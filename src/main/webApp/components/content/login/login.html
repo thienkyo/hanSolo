@@ -1,0 +1,45 @@
+<section id="form" style="margin-top:60px;"><!--form-->
+		<div class="container" >
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>Login to your account</h2>
+						<form  ng-submit="ctrl.login()">
+							<input type="text" placeholder="Email Address" ng-model="ctrl.credential.email"/>
+							<input type="password" placeholder="Password" ng-model="ctrl.credential.pass"/>
+							<span>
+								<input type="checkbox" class="checkbox"> 
+								Keep me signed in
+							</span>
+							<button type="submit" class="btn btn-default">Login</button>
+						</form>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.loginError" style="margin-top:10px">
+						  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						  <span class="sr-only">Error:</span>
+						  {{ctrl.loginError}}
+						</div>
+					</div><!--/login form-->
+				</div>
+				<div class="col-sm-1">
+					<h2 class="or">OR</h2>
+				</div>
+				<div class="col-sm-4">
+					<div class="signup-form"><!--sign up form-->
+						<h2>New User Sign up!</h2>
+						<form ng-submit="ctrl.signup()">
+							<input type="text" placeholder="tên" ng-model="ctrl.newMember.fullName" maxlength="25"/>
+							<input type="text" placeholder="số điện thoại" ng-model="ctrl.newMember.phone" maxlength="12"/>
+							<input type="email" placeholder="email" ng-model="ctrl.newMember.email" maxlength="25"/>
+							<input type="password" placeholder="password" ng-model="ctrl.newMember.pass"  maxlength="15" size="15"/>
+							<button type="submit" class="btn btn-default">Sign up</button>
+						</form>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.signUpError" style="margin-top:10px">
+						  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						  <span class="sr-only">Error:</span>
+						  {{ctrl.signUpError}}
+						</div>
+					</div><!--/sign up form-->
+				</div>
+			</div>
+		</div>
+</section><!--/form-->
