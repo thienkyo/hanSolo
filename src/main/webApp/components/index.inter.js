@@ -1,5 +1,5 @@
 angular.module('app')
-.service('APIInterceptor', function($q,$rootScope, memberService, shipStoreService) { 
+.service('APIInterceptor', function($q,$rootScope, memberService,) {
 	var service = this;
     service.request = function(config) {
         var currentMember = memberService.getCurrentMember();

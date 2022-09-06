@@ -1,7 +1,7 @@
 angular.module('app')
-.config(function(cfpLoadingBarProvider){
+/*.config(function(cfpLoadingBarProvider){
 	cfpLoadingBarProvider.includeSpinner = true;
-})
+})*/
 .config(function($routeProvider,$httpProvider){
     $routeProvider
 	    .when('/',{
