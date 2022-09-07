@@ -1,5 +1,5 @@
 <script>
-	 /*------------------
+ /*------------------
         Background Set
     --------------------*/
     $('.set-bg').each(function () {
@@ -7,22 +7,8 @@
         $(this).css('background-image', 'url(' + bg + ')');
     });
 
-     /*-----------------------
-        Hero Slider
-    ------------------------*/
-    $(".hero__slider").owlCarousel({
-        loop: true,
-        margin: 0,
-        items: 1,
-        dots: false,
-        nav: true,
-        navText: ["<span class='arrow_left'><span/>", "<span class='arrow_right'><span/>"],
-        animateOut: 'fadeOut',
-        animateIn: 'fadeIn',
-        smartSpeed: 2400,
-        autoHeight: false,
-        autoplay: true
-    });
+
+
 
      /*------------------
         According Active
@@ -67,16 +53,16 @@
 	}
 
 </script>
-
 <!-- Hero Section Begin -->
 <section class="hero">
 	<div class="hero__slider owl-carousel">
-		<div class="hero__items set-bg" data-setbg="img/hero/hero-5.jpg">
+<!--		<div class="hero__items set-bg" data-setbg="img/hero/hero-5.jpg" >-->
+		<div class="hero__items set-bg" data-setbg="img/hero/{{banner.image}}" ng-repeat="banner in ctrl.banners | filter:{ type: 'HOMEBANNER' }">
 			<div class="container">
 				<div class="row">
 					<div class="col-xl-5 col-lg-7 col-md-8">
 						<div class="hero__text">
-<!--							<h6>Summer Collection</h6>-->
+							<!--<h6>Summer Collection</h6>-->
 							<h2>Fall - Winter Collections 2030xxxxx</h2>
 							<p>A specialist label creating luxury essentials. Ethically crafted with an unwavering commitment to exceptional quality.</p>
 							<a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
@@ -91,6 +77,9 @@
 				</div>
 			</div>
 		</div>
+
+<!--
+
 		<div class="hero__items set-bg" data-setbg="img/hero/hero-9.jpg">
 			<div class="container">
 				<div class="row">
@@ -117,7 +106,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xl-5 col-lg-7 col-md-8">
-						<!-- <div class="hero__text">
+						&lt;!&ndash; <div class="hero__text">
                             <h6>Summer Collection</h6>
                             <h2>Fall - Winter Collections 2035</h2>
                             <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
@@ -129,11 +118,13 @@
                                 <a href="#"><i class="fa fa-pinterest"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                             </div>
-                        </div> -->
+                        </div> &ndash;&gt;
 					</div>
 				</div>
 			</div>
 		</div>
+
+		-->
 
 	</div>
 </section>

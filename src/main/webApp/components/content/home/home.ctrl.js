@@ -1,17 +1,43 @@
 'use strict';
-angular.module('homeModule').controller('homeController', ['$scope',
-	function($scope) {
-	/*	var self = this;
-		
+angular.module('homeModule').controller('homeController', ['$scope','homeService',
+	function($scope,homeService) {
+		var self = this;
+
+		homeService.getBanner()
+        		.then(function (response) {
+        			self.banners = response.reverse();
+        			console.log(self.banners);
+
+        			$(document).ready(function() {
+                              $(".hero__slider").owlCarousel({
+                                      loop: true,
+                                      margin: 0,
+                                      items: 1,
+                                      dots: false,
+                                      nav: true,
+                                      navText: ["<span class='arrow_left'><span/>", "<span class='arrow_right'><span/>"],
+                                      animateOut: 'fadeOut',
+                                      animateIn: 'fadeIn',
+                                      smartSpeed: 2400,
+                                      autoHeight: false,
+                                      autoplay: true
+                                  });
+
+                            })
+        		});
+
+
+
+
+
+
+	/*
 		homeService.getHomeProduct()
 			.then(function (response) {
 				self.homeProducts = response;
 			});
 
-		homeService.getBanner()
-		.then(function (response) {
-			self.banners = response.reverse();
-		});
+
 
 		homeService.gethomeArticle()
 		.then(function (response) {
