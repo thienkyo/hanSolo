@@ -37,6 +37,17 @@ public class Banner {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @Column(name = "need_text", nullable = false)
+    private boolean needText;
+
+    public boolean isNeedText() {
+        return needText;
+    }
+
+    public void setNeedText(boolean needText) {
+        this.needText = needText;
+    }
+
     public Date getGmtModify() {return gmtModify;}
 
     public void setGmtModify(Date gmtModify) {
