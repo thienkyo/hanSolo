@@ -1,5 +1,8 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -39,6 +42,7 @@ public class Supplier {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "suppliers", orphanRemoval = true)
     private Set<Product> products = new LinkedHashSet<>();
 

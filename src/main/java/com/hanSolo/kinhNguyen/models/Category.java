@@ -1,5 +1,8 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -33,6 +36,7 @@ public class Category {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new LinkedHashSet<>();
 

@@ -6,8 +6,7 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
 		homeService.getBanner()
         		.then(function (response) {
         			self.banners = response.reverse();
-        			console.log(self.banners);
-
+        			// trigger slider
         			$(document).ready(function() {
                               $(".hero__slider").owlCarousel({
                                       loop: true,
@@ -23,11 +22,28 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
                                       autoplay: true
                                   });
 
-                            })
+                    })
         		});
 
+        homeService.getHomeProduct()
+                .then(function (response) {
+                    self.homeProducts = response;
+                    console.log(self.homeProducts);
 
+                    $(document).ready(function() {
+                        //    Gallery filter
+                        $('.filter__controls li').on('click', function () {
+                            $('.filter__controls li').removeClass('active');
+                            $(this).addClass('active');
+                        });
+                        if ($('.product__filter').length > 0) {
+                            var containerEl = document.querySelector('.product__filter');
+                            var mixer = mixitup(containerEl);
+                        }
 
+                    })
+
+        });
 
 
 

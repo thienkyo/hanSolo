@@ -1,5 +1,9 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.ArrayList;
@@ -19,6 +23,7 @@ public class Product {
     @Column(name = "name", length = 100)
     private String name;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "suppliers_id")
     private Supplier suppliers;
