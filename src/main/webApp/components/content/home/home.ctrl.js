@@ -21,7 +21,6 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
                                       autoHeight: false,
                                       autoplay: true
                                   });
-
                     })
         		});
 
@@ -46,18 +45,10 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
         });
 
 
-
-	/*
-		homeService.getHomeProduct()
-			.then(function (response) {
-				self.homeProducts = response;
-			});
-
-
-
-		homeService.gethomeArticle()
+		homeService.getHomeArticle()
 		.then(function (response) {
 			self.homeArticles = response;
+			console.log(self.homeArticles);
 		});
 
 		self.addToCart = function(prod){
@@ -66,6 +57,5 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
 			}
 			self.alertProdId = prod.prodId;
 		}
-*/
 }]);
 

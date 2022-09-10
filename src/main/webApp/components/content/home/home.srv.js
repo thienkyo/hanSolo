@@ -2,19 +2,11 @@
 angular.module('homeModule')
 .factory('homeService', ['ajaxService',function(ajaxService) {
 	var homeService = {
-			getFirst6Product : getFirst6Product,
 			getHomeProduct : getHomeProduct,
-			gethomeArticle : gethomeArticle,
+			getHomeArticle : getHomeArticle,
 			getBanner : getBanner
 			};
 	return homeService;
-
-   function getFirst6Product(){
-		var url = "products/first6";
-		return ajaxService.get(url,null,{}).then(function(data){
-			return data.data;
-		});
-	}
    
    function getHomeProduct(){
 		var url = "products/homeProduct";
@@ -23,7 +15,7 @@ angular.module('homeModule')
 		});
 	}
    
-   function gethomeArticle(){
+   function getHomeArticle(){
 		var url = "blog/homeArticle";
 		return ajaxService.get(url,null,{}).then(function(data){
 			return data.data;

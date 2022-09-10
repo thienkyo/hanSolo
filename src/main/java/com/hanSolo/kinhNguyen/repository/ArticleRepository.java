@@ -1,12 +1,10 @@
-package com.hanSolo.kinhNguyen.services;
+package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Article;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface ArticleRepository extends PagingAndSortingRepository<Article, Integer> {
-    Article findFirstByNameLikeIgnoreCaseOrderByGmtCreateAsc(String name);
-
+    List<Article> findFirst3ByStatusOrderByGmtModifyDesc(boolean status);
 }

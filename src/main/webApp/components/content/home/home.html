@@ -110,7 +110,9 @@
 					<div class="product__item__text">
 						<h6>{{product.name}}</h6>
 						<a href="#" class="add-cart">+ Add To Cart</a>
-						<h5>{{product.sellPrice | number:0}}đ</h5>
+						<h5 ng-show="product.discount == 0">{{product.sellPrice | number:0}}đ</h5>
+						<h5 ng-show="product.discount != 0"><s style="color: #0d0d0d6e;">{{product.sellPrice | number:0}}đ</s></h5>
+						<h5 ng-show="product.discount != 0">{{product.sellPrice*(100 - product.discount)/100 | number:0}}đ</h5>
 					</div>
 				</div>
 			</div>
@@ -125,41 +127,22 @@
 			<div class="col-lg-12">
 				<div class="section-title">
 					<span>Latest News</span>
-					<h2>Fashion New Trends</h2>
+					<h2>Eyeware New Trends</h2>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-4 col-md-6 col-sm-6">
+			<div class="col-lg-4 col-md-6 col-sm-6" ng-repeat="article in ctrl.homeArticles ">
 				<div class="blog__item">
-					<div class="blog__item__pic set-bg" data-setbg="img/blog/blog-1.jpg"></div>
+					<div class="blog__item__pic set-bg" data-setbg="img/blog/{{article.thumbnail}}"></div>
 					<div class="blog__item__text">
-						<span><img src="img/icon/calendar.png" alt=""> 16 February 2020</span>
-						<h5>What Curling Irons Are The Best Ones</h5>
+						<span><img src="img/icon/calendar.png" alt="">{{article.gmtModify | date:"dd-MM-yyyy"}}</span>
+						<h5>{{article.name}}</h5>
 						<a href="#">Read More</a>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="blog__item">
-					<div class="blog__item__pic set-bg" data-setbg="img/blog/blog-2.jpg"></div>
-					<div class="blog__item__text">
-						<span><img src="img/icon/calendar.png" alt=""> 21 February 2020</span>
-						<h5>Eternity Bands Do Last Forever</h5>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="blog__item">
-					<div class="blog__item__pic set-bg" data-setbg="img/blog/blog-3.jpg"></div>
-					<div class="blog__item__text">
-						<span><img src="img/icon/calendar.png" alt=""> 28 February 2020</span>
-						<h5>The Health Benefits Of Sunglasses</h5>
-						<a href="#">Read More</a>
-					</div>
-				</div>
-			</div>
+
 		</div>
 	</div>
 </section>

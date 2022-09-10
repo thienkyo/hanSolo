@@ -66,8 +66,9 @@ function MemberDO () {
 	this.address  = '';
 	this.postCode = '';
 	this.status   = 1;
-	this.shipCostId=0;
-	this.modDate = (new Date()).getTime();
+	this.partnerCode='';
+	this.gmtCreate = (new Date()).getTime();
+	this.gmtModify = (new Date()).getTime();
 	
 		this.clear = function() { 
 		this.memberId = 0;
@@ -80,9 +81,10 @@ function MemberDO () {
 		this.district = '';
 		this.street   = '';
 		this.address  = '';
-		this.postCode = '';
+		this.partnerCode = '';
 		this.status   = 1;
-		this.modDate ='';
+		this.gmtModify ='';
+		this.gmtCreate ='';
 		}
 }
 

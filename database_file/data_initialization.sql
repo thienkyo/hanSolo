@@ -44,18 +44,15 @@ INSERT INTO `hanSoloDB`.`products` (`buy_price`, `description`, `discount`, `gmt
 
 -- table products --
 INSERT INTO `hanSoloDB`.`products_categories` (`product_id`, `category_id`) VALUES
-( 1, 1),
-( 2, 1),
-( 3, 1),
-( 4, 1),
-( 5, 1),
-( 6, 1),
-( 7, 2),
-( 8, 2),
-( 9, 2),
-( 10, 2),
-( 11, 2),
-( 12, 2),
-( 5, 3),
-( 6, 3),
-( 7, 3);
+( 1, 1),( 2, 1),( 3, 1),( 4, 1),
+( 5, 1),( 6, 1),( 7, 2),( 8, 2),
+( 9, 2),( 10, 2),( 11, 2),( 12, 2),
+( 5, 3),( 6, 3),( 7, 3);
+
+-- table articles --
+INSERT INTO `hanSoloDB`.`articles` (`author`, `content`, `description`, `gmt_create`, `gmt_modify`, `name`, `status`, `thumbnail`) VALUES
+('kyo', '<p>nothing much to say here.&nbsp;nothing much to say here.&nbsp;nothing much to say here.nothing much to say here.&nbsp;nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.&nbsp;nothing much to say here.nothing much to say here.nothing much to say here.nothing <span style=\"color: #ff6600;\">much to say here</span>.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.</p>\\n<p>&nbsp;</p>\\n<p style=\"text-align: center;\"><img src=\"images/article/20170510.211333-girl2.jpg\" alt=\"\" width=\"484\" height=\"441\" /></p>\\n<h1>nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.</h1>\\n<p>&nbsp;</p>\\n<p>nothing much to say here.n<span style=\"color: #339966;\">othing much</span> to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.nothing much to say here.</p>', 'nothing much to say here.nothing much to say here.nothing much to say here. thiện thiện tài giỏi', now(), now(), 'bài viết article đầu tiên của tôi 343', 1, 'blog-1.jpg'),
+('kyo', 'khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.\'', 'khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.khống co gì nhiều để nói.', now(), now(), 'đây là bài thứ 2 tôi viết lan dau a 44', 1, 'blog-2.jpg'),
+('kyo', '<p>bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3</p>\\n<h1>bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3bai thu 3 baif thu3</h1>\\n<p>&nbsp;</p>\\n<p style=\"text-align: center;\"><img src=\"images/article/20170510.231336-man-four.jpg\" alt=\"\" width=\"121\" height=\"86\" /></p>\\n<p style=\"text-align: center;\"><img src=\"images/article/20170510.231404-blog-two.jpg\" alt=\"\" width=\"866\" height=\"396\" /></p>\\n<p style=\"text-align: center;\"><img src=\"images/article/20170512.222115-girl2.jpg\" alt=\"\" width=\"484\" height=\"441\" /></p>\\n<p style=\"text-align: center;\">&nbsp;</p>', 'tes tes tes test', now(), now(), 'bai thu 3 baif thu3', 1, 'blog-3.jpg');
+
+
