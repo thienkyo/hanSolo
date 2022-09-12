@@ -6,6 +6,7 @@ import com.hanSolo.kinhNguyen.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -26,9 +27,13 @@ public class ProductController {
         List<Product> discountProducts = prodRepo.findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Utility.ACTIVE_STATUS,1);
         newProducts.addAll(discountProducts);
         Collections.shuffle(newProducts);
-        //List<Product> result = StreamSupport.stream(newProducts.spliterator(), false).collect(Collectors.toList());
 
         return newProducts;
+    }
+
+    @RequestMapping(value="active/{id}",method = RequestMethod.GET)
+    public Product getOneActiveProduct(@PathVariable final int id) {
+        return prodRepo.findByIdAndStatus(id, Utility.ACTIVE_STATUS).get();
     }
 /*
     @RequestMapping("{status}")

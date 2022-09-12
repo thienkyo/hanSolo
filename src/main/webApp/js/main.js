@@ -39,8 +39,6 @@
     });*/
 
 
-
-
     //Search Switch
     $('.search-switch').on('click', function () {
         $('.search-model').fadeIn(400);

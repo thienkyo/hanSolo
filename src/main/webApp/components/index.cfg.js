@@ -14,14 +14,14 @@ angular.module('app')
             controller: 'homeController',
             controllerAs:'ctrl'
         })
-       /* .when('/category/:categoryId',{
-            templateUrl: 'components/content/product/product.html',
-            controller: 'productController',
-            controllerAs:'ctrl'
-        })
         .when('/productDetail/:prodId',{
             templateUrl: 'components/content/productDetail/productDetail.html',
             controller: 'productDetailController',
+            controllerAs:'ctrl'
+        })
+       /* .when('/category/:categoryId',{
+            templateUrl: 'components/content/product/product.html',
+            controller: 'productController',
             controllerAs:'ctrl'
         })
         .when('/cart',{

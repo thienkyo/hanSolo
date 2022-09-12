@@ -7,7 +7,7 @@ angular.module('app', [
 //		'productModule',
 	//	'chieffancypants.loadingBar',
 		'homeModule',
-//		'productDetailModule',
+		'productDetailModule',
 		'loginModule',
 //		'accountModule',
 //		'guestOrderModule',

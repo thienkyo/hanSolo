@@ -4,6 +4,7 @@ import com.hanSolo.kinhNguyen.models.Product;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
 
@@ -12,4 +13,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
     List<Product> findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Boolean status, Integer discount);
     // for homePage, get 4 discount product
     List<Product> findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Boolean status, Integer discount);
+
+    Optional<Product> findByIdAndStatus(Integer id, Boolean status);
+
 }
