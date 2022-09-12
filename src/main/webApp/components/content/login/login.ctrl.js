@@ -11,21 +11,24 @@ angular.module('loginModule')
     
 	self.login = function() {
 		if(self.credential.phone && self.credential.pass){
-			loginService.login({loginStr: memberService.makeLoginStr(self.credential.phone,btoa(self.credential.pass))}).then(function(token) {
-            	self.member.token =  'sheep ' + token;
-            	var arr = token.split('.');
-            	var decodedString = atob(arr[1]);
-                var a = angular.fromJson(decodedString);
-                self.member.roles = a.roles;
-                self.member.name = a.name;
-                console.log(self.member);
-               
-                memberService.setCurrentMember(self.member);
-                $rootScope.$broadcast('authorized');
-                $location.path('#/');
+			loginService.login({loginStr: memberService.makeLoginStr(self.credential.phone,btoa(self.credential.pass))}).then(function(data) {
+			    if(data.errorCode == 'SUCCESS'){
+			        self.member.token =  'sheep ' + data.token;
+                    var arr = data.token.split('.');
+                    var decodedString = atob(arr[1]);
+                    var a = angular.fromJson(decodedString);
+                    self.member.roles = a.roles;
+                    self.member.name = a.name;
+                    memberService.setCurrentMember(self.member);
+                    $rootScope.$broadcast('authorized');
+                    $location.path('#/');
+			    }else{
+			        self.loginError = data.errorMessage;
+			    }
             },
             function(error){
-            	self.loginError = 'invalid login';
+            console.log(error);
+            	self.loginError = error.data.error;
             });
 		}else{
 			self.loginError = 'phone và pass cannot be empty';
@@ -34,14 +37,16 @@ angular.module('loginModule')
 
 	self.signup = function(){
 		if(self.newMember.phone && self.newMember.fullName && self.newMember.pass){
-			loginService.signup({signupStr: memberService.makeLoginStr(self.newMember.phone,btoa(self.newMember.pass)), fullName:self.newMember.fullName, email:self.newMember.email}).then(function(replyStr) {
-				self.reset();
-				self.showAlert();
+			loginService.signup({signupStr: memberService.makeLoginStr(self.newMember.phone,btoa(self.newMember.pass)), fullName:self.newMember.fullName, email:self.newMember.email}).then(function(data) {
+                if(data.errorCode == 'SUCCESS'){
+                    self.reset();
+                    self.showAlert();
+                }else{
+                    self.signUpError = data.errorMessage;
+                }
             },
             function(error){
-            	if(error.data.message == 'phoneExists'){
-            		self.signUpError = 'phone existed';
-            	}
+            	self.signUpError = error.data.error;
             });
 		}else{
 			self.signUpError = 'Name, phone, password cannot be empty';

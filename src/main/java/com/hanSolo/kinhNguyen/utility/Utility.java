@@ -17,6 +17,10 @@ public class Utility {
     final public static String ADMIN_ROLE = "ADMIN";
     final public static String MOD_ROLE = "MOD";
 
+
+    final public static String SUCCESS_ERRORCODE = "SUCCESS";
+    final public static String FAIL_ERRORCODE = "FAIL";
+
     final public static int ORDER_STATUS_ORDERED = 20;
     final public static int ORDER_STATUS_PAID = 21;
     final public static int ORDER_STATUS_SHIPPED = 22;

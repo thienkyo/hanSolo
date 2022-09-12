@@ -10,14 +10,14 @@ angular.module('loginModule')
 	function login(loginRequest){
 		var url = "member/login";
 		return ajaxService.post(url,loginRequest,null,{}).then(function(response){
-			return response.data.token;
+			return response.data;
 		});
 	}
 
 	function signup(signupRequest){
 		var url = "member/add";
 		return ajaxService.post(url,signupRequest,null,{}).then(function(response){
-			return response.data.replyStr;
+			return response.data;
 		});
 	}
  }]);

@@ -4,6 +4,10 @@ import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.MemberRoleRepository;
+import com.hanSolo.kinhNguyen.request.LoginRequest;
+import com.hanSolo.kinhNguyen.request.SignupRequest;
+import com.hanSolo.kinhNguyen.response.LoginResponse;
+import com.hanSolo.kinhNguyen.response.SignupResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,18 +33,15 @@ public class MemberController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody final LoginRequest login) throws ServletException, UnsupportedEncodingException {
-        String decoded = new String(Base64.getDecoder().decode(login.loginStr));
+        String decoded = new String(Base64.getDecoder().decode(login.getLoginStr()));
         String[] parts = decoded.split(Utility.LOGIN_DILIMITER);
 
+        // parts[3] : phone
+        // parts[14] : pass
         Optional<Member> memOpt = memberRepo.findByPhoneAndPassAndStatus(parts[3], parts[14], Utility.ACTIVE_STATUS);
         if (parts[0].isEmpty() || memOpt.isEmpty() ) {
-            throw new ServletException("Invalid login");
+            return new LoginResponse("",Utility.FAIL_ERRORCODE,"account not exist.");
         }
-
-        byte[] decodedBytes = Base64.getDecoder().decode(parts[14]);
-        String decodedString = new String(decodedBytes);
-
-     // List<MemberRole> mr = memberRoleService.findByEmail(parts[3]);
 
         List<String> roleList = new ArrayList<>();
         for(MemberRole r : memOpt.get().getMemberRoles() ){
@@ -54,29 +55,27 @@ public class MemberController {
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT*60*1000))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))
-                .compact());
+                .compact(),Utility.SUCCESS_ERRORCODE,"login success");
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public AddResponse add(@RequestBody final SignupRequest signup) throws ServletException {
-        String decoded = new String(Base64.getDecoder().decode(signup.signupStr));
+    public SignupResponse add(@RequestBody final SignupRequest signup) throws ServletException {
+        String decoded = new String(Base64.getDecoder().decode(signup.getSignupStr()));
         String[] parts = decoded.split(Utility.LOGIN_DILIMITER);
 
         if (memberRepo.findByPhone(parts[3]).isPresent()) {
-            throw new ServletException("phoneExists");
+           // throw new ServletException("phoneExists");
+            return new SignupResponse("",Utility.FAIL_ERRORCODE,"Phone already existed.");
         }
-
-        byte[] decodedBytes = Base64.getDecoder().decode(parts[14]);
-        String decodedString = new String(decodedBytes);
 
         Date now = new Date();
         List<MemberRole> roleList = new ArrayList<>();
 
         Member member = new Member();
-        member.setEmail(signup.email);
+        member.setEmail(signup.getEmail());
         member.setPass(parts[14]);
-        member.setFullname(signup.fullName);
+        member.setFullname(signup.getFullName());
         member.setPhone(parts[3]);
         member.setGmtCreate(now);
         member.setGmtModify(now);
@@ -85,33 +84,14 @@ public class MemberController {
 
         member.setMemberRoles(roleList);
         Member returnMem = memberRepo.save(member);
-   //     memberRoleService.save();
-        return new AddResponse(returnMem.getPhone());
+        return new SignupResponse(returnMem.getPhone(),Utility.SUCCESS_ERRORCODE,"Register user successfully.");
     }
 
 
-    private static class LoginResponse {
-        public String token;
-        public LoginResponse(final String token) {
-            this.token = token;
-        }
-    }
-
-    private static class LoginRequest {
-        public String loginStr;
-    }
-
-    private static class SignupRequest {
-        public String signupStr;
-        public String fullName;
-        public String email;
-    }
-
-    @SuppressWarnings("unused")
-    private static class AddResponse {
+   /* private static class SignupResponse {
         public String replyStr;
-        public AddResponse(final String replyStr) {
+        public SignupResponse(final String replyStr) {
             this.replyStr = replyStr;
         }
-    }
+    }*/
 }
