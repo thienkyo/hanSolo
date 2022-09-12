@@ -11,13 +11,11 @@ public class MemberRole {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    /*
     @Column(name = "name", length = 50)
     private String name;
 
     @Column(name = "phone", length = 20)
     private String phone;
-    */
 
     @Column(name = "role", nullable = false, length = 25)
     private String role;
@@ -36,6 +34,19 @@ public class MemberRole {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public MemberRole() {
+    }
+
+    public MemberRole(String role, String level, String name, String phone, Member member, Date gmtCreate, Date gmtModify) {
+        this.role = role;
+        this.level = level;
+        this.name = name;
+        this.phone = phone;
+        this.member = member;
+        this.gmtCreate = gmtCreate;
+        this.gmtModify = gmtModify;
+    }
 
     public Member getMember() {
         return member;
@@ -77,7 +88,7 @@ public class MemberRole {
         this.role = role;
     }
 
-    /*public String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -91,7 +102,7 @@ public class MemberRole {
 
     public void setName(String name) {
         this.name = name;
-    }*/
+    }
 
     public Integer getId() {
         return id;

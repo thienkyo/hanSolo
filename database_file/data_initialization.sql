@@ -10,13 +10,14 @@ INSERT INTO `hanSoloDB`.`members` (`address`, `email`, `fullname`, `gmt_create`,
 
 
 -- table member_role --
-INSERT INTO `hanSoloDB`.`member_role` (`gmt_create`, `gmt_modify`, `level`, `role`, `member_id`) VALUES
-(now(), now(), '0', 'ADMIN', 1);
+INSERT INTO `hanSoloDB`.`member_role` (`gmt_create`, `gmt_modify`, `level`, `role`, `member_id`, `name`, `phone`) VALUES
+(now(), now(), '0', 'ADMIN', 1,'Thien Le','0909957872'),
+(now(), now(), '0', 'MEMBER', 1,'Thien Le','0909957872');
 
 -- table banners --
 INSERT INTO `hanSoloDB`.`banners` (`description`, `gmt_create`, `gmt_modify`, `image`, `link`, `name`, `status`, `type`, `need_text`) VALUES
 ('A specialist label creating luxury essentials. Ethically crafted with an unwavering commitment to exceptional quality.', now(), now(), 'hero-9.jpg', 'f/sdfe/w234', 'Ten ten Collection 222', 1, 'HOMEBANNER',1),
-('A specialist label creating luxury essentials. Ethically crafted with an unwavering commitment to exceptional quality.', now(), now(), 'hero-7.jpeg', 'f/sdfe/w234', 'Kinh Nguyen special 3000', 1, 'HOMEBANNER',1),
+('A specialist label creating luxury essentials. Ethically crafted with an unwavering commitment to exceptional quality.', now(), now(), 'hero-7.jpeg', 'f/sdfe/w234', 'Kinh Nguyen special 3000', 0, 'HOMEBANNER',1),
 ('A specialist label creating luxury essentials. Ethically crafted with an unwavering commitment to exceptional quality.', now(), now(), 'hero-5.jpg', 'f/sdfe/w234', 'Fall - Winter Collections 2055', 1, 'HOMEBANNER',1),
 ('', now(), now(), 'banner-4.jpeg', 'f/sdfe/w234', 'Youth Collections 2055', 1, 'HOMECOLLECTION',1),
 ('', now(), now(), 'banner-2.jpg', 'f/sdfe/w234', 'Fall Special', 1, 'HOMECOLLECTION',1),

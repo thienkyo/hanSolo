@@ -14,7 +14,7 @@ angular.module('app')
             controller: 'homeController',
             controllerAs:'ctrl'
         })
-        .when('/category/:categoryId',{
+       /* .when('/category/:categoryId',{
             templateUrl: 'components/content/product/product.html',
             controller: 'productController',
             controllerAs:'ctrl'
@@ -28,7 +28,7 @@ angular.module('app')
             templateUrl: 'components/content/cart/cart.html',
             controller: 'cartController',
             controllerAs:'ctrl'
-        })
+        })*/
         .when('/login', {
 			templateUrl: 'components/content/login/login.html',
 			controller: 'loginController',

@@ -14,7 +14,7 @@ angular.module('app')
 	return memberService;
 	
 	function setCurrentMember(member){
-		var te = new BannerDO;
+	//	var te = new BannerDO;
 		currentMember = member;
         store.set('member', member);
         return currentMember;

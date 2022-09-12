@@ -5,10 +5,10 @@
 				<div class="col-sm-1 "></div>
 				<div class="col-sm-4 col-sm-offset-1">
 					<div class="login-form"><!--login form-->
-						<h2>Login to your account</h2>
+						<h2>Sign in to your account</h2>
 						<form  ng-submit="ctrl.login()">
-							<input type="text" placeholder="Email Address" ng-model="ctrl.credential.email"/>
-							<input type="password" placeholder="Password" ng-model="ctrl.credential.pass"/>
+							<input type="text" placeholder="phone number" ng-model="ctrl.credential.phone"/>
+							<input type="password" placeholder="password" ng-model="ctrl.credential.pass"/>
 							<span>
 								<input type="checkbox" class="checkbox">
 								Keep me signed in
@@ -29,10 +29,10 @@
 					<div class="signup-form"><!--sign up form-->
 						<h2>New User Sign up!</h2>
 						<form ng-submit="ctrl.signup()">
-							<input type="text" placeholder="tên" ng-model="ctrl.newMember.fullName" maxlength="25"/>
-							<input type="text" placeholder="số điện thoại" ng-model="ctrl.newMember.phone" maxlength="12"/>
-							<input type="email" placeholder="email" ng-model="ctrl.newMember.email" maxlength="25"/>
-							<input type="password" placeholder="password" ng-model="ctrl.newMember.pass"  maxlength="15" size="15"/>
+							<input type="text" placeholder="phone number" ng-model="ctrl.newMember.phone" maxlength="25"/>
+							<input type="password" placeholder="password" ng-model="ctrl.newMember.pass"  maxlength="25"/>
+							<input type="text" placeholder="name" ng-model="ctrl.newMember.fullName" maxlength="25"/>
+							<input type="email" placeholder="email" ng-model="ctrl.newMember.email" maxlength="40"/>
 							<button type="submit" class="btn btn-default">Sign up</button>
 						</form>
 						<div class="alert alert-danger" role="alert" ng-show="ctrl.signUpError" style="margin-top:10px">

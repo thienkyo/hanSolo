@@ -2,24 +2,22 @@
 angular.module('loginModule')
 .factory('loginService', ['ajaxService',function(ajaxService) {
 		var loginService = {
-			login2 : login2,
-			signup2 : signup2
+			login : login,
+			signup : signup
 			};
 	return loginService;
 
-	function login2(loginRequest){
-		var url = "members/login";
+	function login(loginRequest){
+		var url = "member/login";
 		return ajaxService.post(url,loginRequest,null,{}).then(function(response){
 			return response.data.token;
 		});
 	}
 
-	function signup2(signupRequest){
-		var url = "members/add";
+	function signup(signupRequest){
+		var url = "member/add";
 		return ajaxService.post(url,signupRequest,null,{}).then(function(response){
 			return response.data.replyStr;
 		});
-
 	}
-      
  }]);

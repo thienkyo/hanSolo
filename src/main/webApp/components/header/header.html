@@ -6,25 +6,17 @@
 			<a href="#/login">Sign in</a>
 			<a href="#">Admin</a>
 		</div>
-		<!--<div class="offcanvas__top__hover">
-			<span>Usd <i class="arrow_carrot-down"></i></span>
-			<ul>
-				<li>USD</li>
-				<li>EUR</li>
-				<li>USD</li>
-			</ul>
-		</div>-->
 	</div>
 	<div class="offcanvas__nav__option">
 		<a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-		<a href="#"><img src="img/icon/order.png" alt=""></a>
-		<a href="#"><img src="img/icon/account.png" alt=""></a>
+		<a href="#" ng-show="!ctrl.currentMember"><img src="img/icon/order.png" alt=""></a>
+		<a href="#" ng-show="ctrl.currentMember"><img src="img/icon/account5.png" alt=""></a>
 		<a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
 <!--		<div class="price">2.000.000đ</div>-->
 	</div>
 	<div id="mobile-menu-wrap"></div>
 	<div class="offcanvas__text">
-		<p>358/5/3 CMT8, P10, Q3, HCM.</p>
+		<p>358/5/3 CMT8, P10, Q3, HCM. -- Phone: 0908.01.7383</p>
 	</div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -36,23 +28,16 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-7">
 					<div class="header__top__left">
-						<p>358/5/3 CMT8, P10, Q3, HCM</p>
+						<p>358/5/3 CMT8, P10, Q3, HCM. -- Phone: 0908.01.7383</p>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-5">
 					<div class="header__top__right">
 						<div class="header__top__links">
-							<a href="#/login">Sign in</a>
-							<a href="#">Admin</a>
+							<a href="#/login" ng-show="!ctrl.currentMember">Sign in</a>
+							<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" >Sign out</a>
 						</div>
-						<!--<div class="header__top__hover">
-							<span>Usd <i class="arrow_carrot-down"></i></span>
-							<ul>
-								<li>USD</li>
-								<li>EUR</li>
-								<li>USD</li>
-							</ul>
-						</div>-->
+
 					</div>
 				</div>
 			</div>
@@ -88,14 +73,23 @@
 						</li>
 						<li><a href="./blog.html">Blog</a></li>
 						<li><a href="./contact.html">Contact</a></li>
+						<li><a href="" ng-show="ctrl.isAdmin">admin</a>
+							<ul class="dropdown">
+								<li><a href="./about.html">products</a></li>
+								<li><a href="./shop-details.html">banners</a></li>
+								<li><a href="./shopping-cart.html">orderr</a></li>
+								<li><a href="./checkout.html">members</a></li>
+								<li><a href="./blog-details.html">articles</a></li>
+							</ul>
+						</li>
 					</ul>
 				</nav>
 			</div>
 			<div class="col-lg-3 col-md-3">
 				<div class="header__nav__option">
 					<a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-					<a href="#"><img src="img/icon/order.png" alt=""></a>
-					<a href="#"><img src="img/icon/account.png" alt=""></a>
+					<a href="#" ng-show="!ctrl.currentMember"><img src="img/icon/order.png" alt=""></a>
+					<a href="#" ng-show="ctrl.currentMember"><img src="img/icon/account5.png" alt=""></a>
 					<a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
 <!--					<div class="price">2.000.000đ</div>-->
 				</div>

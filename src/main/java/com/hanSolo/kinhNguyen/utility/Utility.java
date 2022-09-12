@@ -10,6 +10,7 @@ public class Utility {
     final public static String HOME_BANNER = "HOMEBANNER";
     final public static String HOME_COLLECTION = "HOMECOLLECTION";
 
+    final public static String LOGIN_DILIMITER = "d3m";
     final public static String SECRET_KEY = "kinhNguyenSecretKey";
 
     final public static String MEMBER_ROLE = "MEMBER";

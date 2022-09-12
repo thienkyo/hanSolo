@@ -1,18 +1,18 @@
 angular.module('app')
-.controller('headerController', ['$rootScope','$location','ajaxService',
-	function($rootScope,$location,ajaxService) {
-	/*var self=this;
+.controller('headerController', ['$rootScope','$location','ajaxService','memberService',
+	function($rootScope,$location,ajaxService,memberService) {
+	var self=this;
 	self.cart=[];
 	self.currentMember = memberService.getCurrentMember();
 
-	self.currentCart = cartStoreService.getCurrentCart();
-	self.itemQuantity = cartStoreService.getQuantity();
+//	self.currentCart = cartStoreService.getCurrentCart();
+//	self.itemQuantity = cartStoreService.getQuantity();
 	self.isAdmin = memberService.isAdmin();
 	self.isMod = memberService.isMod();
-
+/*
 	categoryService.getActiveCategories().then(function(data){
 		self.cateList = data;
-	});
+	});*/
 
 	self.logout = function() {
 		self.currentMember = memberService.setCurrentMember(null);
@@ -47,10 +47,8 @@ angular.module('app')
 			}
 			$location.path(url);
 		}
-	}*/
-	
-///////////////////////////Receiver/////////////////////////////////////////////	
-/*
+	}
+///////////////////////////Receiver/////////////////////////////////////////////
 	$rootScope.$on('authorized', function() {
 		self.currentMember = memberService.getCurrentMember();
 		self.isAdmin = self.currentMember.roles.indexOf("ADMIN") != -1;
@@ -79,6 +77,6 @@ angular.module('app')
     	self.currentMember = memberService.setCurrentMember(null);
 		self.isAdmin = false;
 		$location.path('#/');
-    });*/
+    });
 
 }]);
