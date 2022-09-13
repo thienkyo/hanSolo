@@ -6,6 +6,7 @@ angular.module('productDetailModule')
 	var self = this;
 	self.qty = 1;
 	self.isAdmin = memberService.isAdmin();
+	self.selectedPicIndex = 0;
 	
 	productDetailService.getProductByProdId($routeParams.prodId)
 		.then(function (data) {
@@ -24,7 +25,7 @@ angular.module('productDetailModule')
 	}
 
 	self.togglePic = function(index){
-    		console.log(index);
+    		self.selectedPicIndex = index;
     	}
 
 }]);

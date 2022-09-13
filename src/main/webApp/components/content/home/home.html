@@ -109,7 +109,7 @@
 					</div></a>
 					<div class="product__item__text">
 						<h6>{{product.name}}</h6>
-						<a href="#" class="add-cart">+ Add To Cart</a>
+						<a href="" class="add-cart" ng-click="ctrl.addToCart(product)" >+ Add To Cart</a>
 						<h5 ng-show="product.discount == 0">{{product.sellPrice | number:0}}đ</h5>
 						<h5 ng-show="product.discount != 0"><s style="color: #0d0d0d6e;">{{product.sellPrice | number:0}}đ</s></h5>
 						<h5 ng-show="product.discount != 0">{{product.sellPrice*(100 - product.discount)/100 | number:0}}đ</h5>

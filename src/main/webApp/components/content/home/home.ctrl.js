@@ -1,6 +1,6 @@
 'use strict';
-angular.module('homeModule').controller('homeController', ['$scope','homeService',
-	function($scope,homeService) {
+angular.module('homeModule').controller('homeController', ['$scope','homeService','cartService',
+	function($scope,homeService,cartService) {
 		var self = this;
 
 		homeService.getBanner()
@@ -47,7 +47,6 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
 		homeService.getHomeArticle()
 		.then(function (response) {
 			self.homeArticles = response;
-			//console.log(self.homeArticles);
 		});
 
 		self.addToCart = function(prod){

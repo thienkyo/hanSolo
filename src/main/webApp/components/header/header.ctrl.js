@@ -1,12 +1,12 @@
 angular.module('app')
-.controller('headerController', ['$rootScope','$location','ajaxService','memberService',
-	function($rootScope,$location,ajaxService,memberService) {
+.controller('headerController', ['$rootScope','$location','ajaxService','memberService','cartStoreService',
+	function($rootScope,$location,ajaxService,memberService,cartStoreService) {
 	var self=this;
 	self.cart=[];
 	self.currentMember = memberService.getCurrentMember();
 
-//	self.currentCart = cartStoreService.getCurrentCart();
-//	self.itemQuantity = cartStoreService.getQuantity();
+	self.currentCart = cartStoreService.getCurrentCart();
+	self.itemQuantity = cartStoreService.getQuantity();
 	self.isAdmin = memberService.isAdmin();
 	self.isMod = memberService.isMod();
 /*
