@@ -23,4 +23,8 @@ angular.module('productDetailModule')
 		self.alertProdId = prod.prodId;
 	}
 
+	self.togglePic = function(index){
+    		console.log(index);
+    	}
+
 }]);
