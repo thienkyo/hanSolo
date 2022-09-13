@@ -1,5 +1,8 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -31,6 +34,7 @@ public class MemberRole {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

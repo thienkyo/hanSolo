@@ -4,9 +4,8 @@ public class SignupResponse extends BaseResponse{
     private String replyStr;
 
     public SignupResponse(String replyStr, String errorCode, String errorMessage) {
+        super(errorCode,errorMessage);
         this.replyStr = replyStr;
-        super.setErrorCode(errorCode);
-        super.setErrorMessage(errorMessage);
     }
 
     public String getReplyStr() {

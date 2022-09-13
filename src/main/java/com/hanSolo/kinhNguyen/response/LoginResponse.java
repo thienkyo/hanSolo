@@ -5,9 +5,8 @@ public class LoginResponse extends BaseResponse{
     private String token;
 
     public LoginResponse(String token, String errorCode, String errorMessage) {
+        super(errorCode,errorMessage);
         this.token = token;
-        super.setErrorCode(errorCode);
-        super.setErrorMessage(errorMessage);
     }
 
     public String getToken() {

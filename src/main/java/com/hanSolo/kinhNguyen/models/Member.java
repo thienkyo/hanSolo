@@ -1,5 +1,9 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.ArrayList;
@@ -54,11 +58,23 @@ public class Member {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberRole> memberRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Recommendation> recommendations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public List<Recommendation> getRecommendations() {
         return recommendations;
@@ -197,7 +213,7 @@ public class Member {
                 ", street='" + street + '\'' +
                 ", district='" + district + '\'' +
                 ", city='" + city + '\'' +
-                ", pass='" + pass + '\'' +
+                ", pass='" + "***" + '\'' +
                 ", status=" + status +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

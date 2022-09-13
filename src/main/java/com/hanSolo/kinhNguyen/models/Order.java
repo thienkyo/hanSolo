@@ -57,6 +57,18 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
     }

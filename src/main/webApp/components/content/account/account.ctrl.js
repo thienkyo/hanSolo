@@ -3,7 +3,7 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 	function($scope,$location, accountService,cartService,OrderStatusArray,paginationService) {
 		var self = this;
 		self.me = {};
-		self.me.shipCostId = 0;
+/*		self.me.shipCostId = 0;
 /////get ship list		
 		var tempShipCost = {
 				distance: "",
@@ -16,28 +16,28 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 	        self.shipCostList = response;
 	        self.shipCostList.push(tempShipCost);
 		});
-		
-		accountService.getMe().then(function(me){
-			self.me = me;
-			for(var i = 0; i < me.orders.length; i++){
+		*/
+		accountService.getMe().then(function(data){
+			self.me = data.member;
+			for(var i = 0; i < data.member.orders.length; i++){
 				var total = 0;
-				for(var k = 0; k < me.orders[i].orderDetails.length; k++){
-					total += me.orders[i].orderDetails[k].priceAtThatTime*me.orders[i].orderDetails[k].quantity;
+				for(var k = 0; k < data.member.orders[i].orderDetails.length; k++){
+					total += data.member.orders[i].orderDetails[k].priceAtThatTime*data.member.orders[i].orderDetails[k].quantity;
 				}
-				total += me.orders[i].shipCostFee;
-				me.orders[i].total = total;
+				//total += data.member.orders[i].shipCostFee;
+				data.member.orders[i].total = total;
 				for(var k = 0; k < OrderStatusArray.length; k++){
-					if(OrderStatusArray[k].value == me.orders[i].status){
-						me.orders[i].status = OrderStatusArray[k].name;
+					if(OrderStatusArray[k].value == data.member.orders[i].status){
+						data.member.orders[i].status = OrderStatusArray[k].name;
 						break;
 					}
 				}
 			}
-			self.orderList = me.orders.reverse();
+			self.orderList = data.member.orders.reverse();
 			self.orderListPage = buildPageable(1);
 			self.pagination = paginationService.builder(self.orderListPage);
-			console.log(me.orders);
-			console.log(me.orders.reverse());
+			console.log(data.member.orders);
+			console.log(data.member.orders.reverse());
 		},function(error){
 			$location.path("#/");
 		});
