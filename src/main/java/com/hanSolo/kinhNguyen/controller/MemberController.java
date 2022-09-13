@@ -65,7 +65,6 @@ public class MemberController {
         String[] parts = decoded.split(Utility.LOGIN_DILIMITER);
 
         if (memberRepo.findByPhone(parts[3]).isPresent()) {
-           // throw new ServletException("phoneExists");
             return new SignupResponse("",Utility.FAIL_ERRORCODE,"Phone already existed.");
         }
 
@@ -86,12 +85,4 @@ public class MemberController {
         Member returnMem = memberRepo.save(member);
         return new SignupResponse(returnMem.getPhone(),Utility.SUCCESS_ERRORCODE,"Register user successfully.");
     }
-
-
-   /* private static class SignupResponse {
-        public String replyStr;
-        public SignupResponse(final String replyStr) {
-            this.replyStr = replyStr;
-        }
-    }*/
 }

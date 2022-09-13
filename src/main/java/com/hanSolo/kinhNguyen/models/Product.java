@@ -63,6 +63,17 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Collection<Category> categories = new ArrayList<>();
 
+    @Column(name = "thumbnail", length = 55)
+    private String thumbnail;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public Collection<Category> getCategories() {
         return categories;
     }

@@ -23,20 +23,19 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-3">
 					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item">
+
+
+
+						<li class="nav-item" ng-repeat="one in ctrl.product.images.split(',')">
 							<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-								<div class="product__thumb__pic set-bg" data-setbg="img/shop-details/{{ctrl.product.images}}">
+								<div class="product__thumb__pic set-bg" data-setbg="img/shop-details/{{one}}">
 								</div>
 							</a>
 						</li>
+
+
 						<li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-								<div class="product__thumb__pic set-bg" data-setbg="img/shop-details/{{ctrl.product.images}}">
-								</div>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" data-toggle="tab" href="http://localhost:8080/#/productDetail/10#tabs-3" role="tab">
+							<a class="nav-link" data-toggle="tab" href="./#tabs-3" role="tab">
 								<div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-3.png">
 								</div>
 							</a>
@@ -58,14 +57,19 @@
 				</div>
 				<div class="col-lg-6 col-md-9">
 					<div class="tab-content">
-						<div class="tab-pane active" id="tabs-1" role="tabpanel">
+
+
+						<div class="tab-pane active" id="tabs-1" role="tabpanel"  ng-repeat="one in ctrl.product.images.split(',')">
 							<div class="product__details__pic__item">
-								<img src="img/shop-details/{{ctrl.product.images}}" alt="">
+								<img src="img/shop-details/{{one}}" alt="">
 							</div>
 						</div>
+
+
+
 						<div class="tab-pane" id="tabs-2" role="tabpanel">
 							<div class="product__details__pic__item">
-								<img src="img/shop-details/{{ctrl.product.images}}" alt="">
+								<img src="img/shop-details/product-big.png" alt="">
 							</div>
 						</div>
 						<div class="tab-pane" id="tabs-3" role="tabpanel">
@@ -106,9 +110,7 @@
 						<h3 ng-show="ctrl.product.discount == 0">{{ctrl.product.sellPrice | number:0}}đ </h3>
 						<h3 ng-show="ctrl.product.discount != 0">{{ctrl.product.sellPrice*(100 - ctrl.product.discount)/100 | number:0}}đ <span>{{ctrl.product.sellPrice | number:0}}đ</span></h3>
 
-						<p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-							cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-							with placket.</p>
+						<p>{{ctrl.product.description}}</p>
 						<!--<div class="product__details__option">
 							<div class="product__details__option__size">
 								<span>Size:</span>
