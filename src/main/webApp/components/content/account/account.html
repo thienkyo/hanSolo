@@ -1,8 +1,28 @@
+<link href="css/main2.css" rel="stylesheet">
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb__text">
+					<h4>User Info</h4>
+					<div class="breadcrumb__links">
+						<a href="./index.html">Home</a>
+						<a href="./shop.html">Account</a>
+						<span>User Info</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Breadcrumb Section End -->
 <section id="do_action">
 		<div class="container">
-			<div class="heading">
+			<!--<div class="heading">
 				<h2>Thông tin cá nhân</h2>
-			</div>
+			</div>-->
 			<div class="row">
 				<div class="col-sm-5">
 					<div class="chose_area" style="margin-bottom: 0px;">
@@ -10,16 +30,16 @@
 							<div class="form-one">
 								<form>
 									<input type="text" placeholder="Email*" value="{{ctrl.me.email}}">
-									<input type="text" placeholder="Tên"  ng-model="ctrl.me.fullName">
+									<input type="text" placeholder="Tên"  ng-model="ctrl.me.fullname">
 								</form>
 							</div>
 							<div class="form-two">
 								<form>
 									<input type="text" placeholder="Số điện thoại*" ng-model="ctrl.me.phone">
-									<select  ng-model="ctrl.me.shipCostId" 
+									<!--<select  ng-model="ctrl.me.shipCostId"
 										 ng-options="opt.shipCostId as opt.region for opt in ctrl.shipCostList"
 										 style="width: 100%;height: 40px;">
-							    	</select>
+							    	</select>-->
 								</form>
 								
 							</div>
@@ -39,12 +59,12 @@
 				<div class="col-sm-7">
 					<div class="total_area" style="padding-left:0px;margin-bottom: 0px;">
 						
-						<ul>
+						<ul style="margin: 0px 0px 0px 40px;">
 							<li class="row" style="padding: 10px 0px 10px 0px;margin-top: 0px;background: #F0F0E9; margin-right: 0px;">
-								<div class="col-xs-3">Ngày</div>
-								<div class="col-xs-3">Mã đơn</div>
-								<div class="col-xs-3">Tổng tiền</div>
-								<div class="col-xs-3">status</div>
+								<div class="col-md-3">Ngày</div>
+								<div class="col-md-3">Mã đơn</div>
+								<div class="col-md-3">Tổng tiền</div>
+								<div class="col-md-3">status</div>
 							</li>
 							<li class="row"
 								ng-repeat="item in ctrl.orderListPage.content" 
@@ -58,7 +78,7 @@
 					</div>
 					
 					<div class="pagination-area" style="margin: 15px 0px 0px 0px;">
-						<ul class="pagination" style="padding-left: 0px;">
+						<ul class="pagination" style="padding-left: 0px;display: contents;">
 							<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.previousNumber)">&laquo;</a></li>
 							<li ng-repeat="item in ctrl.pagination.list"><a class="{{item.status ? 'active' : ''}}" ng-click="ctrl.getTargetPage(item.number)">{{item.number}}</a></li>
 							<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.nextNumber)">&raquo;</a></li>
@@ -145,6 +165,3 @@
 
 		</div>
 </section>
-	
-	
-	

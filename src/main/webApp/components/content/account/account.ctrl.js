@@ -19,6 +19,7 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 		*/
 		accountService.getMe().then(function(data){
 			self.me = data.member;
+			console.log(self.me);
 			for(var i = 0; i < data.member.orders.length; i++){
 				var total = 0;
 				for(var k = 0; k < data.member.orders[i].orderDetails.length; k++){

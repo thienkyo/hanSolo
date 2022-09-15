@@ -28,7 +28,7 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
         homeService.getHomeProduct()
                 .then(function (response) {
                     self.homeProducts = response;
-                    console.log(self.homeProducts);
+                   // console.log(self.homeProducts);
 
                     $(document).ready(function() {
                         //    Gallery filter
@@ -43,17 +43,17 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
                     })
         });
 
-
 		homeService.getHomeArticle()
 		.then(function (response) {
 			self.homeArticles = response;
 		});
 
 		self.addToCart = function(prod){
+		console.log(prod);
 			if(prod.quantity > 0){
 				cartService.addToCart(prod,1);
 			}
-			self.alertProdId = prod.prodId;
+			self.alertProdId = prod.id;
 		}
 }]);
 

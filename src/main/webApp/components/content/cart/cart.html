@@ -1,5 +1,5 @@
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-option">
+<!--<section class="breadcrumb-option">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section>-->
 <!-- Breadcrumb Section End -->
 
 <!-- Shopping Cart Section Begin -->
@@ -33,101 +33,34 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td class="product__cart__item">
+						<tr ng-repeat="item in ctrl.currentCart track by $index">
+							<td class="product__cart__item" >
 								<div class="product__cart__item__pic">
-									<img src="img/shopping-cart/cart-1.jpg" alt="">
+									<img src="img/product/{{item.prod.thumbnail}}" alt="" style="width: 90px;">
 								</div>
 								<div class="product__cart__item__text">
-									<h6>T-shirt Contrast Pocket</h6>
-									<h5>$98.49</h5>
+									<h6>{{item.prod.name}}</h6>
+									<h5 ng-show="item.prod.discount == 0">{{item.prod.sellPrice | number:0}}đ</h5>
+									<h5 ng-show="item.prod.discount != 0">{{item.prod.sellPrice*(100 - item.prod.discount)/100 | number:0}}đ</h5>
+									<h5 ng-show="item.prod.discount != 0"><s style="color: #0d0d0d6e;">{{item.prod.sellPrice | number:0}}đ</s></h5>
 								</div>
 							</td>
 							<td class="quantity__item">
 								<div class="quantity">
 									<div class="pro-qty-2">
-										<input type="text" value="1">
+										<input type="text" value="1" ng-model="item.quantity"ng-change="ctrl.updateTotal()"
+											   autocomplete="off" style="width:40px;" min="1" max="9">
 									</div>
 								</div>
 							</td>
-							<td class="cart__price">$ 30.00</td>
-							<td class="cart__close"><i class="fa fa-close"></i></td>
+							<td class="cart__price">{{(item.prod.sellPrice*(100 - item.prod.discount)/100) * item.quantity | number:0}}đ</td>
+							<td class="cart__close"><i class="fa fa-close" ng-click="ctrl.removeItem($index)"></i></td>
 						</tr>
-						<tr>
-							<td class="product__cart__item">
-								<div class="product__cart__item__pic">
-									<img src="img/shopping-cart/cart-2.jpg" alt="">
-								</div>
-								<div class="product__cart__item__text">
-									<h6>Diagonal Textured Cap</h6>
-									<h5>$98.49</h5>
-								</div>
-							</td>
-							<td class="quantity__item">
-								<div class="quantity">
-									<div class="pro-qty-2">
-										<input type="text" value="1">
-									</div>
-								</div>
-							</td>
-							<td class="cart__price">$ 32.50</td>
-							<td class="cart__close"><i class="fa fa-close"></i></td>
-						</tr>
-						<tr>
-							<td class="product__cart__item">
-								<div class="product__cart__item__pic">
-									<img src="img/shopping-cart/cart-3.jpg" alt="">
-								</div>
-								<div class="product__cart__item__text">
-									<h6>Basic Flowing Scarf</h6>
-									<h5>$98.49</h5>
-								</div>
-							</td>
-							<td class="quantity__item">
-								<div class="quantity">
-									<div class="pro-qty-2">
-										<input type="text" value="1">
-									</div>
-								</div>
-							</td>
-							<td class="cart__price">$ 47.00</td>
-							<td class="cart__close"><i class="fa fa-close"></i></td>
-						</tr>
-						<tr>
-							<td class="product__cart__item">
-								<div class="product__cart__item__pic">
-									<img src="img/shopping-cart/cart-4.jpg" alt="">
-								</div>
-								<div class="product__cart__item__text">
-									<h6>Basic Flowing Scarf</h6>
-									<h5>$98.49</h5>
-								</div>
-							</td>
-							<td class="quantity__item">
-								<div class="quantity">
-									<div class="pro-qty-2">
-										<input type="text" value="1">
-									</div>
-								</div>
-							</td>
-							<td class="cart__price">$ 30.00</td>
-							<td class="cart__close"><i class="fa fa-close"></i></td>
-						</tr>
+
 						</tbody>
 					</table>
 				</div>
-				<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-6">
-						<div class="continue__btn">
-							<a href="#">Continue Shopping</a>
-						</div>
-					</div>
-					<div class="col-lg-6 col-md-6 col-sm-6">
-						<div class="continue__btn update__btn">
-							<a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-						</div>
-					</div>
-				</div>
+
 			</div>
 			<div class="col-lg-4">
 				<div class="cart__discount">
@@ -140,13 +73,43 @@
 				<div class="cart__total">
 					<h6>Cart total</h6>
 					<ul>
-						<li>Subtotal <span>$ 169.50</span></li>
-						<li>Total <span>$ 169.50</span></li>
+						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
+						<li>Coupon <span>{{ctrl.coupon | number:0}}đ</span></li>
+						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
 					</ul>
 					<a href="#" class="primary-btn">Proceed to checkout</a>
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-lg-8 ">
+				<h6 class="checkout__title">Shipping Details</h6>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Full Name<span>*</span></p>
+							<input type="text"  ng-model="ctrl.me.fullname">
+						</div>
+					</div>
+					<div class="col-lg-6	">
+						<div class="checkout__input">
+							<p>Phone<span>*</span></p>
+							<input type="text" ng-model="ctrl.me.phone">
+						</div>
+					</div>
+				</div>
+				<div class="checkout__input">
+					<p>Address<span>*</span></p>
+					<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+						   ng-model="ctrl.me.address">
+
+				</div>
+			</div>
+		</div>
+
+
 	</div>
 </section>
 <!-- Shopping Cart Section End -->
+

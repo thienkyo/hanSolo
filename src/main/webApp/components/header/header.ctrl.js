@@ -6,7 +6,7 @@ angular.module('app')
 	self.currentMember = memberService.getCurrentMember();
 
 	self.currentCart = cartStoreService.getCurrentCart();
-	self.itemQuantity = cartStoreService.getQuantity();
+	self.orderQuantity = cartStoreService.getQuantity();
 	self.isAdmin = memberService.isAdmin();
 	self.isMod = memberService.isMod();
 /*
@@ -61,16 +61,16 @@ angular.module('app')
     });
     
     $rootScope.$on('addToCart', function() {
-    	self.itemQuantity = cartStoreService.getQuantity();
+    	self.orderQuantity = cartStoreService.getQuantity();
 		self.currentCart = cartStoreService.getCurrentCart();
     });
     
     $rootScope.$on('removeItemCart', function() {
-    	self.itemQuantity = cartStoreService.getQuantity();
+    	self.orderQuantity = cartStoreService.getQuantity();
     });
     
     $rootScope.$on('clearCart', function() {
-    	self.itemQuantity = 0;
+    	self.orderQuantity = 0;
     });
     
     $rootScope.$on('ExpiredJwt', function() {

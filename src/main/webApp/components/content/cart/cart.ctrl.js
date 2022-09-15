@@ -1,48 +1,35 @@
 'use strict';
 angular.module('cartModule')
 	.controller('cartController', ['$rootScope','cartService','cartStoreService',
-								   'memberService','OrderDO',
+								   'memberService','OrderDO','accountService',
 								   'OrderDetailDO','MemberDO','$timeout',
-	function($rootScope, cartService,cartStoreService,memberService,OrderDO,OrderDetailDO,MemberDO,$timeout) {
+	function($rootScope, cartService,cartStoreService,memberService,OrderDO,accountService,OrderDetailDO,MemberDO,$timeout) {
 		var self = this;
 		self.isShow = false;
 		self.currentMember = memberService.getCurrentMember();
 		self.currentCart = cartStoreService.getCurrentCart();
 		self.subTotal = 0;
 		self.total = 0;
+		self.coupon = 0; //%
 		self.order = new OrderDO;
 		self.order.shipCostId = 0;
 		self.guest = new MemberDO;//guest member
-		self.guest.memberId = 3;// guest id
+		self.guest.fullName = 'GUEST';// guest id
 		self.orderDetail = [];
 		self.order_one_time_trigger = true;
 
-/////get ship list		
-		var tempShipCost = {
-				distance : "",
-				price : 0,
-				region : "----chọn vùng----",
-				shipCostId : 0
-		};
 		
-		cartService.getActiveShipCost().then(function (response) {
+	/*	cartService.getActiveShipCost().then(function (response) {
 	        self.shipCostList = response;
 	        self.shipCostList.push(tempShipCost);
-		});
+		});*/
 		
 //////get full user data from db		
-		accountService.getMe().then(function(me){
-			self.me = me;
-			self.order.member = me;
+		accountService.getMe().then(function(data){
+			self.me = data.member;
+			self.order.member = self.me;
 			self.isShow = false;
-			self.updateTotal();
-			// set shipCostId based on member address.
-			for (var i = 0; i < self.shipCostList.length; i++){
-                if(self.shipCostList[i].shipCostId === self.me.shipCostId){
-                    self.order.shipCostId = self.shipCostList[i].shipCostId;
-                    break;
-                }
-            }
+			console.log(self.me);
 		},
 		function(error){
 			self.isShow = false;
@@ -51,13 +38,21 @@ angular.module('cartModule')
 		});
 
 		// calculate subtotal
+		self.updateTotal = function(){
+            self.subTotal = 0;
+            for (var i = 0; i < self.currentCart.length; i++){
+                self.subTotal += self.currentCart[i].prod.sellPrice*(100 - self.currentCart[i].prod.discount)/100*self.currentCart[i].quantity;
+            }
+            self.total = self.subTotal*(100 - self.coupon)/100;
+            cartStoreService.setCurrentCart(self.currentCart);;
+        }
+
+		// load cart at load page
 		if(self.currentCart.length > 0){
-			for (var i = 0; i < self.currentCart.length; i++){
-				self.subTotal += self.currentCart[i].prod.price*self.currentCart[i].quantity;
-			}
-		//	console.log(self.currentCart);
+			self.updateTotal();
+			console.log(self.currentCart);
         //    console.log('before init order');
-			console.log(cartStoreService.getOrderId());
+		//	console.log(cartStoreService.getOrderId());
 			//// init order
 			if(cartStoreService.getOrderId() == ''){
 			    var OrderDetailList = [];
@@ -73,13 +68,12 @@ angular.module('cartModule')
                 }
                 self.order.orderDetails = OrderDetailList;
                 self.order.shippingAddress = 'init order';
-                self.order.shipCostId = '8';
                 self.order.shippingName = 'init order';
                 self.order.shippingPhoneNumber = '0000000000';
 
-                cartService.placeGuestOrder(self.order).then(function (response) {
+              /*  cartService.placeGuestOrder(self.order).then(function (response) {
                     cartStoreService.setOrderId(response.orderId);
-                });
+                });*/
                 console.log(self.order);
 			}
 		}
@@ -89,16 +83,6 @@ angular.module('cartModule')
 			cartStoreService.setCurrentCart(self.currentCart);
 			self.updateTotal();
 			$rootScope.$broadcast('removeItemCart');
-		}
-		
-		self.updateTotal = function(){
-			self.subTotal = 0;
-			for (var i = 0; i < self.currentCart.length; i++){
-				//prodIds.push(self.currentCart[i].id);
-				self.subTotal += self.currentCart[i].prod.price*self.currentCart[i].quantity;
-			}
-			cartStoreService.setCurrentCart(self.currentCart);;
-			self.updateShippingFee();
 		}
 		
 		self.placeOrder = function(){
@@ -158,7 +142,7 @@ angular.module('cartModule')
 			}
 		}
 		
-		self.updateShippingFee = function(){
+		/*self.updateShippingFee = function(){
 		    self.isErrorMsg = false;
 			var shipBaseFee = 0;
 			for (var i = 0; i < self.shipCostList.length; i++){
@@ -174,7 +158,7 @@ angular.module('cartModule')
 			self.order.shipCostFee = w*shipBaseFee;
 		//	self.order.shipCostFee = (self.order.shipCostFee < 20000 && self.me.shipCostId != 7) ?  25000 : self.order.shipCostFee ;
 			self.total = self.order.shipCostFee + self.subTotal;
-		}
+		}*/
 
 		self.uploadPic = function(files,oldNames,cartDetail) {
 		        self.isErrorMsg = false;

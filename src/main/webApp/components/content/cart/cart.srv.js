@@ -6,8 +6,8 @@ angular.module('cartModule')
 			getProductForCart : getProductForCart,
 			addToCart : addToCart,
 			placeOrder : placeOrder,
-			getShipCost : getShipCost,
-			getActiveShipCost : getActiveShipCost,
+		//	getShipCost : getShipCost,
+		//	getActiveShipCost : getActiveShipCost,
 			placeGuestOrder : placeGuestOrder
 		};
 	return cartService;
@@ -19,9 +19,9 @@ angular.module('cartModule')
 		});
    }*/
 	      
-   function getProductForCart(prodIds){
+   function getProductForCart(ids){
 		var url = "products/getProductForCart";
-		return ajaxService.post(url,prodIds,{}).then(function(response){
+		return ajaxService.post(url,ids,{}).then(function(response){
 			return response.data;
 		});
    }
@@ -36,7 +36,7 @@ angular.module('cartModule')
 		}else{
 			var flag = false;
 			for (var i = 0; i < currentCart.length; i++){
-			    if(currentCart[i].prod.prodId == prod.prodId){
+			    if(currentCart[i].prod.id == prod.id){
 			    	currentCart[i].quantity = currentCart[i].quantity + 1;
 			    	flag = false;
 			    	break;
@@ -65,7 +65,7 @@ angular.module('cartModule')
    			return response.data;
    	   });
       }
-   
+  /*
    function getShipCost(){
 		var url = "shipcost";
 		return ajaxService.get(url,null,{}).then(function(response){
@@ -78,6 +78,6 @@ angular.module('cartModule')
    		return ajaxService.get(url,null,{}).then(function(response){
    			return response.data;
    		});
-      }
+      }*/
    
  }]);
