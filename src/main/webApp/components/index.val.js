@@ -1,10 +1,9 @@
 'use strict';
 var OrderStatusArray=[
-	{name : 'init', value:19 },
-	{name : 'đã đặt', value:20 },
-	{name : 'nhận tiền', value:21 },
-	{name : 'đã chuyển hàng ', value:22 },
-	{name : 'xong', value:23 }
+	{name : 'đã đặt', value:0 },
+	{name : 'nhận tiền', value:1 },
+	{name : 'đã chuyển hàng ', value:2 },
+	{name : 'xong', value:3 }
 ];
 
 var CommonStatusArray=[
@@ -33,7 +32,7 @@ function OrderDO () {
 	this.couponDiscount = 0;
 	this.extInfo = '';
 	this.shippingAddress = '';
-	this.status = 19;
+	this.status = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 	this.relationship = '';

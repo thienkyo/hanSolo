@@ -27,7 +27,7 @@ angular.module('loginModule')
 			    }
             },
             function(error){
-            console.log(error);
+
             	self.loginError = error.data.error;
             });
 		}else{

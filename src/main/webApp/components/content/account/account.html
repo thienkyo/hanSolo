@@ -8,8 +8,8 @@
 				<div class="breadcrumb__text">
 					<h4>User Info</h4>
 					<div class="breadcrumb__links">
-						<a href="./index.html">Home</a>
-						<a href="./shop.html">Account</a>
+						<a href="#/">Home</a>
+						<a href="">Account</a>
 						<span>User Info</span>
 					</div>
 				</div>
@@ -30,18 +30,13 @@
 							<div class="form-one">
 								<form>
 									<input type="text" placeholder="Email*" value="{{ctrl.me.email}}">
-									<input type="text" placeholder="Tên"  ng-model="ctrl.me.fullname">
+									<input type="text" placeholder="Tên"  ng-model="ctrl.me.fullName">
 								</form>
 							</div>
 							<div class="form-two">
 								<form>
-									<input type="text" placeholder="Số điện thoại*" ng-model="ctrl.me.phone">
-									<!--<select  ng-model="ctrl.me.shipCostId"
-										 ng-options="opt.shipCostId as opt.region for opt in ctrl.shipCostList"
-										 style="width: 100%;height: 40px;">
-							    	</select>-->
+									<input type="text" placeholder="Số điện thoại*" ng-model="ctrl.me.phone" readonly>
 								</form>
-								
 							</div>
 						</div>
 					    <textarea rows="4" cols="50" placeholder="Địa chỉ shipping..." ng-model="ctrl.me.address"></textarea>
@@ -66,13 +61,11 @@
 								<div class="col-md-3">Tổng tiền</div>
 								<div class="col-md-3">status</div>
 							</li>
-							<li class="row"
-								ng-repeat="item in ctrl.orderListPage.content" 
-								style="padding: 10px 0px 10px 0px;margin-right: 0px;">
-								<div class="col-xs-3"> {{item.modDate | date:"dd-MM-yyyy"}}</div>
-								<div class="col-xs-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.orderId).slice(-4)}}</a></div>
-								<div class="col-xs-3" style="text-align: right;padding-right: 40px;padding-left: 0px;"> {{item.total | number}} đ</div>
-								<div class="col-xs-3"> {{item.status}}</div>
+							<li class="row" ng-repeat="item in ctrl.orderListPage.content" style="padding: 10px 0px 10px 0px;margin-right: 0px;">
+								<div class="col-md-3"> {{item.gmtCreate | date:"dd-MM-yyyy"}}</div>
+								<div class="col-md-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.id).slice(-4)}}</a></div>
+								<div class="col-md-3" > {{item.total | number}} đ</div>
+								<div class="col-md-3"> {{item.status}}</div>
 							</li>
 						</ul>
 					</div>
@@ -96,7 +89,7 @@
 				<table class="table table-condensed">
 					<thead>
 						<tr class="cart_menu">
-							<td class="image">Đơn hàng : A{{("000"+ctrl.theOrder.orderId).slice(-4)}}</td>
+							<td class="image">Đơn hàng : A{{("000"+ctrl.theOrder.id).slice(-4)}}</td>
 							<td class="description" style="text-align: left;">Item</td>
 							<td class="price" style="text-align: right;">Price</td>
 							<td class="quantity" style="text-align: right;">Quantity</td>
@@ -107,54 +100,65 @@
 					<tbody>
 						<tr ng-repeat="item in ctrl.theOrder.orderDetails">
 							<td class="cart_product">
-								<a href="#/productDetail/{{item.product.prodId}}"><img ng-src="images/thumbnail/{{item.product.image}}" style="width: 110px;margin-right: 20px;" alt=""></a>
+								<a href="#/productDetail/{{item.product.id}}"><img ng-src="img/product/{{item.product.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
 							</td>
 							<td class="cart_description" style="text-align: left;">
-								<h4><a href="#/productDetail/{{item.product.prodId}}">{{item.product.prodName}}</a></h4>
-								<p>Web ID: {{item.product.prodId}}</p>
+								<h4><a href="#/productDetail/{{item.product.prodId}}">{{item.product.name}}</a></h4>
+								<p>Store ID: {{item.product.id}}</p>
 							</td>
 							<td class="cart_price" style="text-align: right;">
-								<p>{{item.priceAtThatTime | number:0}} đ</p>
-							</td> <!-- value="{{item.quantity}}" -->
+								<p>{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 | number:0}} đ</p>
+								<p ng-show="item.frameDiscountAtThatTime != 0"><s style="color: #0d0d0d6e;">{{item.framePriceAtThatTime | number:0}} đ</s></p>
+							</td>
 							<td class="cart_quantity" style="text-align: right;padding-right: 30px;">
 								<p>{{item.quantity}}</p>
 							</td>
 							<td class="cart_total" style="text-align: right;">
-								<p class="cart_total_price">{{item.priceAtThatTime * item.quantity | number:0}} đ</p>
+								<p class="cart_total_price">{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 * item.quantity | number:0}} đ</p>
 							</td>
 							<td class="cart_delete">
 							</td>
 						</tr>
 						<tr style="border-bottom: 0px;">
-							<td colspan="2" style="padding-left: 30px;padding-top: 0px;">
-								<textarea name="message"  placeholder="địa chỉ shipping của đơn hàng" 
-										  rows="4" style="margin-top: 0px;" ng-model="ctrl.theOrder.shippingAddress" ng-cloak ></textarea>
-								<!--   <a class="btn btn-primary" href="" ng-click="ctrl.placeOrder()">Đặt hàng</a> -->
-								
+							<td colspan="2" style="padding-left: 30px;vertical-align: baseline;padding-top: 62px;">
+								<h6 class="checkout__title">Shipping Details</h6>
+
+
+								<div class="row">
+									<div class="col-lg-6">
+										<div class="checkout__input">
+											<p>Full Name<span>*</span></p>
+											<input type="text"  ng-model="ctrl.theOrder.shippingName">
+										</div>
+									</div>
+									<div class="col-lg-6	">
+										<div class="checkout__input">
+											<p>Phone<span>*</span></p>
+											<input type="text" ng-model="ctrl.theOrder.shippingPhone">
+										</div>
+									</div>
+								</div>
+								<div class="checkout__input" style="margin-bottom: 50px;">
+									<p>Address<span>*</span></p>
+									<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+										   ng-model="ctrl.theOrder.shippingAddress">
+
+								</div>
+
 							</td>
-							<td colspan="1" style="padding-top: 23px; vertical-align: top;">
-								<select  ng-model="ctrl.theOrder.shipCostId" 
-										 ng-options="opt.shipCostId as opt.region for opt in ctrl.shipCostList"
-										 ng-change="ctrl.updateShippingFee()" 
-										 style="width: 250px;height: 40px;">
-							    </select>
+							<td colspan="1" style="padding-top: 23px;">
 							</td>
 							<td colspan="3">
-								<table class="table table-condensed total-result" style="margin-top: 0px;margin-bottom: 40px;text-align: right;">
-									<tr>
-										<td>Cart Sub Total</td>
-										<td>{{ctrl.theOrder.subTotal | number:0}} đ</td>
-									</tr>
-									
-									<tr class="shipping-cost">
-										<td>Shipping Cost</td>
-										<td>{{ctrl.theOrder.shipCostFee | number:0}} đ</td>										
-									</tr>
-									<tr>
-										<td>Total</td>
-										<td><span>{{ctrl.theOrder.total | number:0}} đ</span></td>
-									</tr>
-								</table>
+								<h6 class="checkout__title">Order total</h6>
+								<div class="cart__total">
+									<ul>
+										<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
+										<li>Coupon <span>{{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
+										<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+									</ul>
+
+								</div>
+
 							</td>
 						</tr>
 						

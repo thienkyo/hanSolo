@@ -2,11 +2,15 @@
 INSERT INTO `hanSoloDB`.`categories` (`gmt_create`, `gmt_modify`, `name`, `status`, `type`) VALUES
 (now(), now(), 'Gọng Nam', 1, 'CATEGORY'),
 (now(), now(), 'Gọng Nữ', 1, 'CATEGORY'),
+(now(), now(), 'Trẻ em', 1, 'CATEGORY'),
+(now(), now(), 'Thể thao', 1, 'CATEGORY'),
 (now(), now(), 'Spring Collection', 1, 'COLLECTION');
 
 -- table member --
-INSERT INTO `hanSoloDB`.`members` (`address`, `email`, `fullname`, `gmt_create`, `gmt_modify`, `pass`, `phone`, `status`) VALUES
+INSERT INTO `hanSoloDB`.`members` (`address`, `email`, `full_name`, `gmt_create`, `gmt_modify`, `pass`, `phone`, `status`) VALUES
 ('91/5 trần chánh chiếu, phường 14, quận5, tp Hồ Chí Minh', 'thienkyo@gmail.com', 'Thien Le', now(), now(), 'MTIzNDU2bHR0', '0909957872', 1);
+INSERT INTO `hanSoloDB`.`members` (address, city, district, email, full_name, gmt_create, gmt_modify, partner_code, pass, payment_method, phone, status, street) VALUES
+('358/5/3 CMT8 Q3, tp HCM', NULL, NULL, 'Nguyen@hotmail.com', 'thao Nguyen', '2022-09-17 17:43:30', '2022-09-17 17:44:05', NULL, 'MTIzNDU2bHR0', NULL, '0909957873', 1, NULL);
 
 
 -- table member_role --

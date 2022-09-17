@@ -1,6 +1,6 @@
 angular.module('app')
-.controller('headerController', ['$rootScope','$location','ajaxService','memberService','cartStoreService',
-	function($rootScope,$location,ajaxService,memberService,cartStoreService) {
+.controller('headerController', ['$rootScope','$location','ajaxService','memberService','cartStoreService','categoryService',
+	function($rootScope,$location,ajaxService,memberService,cartStoreService,categoryService) {
 	var self=this;
 	self.cart=[];
 	self.currentMember = memberService.getCurrentMember();
@@ -9,10 +9,11 @@ angular.module('app')
 	self.orderQuantity = cartStoreService.getQuantity();
 	self.isAdmin = memberService.isAdmin();
 	self.isMod = memberService.isMod();
-/*
+
 	categoryService.getActiveCategories().then(function(data){
+	    console.log(data);
 		self.cateList = data;
-	});*/
+	});
 
 	self.logout = function() {
 		self.currentMember = memberService.setCurrentMember(null);

@@ -7,7 +7,7 @@ import com.hanSolo.kinhNguyen.repository.MemberRoleRepository;
 import com.hanSolo.kinhNguyen.request.LoginRequest;
 import com.hanSolo.kinhNguyen.request.SignupRequest;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
-import com.hanSolo.kinhNguyen.response.SignupResponse;
+import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -51,7 +51,7 @@ public class MemberController {
         return new LoginResponse(Jwts.builder()
                 .setSubject(parts[3])
                 .claim("roles", roleList)
-                .claim("name", memOpt.get().getFullname())
+                .claim("name", memOpt.get().getFullName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))
@@ -60,12 +60,12 @@ public class MemberController {
 
     @RequestMapping(value = "add", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public SignupResponse add(@RequestBody final SignupRequest signup) throws ServletException {
+    public GenericResponse add(@RequestBody final SignupRequest signup) throws ServletException {
         String decoded = new String(Base64.getDecoder().decode(signup.getSignupStr()));
         String[] parts = decoded.split(Utility.LOGIN_DILIMITER);
 
         if (memberRepo.findByPhone(parts[3]).isPresent()) {
-            return new SignupResponse("",Utility.FAIL_ERRORCODE,"Phone already existed.");
+            return new GenericResponse("",Utility.FAIL_ERRORCODE,"Phone already existed.");
         }
 
         Date now = new Date();
@@ -74,15 +74,15 @@ public class MemberController {
         Member member = new Member();
         member.setEmail(signup.getEmail());
         member.setPass(parts[14]);
-        member.setFullname(signup.getFullName());
+        member.setFullName(signup.getFullName());
         member.setPhone(parts[3]);
         member.setGmtCreate(now);
         member.setGmtModify(now);
         member.setStatus(Utility.ACTIVE_STATUS);
-        roleList.add(new MemberRole(Utility.MEMBER_ROLE,"0", member.getFullname(), member.getPhone(),member,now,now));
+        roleList.add(new MemberRole(Utility.MEMBER_ROLE,"0", member.getFullName(), member.getPhone(),member,now,now));
 
         member.setMemberRoles(roleList);
         Member returnMem = memberRepo.save(member);
-        return new SignupResponse(returnMem.getPhone(),Utility.SUCCESS_ERRORCODE,"Register user successfully.");
+        return new GenericResponse(returnMem.getPhone(),Utility.SUCCESS_ERRORCODE,"Register user successfully.");
     }
 }

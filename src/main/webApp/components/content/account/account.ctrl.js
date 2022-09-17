@@ -3,42 +3,17 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 	function($scope,$location, accountService,cartService,OrderStatusArray,paginationService) {
 		var self = this;
 		self.me = {};
-/*		self.me.shipCostId = 0;
-/////get ship list		
-		var tempShipCost = {
-				distance: "",
-				price:"",
-				region:"------chọn vùng-------",
-				shipCostId : 0
-		};
-		
-		cartService.getShipCost().then(function (response) {
-	        self.shipCostList = response;
-	        self.shipCostList.push(tempShipCost);
-		});
-		*/
+
 		accountService.getMe().then(function(data){
 			self.me = data.member;
-			console.log(self.me);
 			for(var i = 0; i < data.member.orders.length; i++){
 				var total = 0;
-				for(var k = 0; k < data.member.orders[i].orderDetails.length; k++){
-					total += data.member.orders[i].orderDetails[k].priceAtThatTime*data.member.orders[i].orderDetails[k].quantity;
-				}
-				//total += data.member.orders[i].shipCostFee;
-				data.member.orders[i].total = total;
-				for(var k = 0; k < OrderStatusArray.length; k++){
-					if(OrderStatusArray[k].value == data.member.orders[i].status){
-						data.member.orders[i].status = OrderStatusArray[k].name;
-						break;
-					}
-				}
+				self.calculateOrderTotal(data.member.orders[i]);
 			}
 			self.orderList = data.member.orders.reverse();
 			self.orderListPage = buildPageable(1);
 			self.pagination = paginationService.builder(self.orderListPage);
-			console.log(data.member.orders);
-			console.log(data.member.orders.reverse());
+
 		},function(error){
 			$location.path("#/");
 		});
@@ -66,24 +41,24 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 		} 
 		
 		self.updateMe = function(){
-			for(var i = 0; i < self.shipCostList.length; i++){
-				if(self.shipCostList[i].shipCostId == self.me.shipCostId){
-					self.me.shipCost = self.shipCostList[i];
-					break;
-				}
-			}
-			accountService.updateMe(self.me).then(function (response) {
-				self.responseStr = response;
+			accountService.updateMe(self.me).then(function (data) {
+				self.responseStr = data.errorMessage;
 			});
 		}
 		
 		self.showOrderDetail = function(order){
 			self.theOrder = order;
-			self.theOrder.subTotal = 0;
-			for (var i = 0; i < self.theOrder.orderDetails.length; i++){
-				self.theOrder.subTotal += self.theOrder.orderDetails[i].priceAtThatTime*self.theOrder.orderDetails[i].quantity;
-			}
-			self.theOrder.total = self.theOrder.subTotal + self.theOrder.shipCostFee; 
 		}
+
+		self.calculateOrderTotal = function(order){
+            var subTotal = 0;
+            for (var i = 0; i < order.orderDetails.length; i++){
+                subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity;
+            }
+            order.status = OrderStatusArray.find(i => i.value == order.status).name;
+            order.subTotal = subTotal;
+            order.couponAmount = subTotal*order.couponDiscount/100;
+            order.total = subTotal - order.couponAmount;
+        }
 }]);
 

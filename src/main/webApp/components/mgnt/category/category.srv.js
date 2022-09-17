@@ -17,7 +17,7 @@ angular.module('categoryModule')
 	}
 	
 	function getActiveCategories(){
-		var url = "categories/1";
+		var url = "category/active";
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});

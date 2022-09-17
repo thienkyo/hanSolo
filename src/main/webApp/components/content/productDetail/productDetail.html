@@ -52,14 +52,14 @@
 						<h4>{{ctrl.product.name}}</h4>
 						<h3 ng-show="ctrl.product.discount == 0">{{ctrl.product.sellPrice | number:0}}đ </h3>
 						<h3 ng-show="ctrl.product.discount != 0">{{ctrl.product.sellPrice*(100 - ctrl.product.discount)/100 | number:0}}đ <span>{{ctrl.product.sellPrice | number:0}}đ</span></h3>
-						<p>{{ctrl.product.description}}</p>
+						<p>{{ctrl.description}}</p>
 						<div class="product__details__cart__option">
 							<div class="quantity">
 								<div class="pro-qty">
-									<input type="text" value="1">
+									<input type="text" value="1" ng-model="ctrl.qty" >
 								</div>
 							</div>
-							<a href="#" class="primary-btn">add to cart</a>
+							<a href="" class="primary-btn"  ng-click="ctrl.addToCart(ctrl.product)" >add to cart</a>
 						</div>
 					</div>
 				</div>

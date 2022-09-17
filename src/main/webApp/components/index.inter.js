@@ -1,6 +1,7 @@
 angular.module('app')
 .service('APIInterceptor', function($q,$rootScope, memberService,) {
 	var service = this;
+
     service.request = function(config) {
         var currentMember = memberService.getCurrentMember();
         var	authen_token = currentMember ? currentMember.token : null;
@@ -13,12 +14,10 @@ angular.module('app')
     	 if (response.status === 401) {
              $rootScope.$broadcast('unauthorized');
          }
-    	 
+    /*
     	 if (response.status === 500) {
-    		 if(response.data.exception == 'io.jsonwebtoken.ExpiredJwtException'){
-    			 $rootScope.$broadcast('ExpiredJwt');
-    		 }
-         }
+    	    $rootScope.$broadcast('ExpiredJwt');
+         }*/
     	 
          return $q.reject(response);;
     };

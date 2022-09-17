@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "name", length = 100)
     private String name;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "suppliers_id")
     private Supplier suppliers;
@@ -65,6 +65,17 @@ public class Product {
 
     @Column(name = "thumbnail", length = 55)
     private String thumbnail;
+
+    @Column(name = "weight", length = 10)
+    private String weight;
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
 
     public String getThumbnail() {
         return thumbnail;

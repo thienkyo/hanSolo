@@ -18,7 +18,7 @@ angular.module('app', [
 //		'blogDetailModule',
 //		'productListModule',  //mgnt from here
 //		'productUpsertModule',
-//		'categoryModule',
+		'categoryModule',
 //		'orderListModule',
 //		'blogListModule',
 //		'blogUpsertModule',

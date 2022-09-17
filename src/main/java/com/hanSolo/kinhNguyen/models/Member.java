@@ -1,7 +1,5 @@
 package com.hanSolo.kinhNguyen.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -17,8 +15,8 @@ public class Member {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "fullname", nullable = false, length = 70)
-    private String fullname;
+    @Column(name = "full_name", nullable = false, length = 70)
+    private String fullName;
 
     @Column(name = "address", length = 300)
     private String address;
@@ -48,7 +46,7 @@ public class Member {
     private String paymentMethod;
 
     @Column(name = "partner_code", unique = true, length = 50)
-    private String partner_code;
+    private String partnerCode;
 
     @Column(name = "gmt_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,13 +106,6 @@ public class Member {
         this.gmtCreate = gmtCreate;
     }
 
-    public String getPartnerCode() {
-        return partner_code;
-    }
-
-    public void setPartnerCode(String partner_code) {
-        this.partner_code = partner_code;
-    }
 
     public String getPaymentMethod() {
         return paymentMethod;
@@ -188,12 +179,20 @@ public class Member {
         this.address = address;
     }
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getFullname() {
-        return fullname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPartnerCode() {
+        return partnerCode;
+    }
+
+    public void setPartnerCode(String partnerCode) {
+        this.partnerCode = partnerCode;
     }
 
     public Integer getId() {
@@ -206,9 +205,9 @@ public class Member {
 
     @Override
     public String toString() {
-        return "Members{" +
+        return "Member{" +
                 "id=" + id +
-                ", fullname='" + fullname + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", address='" + address + '\'' +
                 ", street='" + street + '\'' +
                 ", district='" + district + '\'' +
@@ -218,7 +217,7 @@ public class Member {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
-                ", partner_code='" + partner_code + '\'' +
+                ", partner_code='" + partnerCode + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModify=" + gmtModify +
                 '}';

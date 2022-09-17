@@ -33,22 +33,28 @@
 						</tr>
 						</thead>
 						<tbody>
+						<div class="alert alert-success" role="alert" ng-show="ctrl.order_return_status"
+							 style="margin-top:20px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">success:</span>
+							Đặt hàng thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}. Vào trang cá nhân để theo dõi đơn hàng
+						</div>
+
 						<tr ng-repeat="item in ctrl.currentCart track by $index">
 							<td class="product__cart__item" >
 								<div class="product__cart__item__pic">
-									<img src="img/product/{{item.prod.thumbnail}}" alt="" style="width: 90px;">
+									<a href="#/productDetail/{{item.prod.id}}"><img src="img/product/{{item.prod.thumbnail}}" alt="" style="width: 90px;"></a>
 								</div>
 								<div class="product__cart__item__text">
 									<h6>{{item.prod.name}}</h6>
-									<h5 ng-show="item.prod.discount == 0">{{item.prod.sellPrice | number:0}}đ</h5>
-									<h5 ng-show="item.prod.discount != 0">{{item.prod.sellPrice*(100 - item.prod.discount)/100 | number:0}}đ</h5>
+									<h5>{{item.prod.sellPrice*(100 - item.prod.discount)/100 | number:0}}đ</h5>
 									<h5 ng-show="item.prod.discount != 0"><s style="color: #0d0d0d6e;">{{item.prod.sellPrice | number:0}}đ</s></h5>
 								</div>
 							</td>
 							<td class="quantity__item">
 								<div class="quantity">
 									<div class="pro-qty-2">
-										<input type="text" value="1" ng-model="item.quantity"ng-change="ctrl.updateTotal()"
+										<input type="number" value="1" ng-model="item.quantity"ng-change="ctrl.updateTotal()"
 											   autocomplete="off" style="width:40px;" min="1" max="9">
 									</div>
 								</div>
@@ -77,7 +83,20 @@
 						<li>Coupon <span>{{ctrl.coupon | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
 					</ul>
-					<a href="#" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>
+					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>
+					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
+						 style="margin-top:20px;">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						{{ctrl.isErrorMsg}}
+					</div>
+
+					<div class="alert alert-success" role="alert" ng-show="ctrl.order_return_status"
+						 style="margin-top:20px;">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">success:</span>
+						Đặt hàng thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}. Vào trang cá nhân để theo dõi đơn hàng
+					</div>
 				</div>
 			</div>
 		</div>
@@ -89,7 +108,7 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Full Name<span>*</span></p>
-							<input type="text"  ng-model="ctrl.me.fullname">
+							<input type="text"  ng-model="ctrl.me.fullName">
 						</div>
 					</div>
 					<div class="col-lg-6	">
@@ -105,12 +124,12 @@
 						   ng-model="ctrl.me.address">
 
 				</div>
-				<h6 class="checkout__title" style="font-weight: 300;">after place order, shop will contact, then you can use these to pay</h6>
+				<h6 class="checkout__title" style="text-transform: inherit;">*After place order, shop will contact, then you can use these to pay</h6>
 				<div class="checkout__input">
-					<p>Momo:<span>*</span></p>
+					<p>Momo:</p>
 				</div>
 				<div class="checkout__input">
-					<p>Bank transfer:<span>*</span></p>
+					<p>Bank transfer:</p>
 				</div>
 			</div>
 		</div>

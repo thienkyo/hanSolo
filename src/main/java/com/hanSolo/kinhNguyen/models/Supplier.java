@@ -42,7 +42,7 @@ public class Supplier {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
-    @JsonBackReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "suppliers", orphanRemoval = true)
     private Set<Product> products = new LinkedHashSet<>();
 

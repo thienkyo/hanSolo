@@ -1,9 +1,9 @@
 package com.hanSolo.kinhNguyen.response;
 
-public class SignupResponse extends BaseResponse{
+public class GenericResponse extends BaseResponse{
     private String replyStr;
 
-    public SignupResponse(String replyStr, String errorCode, String errorMessage) {
+    public GenericResponse(String replyStr, String errorCode, String errorMessage) {
         super(errorCode,errorMessage);
         this.replyStr = replyStr;
     }

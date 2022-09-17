@@ -1,5 +1,7 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +19,7 @@ public class Order {
     private String couponCode;
 
     @Column(name = "coupon_discount")
-    private Integer coupon_discount;
+    private Integer couponDiscount;
 
     @Column(name = "ext_info", length = 800)
     private String extInfo;
@@ -26,13 +28,13 @@ public class Order {
     private Integer status;
 
     @Column(name = "shipping_address", nullable = false, length = 600)
-    private String shipping_address;
+    private String shippingAddress;
 
     @Column(name = "shipping_name")
-    private String shipping_name;
+    private String shippingName;
 
     @Column(name = "shipping_phone", length = 20)
-    private String shipping_phone;
+    private String shippingPhone;
 
     @Column(name = "relationship", length = 100)
     private String relationship;
@@ -54,9 +56,11 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "order_id")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -125,28 +129,28 @@ public class Order {
         this.relationship = relationship;
     }
 
-    public String getShipping_phone() {
-        return shipping_phone;
+    public String getShippingAddress() {
+        return shippingAddress;
     }
 
-    public void setShipping_phone(String shipping_phone) {
-        this.shipping_phone = shipping_phone;
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
     }
 
-    public String getShipping_name() {
-        return shipping_name;
+    public String getShippingName() {
+        return shippingName;
     }
 
-    public void setShipping_name(String shipping_name) {
-        this.shipping_name = shipping_name;
+    public void setShippingName(String shippingName) {
+        this.shippingName = shippingName;
     }
 
-    public String getShipping_address() {
-        return shipping_address;
+    public String getShippingPhone() {
+        return shippingPhone;
     }
 
-    public void setShipping_address(String shipping_address) {
-        this.shipping_address = shipping_address;
+    public void setShippingPhone(String shippingPhone) {
+        this.shippingPhone = shippingPhone;
     }
 
     public Integer getStatus() {
@@ -165,12 +169,12 @@ public class Order {
         this.extInfo = extInfo;
     }
 
-    public Integer getCoupon_discount() {
-        return coupon_discount;
+    public Integer getCouponDiscount() {
+        return couponDiscount;
     }
 
-    public void setCoupon_discount(Integer coupon_discount) {
-        this.coupon_discount = coupon_discount;
+    public void setCouponDiscount(Integer couponDiscount) {
+        this.couponDiscount = couponDiscount;
     }
 
     public String getCouponCode() {
