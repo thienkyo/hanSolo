@@ -1,9 +1,14 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.models.Category;
 import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.repository.ProductRepository;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,14 +40,16 @@ public class ProductController {
     public Product getOneActiveProduct(@PathVariable final int id) {
         return prodRepo.findByIdAndStatus(id, Utility.ACTIVE_STATUS).get();
     }
-/*
-    @RequestMapping("{status}")
-    public List<Product> getProductByStatus(@PathVariable final int status) {//@RequestParam(value = "status")
-        return prodRepo.findByStatusOrderByModDateDesc(status);
-    }
 
-    @RequestMapping("first6")
-    public List<Product> getFisrt6Product() {//@RequestParam(value = "status")
-        return prodRepo.findFirst6ByStatusOrderByModDateDesc(UtilityConstant.ACTIVE_STATUS);
+   /* @RequestMapping(value = "category/{id}", method = RequestMethod.GET)
+    public List<Product> getProductByCategory(@PathVariable int id) {
+        return prodRepo.findByCategories_IdAndStatusOrderByGmtModifyDesc(id, Utility.ACTIVE_STATUS);
     }*/
+
+    @RequestMapping(value = "getProductPage/{cateId}/{pageNumber}", method = RequestMethod.GET)
+    public Page<Product> getProductPage(@PathVariable Integer cateId, @PathVariable Integer pageNumber) {
+        Pageable request = PageRequest.of(pageNumber - 1, Utility.PRODUCT_PAGE_SIZE, Sort.Direction.DESC, "id");
+
+        return prodRepo.findByCategories_IdAndStatusOrderByGmtModifyDesc(cateId, Utility.ACTIVE_STATUS, request);
+    }
 }

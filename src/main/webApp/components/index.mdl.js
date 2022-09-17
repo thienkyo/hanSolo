@@ -4,7 +4,7 @@ angular.module('app', [
 		'ngResource',
 		'ngCookies',
 		'networkServices', // ajax service
-//		'productModule',
+		'productCategoryModule',
 	//	'chieffancypants.loadingBar',
 		'homeModule',
 		'productDetailModule',

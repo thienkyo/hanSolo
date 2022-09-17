@@ -1,12 +1,17 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
+    List<Product> findByCategories_IdOrderByGmtModifyAsc(Integer id);
+
+    Page<Product> findByCategories_IdAndStatusOrderByGmtModifyDesc(Integer id, Boolean status, Pageable pageable);
 
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
     // for homePage, get 8 new product

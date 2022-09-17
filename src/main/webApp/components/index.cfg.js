@@ -19,9 +19,9 @@ angular.module('app')
             controller: 'productDetailController',
             controllerAs:'ctrl'
         })
-        .when('/category/:categoryId',{
-            templateUrl: 'components/content/product/product.html',
-            controller: 'productController',
+        .when('/productCategory/:categoryId',{
+            templateUrl: 'components/content/productCategory/productCategory.html',
+            controller: 'productCategoryController',
             controllerAs:'ctrl'
         })
         .when('/cart',{

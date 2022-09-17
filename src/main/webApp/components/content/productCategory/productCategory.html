@@ -1,0 +1,42 @@
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 padding-left">
+				<div class="features_items"><!--features_items-->
+					<div class="col-sm-4" ng-repeat="prod in ctrl.currentPage.content">
+						<div class="product-image-wrapper">
+							<div class="single-products">
+								<div class="productinfo text-center">
+									<a href="#/productDetail/{{prod.prodId}}" ><img ng-src="images/thumbnail/{{prod.image}}" alt="" style="width:100%;height:100%;"/></a>
+									<h2>{{prod.price | number:0}} đ</h2>
+									<a href="#/productDetail/{{prod.prodId}}" > <p>{{prod.prodName}}</p> </a>
+								</div>
+								<div class="alert alert-success" role="alert" ng-show="ctrl.alertProdId == prod.prodId && prod.quantity != 0" style="position: absolute;top: 0; left: 0;">
+									  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									  <span class="sr-only">success:</span>
+								  		Đã thêm vào giỏ hàng
+								</div>
+								<div class="alert alert-danger" role="alert" ng-show="ctrl.alertProdId == prod.prodId && prod.quantity == 0" style="position: absolute;top: 0; left: 0;">
+									  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									  <span class="sr-only">error:</span>
+								  		Tạm hết hàng
+								</div>	
+						    </div>
+							<div class="choose">
+								<ul class="nav nav-pills nav-justified">
+									<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+									<li><a class="btn btn-default add-to-cart" ng-click="ctrl.addToCart(prod)"><i class="fa fa-shopping-cart"></i>Add to cart</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div><!--features_items-->
+			</div>
+			<ul class="pagination">
+				<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.previousNumber)">&laquo;</a></li>
+				<li class="{{item.status ? 'active' : ''}}" ng-repeat="item in ctrl.pagination.list"><a ng-click="ctrl.getTargetPage(item.number)">{{item.number}}</a></li>
+				<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.nextNumber)">&raquo;</a></li>
+			</ul>
+		</div>
+	</div>
+</section>

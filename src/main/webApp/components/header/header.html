@@ -56,10 +56,7 @@
 						<li class="active"><a href="#/">Home</a></li>
 						<li><a href="./shop.html">Shop</a>
 							<ul class="dropdown">
-								<li><a href="./about.html">Giọng nam</a></li>
-								<li><a href="./shop-details.html">Gọng nữ</a></li>
-								<li><a href="./shopping-cart.html">Trẻ em</a></li>
-								<li><a href="./checkout.html">Thể thao</a></li>
+								<li ng-repeat="cate in ctrl.cateList | filter:{ type: 'CATEGORY' }"><a href="#/productCategory/{{cate.id}}">{{cate.name}}</a></li>
 							</ul>
 						</li>
 						<li><a href="#">Collections</a>
