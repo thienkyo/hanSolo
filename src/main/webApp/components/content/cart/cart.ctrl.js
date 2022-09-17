@@ -17,12 +17,6 @@ angular.module('cartModule')
 		self.guest.fullName = 'GUEST';// guest id
 		self.orderDetail = [];
 		self.order_one_time_trigger = true;
-
-		
-	/*	cartService.getActiveShipCost().then(function (response) {
-	        self.shipCostList = response;
-	        self.shipCostList.push(tempShipCost);
-		});*/
 		
 //////get full user data from db		
 		accountService.getMe().then(function(data){
@@ -35,7 +29,10 @@ angular.module('cartModule')
 			self.isShow = false;
 			self.me = self.guest;
             self.order.member = self.guest;
+            console.log(self.me);
 		});
+
+
 
 		// calculate subtotal
 		self.updateTotal = function(){
@@ -51,11 +48,8 @@ angular.module('cartModule')
 		if(self.currentCart.length > 0){
 			self.updateTotal();
 			console.log(self.currentCart);
-        //    console.log('before init order');
-		//	console.log(cartStoreService.getOrderId());
-			//// init order
-			if(cartStoreService.getOrderId() == ''){
-			    var OrderDetailList = [];
+
+			   /* var OrderDetailList = [];
                 for (var i = 0; i < self.currentCart.length; i++){
                     var tempOrderDetail = new OrderDetailDO();
                     tempOrderDetail.product = self.currentCart[i].prod;
@@ -69,13 +63,13 @@ angular.module('cartModule')
                 self.order.orderDetails = OrderDetailList;
                 self.order.shippingAddress = 'init order';
                 self.order.shippingName = 'init order';
-                self.order.shippingPhoneNumber = '0000000000';
+                self.order.shippingPhoneNumber = '0000000000';*/
 
               /*  cartService.placeGuestOrder(self.order).then(function (response) {
                     cartStoreService.setOrderId(response.orderId);
                 });*/
-                console.log(self.order);
-			}
+               // console.log(self.order);
+
 		}
 		
 		self.removeItem = function(index){
@@ -91,18 +85,13 @@ angular.module('cartModule')
 				var OrderDetailList = [];
 				
 				for (var i = 0; i < self.currentCart.length; i++){
-				    // user not upload image for prod that require image.
-				    if(self.currentCart[i].prod.needImage && !self.currentCart[i].imageNames){
-				        self.isErrorMsg = 'Cần upload hình cho đơn hàng';
-				        return;
-				    }
 					var tempOrderDetail = new OrderDetailDO();
 					tempOrderDetail.product = self.currentCart[i].prod;
-					tempOrderDetail.priceAtThatTime = self.currentCart[i].prod.price;
+					tempOrderDetail.framePriceAtThatTime = self.currentCart[i].prod.sellPrice;
 					tempOrderDetail.discountAtThatTime = self.currentCart[i].prod.discount;
 					tempOrderDetail.weight = self.currentCart[i].prod.weight;
 					tempOrderDetail.quantity = self.currentCart[i].quantity;
-					tempOrderDetail.imageNames = self.currentCart[i].imageNames;
+					//tempOrderDetail.imageNames = self.currentCart[i].imageNames;
 					OrderDetailList.push(tempOrderDetail);
 				}
 				self.order.orderDetails = OrderDetailList;

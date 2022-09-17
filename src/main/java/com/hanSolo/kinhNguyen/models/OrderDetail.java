@@ -27,7 +27,7 @@ public class OrderDetail {
     private String osVacc;
 
     @Column(name = "os_sphere", length = 10)
-    private String os_sphere;
+    private String osSphere;
 
     @Column(name = "os_cylinder", length = 10)
     private String osCylinder;
@@ -45,7 +45,7 @@ public class OrderDetail {
     private String odVacc;
 
     @Column(name = "od_sphere", length = 10)
-    private String od_sphere;
+    private String odSphere;
 
     @Column(name = "od_cylinder", length = 10)
     private String odCylinder;
@@ -227,12 +227,12 @@ public class OrderDetail {
         this.odCylinder = odCylinder;
     }
 
-    public String getOd_sphere() {
-        return od_sphere;
+    public String getOdSphere() {
+        return odSphere;
     }
 
-    public void setOd_sphere(String od_sphere) {
-        this.od_sphere = od_sphere;
+    public void setOdSphere(String od_sphere) {
+        this.odSphere = odSphere;
     }
 
     public String getOdVacc() {
@@ -275,12 +275,12 @@ public class OrderDetail {
         this.osCylinder = osCylinder;
     }
 
-    public String getOs_sphere() {
-        return os_sphere;
+    public String getOsSphere() {
+        return osSphere;
     }
 
-    public void setOs_sphere(String os_sphere) {
-        this.os_sphere = os_sphere;
+    public void setOsSphere(String os_sphere) {
+        this.osSphere = os_sphere;
     }
 
     public String getOsVacc() {

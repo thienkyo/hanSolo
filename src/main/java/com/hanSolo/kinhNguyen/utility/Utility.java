@@ -2,7 +2,7 @@ package com.hanSolo.kinhNguyen.utility;
 
 public class Utility {
 
-    final public static int AUTHENTICATION_TIMEOUT = 2; //hour
+    final public static int AUTHENTICATION_TIMEOUT = 5*60*1000; //hour or min in dev
 
     final public static Boolean ACTIVE_STATUS = true;
     final public static Boolean INACTIVE_STATUS = false;

@@ -2,6 +2,7 @@
 angular.module('app')
 .factory('memberService',['store', function(store) {
 	var currentMember = null;
+	var cartName = 'kinhNguyenCart'; //
 	var memberService = {
 		setCurrentMember : setCurrentMember,
 		getCurrentMember : getCurrentMember,
@@ -109,28 +110,29 @@ angular.module('app')
 .factory('cartStoreService',['store', function(store) {
 	var currentCart = [];
 	var currentOrderId = '';
+	var cartName = 'kinhNguyenCart';
 	var cartStoreService = {
 		setCurrentCart : setCurrentCart,
 		getCurrentCart : getCurrentCart,
 		getQuantity : getQuantity,
 		clearCart : clearCart,
-		setOrderId : setOrderId,
-		getOrderId : getOrderId,
-		clearOrderId : clearOrderId,
+//		setOrderId : setOrderId,
+//		getOrderId : getOrderId,
+//		clearOrderId : clearOrderId,
 		};
 	return cartStoreService;
 	
 	function setCurrentCart(cart){
 		currentCart = cart;
-        store.set('cart', cart);
+        store.set(cartName, cart);
         return currentCart;
 	}
 	
 	function getCurrentCart(){
-		if (store.get('cart')) {
-			currentCart = store.get('cart');
+		if (store.get(cartName)) {
+			currentCart = store.get(cartName);
         }else{
-        	store.set('cart', currentCart);
+        	store.set(cartName, currentCart);
         }
         return currentCart;
 	}
@@ -144,15 +146,15 @@ angular.module('app')
 	
 	function clearCart(){
 		currentCart = [];
-		store.set('cart', currentCart);
+		store.set(cartName, currentCart);
 	}
-
+/*
 	function setOrderId(orderId){
         currentOrderId = orderId;
         store.set('orderId', orderId);
         return currentOrderId;
-    }
-
+    }*/
+/*
     function getOrderId(){
         return store.get('orderId');
     }
@@ -160,10 +162,10 @@ angular.module('app')
     function clearOrderId(){
         currentOrderId = '';
         store.set('orderId', currentOrderId);
-    }
+    }*/
 
 }])
-.factory('shipStoreService',['store', function(store) {
+/*.factory('shipStoreService',['store', function(store) {
 	var shipList = [];
 	var shipStoreService = {
 		setShipList : setShipList,
@@ -182,7 +184,7 @@ angular.module('app')
 		if (store.get('shipList')) {
 			shipList = store.get('shipList');
         }else{
-        	store.set('cart', shipList);
+        	store.set(cartName, shipList);
         }
         return shipList;
 	}
@@ -196,7 +198,7 @@ angular.module('app')
 		}
 		return false;
 	}
-}])
+}])*/
 
 .factory('paginationService',['store','PaginationItemDO','PaginationDO', function(store,PaginationItemDO,PaginationDO) {
 	var pagination = new PaginationDO;

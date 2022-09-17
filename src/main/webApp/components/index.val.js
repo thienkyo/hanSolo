@@ -28,29 +28,58 @@ angular
 		.value('PaginationDO',PaginationDO);
 
 function OrderDO () {
-	this.orderId = 0;
+	this.id = 0;
+	this.couponCode = '';
+	this.couponDiscount = 0;
+	this.extInfo = '';
 	this.shippingAddress = '';
 	this.status = 19;
-	this.discount = 0;
-	this.modDate = (new Date()).getTime();
-	this.shipCostFee = 0;
-	this.shipCostId = 7;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+	this.relationship = '';
+	this.location = '';
+	this.deposit = 0;
+	this.shippingId = '';
 	this.member = null;
 	this.shippingName = '';
-	this.shippingPhoneNumber ='';
+	this.shippingPhone ='';
 	this.orderDetails = [];
 }
 
 function OrderDetailDO () {
-	this.orderDetailId = 0;
-	//this.orderId = 0;
+	this.id = 0;
 	this.product = null;
-	this.priceAtThatTime = 1;
-	this.discountAtThatTime = 0;
+	this.framePriceAtThatTime = 0;
+	this.frameDiscountAtThatTime = 0;
+
+	this.osVasc = '';
+	this.osVacc = '';
+	this.osSphere = '';
+	this.osCylinder = '';
+	this.osAxis = '';
+	this.osPrism = '';
+
+	this.odVasc = '';
+    this.odVacc = '';
+    this.odSphere = '';
+    this.odCylinder = '';
+    this.odAxis = '';
+    this.odPrism = '';
+
+	this.osAdd = '';
+	this.odAdd = '';
+	this.pd = '';
+	this.wd = '';
+	this.vaNear = '';
+	this.name = '';
+	this.phone = '';
+	this.relationship = '';
+	this.recommendedSpectacles = '';
+
 	this.quantity = 1;
 	this.weight = 1;
-	this.modDate = (new Date()).getTime();
-	this.imageNames = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function MemberDO () {
