@@ -16,7 +16,9 @@ INSERT INTO `hanSoloDB`.`members` (address, city, district, email, full_name, gm
 -- table member_role --
 INSERT INTO `hanSoloDB`.`member_role` (`gmt_create`, `gmt_modify`, `level`, `role`, `member_id`, `name`, `phone`) VALUES
 (now(), now(), '0', 'ADMIN', 1,'Thien Le','0909957872'),
-(now(), now(), '0', 'MEMBER', 1,'Thien Le','0909957872');
+(now(), now(), '0', 'MEMBER', 1,'Thien Le','0909957872'),
+(now(), now(), '0', 'MEMBER', 2,'thao Nguyen','0909957873')
+;
 
 -- table banners --
 INSERT INTO `hanSoloDB`.`banners` (`description`, `gmt_create`, `gmt_modify`, `image`, `link`, `name`, `status`, `type`, `need_text`) VALUES
