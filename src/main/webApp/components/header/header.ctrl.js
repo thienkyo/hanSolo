@@ -77,7 +77,7 @@ angular.module('app')
     $rootScope.$on('ExpiredJwt', function() {
     	self.currentMember = memberService.setCurrentMember(null);
 		self.isAdmin = false;
-		$location.path('#/');
+	//	$location.path('#/');
     });
 
 }]);

@@ -14,7 +14,7 @@ angular.module('cartModule')
 		self.order = new OrderDO;
 		self.order.shipCostId = 0;
 		self.guest = new MemberDO;//guest member
-		self.guest.fullName = 'GUEST';// guest id
+		//self.guest.fullName = 'GUEST';// guest id
 		self.orderDetail = [];
 		self.order_one_time_trigger = true;
 		
@@ -81,14 +81,13 @@ angular.module('cartModule')
 				if(self.me.address && self.me.fullName && self.me.phone){
 				    if(memberService.isLogin()){
 				        cartService.placeOrder(self.order).then(function (data) {
-				            console.log(data);
                             self.order_return_status = data; // return after saving order, order_return_status would be orderid
                             self.newOrderId = data.replyStr;
                         });
 				    }else{
-				        cartService.placeGuestOrder(self.order).then(function (response) {
-                            self.order_return_status = response.replyStr;
-                            self.newOrderId = response.orderId;
+				        cartService.placeGuestOrder(self.order).then(function (data) {
+                            self.order_return_status = data;
+                            self.newOrderId = data.replyStr;
                         });
 				    }
 
@@ -98,16 +97,13 @@ angular.module('cartModule')
                     $rootScope.$broadcast('clearCart');
 
 				}else{
-					self.isErrorMsg ='Cần nhập địa chỉ/tên/số điện thoại/chọn vùng.';
+					self.isErrorMsg ='Cần nhập địa chỉ/tên/số điện thoại.';
 				}
 			}else{
 			    self.isErrorMsg ='Please add an item to cart.';
 				console.log('NOT logined');
 			}
 		}
-
-
-
         self.clearErrorMsg = function() {
             self.isErrorMsg = false;
         }

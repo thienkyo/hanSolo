@@ -62,6 +62,7 @@ angular.module('cartModule')
    function placeGuestOrder(order){
    	   var url = "guest/saveOrder";
    	   return ajaxService.post(url,order,{}).then(function(response){
+   	        console.log(response);
    			return response.data;
    	   });
       }

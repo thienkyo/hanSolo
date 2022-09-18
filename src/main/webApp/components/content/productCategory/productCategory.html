@@ -53,8 +53,8 @@
 					<h4>Shop</h4>
 					<div class="breadcrumb__links">
 						<a href="/#/">Home</a>
-						<a href="/#/">Shop</a>
-						<span>Cate</span>
+						<a href="#/productCategory/0">Shop</a>
+						<span>{{ctrl.categoryName}}</span>
 
 					</div>
 				</div>
@@ -85,15 +85,7 @@
 									<div class="card-body">
 										<div class="shop__sidebar__categories">
 											<ul class="nice-scroll">
-												<li><a href="#">Men (20)</a></li>
-												<li><a href="#">Women (20)</a></li>
-												<li><a href="#">Bags (20)</a></li>
-												<li><a href="#">Clothing (20)</a></li>
-												<li><a href="#">Shoes (20)</a></li>
-												<li><a href="#">Accessories (20)</a></li>
-												<li><a href="#">Kids (20)</a></li>
-												<li><a href="#">Kids (20)</a></li>
-												<li><a href="#">Kids (20)</a></li>
+												<li ng-repeat="cate in ctrl.cateList | filter:{ type: 'CATEGORY' }"><a href="#/productCategory/{{cate.id}}">{{cate.name}}</a></li>
 											</ul>
 										</div>
 									</div>
@@ -111,6 +103,20 @@
 												<li><a href="#">Chanel</a></li>
 												<li><a href="#">Hermes</a></li>
 												<li><a href="#">Gucci</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-heading">
+									<a data-toggle="collapse" data-target="#collapseTwo">Collections</a>
+								</div>
+								<div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+									<div class="card-body">
+										<div class="shop__sidebar__brand">
+											<ul>
+												<li ng-repeat="cate in ctrl.cateList | filter:{ type: 'COLLECTION' }"><a href="#/productCategory/{{cate.id}}">{{cate.name}}</a></li>
 											</ul>
 										</div>
 									</div>
@@ -143,7 +149,8 @@
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							<div class="shop__product__option__left">
-								<p>Showing 1–12 of 126 results</p>
+								<p ng-show="ctrl.currentPage.totalElements == 0">0 results</p>
+								<p ng-show="ctrl.currentPage.totalElements != 0">Showing {{ctrl.currentPage.size*ctrl.currentPage.number +1}}–{{ctrl.currentPage.size*(ctrl.currentPage.number + 1)}} of {{ctrl.currentPage.totalElements}} results</p>
 							</div>
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">

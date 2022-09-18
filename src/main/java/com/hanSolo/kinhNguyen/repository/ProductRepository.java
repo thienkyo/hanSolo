@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
-    List<Product> findByCategories_IdOrderByGmtModifyAsc(Integer id);
 
     Page<Product> findByCategories_IdAndStatusOrderByGmtModifyDesc(Integer id, Boolean status, Pageable pageable);
+
+    Page<Product> findByStatusOrderByGmtModifyDesc(Boolean status, Pageable pageable);
 
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
     // for homePage, get 8 new product

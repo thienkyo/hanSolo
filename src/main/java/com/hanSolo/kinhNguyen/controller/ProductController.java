@@ -50,6 +50,10 @@ public class ProductController {
     public Page<Product> getProductPage(@PathVariable Integer cateId, @PathVariable Integer pageNumber) {
         Pageable request = PageRequest.of(pageNumber - 1, Utility.PRODUCT_PAGE_SIZE, Sort.Direction.DESC, "id");
 
+        if(cateId == 0){
+            return prodRepo.findByStatusOrderByGmtModifyDesc(Utility.ACTIVE_STATUS, request);
+        }
+
         return prodRepo.findByCategories_IdAndStatusOrderByGmtModifyDesc(cateId, Utility.ACTIVE_STATUS, request);
     }
 }

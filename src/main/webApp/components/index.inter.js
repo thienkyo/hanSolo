@@ -14,10 +14,11 @@ angular.module('app')
     	 if (response.status === 401) {
              $rootScope.$broadcast('unauthorized');
          }
-    /*
-    	 if (response.status === 500) {
+
+         console.log(response);
+    	 if (response.status === 500 && response.data.path == '/authenticated/me') {
     	    $rootScope.$broadcast('ExpiredJwt');
-         }*/
+         }
     	 
          return $q.reject(response);;
     };

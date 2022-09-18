@@ -2,7 +2,7 @@ package com.hanSolo.kinhNguyen.utility;
 
 public class Utility {
 
-    final public static int AUTHENTICATION_TIMEOUT = 1*60*60*1000; //hour or min in dev
+    final public static int AUTHENTICATION_TIMEOUT = 1*3*60*1000; //hour or min in dev
 
     final public static Boolean ACTIVE_STATUS = true;
     final public static Boolean INACTIVE_STATUS = false;
@@ -11,6 +11,7 @@ public class Utility {
     final public static String HOME_COLLECTION = "HOMECOLLECTION";
 
     final public static String LOGIN_DILIMITER = "d3m";
+    final public static String DEFAULT_PW = "kinhnguyen";
     final public static String SECRET_KEY = "kinhNguyenSecretKey";
 
     final public static String MEMBER_ROLE = "MEMBER";
@@ -32,7 +33,7 @@ public class Utility {
     final public static int ORDER_USER_DELETE = 4;
     final public static int ORDER_SHOP_DELETE = 5;
 
-    final public static int PRODUCT_PAGE_SIZE = 3;
+    final public static int PRODUCT_PAGE_SIZE = 9;
     final public static int BLOG_PAGE_SIZE = 4;
 
 
