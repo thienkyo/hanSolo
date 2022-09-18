@@ -10,6 +10,7 @@ angular.module('productCategoryModule')
 	    console.log(response);
 		self.currentPage = response;
 		self.pagination = paginationService.builder(response);
+		console.log(self.pagination);
     });
 	
 	self.getTargetPage = function(pageNumber){

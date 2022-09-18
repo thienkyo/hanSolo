@@ -10,7 +10,6 @@ angular.module('productCategoryModule')
 	
 	function getProductByCategory(categoryId){
 		var url = "products/category/" + categoryId;
-		
 		return ajaxService.get(url,null,{}).then(function(data){
 			return data.data;
 		});
