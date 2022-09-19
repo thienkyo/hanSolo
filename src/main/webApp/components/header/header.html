@@ -1,3 +1,30 @@
+<style>
+
+.search_class{
+	background: #F0F0E9;
+    border: medium none;
+    color: #B2B2B2;
+    font-family: 'roboto';
+    font-size: 12px;
+    font-weight: 300;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    width: 100px;
+    background-image: url(../images/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 160px;
+}
+
+.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+    width:500px !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
+	width: 200px;
+}
+
+</style>
 <!-- Offcanvas Menu Begin -->
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
@@ -34,6 +61,35 @@
 				<div class="col-lg-6 col-md-5">
 					<div class="header__top__right">
 						<div class="header__top__links">
+
+
+							<div class="search_box pull-left">
+								<md-autocomplete class="search_class"  flex=""
+												 ng-disabled="ctrl.isDisable"
+												 md-no-cache="ctrl.noCache"
+												 md-selected-item="ctrl.selectedItem"
+												 md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+												 md-search-text="ctrl.searchText"
+												 md-selected-item-change="ctrl.selectedItemChange(item)"
+												 md-items="item in ctrl.querySearch(ctrl.searchText)"
+												 md-item-text="item.name"
+												 md-min-length="2"
+												 md-delay="500"
+												 placeholder="search">
+									<md-item-template>
+										<div class="row" >
+											<div class="col-sm-2" >{{item.type == 1 ? 'shop' : 'blog'}}</div>
+											<div class="col-sm-3" style="border-left: 10px;"><img ng-src=" {{item.type == 1 ? 'images/thumbnail/'+item.image : 'images/article/'+item.image}} " alt="" style="height:40px;"/></div>
+											<div class="col-sm-7" style="border-right: 10px;">{{item.name}}</div>
+										</div>
+									</md-item-template>
+									<md-not-found>
+										không có kết quả cho "{{ctrl.searchText}}".
+									</md-not-found>
+								</md-autocomplete>
+							</div>
+
+
 							<a href="#/login" ng-show="!ctrl.currentMember">Sign in</a>
 							<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" >Sign out</a>
 						</div>
@@ -80,7 +136,7 @@
 			</div>
 			<div class="col-lg-3 col-md-3">
 				<div class="header__nav__option">
-					<a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
+					<!--<a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>-->
 					<a href="#" ng-show="!ctrl.currentMember"><img src="img/icon/order.png" alt=""></a>
 					<a href="#/account" ng-show="ctrl.currentMember"><img src="img/icon/account5.png" alt=""></a>
 					<a href="#/cart"><img src="img/icon/cart.png" alt=""> <span style="color: crimson;">{{ctrl.orderQuantity}}</span></a>
