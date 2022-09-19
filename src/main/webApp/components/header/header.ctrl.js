@@ -11,7 +11,6 @@ angular.module('app')
 	self.isMod = memberService.isMod();
 
 	categoryService.getActiveCategories().then(function(data){
-	    console.log(data);
 		self.cateList = data;
 	});
 
@@ -26,6 +25,7 @@ angular.module('app')
 		if(searchText){
 			var url = "search/"+searchText;
 			return ajaxService.get(url,null,{}).then(function(response){
+			    console.log(response);
 				return response.data;
 			});
 

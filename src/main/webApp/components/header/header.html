@@ -7,13 +7,17 @@
     font-family: 'roboto';
     font-size: 12px;
     font-weight: 300;
-    height: 40px;
+    height: 30px;
     outline: medium none;
     padding-left: 0px;
     width: 100px;
     background-image: url(../images/home/searchicon.png);
     background-repeat: no-repeat;
     background-position: 160px;
+}
+
+.md-whiteframe-z1 {
+    box-shadow: none;
 }
 
 .md-virtual-repeat-container.md-autocomplete-suggestions-container {
@@ -78,8 +82,8 @@
 												 placeholder="search">
 									<md-item-template>
 										<div class="row" >
-											<div class="col-sm-2" >{{item.type == 1 ? 'shop' : 'blog'}}</div>
-											<div class="col-sm-3" style="border-left: 10px;"><img ng-src=" {{item.type == 1 ? 'images/thumbnail/'+item.image : 'images/article/'+item.image}} " alt="" style="height:40px;"/></div>
+											<div class="col-sm-2" >{{item.type}}</div>
+											<div class="col-sm-3" style="border-left: 10px;"><img ng-src="img/product/{{item.thumbnail}}" alt="" style="height:40px;"/></div>
 											<div class="col-sm-7" style="border-right: 10px;">{{item.name}}</div>
 										</div>
 									</md-item-template>
@@ -88,10 +92,8 @@
 									</md-not-found>
 								</md-autocomplete>
 							</div>
-
-
-							<a href="#/login" ng-show="!ctrl.currentMember">Sign in</a>
-							<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" >Sign out</a>
+							<a href="#/login" ng-show="!ctrl.currentMember" style="margin-left: 20px;">Sign in</a>
+							<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" style="margin-left: 20px;">Sign out</a>
 						</div>
 
 					</div>

@@ -1,9 +1,11 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Product;
+import com.hanSolo.kinhNguyen.models.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,9 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
     Page<Product> findByStatusOrderByGmtModifyDesc(Boolean status, Pageable pageable);
 
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
+
+    List<Product> findByNameContainsIgnoreCaseAndStatus(@NonNull String name, Boolean status);
+
     // for homePage, get 8 new product
     List<Product> findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Boolean status, Integer discount);
     // for homePage, get 4 discount product
