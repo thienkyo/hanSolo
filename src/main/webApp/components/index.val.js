@@ -181,7 +181,7 @@ function PaginationDO() {
 	this.currentNumber = 1;
 	this.previousNumber = 1;
 	this.nextNumber = 1;
-	this.totalPage = 1;
+	this.totalElements = 1;
 	this.currentFirstItemIndex = 1;
     this.currentLastItemIndex = 1;
 	this.list = [];

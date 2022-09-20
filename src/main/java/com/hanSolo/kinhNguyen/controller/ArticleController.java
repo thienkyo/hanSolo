@@ -32,4 +32,9 @@ public class ArticleController {
         Pageable request = PageRequest.of(pageNumber - 1, Utility.BLOG_PAGE_SIZE, Sort.Direction.DESC, "id");
         return articleRepo.findByStatus(Utility.ACTIVE_STATUS, request);
     }
+
+    @RequestMapping(value="/{id}",method = RequestMethod.GET)
+    public Article getOneActiveArticle(@PathVariable final int id) {
+        return articleRepo.findByStatusAndId( Utility.ACTIVE_STATUS,id);
+    }
 }

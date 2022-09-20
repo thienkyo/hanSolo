@@ -150,7 +150,7 @@
 						<div class="col-lg-6 col-md-6 col-sm-6">
 							<div class="shop__product__option__left">
 								<p ng-show="ctrl.currentPage.totalElements == 0">0 results</p>
-								<p ng-show="ctrl.currentPage.totalElements != 0">Showing {{ctrl.currentPage.size*ctrl.currentPage.number +1}}–{{ctrl.currentPage.size*(ctrl.currentPage.number + 1)}} of {{ctrl.currentPage.totalElements}} results</p>
+								<p ng-show="ctrl.currentPage.totalElements != 0">Showing {{ctrl.pagination.currentFirstItemIndex}}–{{ctrl.pagination.currentLastItemIndex}} of {{ctrl.pagination.totalElements}} results</p>
 							</div>
 						</div>
 						<div class="col-lg-6 col-md-6 col-sm-6">

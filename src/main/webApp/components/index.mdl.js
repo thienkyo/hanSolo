@@ -15,7 +15,7 @@ angular.module('app', [
 		'angular-storage',
 		'ngMaterial',
 		'blogModule',
-//		'blogDetailModule',
+		'blogDetailModule',
 //		'productListModule',  //mgnt from here
 //		'productUpsertModule',
 		'categoryModule',

@@ -1,0 +1,68 @@
+<!-- Blog Details Hero Begin -->
+<section class="blog-hero spad" style="padding-top: 30px; padding-bottom: 60px">
+	<div class="container">
+		<div class="row d-flex justify-content-center">
+			<div class="col-lg-9 text-center">
+				<div class="blog__hero__text">
+					<h2>{{ctrl.theBlog.name}}</h2>
+					<ul>
+						<li>By {{ctrl.theBlog.author}}</li>
+						<li>{{ctrl.theBlog.gmtCreate | date:"dd-MM-yyyy"}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Blog Details Hero End -->
+
+<!-- Blog Details Section Begin -->
+<section class="blog-details spad">
+	<div class="container">
+		<div class="row d-flex justify-content-center">
+			<div class="col-lg-12" style="padding-bottom: 100px;">
+				<div class="blog__details__pic">
+					<img src="img/blog/details/blog-details.jpg0" alt="">
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="blog__details__content">
+					<div class="blog__details__share">
+						<span>share</span>
+						<ul>
+							<li><a href="/#/"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="/#/" class="twitter"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="/#/" class="youtube"><i class="fa fa-youtube-play"></i></a></li>
+							<li><a href="/#/" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+					<div class="blog__details__text" ng-bind-html="ctrl.theBlog.content"></div>
+
+					<div class="blog__details__option">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<div class="blog__details__author">
+									<div class="blog__details__author__text">
+										<h5>{{ctrl.theBlog.author}}</h5>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<div class="blog__details__tags">
+									<a href="#">#eyeware</a>
+									<a href="#">#Trending</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="blog__details__btns">
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Blog Details Section End -->

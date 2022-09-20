@@ -217,12 +217,9 @@ angular.module('app')
 		   temp.status = i == (pageable.number + 1) ? true : false;
 		   pagination.list.push(temp);
 	   }
-
-	   pagination.totalPage = pageable.totalPages;
+	   pagination.totalElements = pageable.totalElements;
 	   pagination.currentFirstItemIndex = pageable.size*pageable.number +1;
-	   //pagination.currentLastItemIndex = pageable.size*(pageable.number + 1);
-	   pagination.currentLastItemIndex = pageable.size*(pageable.number + 1);
-
+	   pagination.currentLastItemIndex = (pageable.number + 1) == pageable.totalPages ? (pagination.currentFirstItemIndex + pageable.numberOfElements -1)  : pageable.size*(pageable.number + 1);
 
 	   pagination.currentNumber = parseInt(pageable.number) +1;
 	   pagination.nextNumber = parseInt(pagination.currentNumber) + 1;

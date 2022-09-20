@@ -52,8 +52,17 @@
 <!-- Breadcrumb Section End -->
 
 <!-- Blog Section Begin -->
-<section class="blog spad">
+<section class="blog spad" style="padding-top: 0px;">
 	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="product__pagination" style="margin-bottom: 15px;">
+					<a ng-click="ctrl.getTargetPage(ctrl.pagination.previousNumber)">&laquo;</a>
+					<a href="" ng-repeat="item in ctrl.pagination.list" class="{{item.status ? 'active' : ''}}" ng-click="ctrl.getTargetPage(item.number)">{{item.number}}</a>
+					<a ng-click="ctrl.getTargetPage(ctrl.pagination.nextNumber)">&raquo;</a>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-lg-4 col-md-6 col-sm-6" ng-repeat="item in ctrl.currentPage.content">
 				<div class="blog__item">
@@ -61,7 +70,7 @@
 					<div class="blog__item__text">
 						<span><img src="img/icon/calendar.png" alt=""> {{item.gmtModify | date:"dd-MM-yyyy"}}</span>
 						<h5>{{item.name}}</h5>
-						<a href="#">Read More</a>
+						<a href="#/blogDetail/{{item.id}}">Read More</a>
 					</div>
 				</div>
 			</div>
@@ -69,12 +78,10 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="product__pagination">
-					<a class="active" href="#">1</a>
-					<a href="#">2</a>
-					<a href="#">3</a>
-					<span>...</span>
-					<a href="#">21</a>
+				<div class="product__pagination" style="padding-top: 0px;">
+					<a ng-click="ctrl.getTargetPage(ctrl.pagination.previousNumber)">&laquo;</a>
+					<a href="" ng-repeat="item in ctrl.pagination.list" class="{{item.status ? 'active' : ''}}" ng-click="ctrl.getTargetPage(item.number)">{{item.number}}</a>
+					<a ng-click="ctrl.getTargetPage(ctrl.pagination.nextNumber)">&raquo;</a>
 				</div>
 			</div>
 		</div>
