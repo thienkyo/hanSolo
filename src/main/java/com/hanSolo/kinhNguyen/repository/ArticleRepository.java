@@ -1,6 +1,8 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Article;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
@@ -9,5 +11,9 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, I
     List<Article> findFirst3ByStatusOrderByGmtModifyDesc(boolean status);
 
     List<Article> findByNameContainsIgnoreCaseAndStatus(String name, Boolean status);
+
+    List<Article> findByStatusOrderByGmtModifyDesc(boolean status);
+
+    Page<Article> findByStatus(boolean status, Pageable pageable);
 
 }

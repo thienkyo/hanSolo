@@ -34,8 +34,8 @@
 <div class="offcanvas-menu-wrapper">
 	<div class="offcanvas__option">
 		<div class="offcanvas__links">
-			<a href="#/login">Sign in</a>
-			<a href="#">Admin</a>
+			<a href="#/login" ng-show="!ctrl.currentMember" >Sign in</a>
+			<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" style="margin-left: 20px;">Sign out</a>
 		</div>
 	</div>
 	<div class="offcanvas__nav__option">
@@ -59,14 +59,12 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-7">
 					<div class="header__top__left">
-						<p>358/5/3 CMT8, P10, Q3, HCM. -- Phone: 0908.01.7383</p>
+						<p style="margin-top: 3px;">358/5/3 CMT8, P10, Q3, HCM. -- Phone: 0908.01.7383</p>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-5">
 					<div class="header__top__right">
 						<div class="header__top__links">
-
-
 							<div class="search_box pull-left">
 								<md-autocomplete class="search_class"  flex=""
 												 ng-disabled="ctrl.isDisable"
@@ -83,7 +81,7 @@
 									<md-item-template>
 										<div class="row" >
 											<div class="col-sm-2" >{{item.type}}</div>
-											<div class="col-sm-3" style="border-left: 10px;"><img ng-src="img/product/{{item.thumbnail}}" alt="" style="height:40px;"/></div>
+											<div class="col-sm-3" style="border-left: 10px;"><img ng-src="{{item.type == 'Frame' ? 'img/product/'+item.thumbnail : 'img/blog/'+item.thumbnail}}" alt="" style="height:40px;"/></div>
 											<div class="col-sm-7" style="border-right: 10px;">{{item.name}}</div>
 										</div>
 									</md-item-template>
@@ -92,7 +90,7 @@
 									</md-not-found>
 								</md-autocomplete>
 							</div>
-							<a href="#/login" ng-show="!ctrl.currentMember" style="margin-left: 20px;">Sign in</a>
+							<a href="#/login" ng-show="!ctrl.currentMember" style="margin-left: 20px;margin-top: 5px;">Sign in</a>
 							<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" style="margin-left: 20px;">Sign out</a>
 						</div>
 
@@ -122,7 +120,7 @@
 								<li ng-repeat="cate in ctrl.cateList | filter:{ type: 'COLLECTION' }"><a href="#/productCategory/{{cate.id}}">{{cate.name}}</a></li>
 							</ul>
 						</li>
-						<li><a href="./blog.html">Blog</a></li>
+						<li><a href="#/blog">Blog</a></li>
 						<li><a href="./contact.html">Contact</a></li>
 						<li><a href="" ng-show="ctrl.isAdmin">admin</a>
 							<ul class="dropdown">

@@ -34,7 +34,7 @@ public class Utility {
     final public static int ORDER_SHOP_DELETE = 5;
 
     final public static int PRODUCT_PAGE_SIZE = 9;
-    final public static int BLOG_PAGE_SIZE = 4;
+    final public static int BLOG_PAGE_SIZE = 9;
 
 
 }

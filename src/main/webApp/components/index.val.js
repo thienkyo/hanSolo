@@ -120,9 +120,11 @@ function ProductDO(){
 	this.prodId = 0;
 	this.description = '';
 	this.discount = 0;
-	this.mod_date = (new Date()).getTime();
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 	this.notification = 'còn hàng';
-	this.price = 1000;
+	this.buyPrice = 1000;
+	this.sellPrice = 1000;
 	this.prodName = '';
 	this.quantity = 1;
 	this.status = 1;
@@ -130,9 +132,6 @@ function ProductDO(){
 	this.category={categoryId:1};
 	this.image = '';
 	this.extInfo = '{\n\t\"needImage\":false,\n\t\"minNumberOfImage\":0,\n\t\"maxNumberOfImage\":0\n}';
-	this.needImage = 0;
-	this.minNumberOfImage = 0;
-	this.maxNumberOfImage = 0;
 }
 
 function CategoryDO(){
@@ -182,6 +181,9 @@ function PaginationDO() {
 	this.currentNumber = 1;
 	this.previousNumber = 1;
 	this.nextNumber = 1;
+	this.totalPage = 1;
+	this.currentFirstItemIndex = 1;
+    this.currentLastItemIndex = 1;
 	this.list = [];
 	this.clear = function() { 
 		this.list = [];

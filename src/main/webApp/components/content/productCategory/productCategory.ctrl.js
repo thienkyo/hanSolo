@@ -11,12 +11,12 @@ angular.module('productCategoryModule')
     });
 
 	productService.getProductPage(self.cateId,1)
-	.then(function (response) {
-		self.currentPage = response;
+	.then(function (data) {
+		self.currentPage = data;
 		if(self.currentPage.totalElements != 0){
 		    self.currentCategory = self.currentPage.content[0].categories.find(i => i.id == self.cateId);
 		    self.categoryName =    self.currentCategory ? self.currentCategory.name : '';
-        	self.pagination = paginationService.builder(response);
+        	self.pagination = paginationService.builder(data);
 		}
     });
 	

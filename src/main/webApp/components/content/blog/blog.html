@@ -1,0 +1,83 @@
+<script>
+ 	/*------------------
+        Background Set
+    --------------------*/
+    $('.set-bg').each(function () {
+        var bg = $(this).data('setbg');
+        $(this).css('background-image', 'url(' + bg + ')');
+    });
+
+
+	 /*------------------
+		Navigation
+	--------------------*/
+    $(".mobile-menu").slicknav({
+        prependTo: '#mobile-menu-wrap',
+        allowParentLinks: true
+    });
+
+   /*------------------
+        Accordin Active
+    --------------------*/
+    $('.collapse').on('shown.bs.collapse', function () {
+        $(this).prev().addClass('active');
+    });
+
+    $('.collapse').on('hidden.bs.collapse', function () {
+        $(this).prev().removeClass('active');
+    });
+
+    //Canvas Menu
+    $(".canvas__open").on('click', function () {
+        $(".offcanvas-menu-wrapper").addClass("active");
+        $(".offcanvas-menu-overlay").addClass("active");
+    });
+
+    $(".offcanvas-menu-overlay").on('click', function () {
+        $(".offcanvas-menu-wrapper").removeClass("active");
+        $(".offcanvas-menu-overlay").removeClass("active");
+    });
+
+</script>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-blog set-bg" data-setbg="img/breadcrumb-bg.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2>Our Blog</h2>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Blog Section Begin -->
+<section class="blog spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-6 col-sm-6" ng-repeat="item in ctrl.currentPage.content">
+				<div class="blog__item">
+					<div class="blog__item__pic set-bg" data-setbg="img/blog/{{item.thumbnail}}"></div>
+					<div class="blog__item__text">
+						<span><img src="img/icon/calendar.png" alt=""> {{item.gmtModify | date:"dd-MM-yyyy"}}</span>
+						<h5>{{item.name}}</h5>
+						<a href="#">Read More</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="product__pagination">
+					<a class="active" href="#">1</a>
+					<a href="#">2</a>
+					<a href="#">3</a>
+					<span>...</span>
+					<a href="#">21</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Blog Section End -->

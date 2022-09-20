@@ -207,7 +207,7 @@ angular.module('app')
 		};
 	return paginationService;
 	
-	function builder(pageable){
+	function builder(pageable){ // pageable = current page
 		pagination.clear();
 	   for(var i=1 ; i <= pageable.totalPages ; i++){ 
 		   var temp = new PaginationItemDO();
@@ -217,6 +217,13 @@ angular.module('app')
 		   temp.status = i == (pageable.number + 1) ? true : false;
 		   pagination.list.push(temp);
 	   }
+
+	   pagination.totalPage = pageable.totalPages;
+	   pagination.currentFirstItemIndex = pageable.size*pageable.number +1;
+	   //pagination.currentLastItemIndex = pageable.size*(pageable.number + 1);
+	   pagination.currentLastItemIndex = pageable.size*(pageable.number + 1);
+
+
 	   pagination.currentNumber = parseInt(pageable.number) +1;
 	   pagination.nextNumber = parseInt(pagination.currentNumber) + 1;
 	   pagination.previousNumber = pagination.currentNumber == 1 ? 1 : parseInt(pagination.currentNumber) - 1;
