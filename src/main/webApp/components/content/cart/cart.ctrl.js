@@ -10,8 +10,8 @@ angular.module('cartModule')
 		self.currentCart = cartStoreService.getCurrentCart();
 		self.subTotal = 0;
 		self.total = 0;
+		self.coupon = 0; //%
 		self.order = new OrderDO;
-		self.order.couponDiscount = 0; //%
 	//	self.order.shipCostId = 0;
 		self.guest = new MemberDO;//guest member
 		//self.guest.fullName = 'GUEST';// guest id
@@ -38,7 +38,7 @@ angular.module('cartModule')
             for (var i = 0; i < self.currentCart.length; i++){
                 self.subTotal += self.currentCart[i].prod.sellPrice*(100 - self.currentCart[i].prod.discount)/100*self.currentCart[i].quantity;
             }
-            self.total = self.subTotal*(100 - self.order.couponDiscount)/100;
+            self.total = self.subTotal*(100 - self.coupon)/100;
             cartStoreService.setCurrentCart(self.currentCart);;
         }
 
@@ -112,9 +112,8 @@ angular.module('cartModule')
         self.getCoupon = function(code) {
              cartService.getCoupon(code).then(function (data) {
              console.log(data);
-
-             self.order.couponDiscount = data.replyStr;
-             console.log(self.order);
+             self.coupon = data.replyStr;
+             self.updateTotal();
              });
         }
 		

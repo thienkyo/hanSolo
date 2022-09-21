@@ -80,7 +80,7 @@
 					<h6>Cart total</h6>
 					<ul>
 						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
-						<li>Coupon <span>{{ctrl.coupon | number:0}}đ</span></li>
+						<li>Coupon <span>({{ctrl.coupon}}%){{(ctrl.coupon)/100*ctrl.subTotal | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
 					</ul>
 					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>
