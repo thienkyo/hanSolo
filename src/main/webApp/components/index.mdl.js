@@ -10,7 +10,7 @@ angular.module('app', [
 		'productDetailModule',
 		'loginModule',
 		'accountModule',
-//		'guestOrderModule',
+		'guestOrderModule',
 		'cartModule',
 		'angular-storage',
 		'ngMaterial',

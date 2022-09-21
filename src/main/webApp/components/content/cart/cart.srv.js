@@ -2,30 +2,22 @@
 angular.module('cartModule')
 .factory('cartService', ['$rootScope','ajaxService','cartStoreService',function($rootScope,ajaxService,cartStoreService) {
 	var cartService = {
-		//	getFirst6Product : getFirst6Product,
-			getProductForCart : getProductForCart,
+		//	getProductForCart : getProductForCart,
 			addToCart : addToCart,
 			placeOrder : placeOrder,
-		//	getShipCost : getShipCost,
-		//	getActiveShipCost : getActiveShipCost,
+			getCoupon : getCoupon,
 			placeGuestOrder : placeGuestOrder
 		};
 	return cartService;
-/*	
-   function getFirst6Product(){
-		var url = "products/first6";
-		return ajaxService.get(url,null,{}).then(function(data){
-			return data.data;
-		});
-   }*/
-	      
+
+/*
    function getProductForCart(ids){
 		var url = "products/getProductForCart";
 		return ajaxService.post(url,ids,{}).then(function(response){
 			return response.data;
 		});
    }
-  
+  */
    function addToCart(prod,qty){
 	   prod.description = '';
    	   var currentItem={prod:prod,quantity:qty};
@@ -66,19 +58,12 @@ angular.module('cartModule')
    			return response.data;
    	   });
       }
-  /*
-   function getShipCost(){
-		var url = "shipcost";
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-   }
 
-   function getActiveShipCost(){
-   		var url = "shipcost/active";
-   		return ajaxService.get(url,null,{}).then(function(response){
-   			return response.data;
+   function getCoupon(code){
+   		var url = "coupon/getByCode/" + code;
+   		return ajaxService.get(url,null,{}).then(function(data){
+   			return data.data;
    		});
-      }*/
-   
+   	}
+
  }]);

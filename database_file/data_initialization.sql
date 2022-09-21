@@ -74,3 +74,7 @@ INSERT INTO `hanSoloDB`.`articles` (`author`, `content`, `description`, `gmt_cre
 ;
 
 
+-- table coupon --
+INSERT INTO `hanSoloDB`.`coupons` (`code`, `gmt_create`, `gmt_modify`, `image`, `lifespan`, `name`, `quantity`) VALUES
+('SALE30', now(), now(), 'test1.png', '60', 'giam 30', '100'),
+('SALE50', now(), now(), 'test2.png', '60', 'giam 50', '100');

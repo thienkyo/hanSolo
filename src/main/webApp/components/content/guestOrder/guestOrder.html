@@ -1,0 +1,162 @@
+<link href="css/main2.css" rel="stylesheet">
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb__text">
+					<h4>User Info</h4>
+					<div class="breadcrumb__links">
+						<a href="#/">Home</a>
+						<a href="">Account</a>
+						<span>User Info</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Breadcrumb Section End -->
+<section id="do_action">
+		<div class="container">
+			<div class="heading">
+			</div>
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="chose_area" style="margin-bottom: 0px;">
+						<div class="user_option">
+						</div>
+					    <textarea rows="1" cols="50" placeholder="Nhập số điện thoại để tải đơn hàng"
+								  ng-model="ctrl.phone" style="height: 40px;" ></textarea>
+						
+						<a class="btn btn-default check_out" href="" ng-click="ctrl.getOrders()" style="margin-left: 0px;">Tải</a>
+
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.errorMsg"
+							 style="margin: 10px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							{{ctrl.errorMsg}}
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-7">
+					<div class="total_area" style="padding-left:0px;margin-bottom: 0px;">
+
+						<ul style="margin: 0px 0px 0px 40px;">
+							<li class="row" style="padding: 10px 0px 10px 0px;margin-top: 0px;background: #F0F0E9; margin-right: 0px;">
+								<div class="col-md-3">Ngày</div>
+								<div class="col-md-3">Mã đơn</div>
+								<div class="col-md-3">Tổng tiền</div>
+								<div class="col-md-3">status</div>
+							</li>
+							<li class="row" ng-repeat="item in ctrl.orderListPage.content" style="padding: 10px 0px 10px 0px;margin-right: 0px;">
+								<div class="col-md-3"> {{item.gmtCreate | date:"dd-MM-yyyy"}}</div>
+								<div class="col-md-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.id).slice(-4)}}</a></div>
+								<div class="col-md-3" > {{item.total | number}} đ</div>
+								<div class="col-md-3"> {{item.status}}</div>
+							</li>
+						</ul>
+					</div>
+
+					<div class="pagination-area" style="margin: 15px 0px 0px 0px;">
+						<ul class="pagination" style="padding-left: 0px;display: contents;">
+							<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.previousNumber)">&laquo;</a></li>
+							<li ng-repeat="item in ctrl.pagination.list"><a class="{{item.status ? 'active' : ''}}" ng-click="ctrl.getTargetPage(item.number)">{{item.number}}</a></li>
+							<li><a ng-click="ctrl.getTargetPage(ctrl.pagination.nextNumber)">&raquo;</a></li>
+						</ul>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+</section><!--/#do_action-->
+<section id="cart_items" ng-show="ctrl.theOrder">
+		<div class="container">
+
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+					<tr class="cart_menu">
+						<td class="image">Đơn hàng : A{{("000"+ctrl.theOrder.id).slice(-4)}}</td>
+						<td class="description" style="text-align: left;">Item</td>
+						<td class="price" style="text-align: right;">Price</td>
+						<td class="quantity" style="text-align: right;">Quantity</td>
+						<td class="total" style="text-align: right;">Total</td>
+						<td></td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="item in ctrl.theOrder.orderDetails">
+						<td class="cart_product">
+							<a href="#/productDetail/{{item.product.id}}"><img ng-src="img/product/{{item.product.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
+						</td>
+						<td class="cart_description" style="text-align: left;">
+							<h4><a href="#/productDetail/{{item.product.prodId}}">{{item.product.name}}</a></h4>
+							<p>Store ID: {{item.product.id}}</p>
+						</td>
+						<td class="cart_price" style="text-align: right;">
+							<p>{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 | number:0}} đ</p>
+							<p ng-show="item.frameDiscountAtThatTime != 0"><s style="color: #0d0d0d6e;">{{item.framePriceAtThatTime | number:0}} đ</s></p>
+						</td>
+						<td class="cart_quantity" style="text-align: right;padding-right: 30px;">
+							<p>{{item.quantity}}</p>
+						</td>
+						<td class="cart_total" style="text-align: right;">
+							<p class="cart_total_price">{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 * item.quantity | number:0}} đ</p>
+						</td>
+						<td class="cart_delete">
+						</td>
+					</tr>
+					<tr style="border-bottom: 0px;">
+						<td colspan="2" style="padding-left: 30px;vertical-align: baseline;padding-top: 62px;">
+							<h6 class="checkout__title">Shipping Details</h6>
+
+
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="checkout__input">
+										<p>Full Name<span>*</span></p>
+										<input type="text"  ng-model="ctrl.theOrder.shippingName">
+									</div>
+								</div>
+								<div class="col-lg-6	">
+									<div class="checkout__input">
+										<p>Phone<span>*</span></p>
+										<input type="text" ng-model="ctrl.theOrder.shippingPhone">
+									</div>
+								</div>
+							</div>
+							<div class="checkout__input" style="margin-bottom: 50px;">
+								<p>Address<span>*</span></p>
+								<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+									   ng-model="ctrl.theOrder.shippingAddress">
+
+							</div>
+
+						</td>
+						<td colspan="1" style="padding-top: 23px;">
+						</td>
+						<td colspan="3">
+							<h6 class="checkout__title">Order total</h6>
+							<div class="cart__total">
+								<ul>
+									<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
+									<li>Coupon <span>{{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
+									<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+								</ul>
+
+							</div>
+
+						</td>
+					</tr>
+
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+</section>
+	
+	
+	

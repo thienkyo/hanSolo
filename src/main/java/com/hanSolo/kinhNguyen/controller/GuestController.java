@@ -10,10 +10,7 @@ import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,5 +56,10 @@ public class GuestController {
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
 
         return response;
+    }
+
+    @RequestMapping("getGuestOrder/{phone}")
+    public List<Order> getOrdersByPhone(@PathVariable String phone) {
+        return orderRepo.findByShippingPhoneOrderByIdDesc(phone);
     }
 }
