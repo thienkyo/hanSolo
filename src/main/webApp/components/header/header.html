@@ -115,18 +115,17 @@
 								<li ng-repeat="cate in ctrl.cateList | filter:{ type: 'CATEGORY' }"><a href="#/productCategory/{{cate.id}}">{{cate.name}}</a></li>
 							</ul>
 						</li>
-						<li><a href="/#/collection">Collections</a>
-
-						</li>
+						<li><a href="/#/collection">Collections</a></li>
 						<li><a href="#/blog">Blog</a></li>
 						<li><a href="#/contact">Contact</a></li>
 						<li><a href="" ng-show="ctrl.isAdmin">admin</a>
 							<ul class="dropdown" ng-show="ctrl.isAdmin">
 								<li><a href="./about.html">products</a></li>
-								<li><a href="./shop-details.html">banners</a></li>
 								<li><a href="./shopping-cart.html">orders</a></li>
+								<li><a href="./shop-details.html">banners</a></li>
 								<li><a href="./checkout.html">members</a></li>
 								<li><a href="./blog-details.html">articles</a></li>
+								<li><a href="./blog-details.html">category</a></li>
 							</ul>
 						</li>
 					</ul>
