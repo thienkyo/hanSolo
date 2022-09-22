@@ -10,9 +10,9 @@ angular.module('cartModule')
 		self.currentCart = cartStoreService.getCurrentCart();
 		self.subTotal = 0;
 		self.total = 0;
-		self.coupon = 0; //%
+		self.couponDiscount = 0; //%
+		self.couponCode = '';
 		self.order = new OrderDO;
-	//	self.order.shipCostId = 0;
 		self.guest = new MemberDO;//guest member
 		//self.guest.fullName = 'GUEST';// guest id
 		self.orderDetail = [];
@@ -38,7 +38,7 @@ angular.module('cartModule')
             for (var i = 0; i < self.currentCart.length; i++){
                 self.subTotal += self.currentCart[i].prod.sellPrice*(100 - self.currentCart[i].prod.discount)/100*self.currentCart[i].quantity;
             }
-            self.total = self.subTotal*(100 - self.coupon)/100;
+            self.total = self.subTotal*(100 - self.couponDiscount)/100;
             cartStoreService.setCurrentCart(self.currentCart);;
         }
 
@@ -71,9 +71,11 @@ angular.module('cartModule')
 				}
 				self.order.orderDetails = OrderDetailList;
 				self.order.shippingAddress = self.me.address;
-
 				self.order.shippingName = self.me.fullName;
 				self.order.shippingPhone = self.me.phone;
+
+				self.order.couponCode = self.couponCode;
+				self.order.couponDiscount = self.couponDiscount;
 				//self.order.status = 0;
 				console.log(self.order);
 
@@ -104,16 +106,25 @@ angular.module('cartModule')
 				console.log('NOT logined');
 			}
 		}
+
         self.clearErrorMsg = function() {
             self.isErrorMsg = false;
         }
 
-
         self.getCoupon = function(code) {
+            if(code ==''){
+                self.isErrorMsg ='Cần nhập coupon code.';
+                return;
+            }
              cartService.getCoupon(code).then(function (data) {
-             console.log(data);
-             self.coupon = data.replyStr;
-             self.updateTotal();
+             if(data.errorCode == 'SUCCESS'){
+                self.couponDiscount = data.replyStr;
+                self.isCouponApplied = true;
+                self.updateTotal();
+                self.isErrorMsg = false;
+             }else{
+                self.isErrorMsg = data.errorMessage;
+             }
              });
         }
 		

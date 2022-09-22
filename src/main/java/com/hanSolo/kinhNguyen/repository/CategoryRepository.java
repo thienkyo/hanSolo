@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
     List<Category> findByStatusOrderByGmtModifyDesc(@NonNull Boolean status);
+
+    List<Category> findByTypeAndStatusOrderByGmtModifyDesc(String type, Boolean status);
 }

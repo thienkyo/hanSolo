@@ -41,11 +41,6 @@ public class ProductController {
         return prodRepo.findByIdAndStatus(id, Utility.ACTIVE_STATUS).get();
     }
 
-   /* @RequestMapping(value = "category/{id}", method = RequestMethod.GET)
-    public List<Product> getProductByCategory(@PathVariable int id) {
-        return prodRepo.findByCategories_IdAndStatusOrderByGmtModifyDesc(id, Utility.ACTIVE_STATUS);
-    }*/
-
     @RequestMapping(value = "getProductPage/{cateId}/{pageNumber}", method = RequestMethod.GET)
     public Page<Product> getProductPage(@PathVariable Integer cateId, @PathVariable Integer pageNumber) {
         Pageable request = PageRequest.of(pageNumber - 1, Utility.PRODUCT_PAGE_SIZE, Sort.Direction.DESC, "id");

@@ -23,4 +23,10 @@ public class CategoryController {
 
         return categoryRepo.findByStatusOrderByGmtModifyDesc(Utility.ACTIVE_STATUS);
     }
+
+    @RequestMapping("collections")
+    public List<Category> getCollections() {
+
+        return categoryRepo.findByTypeAndStatusOrderByGmtModifyDesc("",Utility.ACTIVE_STATUS);
+    }
 }

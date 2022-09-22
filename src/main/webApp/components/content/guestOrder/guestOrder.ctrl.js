@@ -41,7 +41,7 @@ angular.module('guestOrderModule').controller('guestOrderController', ['$scope',
 				for(var i = 0; i < data.length; i++){
                    self.calculateOrderTotal(data[i]);
                 }
-                self.orderList = data.reverse();
+                self.orderList = data;
                 self.orderListPage = buildPageable(1);
                 console.log(self.orderListPage);
                 self.pagination = paginationService.builder(self.orderListPage);
@@ -51,11 +51,6 @@ angular.module('guestOrderModule').controller('guestOrderController', ['$scope',
 		
 		self.showOrderDetail = function(order){
 			self.theOrder = order;
-			self.theOrder.subTotal = 0;
-			for (var i = 0; i < self.theOrder.orderDetails.length; i++){
-				self.theOrder.subTotal += self.theOrder.orderDetails[i].priceAtThatTime*self.theOrder.orderDetails[i].quantity;
-			}
-			self.theOrder.total = self.theOrder.subTotal + self.theOrder.shipCostFee; 
 		}
 
 		self.calculateOrderTotal = function(order){

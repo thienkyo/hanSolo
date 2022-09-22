@@ -71,16 +71,16 @@
 			<div class="col-lg-4">
 				<div class="cart__discount">
 					<h6>Discount codes</h6>
-					<form action="">
-						<input type="text" placeholder="Coupon code" ng-model="ctrl.order.couponCode">
-						<button type="submit" ng-click="ctrl.getCoupon(ctrl.order.couponCode)">Apply</button>
+					<form>
+						<input type="text" placeholder="Coupon code" ng-model="ctrl.couponCode">
+						<button type="button" ng-click="ctrl.getCoupon(ctrl.couponCode)">Apply</button>
 					</form>
 				</div>
 				<div class="cart__total">
 					<h6>Cart total</h6>
 					<ul>
 						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
-						<li>Coupon <span>({{ctrl.coupon}}%){{(ctrl.coupon)/100*ctrl.subTotal | number:0}}đ</span></li>
+						<li>Coupon <span>({{ctrl.couponDiscount}}%) {{(ctrl.couponDiscount)/100*ctrl.subTotal | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
 					</ul>
 					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>

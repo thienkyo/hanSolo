@@ -40,6 +40,17 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new LinkedHashSet<>();
 
+    @Column(name = "thumbnail", length = 100)
+    private String thumbnail;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public Set<Product> getProducts() {
         return products;
     }
