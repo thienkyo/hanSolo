@@ -21,7 +21,7 @@ public class Utility {
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";
     final public static String GROUP_BRANDING = "BRANDING";
-    final public static String GROUP_TAGS = "TAGS";
+    final public static String GROUP_TAGS = "TAG";
 
     final public static String SUCCESS_ERRORCODE = "SUCCESS";
     final public static String FAIL_ERRORCODE = "FAIL";
@@ -34,6 +34,7 @@ public class Utility {
     final public static int ORDER_SHOP_DELETE = 5;
 
     final public static int PRODUCT_PAGE_SIZE = 9;
+    final public static int COLLECTION_PAGE_SIZE = 4;
     final public static int BLOG_PAGE_SIZE = 9;
 
 

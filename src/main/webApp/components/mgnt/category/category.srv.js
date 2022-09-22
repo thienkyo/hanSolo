@@ -5,19 +5,28 @@ angular.module('categoryModule')
 				getAllCategories : getAllCategories,
 				getActiveCategories : getActiveCategories,
 				upsert : upsert,
+				getCollectionPage : getCollectionPage,
 				deleteCategory : deleteCategory
 			};
 	return categoryService;
-	
+
+	function getActiveCategories(){
+        var url = "category/active";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getCollectionPage(page){
+        var url = "category/getCollectionPage/"+page;
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+	/* management from here*/
 	function getAllCategories(){
 		var url = "mgnt/getAllCategories";
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}
-	
-	function getActiveCategories(){
-		var url = "category/active";
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});

@@ -153,7 +153,7 @@
 								<div class="cart__total">
 									<ul>
 										<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
-										<li>Coupon <span>{{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
+										<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%){{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
 										<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
 									</ul>
 

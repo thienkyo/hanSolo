@@ -61,6 +61,13 @@
 							</div>
 							<a href="" class="primary-btn"  ng-click="ctrl.addToCart(ctrl.product)" >add to cart</a>
 						</div>
+						<div class="product__details__last__option">
+							<ul>
+								<li><span>SKU:</span> {{ctrl.product.id}}</li>
+								<li><span>Categories:</span><a ng-repeat="cate in ctrl.product.categories | filter:{ type: 'CATEGORY' }" href="#/productCategory/{{cate.id}}" style="color: black;"> {{cate.name}}</a></li>
+								<li><span>Tag:</span><a ng-repeat="cate in ctrl.product.categories | filter:{ type: 'TAG' }" href="#/productCategory/{{cate.id}}" style="color: black;"> {{cate.name}}</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>

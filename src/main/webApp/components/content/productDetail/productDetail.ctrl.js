@@ -12,7 +12,6 @@ angular.module('productDetailModule')
 		.then(function (data) {
 			self.product = data;
 			console.log(data);
-			//self.product.description=$sce.trustAsHtml(self.product.description);
 			self.description=$sce.trustAsHtml(self.product.description);
 	        console.log(self.product);
 	        $rootScope.$broadcast('productNameBC', self.product);//self.product.prodName

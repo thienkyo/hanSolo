@@ -1,10 +1,17 @@
 -- table categories --
-INSERT INTO `hanSoloDB`.`categories` (`gmt_create`, `gmt_modify`, `name`, `status`, `type`) VALUES
-(now(), now(), 'Gọng Nam', 1, 'CATEGORY'),
-(now(), now(), 'Gọng Nữ', 1, 'CATEGORY'),
-(now(), now(), 'Trẻ em', 1, 'CATEGORY'),
-(now(), now(), 'Thể thao', 1, 'CATEGORY'),
-(now(), now(), 'Spring Collection', 1, 'COLLECTION');
+INSERT INTO `hanSoloDB`.`categories` (`gmt_create`, `gmt_modify`, `name`, `status`, `type`,`thumbnail`) VALUES
+(now(), now(), 'Gọng Nam', 1, 'CATEGORY','banner-4.jpeg'),
+(now(), now(), 'Gọng Nữ', 1, 'CATEGORY','banner-5.jpeg'),
+(now(), now(), 'Trẻ em', 1, 'CATEGORY','banner-6.jpg'),
+(now(), now(), 'Thể thao', 1, 'CATEGORY','banner-2.jpg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-2.jpg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-4.jpeg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-5.jpeg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-2.jpg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-4.jpeg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-5.jpeg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-2.jpg'),
+(now(), now(), 'Spring Collection', 1, 'COLLECTION','banner-4.jpeg');
 
 -- table member --
 INSERT INTO `hanSoloDB`.`members` (`address`, `email`, `full_name`, `gmt_create`, `gmt_modify`, `pass`, `phone`, `status`) VALUES

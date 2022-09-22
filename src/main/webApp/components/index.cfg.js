@@ -24,6 +24,11 @@ angular.module('app')
             controller: 'productCategoryController',
             controllerAs:'ctrl'
         })
+        .when('/collection',{
+            templateUrl: 'components/content/collection/collection.html',
+            controller: 'collectionController',
+            controllerAs:'ctrl'
+        })
         .when('/cart',{
             templateUrl: 'components/content/cart/cart.html',
             controller: 'cartController',
