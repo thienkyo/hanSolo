@@ -95,6 +95,11 @@ angular.module('app')
             controller: 'categoryController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/supplier',{
+            templateUrl: 'components/mgnt/supplier/supplier.html',
+            controller: 'supplierController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/banner',{
             templateUrl: 'components/mgnt/banner/banner.html',
             controller: 'bannerController',

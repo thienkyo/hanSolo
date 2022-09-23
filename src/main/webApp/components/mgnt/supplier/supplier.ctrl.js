@@ -1,11 +1,11 @@
 'use strict';
-angular.module('categoryModule')
-.controller('categoryController', ['$scope','categoryService','NgTableParams','memberService','CommonStatusArray','CategoryDO','Upload','$timeout',
-	function($scope,categoryService,NgTableParams,memberService,CommonStatusArray,CategoryDO,Upload,$timeout) {
+angular.module('supplierModule')
+.controller('supplierController', ['$scope','supplierService','NgTableParams','memberService','CommonStatusArray','CategoryDO','Upload','$timeout','uploadService',
+	function($scope,supplierService,NgTableParams,memberService,CommonStatusArray,CategoryDO,Upload,$timeout,uploadService) {
 		var self = this;
 		self.statusList = CommonStatusArray;
-		self.theCategory = new CategoryDO;
-		self.cateList = [];
+		self.theSupplier = null;
+		self.supplierList = [];
 		self.statusStyle = { "width": "120px" };
 		
 		if(!memberService.isAdmin()){
@@ -13,48 +13,47 @@ angular.module('categoryModule')
 		}
 		self.currentMember = memberService.getCurrentMember();
 		
-		categoryService.getAllCategories().then(function (data) {
+		supplierService.getAllSuppliers().then(function (data) {
 		    console.log(data);
-			self.cateList = data
-			self.tableParams = new NgTableParams({}, { dataset: self.cateList});
+			self.supplierList = data
+			self.tableParams = new NgTableParams({}, { dataset: self.supplierList});
 		});
 		
 		self.updateCategory = function(cate){
-			self.theCategory = cate;
+			self.theSupplier = cate;
 			self.responseStr = false;
 			self.responseStrFail = false;
 		}
 		
-		self.upsert = function(cate){
-		    console.log(cate);
+		self.upsert = function(supplier){
+		    console.log(supplier);
 
 		    if(self.picFile){
                 if(self.picFile.result){
-                    self.theCategory.thumbnail = self.picFile.result;
+                    self.theSupplier.logo = self.picFile.result;
                 }
-
             }
 
 			self.responseStr = false;
 			self.responseStrFail = false;
-			categoryService.upsert(cate).then(function (data) {
+			supplierService.upsert(supplier).then(function (data) {
 			    console.log(data);
 				self.responseStr = data.errorMessage;
-				if(cate.id == 0){
-					self.cateList.unshift(data.category);
-					self.tableParams = new NgTableParams({}, { dataset: self.cateList});
+				if(supplier.id == 0){
+					self.supplierList.unshift(data.supplier);
+					self.tableParams = new NgTableParams({}, { dataset: self.supplierList});
 				}
 			});
 		}
 		
-		self.deleteCategory = function(cate){
+		self.deleteCategory = function(supplier){
 			self.responseStr = false;
 			self.responseStrFail = false;
-			categoryService.deleteCategory(cate).then(function (data) {
+			supplierService.deleteSupplier(supplier).then(function (data) {
 				self.responseStr = data;
-				var index = self.cateList.indexOf(cate);
-				self.cateList.splice(index,1);
-				self.tableParams = new NgTableParams({}, { dataset: self.cateList});
+				var index = self.supplierList.indexOf(cate);
+				self.supplierList.splice(index,1);
+				self.tableParams = new NgTableParams({}, { dataset: self.supplierList});
 				
 			},function(error){
 				if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
@@ -66,7 +65,7 @@ angular.module('categoryModule')
 		self.clear = function(){
 			self.responseStr = false;
 			self.responseStrFail = false;
-			self.theCategory = new CategoryDO;
+			self.theSupplier = new CategoryDO;
 			self.picFile = null;
 		}
 		
@@ -83,9 +82,12 @@ angular.module('categoryModule')
 		}
 
 		self.uploadPic = function(file) {
-            file.upload = Upload.upload({
+		    uploadService.uploadFunction(file,'SUPPLIERLOGO');
+		
+		
+            /*file.upload = Upload.upload({
               url: 'mgnt/uploadFile',
-              data: {oldName: self.theCategory.thumbnail , file: file, type: 'CATEGORY.COLLECTION'},
+              data: {oldName: self.theSupplier.logo , file: file, type: 'CATEGORY.COLLECTION'},
               headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
             });
 
@@ -100,7 +102,7 @@ angular.module('categoryModule')
             }, function (evt) {
               // Math.min is to fix IE which reports 200% sometimes
               file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
+            });*/
         }
 		
 }]);

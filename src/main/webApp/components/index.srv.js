@@ -148,58 +148,36 @@ angular.module('app')
 		currentCart = [];
 		store.set(cartName, currentCart);
 	}
-/*
-	function setOrderId(orderId){
-        currentOrderId = orderId;
-        store.set('orderId', orderId);
-        return currentOrderId;
-    }*/
-/*
-    function getOrderId(){
-        return store.get('orderId');
-    }
-
-    function clearOrderId(){
-        currentOrderId = '';
-        store.set('orderId', currentOrderId);
-    }*/
 
 }])
-/*.factory('shipStoreService',['store', function(store) {
+.factory('uploadService',['store','Upload', function(store,Upload) {
 	var shipList = [];
-	var shipStoreService = {
-		setShipList : setShipList,
-		getShipList : getShipList,
-		isAvailable : isAvailable 
+	var uploadService = {
+		uploadFunction : uploadFunction
 		};
-	return shipStoreService;
-	
-	function setShipList(list){
-		shipList = list;
-        store.set('shipList', list);
-        return shipList;
-	}
-	
-	function getShipList(){
-		if (store.get('shipList')) {
-			shipList = store.get('shipList');
-        }else{
-        	store.set(cartName, shipList);
-        }
-        return shipList;
-	}
-	
-	function isAvailable(){ 
-		if (!shipList) {
-			shipList = store.get('shipList');
-        }
-		if(shipList){
-			return true;
-		}
-		return false;
-	}
-}])*/
+	return uploadService;
 
+	function uploadFunction(file, type) {
+        file.upload = Upload.upload({
+          url: 'mgnt/uploadFile',
+          data: {oldName: self.theCategory.thumbnail , file: file, type: type},
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+        });
+
+        file.upload.then(function (response) {
+          $timeout(function () {
+          console.log(response);
+            file.result = response.data;
+          });
+        }, function (response) {
+          if (response.status > 0)
+            self.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+          // Math.min is to fix IE which reports 200% sometimes
+          file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+    }
+}])
 .factory('paginationService',['store','PaginationItemDO','PaginationDO', function(store,PaginationItemDO,PaginationDO) {
 	var pagination = new PaginationDO;
 	var paginationService = {

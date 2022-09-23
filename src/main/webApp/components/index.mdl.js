@@ -20,6 +20,7 @@ angular.module('app', [
 //		'productListModule',  //mgnt from here
 //		'productUpsertModule',
 		'categoryModule',
+		'supplierModule',
 //		'orderListModule',
 //		'blogListModule',
 //		'blogUpsertModule',
