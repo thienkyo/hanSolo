@@ -7,8 +7,8 @@ var OrderStatusArray=[
 ];
 
 var CommonStatusArray=[
-	{name : 'active', value:1 },
-	{name : 'inactive', value:0 }
+	{name : 'active', value:true },
+	{name : 'inactive', value:false }
 ];
 
 angular
@@ -135,10 +135,14 @@ function ProductDO(){
 }
 
 function CategoryDO(){
-	this.categoryId = 0;
-	this.categoryName = 'cate name';
-	this.status = 1; 
-	this.mod_date = (new Date()).getTime();
+	this.id = 0;
+	this.name = 'category name';
+	this.status = true;
+	this.type = 'CATEGORY';
+	this.thumbnail = '';
+	this.parentId = null;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function ArticleDO(){

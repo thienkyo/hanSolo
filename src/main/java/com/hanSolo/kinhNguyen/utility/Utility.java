@@ -2,7 +2,7 @@ package com.hanSolo.kinhNguyen.utility;
 
 public class Utility {
 
-    final public static int AUTHENTICATION_TIMEOUT = 1*3*60*1000; //hour or min in dev
+    final public static int AUTHENTICATION_TIMEOUT = 10*60*60*1000; //hour or min in dev
 
     final public static Boolean ACTIVE_STATUS = true;
     final public static Boolean INACTIVE_STATUS = false;
@@ -16,6 +16,7 @@ public class Utility {
 
     final public static String MEMBER_ROLE = "MEMBER";
     final public static String ADMIN_ROLE = "ADMIN";
+    final public static String SUPERADMIN_ROLE = "SUPERADMIN";
     final public static String MOD_ROLE = "MOD";
 
     final public static String GROUP_CATEGORY = "CATEGORY";

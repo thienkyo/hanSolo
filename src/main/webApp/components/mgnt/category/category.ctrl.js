@@ -1,7 +1,7 @@
 'use strict';
 angular.module('categoryModule')
-.controller('categoryController', ['$scope','categoryService','NgTableParams','memberService','CommonStatusArray','CategoryDO',
-	function($scope,categoryService,NgTableParams,memberService,CommonStatusArray,CategoryDO) {
+.controller('categoryController', ['$scope','categoryService','NgTableParams','memberService','CommonStatusArray','CategoryDO','Upload',
+	function($scope,categoryService,NgTableParams,memberService,CommonStatusArray,CategoryDO,Upload) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theCategory = new CategoryDO;
@@ -14,23 +14,27 @@ angular.module('categoryModule')
 		self.currentMember = memberService.getCurrentMember();
 		
 		categoryService.getAllCategories().then(function (data) {
+		    console.log(data);
 			self.cateList = data
 			self.tableParams = new NgTableParams({}, { dataset: self.cateList});
 		});
 		
 		self.updateCategory = function(cate){
+		    console.log(cate);
 			self.theCategory = cate;
 			self.responseStr = false;
 			self.responseStrFail = false;
 		}
 		
 		self.upsert = function(cate){
+		    console.log(cate);
 			self.responseStr = false;
 			self.responseStrFail = false;
 			categoryService.upsert(cate).then(function (data) {
-				self.responseStr = data;
-				if(cate.categoryId == 0){
-					self.cateList.push(data);
+			    console.log(data);
+				self.responseStr = data.errorMessage;
+				if(cate.id == 0){
+					self.cateList.unshift(data.category);
 					self.tableParams = new NgTableParams({}, { dataset: self.cateList});
 				}
 			});
@@ -69,6 +73,26 @@ angular.module('categoryModule')
 			}
 			return self.statusStyle;
 		}
+
+		self.uploadPic = function(file,url) {
+            file.upload = Upload.upload({
+              url: url,
+              data: {oldName: url == 'mgnt/uploadfile2' ? self.product.image : '', file: file},
+              headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+            });
+
+            file.upload.then(function (response) {
+              $timeout(function () {
+                file.result = response.data;
+              });
+            }, function (response) {
+              if (response.status > 0)
+                self.errorMsg = response.status + ': ' + response.data;
+            }, function (evt) {
+              // Math.min is to fix IE which reports 200% sometimes
+              file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+            });
+        }
 		
 }]);
 

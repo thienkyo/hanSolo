@@ -1,2 +1,2 @@
 'use strict';
-angular.module('categoryModule', ['ngTable']);
+angular.module('categoryModule', ['ngTable','ngFileUpload']);

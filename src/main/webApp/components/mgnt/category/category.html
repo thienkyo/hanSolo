@@ -1,25 +1,39 @@
-<section>
+<link href="css/main2.css" rel="stylesheet">
+<section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-	
-		<div class="row" >
+		<h3 style="padding-bottom: 40px;">category management </h3>
+		<div class="row" style="margin-bottom: 30px;">
 			<div class="col-sm-1">
-				<input type="number"  ng-model="ctrl.theCategory.categoryId" disabled="disabled" placeholder="id" style="width:50px;"/>
-			</div>
-			<div class="col-sm-4">
-				<input type="text"  ng-model="ctrl.theCategory.categoryName" placeholder="name" style="width: 100%;"/>
-			</div>
-			<div class="col-sm-2">
-				<select  ng-model="ctrl.theCategory.status" 
-					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-					 style="width: 100%;height: 30px;">
-		    	</select> 
+				<input type="number"  ng-model="ctrl.theCategory.id" disabled="disabled" placeholder="id" style="width:60px;"/>
 			</div>
 			<div class="col-sm-3">
-				<a ng-click="ctrl.upsert(ctrl.theCategory)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
-				
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+				<input type="text"  ng-model="ctrl.theCategory.name" placeholder="name" style="width: 100%;"/>
 			</div>
 			<div class="col-sm-2">
+				<select ng-model="ctrl.theCategory.type" >
+					<option value="CATEGORY">CATEGORY</option>
+					<option value="BRANDING">BRANDING</option>
+					<option value="COLLECTION">COLLECTION</option>
+					<option value="TAG">TAG</option>
+				</select>
+			</div>
+			<div class="col-sm-1">
+				<select  ng-model="ctrl.theCategory.status" 
+					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+					 style="width: 80px;height: 30px;">
+		    	</select> 
+			</div>
+
+			<div class="col-sm-2">
+				<img ng-src="img/product/collections/{{ctrl.theCategory.thumbnail}}" alt="" style="width: 100%;"/>
+				thumbnail: {{ctrl.theCategory.thumbnail}}
+			</div>
+
+			<div class="col-sm-2">
+				<a ng-click="ctrl.upsert(ctrl.theCategory)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
+				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+			</div>
+			<div class="col-sm-1">
 				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -35,24 +49,29 @@
 			</div>
 		</div>
 	
-		<h3>category management </h3>
-		
+		<!--data table-->
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="cate in $data">
-			        <td title="'id'" filter="{ 'categoryId': 'number'}" sortable="'categoryId'" style="width:100px;text-align: center;">
-			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.categoryId}}</a>
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.id}}</a>
 			        </td>
-			        <td title="'name'" filter="{ 'categoryName' : 'text'}" sortable="'categoryName'" style="text-align: right;">
-			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.categoryName}} </a>
+					<td title="'image'"  style="width:130px;">
+						<img ng-click="ctrl.updateCategory(cate)" ng-src="img/product/collections/{{cate.thumbnail}}" />
+					</td>
+			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
+			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.name}} </a>
 			        </td>
-			        <td title="'Date'" sortable="'modDate'" style="width:300px;">
-			        	{{cate.mod_date | date:"dd-MM-yyyy"}}
+					<td title="'type'" filter="{ 'type' : 'text'}" sortable="'type'" style="text-align: right;width:80px;">
+						{{cate.type}}
+					</td>
+			        <td title="'Date'" sortable="'gmtCreate'" style="width:130px;">
+			        	{{cate.gmtCreate | date:"dd-MM-yyyy"}}
 			        </td>
 			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(cate.status)">
-			        	{{cate.status == 0 ? 'inactive' : 'active' }}
+			        	{{cate.status == false ? 'inactive' : 'active' }}
 			        </td>
-			        <td title="'delete'"  >
+			        <td title="'delete'" style="width:100px;" >
 			        	<a ng-click="ctrl.deleteCategory(cate)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
 			        </td>
 			    </tr>

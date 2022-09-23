@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Integer> {
     List<Category> findByStatusOrderByGmtModifyDesc(@NonNull Boolean status);
-
     List<Category> findByTypeAndStatusOrderByGmtModifyDesc(String type, Boolean status);
-
     Page<Category> findByStatusAndTypeOrderByGmtModifyDesc(Boolean status, String type, Pageable pageable);
+
+    List<Category> findByOrderByIdDesc();
 
 }
