@@ -150,24 +150,27 @@ angular.module('app')
 	}
 
 }])
-.factory('uploadService',['store','Upload', function(store,Upload) {
+.factory('uploadService',['Upload','$timeout', function(Upload,$timeout) {
 	var shipList = [];
+	var newPicName='tete';
 	var uploadService = {
 		uploadFunction : uploadFunction
 		};
 	return uploadService;
 
 	function uploadFunction(file, type) {
+
         file.upload = Upload.upload({
           url: 'mgnt/uploadFile',
-          data: {oldName: self.theCategory.thumbnail , file: file, type: type},
+          data: {oldName: file.oldName ? file.oldName : '' , file: file, type: type},
           headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
         });
 
         file.upload.then(function (response) {
           $timeout(function () {
           console.log(response);
-            file.result = response.data;
+          file.result = response.data;
+          newPicName = response.data;
           });
         }, function (response) {
           if (response.status > 0)

@@ -39,6 +39,47 @@ form .progress {
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
 		<h3 style="padding-bottom: 40px;">category management </h3>
+
+
+		<div class="row" style="margin-bottom: 30px;">
+
+
+			<div class="col-sm-3">
+				<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
+				<img ng-src="img/supplier/{{ctrl.picFile.result}}" ng-show="ctrl.isShowUploadPic" alt="" style="width: 100%;"/>
+			</div>
+
+
+			<div class="col-sm-4">
+				<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
+				<input type="file" ngf-select ng-model="ctrl.picFile" name="file"
+					   accept="image/*" ngf-max-size="2MB"
+					   ngf-model-invalid="errorFile">
+
+				<i ng-show="myForm.file.$error.maxSize">File too large
+					{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+				<img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb">
+				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+
+				<button ng-disabled="!ctrl.picFile"
+						ng-click="ctrl.picFile.oldName = ctrl.theCategory.thumbnail; ctrl.uploadPic(ctrl.picFile)">upload</button>
+				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
+			        <div style="width:{{ctrl.picFile.progress}}%"
+						 ng-bind="ctrl.picFile.progress + '%'"></div>
+			      </span>
+				<span ng-show="ctrl.picFile.result">Upload Successful</span>
+				<span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
+				<span>size: 440x440</span>
+			</div>
+
+			<div class="col-sm-3">
+				<p ng-show="ctrl.theCategory.thumbnail">Old image: {{ctrl.theCategory.thumbnail}}</p>
+				<img ng-src="img/product/collections/{{ctrl.theCategory.thumbnail}}" alt="" style="width: 100%;"/>
+			</div>
+
+		</div>
+
+
 		<div class="row" style="margin-bottom: 30px;">
 			<div class="col-sm-1">
 				<input type="number"  ng-model="ctrl.theCategory.id" disabled="disabled" placeholder="id" style="width:60px;"/>
@@ -84,34 +125,7 @@ form .progress {
 			</div>
 		</div>
 
-		<div class="row" style="margin-bottom: 30px;">
-			<div class="col-sm-4">
-				<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
-				<input type="file" ngf-select ng-model="ctrl.picFile" name="file"
-					   accept="image/*" ngf-max-size="2MB"
-					   ngf-model-invalid="errorFile">
 
-				<i ng-show="myForm.file.$error.maxSize">File too large
-					{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-				<img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb">
-				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
-
-				<button ng-disabled="!ctrl.picFile"
-						ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
-				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
-			        <div style="width:{{ctrl.picFile.progress}}%"
-						 ng-bind="ctrl.picFile.progress + '%'"></div>
-			      </span>
-				<span ng-show="ctrl.picFile.result">Upload Successful</span>
-				<span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
-				<span>size: 440x440</span>
-			</div>
-
-			<div class="col-sm-4">
-				<img ng-src="img/product/collections/{{ctrl.theCategory.thumbnail}}" alt="" style="width: 100%;"/>
-			</div>
-
-		</div>
 	
 		<!--data table-->
         <div class="table-responsive">

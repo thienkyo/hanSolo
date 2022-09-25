@@ -18,14 +18,14 @@ angular.module('supplierModule')
 	
 	function upsert(supplier){
 		var url = "mgnt/upsertSupplier";
-		return ajaxService.post(url,cate,{}).then(function(response){
+		return ajaxService.post(url,supplier,{}).then(function(response){
 			return response.data;
 		});
 	}
 	
 	function deleteSupplier(supplier){
 		var url = "mgnt/deleteSupplier";
-		return ajaxService.post(url,cate,{}).then(function(response){
+		return ajaxService.post(url,supplier,{}).then(function(response){
 			return response.data;
 		});
 	}

@@ -40,64 +40,23 @@ form .progress {
 	<div class="container" ng-cloak>
 		<h3 style="padding-bottom: 40px;">Supplier management </h3>
 		<div class="row" style="margin-bottom: 30px;">
-			<div class="col-sm-1">
-				<input type="number"  ng-model="ctrl.theSupplier.id" disabled="disabled" placeholder="id" style="width:60px;"/>
-			</div>
 			<div class="col-sm-3">
-				<input type="text"  ng-model="ctrl.theSupplier.name" placeholder="name" style="width: 100%;"/>
-			</div>
-			<div class="col-sm-2">
-				<select ng-model="ctrl.theSupplier.type" >
-					<option value="CATEGORY">CATEGORY</option>
-					<option value="BRANDING">BRANDING</option>
-					<option value="COLLECTION">COLLECTION</option>
-					<option value="TAG">TAG</option>
-				</select>
-			</div>
-			<div class="col-sm-1">
-				<select  ng-model="ctrl.theSupplier.status" 
-					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-					 style="width: 80px;height: 30px;">
-		    	</select> 
-			</div>
-			<div class="col-sm-3">
-				logo: {{ctrl.theSupplier.logo}}
-			</div>
-
-			<div class="col-sm-2">
-				<a ng-click="ctrl.upsert(ctrl.theSupplier)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
-			</div>
-			<div class="col-sm-1">
-				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 thành công
-				</div>
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 có sản phẩm
-				</div>
-			</div>
-		</div>
-
-		<div class="row" style="margin-bottom: 30px;">
-			<div class="col-sm-4">
 				<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
+				<img ng-src="img/supplier/{{ctrl.picFile.result}}" ng-show="ctrl.isShowUploadPic" alt="" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-4">
 				<input type="file" ngf-select ng-model="ctrl.picFile" name="file"
-					   accept="image/*" ngf-max-size="2MB"
+					   accept="image/*" ngf-max-size="4MB"
 					   ngf-model-invalid="errorFile">
 
 				<i ng-show="myForm.file.$error.maxSize">File too large
-					{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+					{{errorFile.size / 1000000|number:1}}MB: max 4M</i>
 				<img ng-show="myForm.file.$valid" ngf-logo="ctrl.picFile" class="thumb">
-				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile" style="margin: 10px 0px 10px 0px;">Remove</button>
 
 				<button ng-disabled="!ctrl.picFile"
-						ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
+						ng-click="ctrl.picFile.oldName = ctrl.theSupplier.logo; ctrl.uploadPic(ctrl.picFile)" style="margin: 10px 0px 10px 0px;">upload</button>
 				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
 			        <div style="width:{{ctrl.picFile.progress}}%"
 						 ng-bind="ctrl.picFile.progress + '%'"></div>
@@ -106,37 +65,85 @@ form .progress {
 				<span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
 				<span>size: 440x440</span>
 			</div>
-
-			<div class="col-sm-4">
-				<img ng-src="img/product/collections/{{ctrl.theSupplier.logo}}" alt="" style="width: 100%;"/>
+			<div class="col-sm-3">
+				<p ng-show="ctrl.theSupplier.logo">Old image: {{ctrl.theSupplier.logo}}</p>
+				<img ng-src="img/supplier/{{ctrl.theSupplier.logo}}" alt="" style="width: 100%;"/>
 			</div>
 
 		</div>
+
+		<div class="row" style="margin-bottom: 30px;">
+			<div class="col-sm-1">
+				<input type="number"  ng-model="ctrl.theSupplier.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+			</div>
+
+			<div class="col-sm-2">
+				<input type="text"  ng-model="ctrl.theSupplier.name" placeholder="name" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-3">
+				<input type="text"  ng-model="ctrl.theSupplier.address" placeholder="address" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-2">
+				<input type="text"  ng-model="ctrl.theSupplier.phone" placeholder="phone" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-1">
+				<input type="text"  ng-model="ctrl.theSupplier.prefix" placeholder="prefix" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-2">
+				<a ng-click="ctrl.upsert(ctrl.theSupplier)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
+				<a ng-click="ctrl.picFile.result=null; ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+			</div>
+			<div class="col-sm-1">
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only"></span>
+					thành công
+				</div>
+				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only"></span>
+					có sản phẩm
+				</div>
+			</div>
+
+		</div>
+
 	
 		<!--data table-->
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
-			    <tr ng-repeat="cate in $data">
+			    <tr ng-repeat="supplier in $data">
 			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
-			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.id}}</a>
+			        	<a href="" ng-click="ctrl.updateSupplier(supplier)">{{supplier.id}}</a>
 			        </td>
 					<td title="'image'"  style="width:130px;">
-						<img ng-click="ctrl.updateCategory(cate)" ng-src="img/product/collections/{{cate.logo}}" />
+						<img ng-click="ctrl.updateSupplier(supplier)" ng-src="img/supplier/{{supplier.logo}}" />
 					</td>
 			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
-			        	<a href="" ng-click="ctrl.updateCategory(cate)">{{cate.name}} </a>
+			        	<a href="" ng-click="ctrl.updateSupplier(supplier)">{{supplier.name}} </a>
 			        </td>
-					<td title="'type'" filter="{ 'type' : 'text'}" sortable="'type'" style="text-align: right;width:80px;">
-						{{cate.type}}
+					<td title="'address'" filter="{ 'address' : 'text'}" sortable="'address'" style="text-align: right;">
+						{{supplier.address}}
 					</td>
+
+					<td title="'phone'" filter="{ 'phone' : 'text'}" sortable="'phone'" style="text-align: right;">
+						{{supplier.phone}}
+					</td>
+
 			        <td title="'Date'" sortable="'gmtCreate'" style="width:130px;">
-			        	{{cate.gmtCreate | date:"dd-MM-yyyy"}}
+			        	{{supplier.gmtCreate | date:"dd-MM-yyyy"}}
 			        </td>
-			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(cate.status)">
-			        	{{cate.status == false ? 'inactive' : 'active' }}
+			        <td title="'prefix'" filter="{ 'prefix' : 'text'}" sortable="'prefix'">
+			        	{{supplier.prefix}}
 			        </td>
 			        <td title="'delete'" style="width:100px;" >
-			        	<a ng-click="ctrl.deleteCategory(cate)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+			        <!--	<a ng-click="ctrl.deleteCategory(supplier)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>-->
 			        </td>
 			    </tr>
 			</table>

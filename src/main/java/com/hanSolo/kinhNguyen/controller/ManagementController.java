@@ -75,17 +75,19 @@ public class ManagementController {
     @ResponseBody
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile uploadfile, @RequestParam("oldName") String oldName, @RequestParam("type") String type, final HttpServletRequest request) {
 
-        String dir="";
+        String dir;
         switch (type) {
             case "CATEGORY.COLLECTION":
                 dir = env.getProperty("hanSolo.uploadedFiles.collectionThumbnail");
+                break;
+            case "SUPPLIERLOGO":
+                dir = env.getProperty("hanSolo.uploadedFiles.supplier");
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return Utility.savefile(dir,uploadfile,oldName);
-
 
     } // method uploadFile
 }

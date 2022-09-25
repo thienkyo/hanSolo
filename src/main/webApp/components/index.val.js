@@ -20,6 +20,7 @@ angular
 		.value('CommonStatusArray',CommonStatusArray)
 		.value('ProductDO',ProductDO)
 		.value('CategoryDO',CategoryDO)
+		.value('SupplierDO',SupplierDO)
 		.value('ArticleDO',ArticleDO)
 		.value('BannerDO',BannerDO)
 		.value('ShipCostDO',ShipCostDO)
@@ -141,6 +142,18 @@ function CategoryDO(){
 	this.type = 'CATEGORY';
 	this.thumbnail = '';
 	this.parentId = null;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function SupplierDO(){
+	this.id = 0;
+	this.name = 'supplier name';
+	this.status = true;
+	this.logo = '';
+	this.address = '';
+	this.phone = '';
+	this.prefix = '';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('categoryModule')
-.controller('categoryController', ['$scope','categoryService','NgTableParams','memberService','CommonStatusArray','CategoryDO','Upload','$timeout',
-	function($scope,categoryService,NgTableParams,memberService,CommonStatusArray,CategoryDO,Upload,$timeout) {
+.controller('categoryController', ['$scope','categoryService','NgTableParams','memberService','CommonStatusArray','CategoryDO','Upload','$timeout','uploadService',
+	function($scope,categoryService,NgTableParams,memberService,CommonStatusArray,CategoryDO,Upload,$timeout,uploadService) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theCategory = new CategoryDO;
@@ -68,6 +68,7 @@ angular.module('categoryModule')
 			self.responseStrFail = false;
 			self.theCategory = new CategoryDO;
 			self.picFile = null;
+			self.isShowUploadPic = false;
 		}
 		
 		self.setStyle = function(status){
@@ -83,6 +84,15 @@ angular.module('categoryModule')
 		}
 
 		self.uploadPic = function(file) {
+
+
+
+
+		    uploadService.uploadFunction(file,'CATEGORY.COLLECTION');
+
+            self.isShowUploadPic = true;
+
+		/*
             file.upload = Upload.upload({
               url: 'mgnt/uploadFile',
               data: {oldName: self.theCategory.thumbnail , file: file, type: 'CATEGORY.COLLECTION'},
@@ -100,7 +110,7 @@ angular.module('categoryModule')
             }, function (evt) {
               // Math.min is to fix IE which reports 200% sometimes
               file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });
+            });*/
         }
 		
 }]);
