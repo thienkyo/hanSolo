@@ -1,7 +1,6 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Product;
-import com.hanSolo.kinhNguyen.models.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -26,5 +25,14 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
     List<Product> findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Boolean status, Integer discount);
 
     Optional<Product> findByIdAndStatus(Integer id, Boolean status);
+
+    List<Product> findFirst50ByOrderByGmtModifyDesc();
+
+    List<Product> findFirst50ByCategories_IdOrderByGmtModifyDesc(Integer id);
+
+    List<Product> findByCategories_IdOrderByGmtModifyDesc(Integer id);
+
+    List<Product> findByOrderByGmtModifyDesc();
+
 
 }

@@ -39,14 +39,10 @@ form .progress {
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
 		<h3 style="padding-bottom: 40px;">category management </h3>
-
-
 		<div class="row" style="margin-bottom: 30px;">
-
-
 			<div class="col-sm-3">
 				<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
-				<img ng-src="img/supplier/{{ctrl.picFile.result}}" ng-show="ctrl.isShowUploadPic" alt="" style="width: 100%;"/>
+				<img ng-src="img/product/collections/{{ctrl.picFile.result}}" ng-show="ctrl.isShowUploadPic" alt="" style="width: 100%;"/>
 			</div>
 
 
@@ -59,10 +55,10 @@ form .progress {
 				<i ng-show="myForm.file.$error.maxSize">File too large
 					{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
 				<img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb">
-				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile" style="margin: 10px 0px 10px 0px;">Remove</button>
 
 				<button ng-disabled="!ctrl.picFile"
-						ng-click="ctrl.picFile.oldName = ctrl.theCategory.thumbnail; ctrl.uploadPic(ctrl.picFile)">upload</button>
+						ng-click="ctrl.picFile.oldName = ctrl.theCategory.thumbnail; ctrl.uploadPic(ctrl.picFile)" style="margin: 10px 0px 10px 0px;">upload</button>
 				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
 			        <div style="width:{{ctrl.picFile.progress}}%"
 						 ng-bind="ctrl.picFile.progress + '%'"></div>
@@ -71,12 +67,10 @@ form .progress {
 				<span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
 				<span>size: 440x440</span>
 			</div>
-
 			<div class="col-sm-3">
 				<p ng-show="ctrl.theCategory.thumbnail">Old image: {{ctrl.theCategory.thumbnail}}</p>
 				<img ng-src="img/product/collections/{{ctrl.theCategory.thumbnail}}" alt="" style="width: 100%;"/>
 			</div>
-
 		</div>
 
 
@@ -100,9 +94,6 @@ form .progress {
 					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
 					 style="width: 80px;height: 30px;">
 		    	</select> 
-			</div>
-			<div class="col-sm-3">
-				thumbnail: {{ctrl.theCategory.thumbnail}}
 			</div>
 
 			<div class="col-sm-2">
@@ -143,8 +134,8 @@ form .progress {
 					<td title="'type'" filter="{ 'type' : 'text'}" sortable="'type'" style="text-align: right;width:80px;">
 						{{cate.type}}
 					</td>
-			        <td title="'Date'" sortable="'gmtCreate'" style="width:130px;">
-			        	{{cate.gmtCreate | date:"dd-MM-yyyy"}}
+			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
+			        	{{cate.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
 			        </td>
 			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(cate.status)">
 			        	{{cate.status == false ? 'inactive' : 'active' }}

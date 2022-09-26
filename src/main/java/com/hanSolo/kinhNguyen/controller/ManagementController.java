@@ -1,8 +1,10 @@
 package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.models.Category;
+import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.models.Supplier;
 import com.hanSolo.kinhNguyen.repository.CategoryRepository;
+import com.hanSolo.kinhNguyen.repository.ProductRepository;
 import com.hanSolo.kinhNguyen.repository.SupplierRepository;
 import com.hanSolo.kinhNguyen.response.CategoryResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
@@ -12,6 +14,7 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,10 +29,14 @@ import java.util.List;
 @RequestMapping("/mgnt")
 public class ManagementController {
 
-    @Autowired CategoryRepository categoryRepo;
+    @Autowired
+    CategoryRepository categoryRepo;
 
     @Autowired
     SupplierRepository supplierRepo;
+
+    @Autowired
+    private ProductRepository prodRepo;
 
     @Autowired private Environment env;
 
@@ -69,6 +76,27 @@ public class ManagementController {
         return new SupplierResponse(newSupplier,Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    //////////////////////////// product section ///////////////////////////////
+    @RequestMapping(value = "getProductsForMgnt/{cateId}/{amount}", method = RequestMethod.GET)
+    public List<Product> getProductsForMgnt(@PathVariable final int cateId, @PathVariable final int amount, final HttpServletRequest request) throws ServletException {
+        List<Product> productList;
+            if(cateId==0){
+                if(amount==50){
+                    productList =  prodRepo.findFirst50ByOrderByGmtModifyDesc();
+                }else{
+                    productList =  prodRepo.findByOrderByGmtModifyDesc();
+                }
+            }else{
+                if(amount==50){
+                    productList =  prodRepo.findFirst50ByCategories_IdOrderByGmtModifyDesc(cateId);
+                }else{
+                    productList =  prodRepo.findByCategories_IdOrderByGmtModifyDesc(cateId);
+                }
+            }
+
+        return productList;
+    }
+
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
@@ -88,6 +116,13 @@ public class ManagementController {
         }
 
         return Utility.savefile(dir,uploadfile,oldName);
-
     } // method uploadFile
+
+    @RequestMapping(value = "uploadFiles", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> uploadFile(@RequestParam("files") List<MultipartFile> uploadFiles, @RequestParam("oldNames") String oldNames) {
+
+        String directory = env.getProperty("hanSolo.uploadedFiles.product");
+        return Utility.saveMultipleFile(directory,uploadFiles, oldNames);
+    }
 }

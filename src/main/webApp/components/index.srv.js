@@ -154,7 +154,8 @@ angular.module('app')
 	var shipList = [];
 	var newPicName='tete';
 	var uploadService = {
-		uploadFunction : uploadFunction
+		uploadFunction : uploadFunction,
+		uploadFilesFunction : uploadFilesFunction
 		};
 	return uploadService;
 
@@ -180,6 +181,37 @@ angular.module('app')
           file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
     }
+
+    function uploadFilesFunction(files, oldNames) {
+
+        Upload.upload({
+          url: 'mgnt/uploadFiles',
+          data: {oldName: oldNames ? oldNames : '' , files: files},
+          arrayKey: '',
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+        }).then(function (response) {
+          $timeout(function () {
+          console.log(response);
+          file.result = response.data;
+          newPicName = response.data;
+
+          cartDetail.imageNames = response.data;
+          cartDetail.quantity = files.length;
+          //cartStoreService.setCurrentCart(self.currentCart);;
+          self.updateTotal();
+          });
+        }, function (response) {
+          if (response.status > 0)
+            self.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+          // Math.min is to fix IE which reports 200% sometimes
+          files.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+    }
+
+
+
+
 }])
 .factory('paginationService',['store','PaginationItemDO','PaginationDO', function(store,PaginationItemDO,PaginationDO) {
 	var pagination = new PaginationDO;

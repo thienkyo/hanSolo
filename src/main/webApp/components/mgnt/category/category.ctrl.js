@@ -14,7 +14,7 @@ angular.module('categoryModule')
 		self.currentMember = memberService.getCurrentMember();
 		
 		categoryService.getAllCategories().then(function (data) {
-		    console.log(data);
+		//    console.log(data);
 			self.cateList = data
 			self.tableParams = new NgTableParams({}, { dataset: self.cateList});
 		});
@@ -84,33 +84,9 @@ angular.module('categoryModule')
 		}
 
 		self.uploadPic = function(file) {
-
-
-
-
 		    uploadService.uploadFunction(file,'CATEGORY.COLLECTION');
-
             self.isShowUploadPic = true;
 
-		/*
-            file.upload = Upload.upload({
-              url: 'mgnt/uploadFile',
-              data: {oldName: self.theCategory.thumbnail , file: file, type: 'CATEGORY.COLLECTION'},
-              headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
-            });
-
-            file.upload.then(function (response) {
-              $timeout(function () {
-              console.log(response);
-                file.result = response.data;
-              });
-            }, function (response) {
-              if (response.status > 0)
-                self.errorMsg = response.status + ': ' + response.data;
-            }, function (evt) {
-              // Math.min is to fix IE which reports 200% sometimes
-              file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-            });*/
         }
 		
 }]);

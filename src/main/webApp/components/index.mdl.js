@@ -17,8 +17,8 @@ angular.module('app', [
 		'ngMaterial',
 		'blogModule',
 		'blogDetailModule',
-//		'productListModule',  //mgnt from here
-//		'productUpsertModule',
+		'productListModule',  //mgnt from here
+		'productUpsertModule',
 		'categoryModule',
 		'supplierModule',
 //		'orderListModule',

@@ -1,0 +1,207 @@
+<style>
+
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+
+.bt {
+  background: #FE980F;
+  border: medium none;
+  border-radius: 0;
+  margin-left: -5px;
+  margin-top: -3px;
+  padding: 7px 17px;
+}
+</style>
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="padding-bottom: 40px;">Product Detail </h3>
+	 <div class="login-form">
+	 <form name="myForm" >
+	 	<div class="row">
+	 		<div class="col-sm-4">
+	 			<img ng-src="images/thumbnail/{{ctrl.product.image}}" alt="" style="width: 100%;"/>
+	 		</div>
+	 		<div class="col-sm-4">
+	 			<span>image: {{ctrl.product.image}}</span>
+			 	<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
+			      <input type="file" ngf-select ng-model="ctrl.picFile" name="file"    
+			             accept="image/*" ngf-max-size="4MB"
+			             ngf-model-invalid="errorFile">
+			      
+			      <i ng-show="myForm.file.$error.maxSize">File too large 
+			          {{errorFile.size / 1000000|number:1}}MB: max 4M</i>
+			      <img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb"> 
+			      <button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+			     
+			      <button ng-disabled="!ctrl.picFile"  
+			      		ng-click="ctrl.uploadPic(ctrl.picFile,'mgnt/uploadfile2')">upload</button>
+			      <span class="progress" ng-show="ctrl.picFile.progress >= 0">
+			        <div style="width:{{ctrl.picFile.progress}}%"  
+			        		ng-bind="ctrl.picFile.progress + '%'"></div>
+			      </span>
+			      <span ng-show="ctrl.picFile.result">Upload Successful</span>
+			      <span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
+			      <span>size: 400x400</span>
+	 		</div>
+	 		<div class="col-sm-4">
+	 			<img ng-show="ctrl.picFile.result" ng-src="images/thumbnail/{{ctrl.picFile.result}}" alt="" style="width: 100%;"/>
+
+	 		</div>
+	 	</div>
+		<div class="row">
+			<div class="col-sm-1">
+				id:	<input type="number"  ng-model="ctrl.product.id" disabled="disabled"/>
+			</div>
+			<div class="col-sm-4">
+				name:<input type="text"  ng-model="ctrl.product.prodName" required/>
+			</div>
+			<div class="col-sm-2">
+				buy price:	<input type="text"  ng-model="ctrl.product.buyPrice"/>
+			</div>
+			<div class="col-sm-2">
+				sell Price:	<input type="text"  ng-model="ctrl.product.sellPrice"/>
+			</div>
+			<div class="col-sm-2">
+				supplier:
+				<select  ng-model="ctrl.product.supplier"
+						 ng-options="opt as opt.name for opt in ctrl.supplierList"
+						 style="width: 100%;height: 40px;">
+				</select>
+			</div>
+			<div class="col-sm-1">
+				quantity: <input type="number" ng-model="ctrl.product.quantity"/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">
+				weight: <input type="number"  ng-model="ctrl.product.weight" />
+			</div>
+			<div class="col-sm-2">
+				supplier product id:	<input type="text"  ng-model="ctrl.product.merchantProductId"/>
+			</div>
+			<div class="col-sm-2">
+				discount: <input type="number" ng-model="ctrl.product.discount"/>
+			</div>
+			<div class="col-sm-2">
+				status:
+				<select  ng-model="ctrl.product.status"
+						 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+						 style="width: 100%;height: 40px;">
+				</select>
+			</div>
+		</div>
+		 <div class="row">
+			 <div class="col-sm-3">
+				 category:
+				 <select  ng-model="ctrl.category"
+						  ng-options="opt as opt.name for opt in ctrl.groupList | filter:{ type: 'CATEGORY' }"
+						  ng-change="ctrl.pickGroup(ctrl.category)"
+						  style="width: 100%;height: 40px;">
+				 </select>
+			 </div>
+			 <div class="col-sm-3">
+				 branding:
+				 <select  ng-model="ctrl.brand"
+						  ng-options="opt as opt.name for opt in ctrl.groupList | filter:{ type: 'BRANDING' }"
+						  ng-change="ctrl.pickGroup(ctrl.brand)"
+						  style="width: 100%;height: 40px;">
+				 </select>
+			 </div>
+			 <div class="col-sm-3">
+				 collection:
+				 <select  ng-model="ctrl.collection"
+						  ng-options="opt as opt.name for opt in ctrl.groupList | filter:{ type: 'COLLECTION' }"
+						  ng-change="ctrl.pickGroup(ctrl.collection)"
+						  style="width: 100%;height: 40px;">
+				 </select>
+			 </div>
+			 <div class="col-sm-3">
+				 tag:
+				 <select  ng-model="ctrl.tag"
+						  ng-options="opt as opt.name for opt in ctrl.groupList | filter:{ type: 'TAG' }"
+						  ng-change="ctrl.pickGroup(ctrl.tag)"
+						  style="width: 100%;height: 40px;">
+				 </select>
+			 </div>
+		 </div>
+		 <div class="row" style="margin-top:15px;margin-bottom:15px;">
+			 <div class="col-sm-3">
+				 <span class="badge badge-primary"
+					   ng-repeat="group in ctrl.product.categories | filter:{ type: 'CATEGORY'}"
+					   ng-click="ctrl.removeGroup(group)"
+					   style="margin-right: 5px;">
+					 {{group.name}}</span>
+			 </div>
+			 <div class="col-sm-3">
+				 <span class="badge badge-info"
+					   ng-repeat="group in ctrl.product.categories | filter:{ type: 'BRANDING'}"
+					   ng-click="ctrl.removeGroup(group)"
+					   style="margin-right: 5px;">{{group.name}}</span>
+			 </div>
+			 <div class="col-sm-3">
+				 <span class="badge badge-success"
+					   ng-repeat="group in ctrl.product.categories | filter:{ type: 'COLLECTION'}"
+					   ng-click="ctrl.removeGroup(group)"
+					   style="margin-right: 5px;">{{group.name}}</span>
+			 </div>
+			 <div class="col-sm-3">
+				 <span class="badge badge-warning"
+					   ng-repeat="group in ctrl.product.categories | filter:{ type: 'TAG'}"
+					   ng-click="ctrl.removeGroup(group)"
+					   style="margin-right: 5px;">{{group.name}}</span>
+			 </div>
+		 </div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				description:<textarea  ng-model="ctrl.product.description"></textarea>
+			</div>
+		</div>
+
+		<div class="row" style="margin-bottom: 15px;margin-top: 15px;">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<a ng-click="ctrl.upsert()" href="" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">submit</a>
+				<a href="#/mgnt/productUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">add</a>
+				<a href="#/mgnt/productList" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">back</a>
+			</div>
+			<div class="col-sm-4">
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  <span class="sr-only">Error:</span>
+					 thành công
+				</div>				
+			</div>
+		</div>
+	</form>
+	
+
+	</div>
+	
+	</div>
+	
+</section>

@@ -14,7 +14,6 @@ angular.module('supplierModule')
 		self.currentMember = memberService.getCurrentMember();
 		
 		supplierService.getAllSuppliers().then(function (data) {
-		    console.log(data);
 			self.supplierList = data
 			self.tableParams = new NgTableParams({}, { dataset: self.supplierList});
 		});
@@ -23,7 +22,7 @@ angular.module('supplierModule')
 			self.theSupplier = supplier;
 			self.responseStr = false;
 			self.responseStrFail = false;
-            self.picFile = null;
+           // self.picFile = null;
 		}
 		
 		self.upsert = function(supplier){
@@ -34,6 +33,7 @@ angular.module('supplierModule')
                     self.theSupplier.logo = self.picFile.result;
                 }
             }
+            console.log(supplier);
 
 			self.responseStr = false;
 			self.responseStrFail = false;
@@ -47,22 +47,6 @@ angular.module('supplierModule')
 			});
 		}
 		
-	/*	self.deleteCategory = function(supplier){
-			self.responseStr = false;
-			self.responseStrFail = false;
-			supplierService.deleteSupplier(supplier).then(function (data) {
-				self.responseStr = data;
-				var index = self.supplierList.indexOf(supplier);
-				self.supplierList.splice(index,1);
-				self.tableParams = new NgTableParams({}, { dataset: self.supplierList});
-				
-			},function(error){
-				if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
-					self.responseStrFail = error;
-				}
-			});
-		}*/
-		
 		self.clear = function(){
 			self.responseStr = false;
 			self.responseStrFail = false;
@@ -73,14 +57,8 @@ angular.module('supplierModule')
 		}
 
 		self.uploadPic = function(file) {
-		    console.log(file);
-		    console.log(file.result);
 		    uploadService.uploadFunction(file,'SUPPLIERLOGO');
 		    self.isShowUploadPic = true;
-		   /* console.log(file);
-		    console.log(self.picFile);
-		    console.log(self.picFile.result);
-		    self.theSupplier.logo = file.result;*/
         }
 		
 }]);

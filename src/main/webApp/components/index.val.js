@@ -11,6 +11,11 @@ var CommonStatusArray=[
 	{name : 'inactive', value:false }
 ];
 
+var AmountList=[
+	{name : '50', value:50 },
+    {name : 'all', value:0 }
+];
+
 angular
 		.module('app') 
 		.value('MemberDO', MemberDO)
@@ -18,6 +23,7 @@ angular
 		.value('OrderDetailDO',OrderDetailDO)
 		.value('OrderStatusArray',OrderStatusArray)
 		.value('CommonStatusArray',CommonStatusArray)
+		.value('AmountList',AmountList)
 		.value('ProductDO',ProductDO)
 		.value('CategoryDO',CategoryDO)
 		.value('SupplierDO',SupplierDO)
@@ -118,24 +124,26 @@ function MemberDO () {
 }
 
 function ProductDO(){
-	this.prodId = 0;
+	this.id = 0;
 	this.description = '';
 	this.discount = 0;
+	this.supplier = null;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 	this.notification = 'còn hàng';
 	this.buyPrice = 1000;
 	this.sellPrice = 1000;
-	this.prodName = '';
+	this.name = '';
 	this.quantity = 1;
-	this.status = 1;
+	this.status = true;
 	this.weight = 0.1;
-	this.category={categoryId:1};
-	this.image = '';
-	this.extInfo = '{\n\t\"needImage\":false,\n\t\"minNumberOfImage\":0,\n\t\"maxNumberOfImage\":0\n}';
+	this.merchantProductId='';
+	this.categories=[];
+	this.images = '';
+	this.thumbnail = '';
 }
 
-function CategoryDO(){
+function CategoryDO(name, type){
 	this.id = 0;
 	this.name = 'category name';
 	this.status = true;
@@ -144,6 +152,14 @@ function CategoryDO(){
 	this.parentId = null;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
+
+    if(name && name != ''){
+        this.name = name;
+    }
+
+    if(type && type != ''){
+        this.type = type;
+    }
 }
 
 function SupplierDO(){

@@ -1,0 +1,57 @@
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="padding-bottom: 40px;">Product management </h3>
+		
+		<div class="row" style="margin-bottom: 15px;">
+			<div class="col-sm-1">
+				<a href="#/mgnt/productUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">add</a>
+			</div>
+			<div class="col-sm-1">
+				<select  ng-model="ctrl.amount"  ng-change="ctrl.getProductByTerm(0,ctrl.amount,'amount')"
+					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 
+			</div>
+			<div class="col-sm-3">
+				<select  ng-model="ctrl.categoryId" ng-change="ctrl.getProductByTerm(ctrl.categoryId,ctrl.amount,'category')"
+					 ng-options="opt.id as opt.name for opt in ctrl.categoryList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 	
+			</div>
+			<div class="col-sm-3">
+				<select  ng-model="ctrl.brandId" ng-change="ctrl.getProductByTerm(ctrl.brandId,ctrl.amount,'brand')"
+						 ng-options="opt.id as opt.name for opt in ctrl.brandList"
+						 style="width: 100%;height: 40px;">
+				</select>
+			</div>
+
+			<div class="col-sm-7"></div>
+		</div>
+		
+		
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="prod in $data">
+			        <td title="'id'" filter="{ id: 'text'}" sortable="'id'" style="width:60px;text-align: center;">
+			        	<a href="#/mgnt/productUpsert/{{prod.id}}" >{{prod.id}}</a>
+			        </td>
+			        <td title="'image'" sortable="'image'"  style="width:90px;">
+			        	<a href="#/mgnt/productUpsert/{{prod.id}}" ><img ng-src="img/product/{{prod.thumbnail}}" style="width:80px;height: 80px;"/></a>
+			        </td>
+			        <td title="'name'" filter="{ name: 'text'}" sortable="'name'" style="width:300px;">
+			        	<a href="#/mgnt/productUpsert/{{prod.prodId}}" >{{prod.name}}</a>
+			        </td>
+					<td title="'supplier prodId'" filter="{ merchantProductId: 'text'}" sortable="'merchantProductId'">
+						{{prod.merchantProductId}}
+					</td>
+					<td title="'buy price'" filter="{ buyPrice : 'number'}" sortable="'buyPrice'">{{prod.buyPrice | number:1}}</td>
+					<td title="'sell price'" filter="{ sellPrice : 'number'}" sortable="'sellPrice'" style="text-align: right;">{{prod.sellPrice | number:0}}</td>
+					<td title="'quantity'" filter="{ quantity : 'number'}" sortable="'quantity'">{{prod.quantity}}</td>
+			        <td title="'view'" sortable="" style="width:60px;"><a href="#/productDetail/{{prod.id}}" >view</a></td>
+			        <td title="'status'" filter="{ status : 'number'}" sortable="'status'" ng-style="ctrl.setStyle(prod.status)">{{prod.status == 0 ? 'inactive' : 'active' }}</td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>
