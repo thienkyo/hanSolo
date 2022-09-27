@@ -4,11 +4,11 @@ angular.module('productUpsertModule')
 										   'productUpsertService','memberService',
 										   'productDetailService','CommonStatusArray',
 										   'ProductDO','Upload','$timeout','categoryService',
-										   'supplierService',
+										   'supplierService','uploadService',
 	function($rootScope, $routeParams,$location,
 			productUpsertService,memberService,
 			productDetailService,CommonStatusArray,
-			ProductDO,Upload,$timeout,categoryService,supplierService) {
+			ProductDO,Upload,$timeout,categoryService,supplierService,uploadService) {
 		
 	var self = this;
 	self.statusList = CommonStatusArray;
@@ -41,25 +41,17 @@ angular.module('productUpsertModule')
     self.pickGroup = function(opt){
         self.product.categories.push(opt);
 /*
-        var index = self.groupList.indexOf(opt);
-        self.groupList.splice(index,1);*/
-
-
         console.log(self.groupList);
-        var temp = self.groupList.filter(i => i.id != opt.id)
-        self.groupList = temp;
-
-        console.log(self.groupList);
-        console.log(self.product);
+        console.log(self.product);*/
     }
 
     self.removeGroup = function(opt){
         var index = self.product.categories.indexOf(opt);
-        self.product.categories.splice(index,1);
+       self.product.categories.splice(index,1);
 
-        self.groupList.push(opt);
+     /*    self.groupList.push(opt);
 
-        console.log(self.product);
+        console.log(self.product);*/
     }
 
 	
@@ -77,7 +69,13 @@ angular.module('productUpsertModule')
 		});
 	}
 	
-	self.uploadPic = function(file,url) {
+	self.uploadPic = function(file,oldNames) {
+
+
+	        uploadService.uploadFilesFunction(file,oldNames);
+
+
+	/*
 		    file.upload = Upload.upload({
 		      url: url,
 		      data: {oldName: url == 'mgnt/uploadFiles' ? self.product.image : '', file: file},
@@ -94,7 +92,7 @@ angular.module('productUpsertModule')
 		    }, function (evt) {
 		      // Math.min is to fix IE which reports 200% sometimes
 		      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		    });
+		    });*/
 	}
 	
 }]);

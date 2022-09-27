@@ -186,19 +186,19 @@ angular.module('app')
 
         Upload.upload({
           url: 'mgnt/uploadFiles',
-          data: {oldName: oldNames ? oldNames : '' , files: files},
+          data: {oldNames: oldNames ? oldNames : '' , files: files},
           arrayKey: '',
           headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
         }).then(function (response) {
           $timeout(function () {
           console.log(response);
-          file.result = response.data;
-          newPicName = response.data;
+          files.result = response.data;
+        //  newPicName = response.data;
 
-          cartDetail.imageNames = response.data;
-          cartDetail.quantity = files.length;
+         // cartDetail.imageNames = response.data;
+        //  cartDetail.quantity = files.length;
           //cartStoreService.setCurrentCart(self.currentCart);;
-          self.updateTotal();
+         // self.updateTotal();
           });
         }, function (response) {
           if (response.status > 0)
