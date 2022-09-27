@@ -12,7 +12,5 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
     Optional<Member> findByPhoneAndStatus(String phone, Boolean status);
     Optional<Member> findByPhone(String phone);
 
-
-
     boolean existsByPhoneAndPass(String phone, String pass);
 }

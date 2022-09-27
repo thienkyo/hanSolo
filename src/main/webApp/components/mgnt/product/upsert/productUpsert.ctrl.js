@@ -40,26 +40,27 @@ angular.module('productUpsertModule')
 
     self.pickGroup = function(opt){
         self.product.categories.push(opt);
-/*
-        console.log(self.groupList);
-        console.log(self.product);*/
+
+    //    console.log(self.product);
     }
 
     self.removeGroup = function(opt){
         var index = self.product.categories.indexOf(opt);
        self.product.categories.splice(index,1);
 
-     /*    self.groupList.push(opt);
-
-        console.log(self.product);*/
+   //  self.groupList.push(opt);
+   //    console.log(self.product);
     }
 
 	
 	self.upsert = function(){
 		self.responseStr = false;
+		console.log(self.product);
 		if(self.picFile){
+		    console.log(self.picFile.result);
 			if(self.picFile.result){
-				self.product.image = self.picFile.result;
+				self.product.images = self.picFile.result;
+				self.product.thumbnail=self.picFile.result.split(',')[0];
 			}
 		}
 		
@@ -69,10 +70,12 @@ angular.module('productUpsertModule')
 		});
 	}
 	
-	self.uploadPic = function(file,oldNames) {
+	self.uploadPic = function(files,oldNames) {
 
 
-	        uploadService.uploadFilesFunction(file,oldNames);
+	    uploadService.uploadFilesFunction(files,oldNames);
+
+
 
 
 	/*

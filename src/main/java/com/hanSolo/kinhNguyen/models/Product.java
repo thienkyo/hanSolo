@@ -23,10 +23,10 @@ public class Product {
     @Column(name = "name", length = 100)
     private String name;
 
-    @JsonBackReference
+  //  @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "suppliers_id")
-    private Supplier suppliers;
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
     @Column(name = "buy_price")
     private Integer buyPrice;
@@ -165,12 +165,12 @@ public class Product {
         this.buyPrice = buyPrice;
     }
 
-    public Supplier getSuppliers() {
-        return suppliers;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setSuppliers(Supplier suppliers) {
-        this.suppliers = suppliers;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public String getName() {

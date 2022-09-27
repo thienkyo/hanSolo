@@ -41,7 +41,7 @@ angular.module('app')
 	self.selectedItemChange = function(item) {
 		var url = '';
 		if(item){
-			if(item.type == 1){
+			if(item.type == 'Frame'){
 				url = 'productDetail/'+item.id;
 			}else{
 				url = 'blogDetail/'+item.id;

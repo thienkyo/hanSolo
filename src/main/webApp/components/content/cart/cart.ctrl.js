@@ -76,8 +76,7 @@ angular.module('cartModule')
 
 				self.order.couponCode = self.couponCode;
 				self.order.couponDiscount = self.couponDiscount;
-				//self.order.status = 0;
-				console.log(self.order);
+				//console.log(self.order);
 
 				//save order
 				if(self.me.address && self.me.fullName && self.me.phone){

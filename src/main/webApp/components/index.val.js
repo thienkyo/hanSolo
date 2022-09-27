@@ -133,13 +133,13 @@ function ProductDO(){
 	this.notification = 'còn hàng';
 	this.buyPrice = 1000;
 	this.sellPrice = 1000;
-	this.name = '';
+	this.name = 'name';
 	this.quantity = 1;
 	this.status = true;
 	this.weight = 0.1;
 	this.merchantProductId='';
 	this.categories=[];
-	this.images = '';
+	this.images = null;
 	this.thumbnail = '';
 }
 

@@ -42,8 +42,8 @@ public class Supplier {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "suppliers", orphanRemoval = true)
+    /*@JsonBackReference
+    @OneToMany(mappedBy = "supplier", orphanRemoval = true)
     private Set<Product> products = new LinkedHashSet<>();
 
     public Set<Product> getProducts() {
@@ -53,7 +53,7 @@ public class Supplier {
     public void setProducts(Set<Product> products) {
         this.products = products;
     }
-
+*/
     public Date getGmtModify() {
         return gmtModify;
     }

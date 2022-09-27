@@ -97,6 +97,18 @@ public class ManagementController {
         return productList;
     }
 
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "upsertProduct", method = RequestMethod.POST)
+    public GenericResponse updateProducts(@RequestBody final Product product, final HttpServletRequest request) throws ServletException {
+        product.setGmtCreate(new Date());
+        product.setGmtModify(new Date());
+        prodRepo.save(product);
+
+        return new GenericResponse("upsert_product_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+
+
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)

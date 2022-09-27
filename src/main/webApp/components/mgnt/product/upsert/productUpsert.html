@@ -42,22 +42,26 @@ form .progress {
 	 <form name="myForm" enctype="multipart/form-data">
 	 	<div class="row">
 	 		<div class="col-sm-4">
-	 			<img ng-src="images/thumbnail/{{ctrl.product.thumbnail}}" alt="" style="width: 100%;"/>
+	 			<img ng-src="img/product/{{ctrl.picFile.result.split(',')[0]}}" alt="" style="width: 100%;"/>
+	 			<img ng-src="img/product/{{ctrl.product.thumbnail}}" alt="" style="width: 100%;"/>
 	 		</div>
 	 		<div class="col-sm-4">
 	 			<span>image: {{ctrl.product.image}}</span>
 			 	<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
-			      <input type="file" ngf-select ng-model="ctrl.picFile" name="file"    
-			             accept="image/*" ngf-max-size="4MB" multiple="multiple"
-			             ngf-model-invalid="errorFile">
-			      
-			      <i ng-show="myForm.file.$error.maxSize">File too large 
-			          {{errorFile.size / 1000000|number:1}}MB: max 4M</i>
-			      <img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb"> 
-			      <button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+					  <input type="file" ngf-select ng-model="ctrl.picFile" name="file"
+							 accept="image/*" ngf-max-size="4MB" multiple="multiple"
+							 ngf-model-invalid="errorFile">
+
+					  <i ng-show="myForm.file.$error.maxSize">File too large
+						  {{errorFile.size / 1000000|number:1}}MB: max 4M</i>
+					  <img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb">
+
+
+					<button ng-disabled="!ctrl.picFile"
+						ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
+			        <button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
 			     
-			      <button ng-disabled="!ctrl.picFile"  
-			      		ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
+
 			      <span class="progress" ng-show="ctrl.picFile.progress >= 0">
 			        <div style="width:{{ctrl.picFile.progress}}%"  
 			        		ng-bind="ctrl.picFile.progress + '%'"></div>
@@ -67,12 +71,15 @@ form .progress {
 			      <span>size: 400x400</span>
 	 		</div>
 	 		<div class="col-sm-4">
-	 			<img ng-show="ctrl.picFile.result" ng-src="images/thumbnail/{{ctrl.picFile.result}}" alt="" style="width: 100%;"/>
-
 				<!--show upload image -->
-				<img ng-repeat="one in product.images.split(',')  track by $index" ng-show="product.images"
-					 ng-src="img/productDetail/{{one}}"
-					 style="width: 50px;vertical-align: bottom;padding-right: 5px;"/>
+				<img ng-repeat="one in ctrl.picFile.result.split(',')  track by $index"
+					 ng-src="img/product/{{one}}"
+					 style="width: 90px;vertical-align: bottom;padding-right: 5px;"/>
+				<img ng-repeat="one in ctrl.product.images.split(',')  track by $index"
+					 ng-src="img/product/{{one}}"
+					 style="width: 90px;vertical-align: bottom;padding-right: 5px;"/>
+
+				<!--ng-show="ctrl.product.images"-->
 	 		</div>
 	 	</div>
 		<div class="row">
@@ -80,7 +87,7 @@ form .progress {
 				id:	<input type="number"  ng-model="ctrl.product.id" disabled="disabled"/>
 			</div>
 			<div class="col-sm-4">
-				name:<input type="text"  ng-model="ctrl.product.prodName" required/>
+				name:<input type="text"  ng-model="ctrl.product.name" required/>
 			</div>
 			<div class="col-sm-2">
 				buy price:	<input type="text"  ng-model="ctrl.product.buyPrice"/>
@@ -188,7 +195,7 @@ form .progress {
 		<div class="row" style="margin-bottom: 15px;margin-top: 15px;">
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<a ng-click="ctrl.upsert()" href="" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">submit</a>
+				<a ng-click="ctrl.upsert();" href="" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">submit</a>
 				<a href="#/mgnt/productUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">add</a>
 				<a href="#/mgnt/productList" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">back</a>
 			</div>
