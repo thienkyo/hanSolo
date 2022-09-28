@@ -186,13 +186,16 @@ function ArticleDO(){
 }
 
 function BannerDO(){
-	this.bannerId = 0;
-	this.categoryName = 'banner name';
-	this.status = 1; 
-	this.mod_date = (new Date()).getTime();
+	this.id = 0;
+	this.name = 'banner name';
+	this.status = true;
+	this.needText = true;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 	this.image='';
-	this.description='';
+	this.description='description';
 	this.link='';
+	this.type='HOMEBANNER';
 }
 
 function ShipCostDO(){

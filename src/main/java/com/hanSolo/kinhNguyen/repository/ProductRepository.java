@@ -33,6 +33,4 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
     List<Product> findByCategories_IdOrderByGmtModifyDesc(Integer id);
 
     List<Product> findByOrderByGmtModifyDesc();
-
-
 }

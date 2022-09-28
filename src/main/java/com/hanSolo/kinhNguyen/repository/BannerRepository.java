@@ -9,4 +9,6 @@ public interface BannerRepository extends PagingAndSortingRepository<Banner, Int
     List<Banner> findByStatusAndTypeOrderByIdDesc(Boolean status, String type);
     List<Banner> findByStatusOrderByIdDesc(Boolean status);
 
+    List<Banner> findByOrderByGmtModifyDesc();
+
 }

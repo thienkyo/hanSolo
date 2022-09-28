@@ -98,7 +98,7 @@ form .progress {
 			<div class="col-sm-2">
 				supplier:
 				<select  ng-model="ctrl.product.supplier"
-						 ng-options="opt as opt.name for opt in ctrl.supplierList"
+						 ng-options="opt as opt.name for opt in ctrl.supplierList track by opt.id"
 						 style="width: 100%;height: 40px;">
 				</select>
 			</div>
@@ -108,7 +108,7 @@ form .progress {
 		</div>
 		<div class="row">
 			<div class="col-sm-1">
-				weight: <input type="number"  ng-model="ctrl.product.weight" />
+				weight: <input type="text"  ng-model="ctrl.product.weight" />
 			</div>
 			<div class="col-sm-2">
 				supplier product id:	<input type="text"  ng-model="ctrl.product.merchantProductId"/>
@@ -188,16 +188,17 @@ form .progress {
 
 		<div class="row">
 			<div class="col-sm-12">
-				description:<textarea  ng-model="ctrl.product.description"></textarea>
+				description:<textarea  ng-model="ctrl.product.description" rows="5"></textarea>
 			</div>
 		</div>
 
 		<div class="row" style="margin-bottom: 15px;margin-top: 15px;">
 			<div class="col-sm-4"></div>
 			<div class="col-sm-4">
-				<a ng-click="ctrl.upsert();" href="" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">submit</a>
-				<a href="#/mgnt/productUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">add</a>
+				<a ng-click="ctrl.upsert();" href="" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">save</a>
+				<a href="#/mgnt/productUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">clear</a>
 				<a href="#/mgnt/productList" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">back</a>
+				<a href="#/productDetail/{{ctrl.product.id}}" class="btn btn-default check_out" style="margin: 5px 0px 0px 10px;">view</a>
 			</div>
 			<div class="col-sm-4">
 				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 

@@ -1,8 +1,10 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.models.Banner;
 import com.hanSolo.kinhNguyen.models.Category;
 import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.models.Supplier;
+import com.hanSolo.kinhNguyen.repository.BannerRepository;
 import com.hanSolo.kinhNguyen.repository.CategoryRepository;
 import com.hanSolo.kinhNguyen.repository.ProductRepository;
 import com.hanSolo.kinhNguyen.repository.SupplierRepository;
@@ -21,9 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -38,7 +44,11 @@ public class ManagementController {
     @Autowired
     private ProductRepository prodRepo;
 
-    @Autowired private Environment env;
+    @Autowired
+    private BannerRepository bannerRepo;
+
+    @Autowired
+    private Environment env;
 
     ////////////////////////////category section//////////////////////////
     @SuppressWarnings("unchecked")
@@ -107,7 +117,37 @@ public class ManagementController {
         return new GenericResponse("upsert_product_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "getProductById/{prodId}", method = RequestMethod.GET)
+    public Product getProductById(@PathVariable final int prodId, final HttpServletRequest request) throws ServletException {
+        return	prodRepo.findById(prodId).get();
 
+    }
+
+
+    //////////////////////////// banner ///////////////////////////////
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getBannerForMgnt", method = RequestMethod.GET)
+    public List<Banner> getBanner(final HttpServletRequest request) throws ServletException {
+        return bannerRepo.findByOrderByGmtModifyDesc();
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "upsertBanner", method = RequestMethod.POST)
+    public GenericResponse updateBanner(@RequestBody final Banner banner, final HttpServletRequest request) throws ServletException, ParseException {
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        df.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        String currentTime = df.format(new Date());
+        Date date = df.parse(currentTime);
+
+        if(banner.getId() == 0){
+            banner.setGmtCreate(date);
+        }
+        banner.setGmtModify(date);
+
+        bannerRepo.save(banner);
+        return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
@@ -122,6 +162,9 @@ public class ManagementController {
                 break;
             case "SUPPLIERLOGO":
                 dir = env.getProperty("hanSolo.uploadedFiles.supplier");
+                break;
+            case "BANNER":
+                dir = env.getProperty("hanSolo.uploadedFiles.banner");
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

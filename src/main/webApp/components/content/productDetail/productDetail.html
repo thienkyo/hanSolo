@@ -49,7 +49,7 @@
 			<div class="row d-flex justify-content-center">
 				<div class="col-lg-8">
 					<div class="product__details__text">
-						<h4>{{ctrl.product.name}}</h4>
+						<h4>{{ctrl.product.name}} <a href="#/mgnt/productUpsert/{{ctrl.product.id}}" ng-show="ctrl.isAdmin">[edit]</a></h4>
 						<h3 ng-show="ctrl.product.discount == 0">{{ctrl.product.sellPrice | number:0}}đ </h3>
 						<h3 ng-show="ctrl.product.discount != 0">{{ctrl.product.sellPrice*(100 - ctrl.product.discount)/100 | number:0}}đ <span>{{ctrl.product.sellPrice | number:0}}đ</span></h3>
 						<p>{{ctrl.description}}</p>

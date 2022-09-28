@@ -40,7 +40,7 @@
 			        	<a href="#/mgnt/productUpsert/{{prod.id}}" ><img ng-src="img/product/{{prod.thumbnail}}" style="width:80px;height: 80px;"/></a>
 			        </td>
 			        <td title="'name'" filter="{ name: 'text'}" sortable="'name'" style="width:300px;">
-			        	<a href="#/mgnt/productUpsert/{{prod.prodId}}" >{{prod.name}}</a>
+			        	<a href="#/mgnt/productUpsert/{{prod.id}}" >{{prod.name}}</a>
 			        </td>
 					<td title="'supplier prodId'" filter="{ merchantProductId: 'text'}" sortable="'merchantProductId'">
 						{{prod.merchantProductId}}
@@ -49,7 +49,7 @@
 					<td title="'sell price'" filter="{ sellPrice : 'number'}" sortable="'sellPrice'" style="text-align: right;">{{prod.sellPrice | number:0}}</td>
 					<td title="'quantity'" filter="{ quantity : 'number'}" sortable="'quantity'">{{prod.quantity}}</td>
 			        <td title="'view'" sortable="" style="width:60px;"><a href="#/productDetail/{{prod.id}}" >view</a></td>
-			        <td title="'status'" filter="{ status : 'number'}" sortable="'status'" ng-style="ctrl.setStyle(prod.status)">{{prod.status == 0 ? 'inactive' : 'active' }}</td>
+			        <td title="'status'" filter="{ status : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(prod.status)">{{prod.status == 0 ? 'inactive' : 'active' }}</td>
 			    </tr>
 			</table>
         </div>

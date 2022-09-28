@@ -1,0 +1,172 @@
+<style>
+
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+
+.bt {
+  background: #FE980F;
+  border: medium none;
+  border-radius: 0;
+  margin-left: -5px;
+  margin-top: -3px;
+  padding: 7px 17px;
+}
+</style>
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3>New/Update Banner </h3>
+		<div class="row" style="margin-bottom: 20px;">
+
+	 		<div class="col-sm-4">
+	 			<img ng-src="img/banner/{{ctrl.theBanner.image}}" alt="" style="width: 100%;"/>
+	 		</div>
+	 		<div class="col-sm-4">
+	 			<span>image: {{ctrl.theBanner.image}}</span>
+			 	<p ng-show="ctrl.picFile.result">New image: {{ctrl.picFile.result}}</p>
+				<form name="myForm" >
+				<input type="file" ngf-select ng-model="ctrl.picFile" name="file"
+			             accept="image/*" ngf-max-size="4MB"
+			             ngf-model-invalid="errorFile">
+			      
+				<i ng-show="myForm.file.$error.maxSize">File too large
+			          {{errorFile.size / 1000000|number:1}}MB: max 4M</i>
+				<img ng-show="myForm.file.$valid" ngf-thumbnail="ctrl.picFile" class="thumb">
+				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
+
+				<button ng-disabled="!ctrl.picFile"  style="margin-top: 10px;"
+						ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
+				</form>
+				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
+					<div style="width:{{ctrl.picFile.progress}}%"
+							ng-bind="ctrl.picFile.progress + '%'"></div>
+				</span>
+				<span ng-show="ctrl.picFile.result">Upload Successful</span>
+				<span class="err" ng-show="ctrl.errorMsg">{{ctrl.errorMsg}}</span>
+				<p>size: collection:400x400; banner:1920x800</p>
+	 		</div>
+	 		<div class="col-sm-4">
+	 			<img ng-show="ctrl.picFile.result" ng-src="img/banner/{{ctrl.picFile.result}}" alt="" style="width: 100%;"/>
+	 		</div>
+
+	 	</div>
+	
+		<div class="row" >
+			<div class="col-sm-1">
+				<input type="number"  ng-model="ctrl.theBanner.id" disabled="disabled" placeholder="id" style="width:50px;"/>
+			</div>
+			<div class="col-sm-3">
+				<input type="text"  ng-model="ctrl.theBanner.name" placeholder="name" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.theBanner.status" 
+					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+					 style="width: 100%;height: 30px;">
+		    	</select> 
+			</div>
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.theBanner.needText"
+						 ng-options="opt.value as opt.name for opt in ctrl.needTextList"
+						 style="width: 100%;height: 30px;">
+				</select>
+			</div>
+			<div class="col-sm-2">
+				<a ng-click="ctrl.upsert(ctrl.theBanner)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">save</a>
+				
+				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+			</div>
+			<div class="col-sm-1">
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 thành công
+				</div>
+				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 thất bại
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin-top: 20px;">
+	    	<div class="col-sm-7">
+	    		<textarea name="message" rows="3"  ng-model="ctrl.theBanner.description" ng-cloak ></textarea>
+	    	</div>
+	    	<div class="col-sm-5">
+	    		<input type="text"  ng-model="ctrl.theBanner.link" placeholder="link" style="width: 100%;margin-bottom: 20px;"/>
+
+
+				<select  ng-model="ctrl.theBanner.type"
+						 ng-options="opt.value as opt.name for opt in ctrl.typeListForUpsert"
+						 ng-change="ctrl.filterBannerByType(ctrl.currentType)"
+						 style="width: 100%;height: 30px;">
+				</select>
+
+
+	    	</div>
+	    </div>
+	
+
+		<!-- banner table-->
+		<h3 style="margin-top: 20px;">Banner management </h3>
+		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.currentType"
+						 ng-options="opt.value as opt.name for opt in ctrl.typeList"
+						 ng-change="ctrl.filterBannerByType(ctrl.currentType)"
+						 style="width: 100%;height: 30px;">
+				</select>
+			</div>
+		</div>
+
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="banner in $data">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:100px;text-align: center;">
+			        	<a href="" ng-click="ctrl.updateBanner(banner)">{{banner.id}}</a>
+			        </td>
+			        <td title="'image'"   style="width:150px;">
+			        	<a href="" ng-click="ctrl.updateBanner(banner)"><img ng-src="img/banner/{{banner.image}}" style="width:100%;"/></a>
+			        </td>
+			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
+			        	<a href="" ng-click="ctrl.updateBanner(banner)">{{banner.name}} </a>
+			        </td>
+			        <td title="'link'" filter="{ 'link' : 'text'}" sortable="'link'" style="text-align: right;">
+			        	{{banner.link}}
+			        </td>
+			        <td title="'Date'" sortable="'gmtCreate'" style="width:120px;">
+			        	{{banner.gmtCreate | date:"dd-MM-yyyy HH:mm:ss"}}
+			        </td>
+			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" >
+			        	{{banner.status == 0 ? 'inactive' : 'active' }}
+			        </td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>

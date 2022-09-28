@@ -37,7 +37,6 @@ angular.module('productUpsertModule')
         self.product = new ProductDO();
     }
 
-
     self.pickGroup = function(opt){
         self.product.categories.push(opt);
 
