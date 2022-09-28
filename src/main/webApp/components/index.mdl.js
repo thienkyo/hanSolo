@@ -19,6 +19,7 @@ angular.module('app', [
 		'blogDetailModule',
 		'productListModule',  //mgnt from here
 		'productUpsertModule',
+		'memberListModule',
 		'categoryModule',
 		'supplierModule',
 //		'orderListModule',
@@ -27,5 +28,5 @@ angular.module('app', [
 		'bannerModule',
 //		'shipCostModule',
 		'ui.tinymce'
-//		'memberListModule'
+
 ]);

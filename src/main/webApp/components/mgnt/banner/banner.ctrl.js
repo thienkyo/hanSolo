@@ -46,29 +46,8 @@ angular.module('bannerModule')
 
 	
 	self.uploadPic = function(file) {
-
-
 	    uploadService.uploadFunction(file,'BANNER');
 	    self.isShowUploadPic = true;
-
-	    /*console.log(file);
-	    file.upload = Upload.upload({
-	      url: url,
-	      data: {oldName: self.theBanner.image, file: file},
-	      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
-	    });
-
-	    file.upload.then(function (response) {
-	      $timeout(function () {
-	        file.result = response.data;
-	      });
-	    }, function (response) {
-	      if (response.status > 0)
-	        self.errorMsg = response.status + ': ' + response.data;
-	    }, function (evt) {
-	      // Math.min is to fix IE which reports 200% sometimes
-	      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-	    });*/
 	}
 	
 	self.upsert = function(banner){
@@ -99,5 +78,6 @@ angular.module('bannerModule')
 		self.responseStr = false;
 		self.responseStrFail = false;
 		self.theBanner = new BannerDO;
+		self.picFile = null;
 	}
 }]);

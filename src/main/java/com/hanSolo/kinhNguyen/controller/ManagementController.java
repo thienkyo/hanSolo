@@ -1,13 +1,7 @@
 package com.hanSolo.kinhNguyen.controller;
 
-import com.hanSolo.kinhNguyen.models.Banner;
-import com.hanSolo.kinhNguyen.models.Category;
-import com.hanSolo.kinhNguyen.models.Product;
-import com.hanSolo.kinhNguyen.models.Supplier;
-import com.hanSolo.kinhNguyen.repository.BannerRepository;
-import com.hanSolo.kinhNguyen.repository.CategoryRepository;
-import com.hanSolo.kinhNguyen.repository.ProductRepository;
-import com.hanSolo.kinhNguyen.repository.SupplierRepository;
+import com.hanSolo.kinhNguyen.models.*;
+import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.CategoryResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.SupplierResponse;
@@ -23,13 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -46,6 +36,9 @@ public class ManagementController {
 
     @Autowired
     private BannerRepository bannerRepo;
+
+    @Autowired
+    private MemberRepository memberRepo;
 
     @Autowired
     private Environment env;
@@ -109,9 +102,12 @@ public class ManagementController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertProduct", method = RequestMethod.POST)
-    public GenericResponse updateProducts(@RequestBody final Product product, final HttpServletRequest request) throws ServletException {
-        product.setGmtCreate(new Date());
-        product.setGmtModify(new Date());
+    public GenericResponse updateProducts(@RequestBody final Product product, final HttpServletRequest request) throws ServletException, ParseException {
+        if(product.getId() == 0){
+            product.setGmtCreate(Utility.getCurrentDate());
+        }
+        product.setGmtModify(Utility.getCurrentDate());
+
         prodRepo.save(product);
 
         return new GenericResponse("upsert_product_success",Utility.SUCCESS_ERRORCODE,"Success");
@@ -135,18 +131,34 @@ public class ManagementController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertBanner", method = RequestMethod.POST)
     public GenericResponse updateBanner(@RequestBody final Banner banner, final HttpServletRequest request) throws ServletException, ParseException {
-        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        df.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
-        String currentTime = df.format(new Date());
-        Date date = df.parse(currentTime);
-
         if(banner.getId() == 0){
-            banner.setGmtCreate(date);
+            banner.setGmtCreate(Utility.getCurrentDate());
         }
-        banner.setGmtModify(date);
+        banner.setGmtModify(Utility.getCurrentDate());
 
         bannerRepo.save(banner);
         return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////////Member section/////////////////////////////
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
+    public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
+        List<Member> memberList;
+            if(amount==50){
+                memberList =  memberRepo.findFirst50ByOrderByGmtModifyDesc();
+            }else{
+                memberList = memberRepo.findByOrderByGmtModifyDesc();
+            }
+        return memberList;
+    }
+
+    @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse updateMe(@RequestBody final Member member,final HttpServletRequest request) throws ServletException {
+        memberRepo.save(member);
+
+        return new GenericResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// upload ///////////////////////////////

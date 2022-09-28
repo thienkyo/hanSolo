@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -57,6 +59,12 @@ public class Utility {
     final public static int BLOG_PAGE_SIZE = 9;
 
 
+    final public static Date getCurrentDate() throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        df.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        String currentTime = df.format(new Date());
+        return df.parse(currentTime);
+    }
     final public static ResponseEntity<String> savefile(String dir, MultipartFile uploadfile, String oldName){
         HttpHeaders headers = new HttpHeaders();
         String oldFilepath = "";

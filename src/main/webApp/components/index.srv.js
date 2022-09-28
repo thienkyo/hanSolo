@@ -171,7 +171,7 @@ angular.module('app')
           $timeout(function () {
           console.log(response);
           file.result = response.data;
-          newPicName = response.data;
+       //   newPicName = response.data;
           });
         }, function (response) {
           if (response.status > 0)

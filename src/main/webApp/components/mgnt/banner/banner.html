@@ -57,7 +57,7 @@ form .progress {
 				<button ng-click="ctrl.picFile = null" ng-show="ctrl.picFile">Remove</button>
 
 				<button ng-disabled="!ctrl.picFile"  style="margin-top: 10px;"
-						ng-click="ctrl.uploadPic(ctrl.picFile)">upload</button>
+						ng-click="ctrl.picFile.oldName = ctrl.theBanner.image; ctrl.uploadPic(ctrl.picFile)">upload</button>
 				</form>
 				<span class="progress" ng-show="ctrl.picFile.progress >= 0">
 					<div style="width:{{ctrl.picFile.progress}}%"

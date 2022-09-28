@@ -1,0 +1,72 @@
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="margin-bottom: 30px; margin-top: 30px;">New/Update Member </h3>
+		<div class="row" >
+			<div class="col-sm-2">
+				<input type="text"  ng-model="ctrl.theMember.email" disabled="disabled" placeholder="email" style="width:150px;"/>
+			</div>
+			<div class="col-sm-3">
+				<input type="text"  ng-model="ctrl.theMember.fullName" placeholder="name" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.theMember.status" 
+					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+					 style="width: 100%;height: 30px;">
+		    	</select> 
+			</div>
+			<div class="col-sm-3">
+				<a ng-click="ctrl.upsert(ctrl.theMember)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
+				
+				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+			</div>
+			<div class="col-sm-2">
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 thành công
+				</div>
+				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 fail
+				</div>
+			</div>
+		</div>
+		
+		<h3 style="margin-bottom: 20px; margin-top: 20px;">Member management </h3>
+		
+		<div class="row" style="margin-bottom: 15px;">
+			
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.amount"  ng-change="ctrl.getMemberByTerm()"
+					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 
+			</div>
+			
+			<div class="col-sm-7"></div>
+		</div>
+		
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="mem in $data">
+			        <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.id}}</a>
+			        </td>
+			        <td title="'email'" filter="{ email : 'text'}" sortable="'email'" style="width:90px;">
+			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.email}}</a>
+			        </td>
+			        <td title="'name'" filter="{ fullName: 'text'}" sortable="'fullName'" style="width:100px;">
+			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.fullName}}</a>
+			        </td>
+			        <td title="'phone'" filter="{ phone : 'text'}" sortable="'phone'" style="text-align: right;width:100px;">{{mem.phone}}</td>
+			        <td title="'address'" filter="{ address : 'text'}" sortable="'address'" style="width:250px;">{{mem.address}}</td>
+			        <td title="'status'" filter="{ status : 'number'}" sortable="'status'" ng-style="ctrl.setStyle(mem.status)">{{mem.status == 0 ? 'inactive' : 'active' }}</td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>
