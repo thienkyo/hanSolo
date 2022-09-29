@@ -51,7 +51,7 @@ angular.module('bannerModule')
 	}
 	
 	self.upsert = function(banner){
-		if(self.picFile){
+		if(self.picFile){ // need to be written like this to access "result".
 			if(self.picFile.result){
 				self.theBanner.image = self.picFile.result;
 			}

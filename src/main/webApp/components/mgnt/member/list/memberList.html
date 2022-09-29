@@ -64,6 +64,7 @@
 			        </td>
 			        <td title="'phone'" filter="{ phone : 'text'}" sortable="'phone'" style="text-align: right;width:100px;">{{mem.phone}}</td>
 			        <td title="'address'" filter="{ address : 'text'}" sortable="'address'" style="width:250px;">{{mem.address}}</td>
+					<td title="'roles'"   style="text-align: right;width:100px;"><span ng-repeat="role in mem.memberRoles"> {{role.role}}</span> </td>
 			        <td title="'status'" filter="{ status : 'number'}" sortable="'status'" ng-style="ctrl.setStyle(mem.status)">{{mem.status == 0 ? 'inactive' : 'active' }}</td>
 			    </tr>
 			</table>
