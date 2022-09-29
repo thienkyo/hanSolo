@@ -37,15 +37,12 @@ angular.module('guestOrderModule').controller('guestOrderController', ['$scope',
 		    }
 
 			guestOrderService.getGuestOrder(self.phone).then(function (data) {
-			    console.log(data);
 				for(var i = 0; i < data.length; i++){
                    self.calculateOrderTotal(data[i]);
                 }
                 self.orderList = data;
                 self.orderListPage = buildPageable(1);
-                console.log(self.orderListPage);
                 self.pagination = paginationService.builder(self.orderListPage);
-                console.log(self.pagination);
 			});
 		}
 		

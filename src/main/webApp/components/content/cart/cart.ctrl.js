@@ -25,10 +25,8 @@ angular.module('cartModule')
 
 		},
 		function(error){
-
 			self.me = self.guest;
             self.order.member = self.guest;
-            console.log(self.me);
 		});
 
 
@@ -45,7 +43,6 @@ angular.module('cartModule')
 		// load cart at load page
 		if(self.currentCart.length > 0){
 			self.updateTotal();
-			console.log(self.currentCart);
 		}
 		
 		self.removeItem = function(index){
@@ -76,7 +73,6 @@ angular.module('cartModule')
 
 				self.order.couponCode = self.couponCode;
 				self.order.couponDiscount = self.couponDiscount;
-				//console.log(self.order);
 
 				//save order
 				if(self.me.address && self.me.fullName && self.me.phone){
@@ -102,7 +98,6 @@ angular.module('cartModule')
 				}
 			}else{
 			    self.isErrorMsg ='Please add an item to cart.';
-				console.log('NOT logined');
 			}
 		}
 

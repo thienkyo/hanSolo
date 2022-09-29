@@ -6,7 +6,6 @@ angular.module('blogModule').controller('blogController', ['$routeParams','blogS
 		self.isAdmin = memberService.isAdmin();
 		blogService.getBlogPage(1)
 		.then(function (data) {
-		    console.log(data);
 			self.currentPage = data;
 			self.pagination = paginationService.builder(data);
 	    });

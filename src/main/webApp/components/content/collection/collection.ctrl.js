@@ -4,12 +4,10 @@ angular.module('collectionModule').controller('collectionController', ['$scope',
 		var self = this;
 
 		categoryService.getActiveCategories().then(function(data){
-		    console.log(data)
             self.cateList = data;
         });
 
         categoryService.getCollectionPage(1).then(function(data){
-            console.log(data)
             self.currentPage = data;
             if(self.currentPage.totalElements != 0){
                 self.pagination = paginationService.builder(data);
@@ -20,7 +18,6 @@ angular.module('collectionModule').controller('collectionController', ['$scope',
             if(pageNumber != self.pagination.currentNumber && pageNumber <= self.pagination.list.length){
                 categoryService.getCollectionPage(pageNumber)
                 .then(function (data) {
-                    console.log(data);
                     self.currentPage = data;
                     self.pagination = paginationService.builder(data);
                 });

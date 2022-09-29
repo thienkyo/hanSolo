@@ -7,7 +7,7 @@ angular.module('blogDetailModule')
 		
 		blogDetailService.getOneActiveBlog($routeParams.blogId)
 		.then(function (data) {
-		console.log(data);
+
 			self.theBlog = data;
 			self.theBlog.content=$sce.trustAsHtml(self.theBlog.content);
 		});

@@ -2,7 +2,6 @@ angular.module('app').controller('appController',['$scope','$rootScope', functio
     $scope.headingTitle = "app controller";
     var self = this;
     $scope.$on('productNameBC', function(event,data) {
-    	//console.log(data);
     	self.product = data;
     });
     
