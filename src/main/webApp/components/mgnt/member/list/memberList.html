@@ -6,7 +6,7 @@
 			<div class="col-sm-2">
 				<input type="text"  ng-model="ctrl.theMember.email" disabled="disabled" placeholder="email" style="width:150px;"/>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 				<input type="text"  ng-model="ctrl.theMember.fullName" placeholder="name" style="width: 100%;"/>
 			</div>
 			<div class="col-sm-2">
@@ -15,8 +15,13 @@
 					 style="width: 100%;height: 30px;">
 		    	</select> 
 			</div>
-			<div class="col-sm-3">
-				<a ng-click="ctrl.upsert(ctrl.theMember)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">submit</a>
+			<div class="col-sm-1">
+				<input type="checkbox" id="admin" name="admin" value="admin" ng-model="ctrl.adminRole">
+				<label > admin</label>
+			</div>
+
+			<div class="col-sm-2">
+				<a ng-click="ctrl.upsert(ctrl.theMember)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">save</a>
 				
 				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 			</div>

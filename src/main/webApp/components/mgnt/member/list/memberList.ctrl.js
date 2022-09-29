@@ -6,7 +6,14 @@ angular.module('memberListModule')
 	var self = this;
 	self.statusList = CommonStatusArray;
 	self.statusStyle = { "width": "100px" };
-	
+	//self.adminRole = false;
+	var role = {
+               role: "ADMIN",
+               level: "0",
+               gmtCreate: (new Date()).getTime(),
+               gmtModify: (new Date()).getTime()
+             }
+
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}
@@ -30,11 +37,31 @@ angular.module('memberListModule')
 	
 	self.updateMember = function(mem){
 		self.theMember = mem;
+
+		if(self.theMember.memberRoles.find(i => i.role == 'ADMIN')){
+		    self.adminRole = true;
+		}else{
+		    self.adminRole = false;
+		}
+
 		self.responseStr = false;
 		self.responseStrFail = false;
 	}
 	
 	self.upsert = function(mem){
+
+	    var isAdmin = mem.memberRoles.find(i => i.role == 'ADMIN');
+	    if(self.adminRole){
+	        if(!isAdmin){
+	            role.name = mem.name;
+	            role.phone = mem.phone;
+	            mem.memberRoles.push(role);
+	        }
+	    }else if(isAdmin){
+            mem.memberRoles = mem.memberRoles.filter(i => i.role != 'ADMIN');
+	    }
+
+        console.log(mem);
 		self.responseStr = false;
 		self.responseStrFail = false;
 		memberListService.upsert(mem).then(function (data) {

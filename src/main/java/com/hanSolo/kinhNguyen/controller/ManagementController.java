@@ -150,6 +150,7 @@ public class ManagementController {
             }else{
                 memberList = memberRepo.findByOrderByGmtModifyDesc();
             }
+            memberList.forEach(item -> item.setPass(""));
         return memberList;
     }
 
