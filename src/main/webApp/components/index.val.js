@@ -179,7 +179,7 @@ function CouponDO(){
 	this.id = 0;
 	this.name = 'coupon name';
 	this.status = true;
-	this.value = 0;
+	this.value = null;
 	this.image = '';
 	this.code = '';
 	this.lifespan = null;
