@@ -1,7 +1,9 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.models.Coupon;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.Order;
+import com.hanSolo.kinhNguyen.repository.CouponRepository;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.OrderRepository;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
@@ -28,6 +30,7 @@ public class AuthenticationController {
 
     @Autowired private MemberRepository memberRepo;
     @Autowired private OrderRepository orderRepo;
+    @Autowired private CouponRepository couponRepo;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public MemberResponse getMe(final HttpServletRequest request) throws ServletException {
@@ -50,8 +53,17 @@ public class AuthenticationController {
         }
         order.setMember(memOpt.get());
         Order or = orderRepo.save(order);
-        GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
 
+        if(!or.getCouponCode().isBlank()){
+            Optional<Coupon>  couponOpt = couponRepo.findByCode(or.getCouponCode());
+            if(couponOpt.isPresent()){
+                Coupon coupon = couponOpt.get();
+                coupon.setQuantity(coupon.getQuantity()-1);
+                couponRepo.save(coupon);
+            }
+        }
+
+        GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }
 

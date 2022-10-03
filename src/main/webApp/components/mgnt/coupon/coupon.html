@@ -1,0 +1,118 @@
+<style>
+
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+    top: 7px;
+    margin-bottom: 20px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+}
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+
+.bt {
+  background: #FE980F;
+  border: medium none;
+  border-radius: 0;
+  margin-left: -5px;
+  margin-top: -3px;
+  padding: 7px 17px;
+}
+</style>
+<link href="css/main2.css" rel="stylesheet">
+<section style="margin-top: 30px;">
+	<div class="container" ng-cloak>
+		<h3 style="padding-bottom: 40px;">Coupon management </h3>
+
+		<div class="row" style="margin-bottom: 30px;">
+			<div class="col-sm-1">
+				<input type="number"  ng-model="ctrl.theCoupon.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+			</div>
+			<div class="col-sm-1">
+				<input type="text"  ng-model="ctrl.theCoupon.code" placeholder="code" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-1">
+				<input type="text"  ng-model="ctrl.theCoupon.value" placeholder="value" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-3">
+				<input type="text"  ng-model="ctrl.theCoupon.name" placeholder="name" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-2">
+				<input type="text"  ng-model="ctrl.theCoupon.quantity" placeholder="value" style="width: 100%;"/>
+			</div>
+			<div class="col-sm-2">
+				<input type="text"  ng-model="ctrl.theCoupon.lifespan" placeholder="lifespan" style="width: 100%;"/>
+			</div>
+
+			<div class="col-sm-2">
+				<a ng-click="ctrl.upsert(ctrl.theCoupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
+				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+			</div>
+			<div class="col-sm-1">
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 thành công
+				</div>
+				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
+					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 có sản phẩm
+				</div>
+			</div>
+		</div>
+
+
+	
+		<!--data table-->
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="coupon in $data">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+			        	<a href="" ng-click="ctrl.updateCoupon(coupon)">{{coupon.id}}</a>
+			        </td>
+					<td title="'code'" filter="{ 'code': 'text'}" sortable="'code'"  style="width:130px;">
+						<a href="" ng-click="ctrl.updateCoupon(coupon)">{{coupon.code}} </a>
+					</td>
+					<td title="'value'" filter="{ 'value': 'text'}" sortable="'value'"  style="width:130px;">
+						{{coupon.value}}
+					</td>
+			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="width:200px;">
+			        	{{coupon.name}}
+			        </td>
+					<td title="'quantity'" filter="{ 'quantity' : 'text'}" sortable="'quantity'" style="text-align: right;width:120px;">
+						{{coupon.quantity}}
+					</td>
+					<td title="'lifespan'" filter="{ 'lifespan' : 'text'}" sortable="'lifespan'" style="text-align: right;width:120px;">
+						{{coupon.lifespan}}
+					</td>
+			        <td title="'Modify date'" filter="{ 'gmtModify' : 'text'}" sortable="'gmtModify'" >
+			        	{{coupon.gmtModify | date:"yyyy-MM-dd hh:mm:ss"}}
+			        </td>
+
+			      <!--  <td title="'delete'" style="width:100px;" >
+			        	<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+			        </td>-->
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>

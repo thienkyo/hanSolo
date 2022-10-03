@@ -21,6 +21,7 @@ angular.module('app', [
 		'productUpsertModule',
 		'memberListModule',
 		'categoryModule',
+		'couponModule',
 		'supplierModule',
 //		'orderListModule',
 //		'blogListModule',

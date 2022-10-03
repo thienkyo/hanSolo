@@ -29,6 +29,7 @@ angular
 		.value('SupplierDO',SupplierDO)
 		.value('ArticleDO',ArticleDO)
 		.value('BannerDO',BannerDO)
+		.value('CouponDO',CouponDO)
 		.value('ShipCostDO',ShipCostDO)
 		.value('PaginationItemDO',PaginationItemDO)
 		.value('PaginationDO',PaginationDO);
@@ -170,6 +171,19 @@ function SupplierDO(){
 	this.address = '';
 	this.phone = '';
 	this.prefix = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function CouponDO(){
+	this.id = 0;
+	this.name = 'coupon name';
+	this.status = true;
+	this.value = 0;
+	this.image = '';
+	this.code = '';
+	this.lifespan = null;
+	this.quantity = null;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

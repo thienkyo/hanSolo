@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -39,6 +40,9 @@ public class ManagementController {
 
     @Autowired
     private MemberRepository memberRepo;
+
+    @Autowired
+    private CouponRepository couponRepo;
 
     @Autowired
     private Environment env;
@@ -157,10 +161,37 @@ public class ManagementController {
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GenericResponse updateMe(@RequestBody final Member member,final HttpServletRequest request) throws ServletException {
+        Optional<Member>  memberOpt = memberRepo.findById(member.getId());
+        if(memberOpt.isPresent()){
+            member.setPass(memberOpt.get().getPass());
+        }
         memberRepo.save(member);
 
         return new GenericResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
+
+    //////////////////////////// Coupon ///////////////////////////////
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getAllCoupons", method = RequestMethod.GET)
+    public List<Coupon> getAllCoupons(final HttpServletRequest request) throws ServletException {
+        return couponRepo.findByOrderByGmtModifyDesc();
+    }
+/*
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "upsertCategory", method = RequestMethod.POST)
+    public CategoryResponse upsertCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
+        Category newCate = categoryRepo.save(cate);
+        return new CategoryResponse(newCate,Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "deleteCategory", method = RequestMethod.POST)
+    public GenericResponse deleteCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
+        categoryRepo.delete(cate);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+    */
+
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
