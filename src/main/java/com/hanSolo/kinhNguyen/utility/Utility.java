@@ -31,7 +31,7 @@ public class Utility {
     final public static String HOME_COLLECTION = "HOMECOLLECTION";
 
     final public static String LOGIN_DILIMITER = "d3m";
-    final public static String DEFAULT_PW = "kinhnguyen";
+    final public static String DEFAULT_PW = "a2luaG5ndXllbg==";//kinhnguyen
     final public static String SECRET_KEY = "kinhNguyenSecretKey";
 
     final public static String MEMBER_ROLE = "MEMBER";

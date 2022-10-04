@@ -3,6 +3,7 @@ package com.hanSolo.kinhNguyen.controller;
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.CategoryResponse;
+import com.hanSolo.kinhNguyen.response.CouponResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.SupplierResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
@@ -19,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +45,9 @@ public class ManagementController {
 
     @Autowired
     private CouponRepository couponRepo;
+
+    @Autowired
+    private ArticleRepository articleRepo;
 
     @Autowired
     private Environment env;
@@ -78,7 +83,11 @@ public class ManagementController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertSupplier", method = RequestMethod.POST)
-    public SupplierResponse upsertSupplier(@RequestBody final Supplier supplier, final HttpServletRequest request) throws ServletException {
+    public SupplierResponse upsertSupplier(@RequestBody final Supplier supplier, final HttpServletRequest request) throws ServletException, ParseException {
+        if(supplier.getId() == 0){
+            supplier.setGmtCreate(Utility.getCurrentDate());
+        }
+        supplier.setGmtModify(Utility.getCurrentDate());
         Supplier newSupplier = supplierRepo.save(supplier);
         return new SupplierResponse(newSupplier,Utility.SUCCESS_ERRORCODE,"Success");
     }
@@ -160,10 +169,11 @@ public class ManagementController {
 
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse updateMe(@RequestBody final Member member,final HttpServletRequest request) throws ServletException {
+    public GenericResponse updateMe(@RequestBody final Member member,final HttpServletRequest request) throws ServletException, ParseException {
         Optional<Member>  memberOpt = memberRepo.findById(member.getId());
         if(memberOpt.isPresent()){
             member.setPass(memberOpt.get().getPass());
+            member.setGmtModify(Utility.getCurrentDate());
         }
         memberRepo.save(member);
 
@@ -176,22 +186,44 @@ public class ManagementController {
     public List<Coupon> getAllCoupons(final HttpServletRequest request) throws ServletException {
         return couponRepo.findByOrderByGmtModifyDesc();
     }
-/*
+
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "upsertCategory", method = RequestMethod.POST)
-    public CategoryResponse upsertCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
-        Category newCate = categoryRepo.save(cate);
-        return new CategoryResponse(newCate,Utility.SUCCESS_ERRORCODE,"Success");
+    @RequestMapping(value = "upsertCoupon", method = RequestMethod.POST)
+    public CouponResponse upsertCoupon(@RequestBody final Coupon coupon, final HttpServletRequest request) throws ServletException, ParseException {
+        if(coupon.getId() == 0){
+            coupon.setGmtCreate(Utility.getCurrentDate());
+        }
+        coupon.setGmtModify(Utility.getCurrentDate());
+        return new CouponResponse(couponRepo.save(coupon),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// blog/article ///////////////////////////////
+    @RequestMapping(value = "getArticlesForMgnt/{amount}", method = RequestMethod.GET)
+    public List<Article> getArticlesForMgnt(@PathVariable final int amount) throws ServletException {
+        List<Article> articleList;
+        if(amount==50){
+            articleList =  articleRepo.findFirst50ByOrderByGmtModifyDesc();
+        }else{
+            articleList = articleRepo.findByOrderByGmtModifyDesc();
+        }
+        return articleList;
+    }
+
+    @RequestMapping(value = "upsertArticle", method = RequestMethod.POST)
+    public GenericResponse updateArticle(@RequestBody final Article article) throws ServletException, ParseException {
+        if(article.getId() == 0){
+            article.setGmtCreate(Utility.getCurrentDate());
+        }
+        article.setGmtModify(Utility.getCurrentDate());
+        articleRepo.save(article);
+        return new GenericResponse("upsert_article_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "deleteCategory", method = RequestMethod.POST)
-    public GenericResponse deleteCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
-        categoryRepo.delete(cate);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    @RequestMapping(value = "getArticleById/{articleId}", method = RequestMethod.GET)
+    public Article getArticleById(@PathVariable final int articleId) throws ServletException {
+        return	articleRepo.findById(articleId).get();
     }
-    */
-
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
@@ -209,6 +241,12 @@ public class ManagementController {
                 break;
             case "BANNER":
                 dir = env.getProperty("hanSolo.uploadedFiles.banner");
+                break;
+            case "BLOG":
+                dir = env.getProperty("hanSolo.uploadedFiles.blog");
+                break;
+            case "BLOG.DETAIL":
+                dir = env.getProperty("hanSolo.uploadedFiles.blog.detail");
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

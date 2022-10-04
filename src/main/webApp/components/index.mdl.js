@@ -24,8 +24,8 @@ angular.module('app', [
 		'couponModule',
 		'supplierModule',
 //		'orderListModule',
-//		'blogListModule',
-//		'blogUpsertModule',
+		'blogListModule',
+		'blogUpsertModule',
 		'bannerModule',
 //		'shipCostModule',
 		'ui.tinymce'

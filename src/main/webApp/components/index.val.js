@@ -189,14 +189,15 @@ function CouponDO(){
 }
 
 function ArticleDO(){
-	this.articleId = 0;
+	this.id = 0;
 	this.description = '';
-	this.mod_date = (new Date()).getTime();
 	this.content = '';
-	this.articleName = '';
-	this.image = '';
-	this.status = 1;
+	this.name = '';
+	this.thumbnail = '';
+	this.status = true;
 	this.author = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function BannerDO(){

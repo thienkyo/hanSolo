@@ -18,7 +18,7 @@ angular.module('couponModule')
 
 	function upsert(coupon){
 		var url = "mgnt/upsertCoupon";
-		return ajaxService.post(url,cate,{}).then(function(response){
+		return ajaxService.post(url,coupon,{}).then(function(response){
 			return response.data;
 		});
 	}

@@ -1,6 +1,7 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.Article;
+import com.hanSolo.kinhNguyen.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -19,5 +20,10 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, I
     Article findByStatusAndId(@NonNull boolean status, @NonNull Integer id);
 
     Page<Article> findByStatus(boolean status, Pageable pageable);
+
+    List<Article> findByOrderByGmtModifyDesc();
+
+    List<Article> findFirst50ByOrderByGmtModifyDesc();
+
 
 }

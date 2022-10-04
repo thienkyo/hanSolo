@@ -8,6 +8,7 @@
 					<ul>
 						<li>By {{ctrl.theBlog.author}}</li>
 						<li>{{ctrl.theBlog.gmtCreate | date:"dd-MM-yyyy"}}</li>
+
 					</ul>
 				</div>
 			</div>
@@ -44,6 +45,7 @@
 								<div class="blog__details__author">
 									<div class="blog__details__author__text">
 										<h5>{{ctrl.theBlog.author}}</h5>
+										<a href="#/mgnt/blogUpsert/{{ctrl.theBlog.id}}" ng-show="ctrl.isAdmin">[edit]</a>
 									</div>
 								</div>
 							</div>

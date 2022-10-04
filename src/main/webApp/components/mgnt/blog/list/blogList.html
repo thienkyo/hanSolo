@@ -1,0 +1,44 @@
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3>Blog management </h3>
+		
+		<div class="row" style="margin-bottom: 15px;">
+			<div class="col-sm-1">
+				<a href="#/mgnt/blogUpsert/0" class="btn btn-default check_out" style="margin: 5px 0px 0px 0px;">New</a>
+			</div>
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.amount"  ng-change="ctrl.getBlogByTerm()"
+					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 
+			</div>
+		</div>
+		
+		
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="article in $data">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:100px;text-align: center;">
+			        	<a href="" >{{article.id}}</a>
+			        </td>
+			         <td title="'image'" sortable="'image'"  style="width:150px;">
+			        	<a href="#/mgnt/blogUpsert/{{article.id}}" ><img ng-src="img/blog/{{article.thumbnail}}" style="width:100%;"/></a>
+			        </td>
+			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: left;width:300px;">
+			        	<a href="#/mgnt/blogUpsert/{{article.id}}" >{{article.name }} </a>
+			        </td>
+			        <td title="'Date'" sortable="'modDate'" style="width:190px;">
+			        	{{article.gmtModify | date:"dd-MM-yyyy  HH:mm:ss"}}
+			        </td>
+			        
+			        <td title="'author'" filter="{ 'author' : 'text'}"  sortable="'author'" style="width:90px;">{{article.author}}</td>
+			        <td title="'view'" sortable="" style="width:60px;"><a href="#/blogDetail/{{article.id}}" >view</a></td>
+			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(article.status)">
+			        	{{article.status == 0 ? 'inactive' : 'active' }}
+			        </td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>

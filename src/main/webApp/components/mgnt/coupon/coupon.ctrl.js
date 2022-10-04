@@ -31,7 +31,7 @@ angular.module('couponModule')
 			couponService.upsert(coupon).then(function (data) {
 			    console.log(data);
 				self.responseStr = data.errorMessage;
-				if(cate.id == 0){
+				if(coupon.id == 0){
 					self.couponList.unshift(data.coupon);
 					self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 				}
