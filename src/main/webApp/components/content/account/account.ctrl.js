@@ -35,10 +35,10 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 			return pageable;
 		}
 		
-		self.getTargetPage = function(targetpage){
-			self.orderListPage = buildPageable(targetpage);
+		self.getTargetPage = function(targetPage){
+			self.orderListPage = buildPageable(targetPage);
 			self.pagination = paginationService.builder(self.orderListPage);
-		} 
+		}
 		
 		self.updateMe = function(){
 			accountService.updateMe(self.me).then(function (data) {

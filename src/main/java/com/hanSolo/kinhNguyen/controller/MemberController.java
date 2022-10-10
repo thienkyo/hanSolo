@@ -30,7 +30,6 @@ public class MemberController {
 
     @Autowired private MemberRoleRepository memberRoleRepo;
 
-
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody final LoginRequest login) throws ServletException, UnsupportedEncodingException {
         String decoded = new String(Base64.getDecoder().decode(login.getLoginStr()));

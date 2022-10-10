@@ -30,7 +30,7 @@ public class ArticleController {
     public Page<Article> getArticlePage(@PathVariable Integer pageNumber) {
         //Pageable request = new PageRequest(pageNumber - 1, UtilityConstant.BLOG_PAGE_SIZE, Sort.Direction.DESC, "articleId");
         Pageable request = PageRequest.of(pageNumber - 1, Utility.BLOG_PAGE_SIZE, Sort.Direction.DESC, "id");
-        return articleRepo.findByStatus(Utility.ACTIVE_STATUS, request);
+        return articleRepo.findByStatusOrderByGmtModifyDesc(Utility.ACTIVE_STATUS, request);
     }
 
     @RequestMapping(value="/{id}",method = RequestMethod.GET)

@@ -169,9 +169,7 @@ angular.module('app')
 
         file.upload.then(function (response) {
           $timeout(function () {
-          console.log(response);
           file.result = response.data;
-       //   newPicName = response.data;
           });
         }, function (response) {
           if (response.status > 0)
@@ -191,14 +189,7 @@ angular.module('app')
           headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
         }).then(function (response) {
           $timeout(function () {
-          console.log(response);
           files.result = response.data;
-        //  newPicName = response.data;
-
-         // cartDetail.imageNames = response.data;
-        //  cartDetail.quantity = files.length;
-          //cartStoreService.setCurrentCart(self.currentCart);;
-         // self.updateTotal();
           });
         }, function (response) {
           if (response.status > 0)
@@ -208,9 +199,6 @@ angular.module('app')
           files.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
         });
     }
-
-
-
 
 }])
 .factory('paginationService',['store','PaginationItemDO','PaginationDO', function(store,PaginationItemDO,PaginationDO) {

@@ -1,0 +1,159 @@
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3>Order management </h3>
+		
+		<div class="row" style="margin-bottom: 15px;">
+			
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderbyTerm()"
+					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 
+			</div>
+			<div class="col-sm-6"></div>
+			<div class="col-sm-1" style="font-size: large;color:limegreen;">
+				{{ctrl.statusNumber.ordered}}
+			</div>
+			<div class="col-sm-1" style="font-size: large;color:blue;">
+				{{ctrl.statusNumber.paid}}
+			</div>
+			<div class="col-sm-1" style="font-size: large">
+				{{ctrl.statusNumber.shipped}}
+			</div>
+			<div class="col-sm-1" style="font-size: large">
+				{{ctrl.statusNumber.done}}
+			</div>
+			
+		</div>
+		
+		
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="order in $data">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:100px;text-align: center;">
+			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.id}}</a>
+			        </td>
+			        <td title="'Date'" sortable="'modDate'" style="width:300px;">
+			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"dd-MM-yyyy  HH:mm:ss"}}</a>
+			        </td>
+			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;">{{order.total | number:0 }}đ</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'">{{order.shippingPhone}}</td>
+					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
+			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(order.status)">{{ctrl.getOrderStatusName(order.status)}}</td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>
+<section id="cart_items" ng-show="ctrl.theOrder">
+		<div class="container">
+			<div class="row" >
+				<div class="col-sm-2"> <h3 style="margin-top: 15px;margin-bottom: 20px;">Order [{{ctrl.theOrder.id}}]</h3></div>
+				
+				<div class="col-sm-3">
+					<select  ng-model="ctrl.newOrderStatus"  ng-change="ctrl.updateOrderStatus()"
+							 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
+							 style="width: 100%;height: 40px;">
+				    </select> 
+				</div>
+				<div class="col-sm-7">
+					<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+						 style="margin-top:10px;margin-left: 30px;margin-right: 20px;">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only"></span>
+						 Cập nhật thành công
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description" style="padding-left: 40px;"> name </td>
+							<td class="price" style="text-align: right;padding-right: 80px;">Price</td>
+							<td class="quantity" style="text-align: left;">Quantity</td>
+							<td class="total" style="text-align: right;">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in ctrl.theOrder.orderDetails ">
+							<td class="cart_product">
+								<a href="#/productDetail/{{item.product.id}}"><img ng-src="img/product/{{item.product.thumbnail}}" style="margin-right: 20px;" alt=""></a>
+							</td>
+							<td class="cart_description" style="padding-left: 10px;">
+								<a href="#/productDetail/{{item.product.id}}">{{item.product.name}}</a>
+								<p>Prod ID: {{item.product.id}}</p>
+
+								<!--<img ng-repeat="one in item.product.images.split(',') track by $index" ng-show="item.product.images"
+									 ng-src="img/product/{{one}}"
+									 style="width: 50px;vertical-align: bottom;padding-right: 5px;"/>-->
+
+							</td>
+							<td class="cart_price" style="text-align: right; padding-right: 80px;">
+								<p>{{item.framePriceAtThatTime | number:0}} đ</p>
+							</td> <!-- value="{{item.quantity}}" -->
+							<td class="cart_quantity" style="text-align: center;">
+								<p>{{item.quantity}}</p>
+							</td>
+							<td class="cart_total" style="text-align: right;">
+								<p class="cart_total_price">{{item.priceAtThatTime * item.quantity | number:0}} đ</p>
+							</td>
+							<td class="cart_delete">
+							</td>
+						</tr>
+						<tr style="border-bottom: 0px;">
+							<td colspan="2" style="padding-left: 30px;padding-top: 20px;vertical-align: initial;">
+								<textarea name="message"  placeholder="địa chỉ shipping của đơn hàng" 
+										  rows="4" style="margin-top: 0px;" ng-model="ctrl.theOrder.shippingAddress" ng-cloak ></textarea>
+								
+							</td>
+							<td colspan="1" style="padding-top: 23px; vertical-align: top;">
+								<select  ng-model="ctrl.theOrder.shipCostId" 
+										 ng-options="opt.shipCostId as opt.region for opt in ctrl.shipCostList"
+										 
+										 style="width: 395px;height: 40px;">
+							    </select>
+								<div style="margin: 5px 0px 0px 0px;width: 400px;">
+									<textarea name="message"  placeholder="tên"
+											  rows="1" style="margin-top: 5px;height: 40px; width: 225px;margin-right: 5px;padding-top: 8px;" ng-model="ctrl.theOrder.shippingName" ng-cloak ></textarea>
+									<textarea name="message"  placeholder="Số điện thoại"
+											  rows="1" style="margin-top: 5px;height: 40px;width: 160px;padding-top: 8px;" ng-model="ctrl.theOrder.shippingPhoneNumber" ng-cloak ></textarea>
+								</div>
+							</td>
+							<td colspan="3">
+								<table class="table table-condensed total-result" style="margin-top: 0px;margin-bottom: 40px;text-align: right;">
+									<tr>
+										<td>Cart Sub Total</td>
+										<td>{{ctrl.theOrder.subTotal | number:0}} đ</td>
+									</tr>
+									
+									<tr>
+										<td>kg</td>
+										<td>{{ctrl.weight | number:1}} k</td>
+									</tr>
+									
+									
+									<tr class="shipping-cost">
+										<td>Shipping Cost</td>
+										<td>{{ctrl.theOrder.shipCostFee | number:0}} đ</td>										
+									</tr>
+									<tr>
+										<td>Total</td>
+										<td><span>{{ctrl.theOrder.total | number:0}} đ</span></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
+				<a ng-click="ctrl.deleteOrder(ctrl.theOrder)" href="" class="btn btn-default check_out" style="margin: 0px 0px 30px 30px;">delete</a>
+			</div>
+
+		</div>
+</section>

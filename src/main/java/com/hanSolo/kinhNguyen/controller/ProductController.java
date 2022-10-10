@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.facade.ProductInterface;
 import com.hanSolo.kinhNguyen.models.Category;
 import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.repository.ProductRepository;
@@ -16,9 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/products")
@@ -27,9 +25,9 @@ public class ProductController {
     private ProductRepository prodRepo;
 
     @RequestMapping("homeProduct")
-    public List<Product> getHomeProduct() {
-        List<Product> newProducts = prodRepo.findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Utility.ACTIVE_STATUS,0);
-        List<Product> discountProducts = prodRepo.findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Utility.ACTIVE_STATUS,1);
+    public List<ProductInterface> getHomeProduct() {
+        List<ProductInterface> newProducts = prodRepo.findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Utility.ACTIVE_STATUS,0);
+        List<ProductInterface> discountProducts = prodRepo.findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Utility.ACTIVE_STATUS,1);
         newProducts.addAll(discountProducts);
         Collections.shuffle(newProducts);
 
@@ -42,13 +40,11 @@ public class ProductController {
     }
 
     @RequestMapping(value = "getProductPage/{cateId}/{pageNumber}", method = RequestMethod.GET)
-    public Page<Product> getProductPage(@PathVariable Integer cateId, @PathVariable Integer pageNumber) {
+    public Page<ProductInterface> getProductPage(@PathVariable Integer cateId, @PathVariable Integer pageNumber) {
         Pageable request = PageRequest.of(pageNumber - 1, Utility.PRODUCT_PAGE_SIZE, Sort.Direction.DESC, "id");
-
         if(cateId == 0){
             return prodRepo.findByStatusOrderByGmtModifyDesc(Utility.ACTIVE_STATUS, request);
         }
-
         return prodRepo.findByCategories_IdAndStatusOrderByGmtModifyDesc(cateId, Utility.ACTIVE_STATUS, request);
     }
 }

@@ -153,7 +153,7 @@ form .progress {
 			      <button ng-click="ctrl.picProduct = null" ng-show="ctrl.picProduct">Remove</button>
 			     
 			      <button ng-disabled="!ctrl.picProduct"  
-			      		ng-click="ctrl.uploadPic(ctrl.picProduct,'mgnt/uploadfile4',2)">upload</button>
+			      		ng-click="ctrl.uploadPic(ctrl.picProduct)">upload</button>
 			      <span class="progress" ng-show="ctrl.picProduct.progress >= 0">
 			        <div style="width:{{ctrl.picProduct.progress}}%"  
 			        		ng-bind="ctrl.picProduct.progress + '%'"></div>

@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.repository;
 
+import com.hanSolo.kinhNguyen.facade.ProductInterface;
 import com.hanSolo.kinhNguyen.models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,18 +12,18 @@ import java.util.Optional;
 
 public interface ProductRepository extends PagingAndSortingRepository<Product, Integer> {
 
-    Page<Product> findByCategories_IdAndStatusOrderByGmtModifyDesc(Integer id, Boolean status, Pageable pageable);
+    Page<ProductInterface> findByCategories_IdAndStatusOrderByGmtModifyDesc(Integer id, Boolean status, Pageable pageable);
 
-    Page<Product> findByStatusOrderByGmtModifyDesc(Boolean status, Pageable pageable);
+    Page<ProductInterface> findByStatusOrderByGmtModifyDesc(Boolean status, Pageable pageable);
 
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
 
     List<Product> findByNameContainsIgnoreCaseAndStatus(@NonNull String name, Boolean status);
 
     // for homePage, get 8 new product
-    List<Product> findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Boolean status, Integer discount);
+    List<ProductInterface> findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Boolean status, Integer discount);
     // for homePage, get 4 discount product
-    List<Product> findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Boolean status, Integer discount);
+    List<ProductInterface> findFirst4ByStatusAndDiscountGreaterThanOrderByGmtModifyDesc(Boolean status, Integer discount);
 
     Optional<Product> findByIdAndStatus(Integer id, Boolean status);
 

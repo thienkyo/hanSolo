@@ -49,6 +49,8 @@ public class ManagementController {
     @Autowired
     private ArticleRepository articleRepo;
 
+    @Autowired private OrderRepository orderRepo;
+
     @Autowired
     private Environment env;
 
@@ -131,7 +133,6 @@ public class ManagementController {
         return	prodRepo.findById(prodId).get();
 
     }
-
 
     //////////////////////////// banner ///////////////////////////////
 
@@ -223,6 +224,20 @@ public class ManagementController {
     @RequestMapping(value = "getArticleById/{articleId}", method = RequestMethod.GET)
     public Article getArticleById(@PathVariable final int articleId) throws ServletException {
         return	articleRepo.findById(articleId).get();
+    }
+
+    /////////////////////////Orders section///////////////////////
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
+    public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
+        List<Order> orderList ;
+        if(amount==50){
+            orderList =  orderRepo.findFirst50ByOrderByGmtModifyDesc();
+        }else{
+            orderList = orderRepo.findAllByOrderByGmtModifyDesc();
+        }
+
+        return orderList;
     }
 
     //////////////////////////// upload ///////////////////////////////

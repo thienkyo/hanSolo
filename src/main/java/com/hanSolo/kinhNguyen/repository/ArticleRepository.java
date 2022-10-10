@@ -15,7 +15,7 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, I
 
     List<Article> findByNameContainsIgnoreCaseAndStatus(String name, Boolean status);
 
-    List<Article> findByStatusOrderByGmtModifyDesc(boolean status);
+    Page<Article> findByStatusOrderByGmtModifyDesc(boolean status,Pageable pageable);
 
     Article findByStatusAndId(@NonNull boolean status, @NonNull Integer id);
 

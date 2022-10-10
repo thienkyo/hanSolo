@@ -51,25 +51,13 @@ angular.module('blogUpsertModule')
 
     }
 
-	self.uploadPic = function(file,url,a) {
-		    file.upload = Upload.upload({
-		      url: url,
-		      data: {oldName: a == 1 ? self.article.image : '', file: file},
-		      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
-		    });
+    self.uploadPic = function(file) {
+        uploadService.uploadFunction(file,'BLOG.DETAIL');
+        self.isShowUploadPic = true;
 
-		    file.upload.then(function (response) {
-		      $timeout(function () {
-		        file.result = response.data;
-		      });
-		    }, function (response) {
-		      if (response.status > 0)
-		        self.errorMsg = response.status + ': ' + response.data;
-		    }, function (evt) {
-		      // Math.min is to fix IE which reports 200% sometimes
-		      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		    });
-	}
+    }
+
+
 	/////////////////////////tinyMCE/////////////////////
 	self.tinymceOptions = { 
 		      height: 800,

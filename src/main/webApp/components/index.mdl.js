@@ -23,11 +23,10 @@ angular.module('app', [
 		'categoryModule',
 		'couponModule',
 		'supplierModule',
-//		'orderListModule',
+		'orderListModule',
 		'blogListModule',
 		'blogUpsertModule',
 		'bannerModule',
-//		'shipCostModule',
 		'ui.tinymce'
 
 ]);
