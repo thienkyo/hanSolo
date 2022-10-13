@@ -236,9 +236,19 @@ public class ManagementController {
         }else{
             orderList = orderRepo.findAllByOrderByGmtModifyDesc();
         }
-
         return orderList;
     }
+
+    @RequestMapping(value = "updateOrder", method = RequestMethod.POST)
+    public GenericResponse updateOrder(@RequestBody final Order order) throws ServletException, ParseException {
+        if(order.getId() == 0){
+            order.setGmtCreate(Utility.getCurrentDate());
+        }
+        order.setGmtModify(Utility.getCurrentDate());
+        orderRepo.save(order);
+        return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")

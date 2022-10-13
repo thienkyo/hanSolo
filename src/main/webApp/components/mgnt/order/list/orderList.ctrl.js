@@ -8,7 +8,7 @@ angular.module('orderListModule')
 	self.orderList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "120px" };
-	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0};
+	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
 	/*self.statusNumber.ordered = 0;
 	self.statusNumber.paid = 0;
 	self.statusNumber.shipped = 0;
@@ -26,7 +26,6 @@ angular.module('orderListModule')
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
 
-	    console.log(data);
 	    console.log(self.orderList);
 	//	engineerOrderList();
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -41,20 +40,21 @@ angular.module('orderListModule')
 		return total;
 	}
 */	 
-	self.getOrderStatusName = function(value){
+	/*self.getOrderStatusName = function(value){
+	    console.log(value);
 		for(var k = 0; k < OrderStatusArray.length; k++){
 			if(OrderStatusArray[k].value == value){
 				return OrderStatusArray[k].name;
 				break;
 			}
 		}
-	}
+	}*/
 	
 	self.updateOrderStatus = function(){
 		orderListService.updateOrderStatus(self.theOrder.orderId,self.newOrderStatus).then(function(data){
 			self.responseStr = data.replyStr;
 			self.theOrder.status = self.newOrderStatus;
-			engineerOrderList();
+			//engineerOrderList();
 		});
 		
 	}
@@ -62,7 +62,7 @@ angular.module('orderListModule')
 	self.getOrderbyTerm = function(){
 		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 			self.orderList = data;;
-			engineerOrderList();
+			//engineerOrderList();
 			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		});
 	}
@@ -85,13 +85,13 @@ angular.module('orderListModule')
 		}
 		self.newOrderStatus = order.status;
 		self.theOrder = order;
-		
+	/*
 		self.theOrder.subTotal = 0;
 		self.weight = 0;
 		for (var i = 0; i < self.theOrder.orderDetails.length; i++){
 			self.weight += self.theOrder.orderDetails[i].weight*self.theOrder.orderDetails[i].quantity;
 			self.theOrder.subTotal += self.theOrder.orderDetails[i].priceAtThatTime*self.theOrder.orderDetails[i].quantity;
-		}
+		}*/
 	}
 	
 	self.deleteOrder = function(order){
@@ -102,23 +102,35 @@ angular.module('orderListModule')
 	
 	function engineerOrderList(){
 		self.statusNumber.ordered = 0;
-		self.statusNumber.paid = 0;
-		self.statusNumber.shipped = 0;
-		self.statusNumber.done = 0;
+        self.statusNumber.paid = 0;
+        self.statusNumber.shipped = 0;
+        self.statusNumber.done = 0;
+        self.statusNumber.shopDelete = 0;
+        self.statusNumber.userDelete = 0;
 		
 		for(var i = 0; i < self.orderList.length; i++){
-			if(self.orderList[i].status == 0){
-				self.statusNumber.ordered += 1;
-			}
-			if(self.orderList[i].status == 1){
-				self.statusNumber.paid += 1;
-			}
-			if(self.orderList[i].status == 2){
-				self.statusNumber.shipped += 1;
-			}
-			if(self.orderList[i].status == 3){
-				self.statusNumber.done += 1;
-			}
+
+	        switch(self.orderList[i].status) {
+              case 0:
+                  self.statusNumber.ordered += 1;
+                  break;
+              case 1:
+                  self.statusNumber.paid += 1;
+                  break;
+              case 2:
+                  self.statusNumber.shipped += 1;
+                  break;
+              case 3:
+                  self.statusNumber.done += 1;
+                  break;
+              case 4:
+                  self.statusNumber.shopDelete += 1;
+                  break;
+              case 5:
+                  self.statusNumber.userDelete += 1;
+                  break;
+              default:
+            }
 		}
 	}
 
@@ -127,17 +139,10 @@ angular.module('orderListModule')
         for (var i = 0; i < order.orderDetails.length; i++){
             subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity;
         }
-        order.status = OrderStatusArray.find(i => i.value == order.status).name;
+        order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
         order.subTotal = subTotal;
         order.couponAmount = subTotal*order.couponDiscount/100;
         order.total = subTotal - order.couponAmount;
-
-        self.statusNumber.ordered = 0;
-        self.statusNumber.paid = 0;
-        self.statusNumber.shipped = 0;
-        self.statusNumber.done = 0;
-        self.statusNumber.shopDelete = 0;
-        self.statusNumber.userDelete = 0;
 
         switch(order.status) {
           case 0:
@@ -160,6 +165,7 @@ angular.module('orderListModule')
               break;
           default:
         }
+
     }
 	
 }]);

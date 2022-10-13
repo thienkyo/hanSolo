@@ -3,7 +3,9 @@ var OrderStatusArray=[
 	{name : 'đã đặt', value:0 },
 	{name : 'nhận tiền', value:1 },
 	{name : 'đã chuyển hàng ', value:2 },
-	{name : 'xong', value:3 }
+	{name : 'xong', value:3 },
+	{name : 'shop xoá', value:4 },
+	{name : 'khách xoá', value:5 }
 ];
 
 var CommonStatusArray=[
