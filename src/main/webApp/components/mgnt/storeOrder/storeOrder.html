@@ -1,0 +1,133 @@
+<link href="css/main2.css" rel="stylesheet">
+
+<section id="cart_items" >
+	<div class="container">
+		<h2>Create order</h2>
+		<div class="table-responsive cart_info">
+			<table class="table table-condensed">
+				<thead>
+					<tr class="cart_menu">
+						<td class="image">Order : </td>
+						<td class="description" >  </td>
+						<td class="price" ></td>
+						<td class="quantity" ></td>
+						<td class="total" ></td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="border-bottom: 0px;">
+						<td colspan="2" style="padding-left: 30px;padding-top: 60px;">
+							<h6 class="checkout__title">Shipping Details</h6>
+
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="checkout__input">
+										<p>Full Name<span>*</span></p>
+										<input type="text"  ng-model="ctrl.theOrder.shippingName">
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="checkout__input">
+										<p>Phone<span>*</span></p>
+										<input type="text" ng-model="ctrl.theOrder.shippingPhone">
+									</div>
+								</div>
+							</div>
+							<div class="checkout__input" style="margin-bottom: 50px;">
+								<p>Address<span>*</span></p>
+								<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+									   ng-model="ctrl.theOrder.shippingAddress">
+							</div>
+
+						</td>
+						<td colspan="1" >
+						</td>
+						<td colspan="3">
+							<h6 class="checkout__title">Order total</h6>
+							<div class="cart__total">
+								<ul>
+									<li>Subtotal <span>00.000.000 đ</span></li>
+									<li>Coupon <span>0đ</span></li>
+									<li>Total <span>00.000.000 đ</span></li>
+								</ul>
+
+							</div>
+
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+							<div class="row">
+								<div class="col-lg-4">
+									<div class="checkout__input">
+										<p>Full Name<span>*</span></p>
+										<input type="text"  ng-model="ctrl.theOrder.shippingName">
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="checkout__input">
+										<p>Phone<span>*</span></p>
+										<input type="text" ng-model="ctrl.theOrder.shippingPhone">
+									</div>
+								</div>
+								<div class="col-lg-4"></div>
+							</div>
+							<div class="row">
+								<div class="col-lg-4"></div>
+								<div class="col-lg-4"></div>
+								<div class="col-lg-4"></div>
+							</div>
+							<div class="checkout__input" style="margin-bottom: 50px;">
+								<p>Address<span>*</span></p>
+								<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+									   ng-model="ctrl.theOrder.shippingAddress">
+							</div>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+
+
+		</div>
+
+
+	</div>
+
+	<div class="container">
+		<h2>Glass Prescription</h2>
+		<br>
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="" data-target="#home">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#menu1">Menu 1</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#menu2" ng-show="1==0">Menu 2</a>
+			</li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div id="home" class="container tab-pane active"><br>
+				<h3>HOME</h3>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			</div>
+			<div id="menu1" class="container tab-pane fade"><br>
+				<h3>Menu 1</h3>
+				<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			</div>
+			<div id="menu2" class="container tab-pane fade" ng-show="1==0"><br>
+				<h3>Menu 2</h3>
+				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+			</div>
+		</div>
+	</div>
+
+</section>

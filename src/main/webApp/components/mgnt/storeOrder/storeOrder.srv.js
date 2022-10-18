@@ -1,6 +1,6 @@
 'use strict';
-angular.module('orderListModule')
-.factory('orderListService', ['ajaxService',function(ajaxService) {
+angular.module('storeOrderModule')
+.factory('storeOrderService', ['ajaxService',function(ajaxService) {
 		var orderListService = {
 			getOrdersForMgnt : getOrdersForMgnt,
 			getAllOrdersForMgnt : getAllOrdersForMgnt,

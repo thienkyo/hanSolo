@@ -17,6 +17,7 @@ angular.module('app', [
 		'ngMaterial',
 		'blogModule',
 		'blogDetailModule',
+		'storeOrderModule',   //tool from here
 		'productListModule',  //mgnt from here
 		'productUpsertModule',
 		'memberListModule',

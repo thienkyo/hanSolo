@@ -1,19 +1,15 @@
 'use strict';
-angular.module('orderListModule')
-	.controller('orderListController',['$rootScope','$routeParams','$location',
-										 'memberService','orderListService',
+angular.module('storeOrderModule')
+	.controller('storeOrderController',['$rootScope','$routeParams','$location',
+										 'memberService','storeOrderService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList',
-	function($rootScope, $routeParams,$location,memberService,orderListService,NgTableParams,OrderStatusArray,cartService,AmountList) {
+	function($rootScope, $routeParams,$location,memberService,storeOrderService,NgTableParams,OrderStatusArray,cartService,AmountList) {
 	var self = this;
 	self.orderList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "120px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
-	/*self.statusNumber.ordered = 0;
-	self.statusNumber.paid = 0;
-	self.statusNumber.shipped = 0;
-	self.statusNumber.done = 0;*/
-	
+
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}
@@ -21,55 +17,12 @@ angular.module('orderListModule')
 	self.amountList=AmountList;
 	self.amount = 50;
 
-	
-	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
-		self.orderList = data;
-		self.orderList.forEach(calculateOrderTotal);
 
-	    console.log(self.orderList);
-	//	engineerOrderList();
-		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-	});
-/*	
-	 function calculateTotal(order){
-		var total = 0;
-		for(var k = 0; k < order.orderDetails.length; k++){
-			total += order.orderDetails[k].priceAtThatTime*order.orderDetails[k].quantity;
-		}
-		total += order.shipCostFee;
-		return total;
-	}
-*/	 
-	/*self.getOrderStatusName = function(value){
-	    console.log(value);
-		for(var k = 0; k < OrderStatusArray.length; k++){
-			if(OrderStatusArray[k].value == value){
-				return OrderStatusArray[k].name;
-				break;
-			}
-		}
-	}*/
+
 	
-	self.updateOrder = function(order){
-	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
-	    console.log(order);
-		orderListService.updateOrder(order).then(function(data){
-		    console.log(data);
-			self.responseStr = data.replyStr;
-			//self.theOrder.status = self.newOrderStatus;
-			//engineerOrderList();
-		});
-		
-	}
+
 	
-	self.getOrderByTerm = function(){
-		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
-			self.orderList = data;;
-			//engineerOrderList();
-			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-		});
-	}
-	
+
 	self.setStyle = function(status){
 		if(status==0){
 			self.statusStyle.color = "limegreen";

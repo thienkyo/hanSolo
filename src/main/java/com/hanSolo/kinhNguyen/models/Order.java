@@ -1,6 +1,8 @@
 package com.hanSolo.kinhNguyen.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -60,9 +62,11 @@ public class Order {
     @JoinColumn(name = "order_id")
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
+   // @Transient
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @Fetch(FetchMode.JOIN)
     private Member member;
 
     public Member getMember() {

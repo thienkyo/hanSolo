@@ -95,10 +95,16 @@ public class OrderDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    /*@ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;*/
+    @Column(name = "yob")
+    private String yob;
 
+    public String getYob() {
+        return yob;
+    }
+
+    public void setYob(String yob) {
+        this.yob = yob;
+    }
 
     public Product getProduct() {
         return product;

@@ -46,7 +46,7 @@ function OrderDO () {
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 	this.relationship = '';
-	this.location = '';
+	this.location = 'WEB';
 	this.deposit = 0;
 	this.shippingId = '';
 	this.member = null;
@@ -80,6 +80,7 @@ function OrderDetailDO () {
 	this.pd = '';
 	this.wd = '';
 	this.vaNear = '';
+
 	this.name = '';
 	this.phone = '';
 	this.relationship = '';

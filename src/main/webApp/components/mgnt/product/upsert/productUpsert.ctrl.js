@@ -47,8 +47,6 @@ angular.module('productUpsertModule')
         var index = self.product.categories.indexOf(opt);
        self.product.categories.splice(index,1);
 
-   //  self.groupList.push(opt);
-   //    console.log(self.product);
     }
 
 	
@@ -70,31 +68,7 @@ angular.module('productUpsertModule')
 	}
 	
 	self.uploadPic = function(files,oldNames) {
-
-
 	    uploadService.uploadFilesFunction(files,oldNames);
-
-
-
-
-	/*
-		    file.upload = Upload.upload({
-		      url: url,
-		      data: {oldName: url == 'mgnt/uploadFiles' ? self.product.image : '', file: file},
-		      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
-		    });
-
-		    file.upload.then(function (response) {
-		      $timeout(function () {
-		        file.result = response.data;
-		      });
-		    }, function (response) {
-		      if (response.status > 0)
-		        self.errorMsg = response.status + ': ' + response.data;
-		    }, function (evt) {
-		      // Math.min is to fix IE which reports 200% sometimes
-		      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-		    });*/
 	}
 	
 }]);

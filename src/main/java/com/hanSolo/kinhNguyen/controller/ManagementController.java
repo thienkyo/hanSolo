@@ -241,11 +241,7 @@ public class ManagementController {
 
     @RequestMapping(value = "updateOrder", method = RequestMethod.POST)
     public GenericResponse updateOrder(@RequestBody final Order order) throws ServletException, ParseException {
-        if(order.getId() == 0){
-            order.setGmtCreate(Utility.getCurrentDate());
-        }
-        order.setGmtModify(Utility.getCurrentDate());
-        orderRepo.save(order);
+        orderRepo.updateStatusAndGmtModifyById(order.getStatus(),Utility.getCurrentDate(),order.getId());
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 

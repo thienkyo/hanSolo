@@ -110,16 +110,19 @@ angular.module('app')
             controller: 'bannerController',
             controllerAs:'ctrl'
         })
-
         .when('/mgnt/shipCost',{
             templateUrl: 'components/mgnt/shipCost/shipCost.html',
             controller: 'shipCostController',
             controllerAs:'ctrl'
         })
-
         .when('/mgnt/member',{
             templateUrl: 'components/mgnt/member/list/memberList.html',
             controller: 'memberListController',
+            controllerAs:'ctrl'
+        })
+        .when('/mgnt/storeOrder',{
+            templateUrl: 'components/mgnt/storeOrder/storeOrder.html',
+            controller: 'storeOrderController',
             controllerAs:'ctrl'
         })
         .otherwise(
