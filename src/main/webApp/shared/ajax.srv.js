@@ -4,6 +4,7 @@ angular.module('networkServices',[])
 		//var urlbase = "http://146.190.6.177:8080/";
 		//var urlbase = "http://kyoshop.org/";
 		var urlbase = "http://localhost:8080/";
+		//var urlbase = "http://matkinhnguyen.com/";
 		var sessionid = $cookies.get('JSESSIONID');
 		
 		var config = {
