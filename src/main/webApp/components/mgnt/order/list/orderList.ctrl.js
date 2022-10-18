@@ -27,28 +27,8 @@ angular.module('orderListModule')
 		self.orderList.forEach(calculateOrderTotal);
 
 	    console.log(self.orderList);
-	//	engineerOrderList();
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 	});
-/*	
-	 function calculateTotal(order){
-		var total = 0;
-		for(var k = 0; k < order.orderDetails.length; k++){
-			total += order.orderDetails[k].priceAtThatTime*order.orderDetails[k].quantity;
-		}
-		total += order.shipCostFee;
-		return total;
-	}
-*/	 
-	/*self.getOrderStatusName = function(value){
-	    console.log(value);
-		for(var k = 0; k < OrderStatusArray.length; k++){
-			if(OrderStatusArray[k].value == value){
-				return OrderStatusArray[k].name;
-				break;
-			}
-		}
-	}*/
 	
 	self.updateOrder = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;

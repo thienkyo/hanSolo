@@ -79,31 +79,26 @@
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item" ng-repeat="item in ctrl.orderDetailList track by $index">
+				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >Prescription {{$index}}</a>
+			</li>
+
 			<li class="nav-item">
-				<a class="nav-link active" data-toggle="tab" href="" data-target="#home">Home</a>
+				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.add1Tab()"> + </a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#menu1">Menu 1</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#menu2" ng-show="1==0">Menu 2</a>
+				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.remove1Tab()"> - </a>
 			</li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div id="home" class="container tab-pane active"><br>
-				<h3>HOME</h3>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.orderDetailList track by $index"><br>
+				<h3>HOME {{$index}}</h3>
+				<p>Lorem ipsum dolor sit amet,{{$index}} consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 			</div>
-			<div id="menu1" class="container tab-pane fade"><br>
-				<h3>Menu 1</h3>
-				<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			</div>
-			<div id="menu2" class="container tab-pane fade" ng-show="1==0"><br>
-				<h3>Menu 2</h3>
-				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-			</div>
+
 		</div>
 	</div>
 

@@ -120,7 +120,7 @@ angular.module('app')
             controller: 'memberListController',
             controllerAs:'ctrl'
         })
-        .when('/mgnt/storeOrder',{
+        .when('/mgnt/storeOrder/:orderId',{
             templateUrl: 'components/mgnt/storeOrder/storeOrder.html',
             controller: 'storeOrderController',
             controllerAs:'ctrl'

@@ -87,6 +87,8 @@ function OrderDetailDO () {
 	this.relationship = '';
 	this.recommendedSpectacles = '';
 
+	//this.isShow = isShow;
+
 	this.quantity = 1;
 	this.weight = 1;
 	this.gmtCreate = (new Date()).getTime();
