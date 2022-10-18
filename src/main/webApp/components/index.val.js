@@ -82,6 +82,7 @@ function OrderDetailDO () {
 	this.vaNear = '';
 
 	this.name = '';
+	this.yob ='';
 	this.phone = '';
 	this.relationship = '';
 	this.recommendedSpectacles = '';

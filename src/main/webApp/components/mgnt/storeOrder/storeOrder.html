@@ -1,100 +1,77 @@
-<link href="css/main2.css" rel="stylesheet">
-
-<section id="cart_items" >
+<!-- Shopping Cart Section Begin -->
+<section class="shopping-cart spad">
 	<div class="container">
-		<h2>Create order</h2>
-		<div class="table-responsive cart_info">
-			<table class="table table-condensed">
-				<thead>
-					<tr class="cart_menu">
-						<td class="image">Order : </td>
-						<td class="description" >  </td>
-						<td class="price" ></td>
-						<td class="quantity" ></td>
-						<td class="total" ></td>
-						<td></td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr style="border-bottom: 0px;">
-						<td colspan="2" style="padding-left: 30px;padding-top: 60px;">
-							<h6 class="checkout__title">Shipping Details</h6>
+		<div class="row">
+			<div class="col-lg-8">
+				<h6 class="checkout__title">Order Details</h6>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Full Name<span>*</span></p>
+							<input type="text"  ng-model="ctrl.me.fullName" ng-change="ctrl.clearErrorMsg()">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Phone<span>*</span></p>
+							<input type="text" ng-model="ctrl.me.phone" ng-change="ctrl.clearErrorMsg()">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>RelationShip</p>
+							<input type="text"  ng-model="ctrl.me.fullName" ng-change="ctrl.clearErrorMsg()">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Deposit</p>
+							<input type="text" ng-model="ctrl.me.phone" ng-change="ctrl.clearErrorMsg()">
+						</div>
+					</div>
+				</div>
+				<div class="checkout__input" style="margin-bottom: 50px;">
+					<p>Address<span>*</span></p>
+					<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
+						   ng-model="ctrl.me.address" ng-change="ctrl.clearErrorMsg()">
 
-							<div class="row">
-								<div class="col-lg-6">
-									<div class="checkout__input">
-										<p>Full Name<span>*</span></p>
-										<input type="text"  ng-model="ctrl.theOrder.shippingName">
-									</div>
-								</div>
-								<div class="col-lg-6">
-									<div class="checkout__input">
-										<p>Phone<span>*</span></p>
-										<input type="text" ng-model="ctrl.theOrder.shippingPhone">
-									</div>
-								</div>
-							</div>
-							<div class="checkout__input" style="margin-bottom: 50px;">
-								<p>Address<span>*</span></p>
-								<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
-									   ng-model="ctrl.theOrder.shippingAddress">
-							</div>
+				</div>
 
-						</td>
-						<td colspan="1" >
-						</td>
-						<td colspan="3">
-							<h6 class="checkout__title">Order total</h6>
-							<div class="cart__total">
-								<ul>
-									<li>Subtotal <span>00.000.000 đ</span></li>
-									<li>Coupon <span>0đ</span></li>
-									<li>Total <span>00.000.000 đ</span></li>
-								</ul>
+			</div>
+			<div class="col-lg-4">
+				<div class="cart__discount">
+					<h6>Discount codes</h6>
+					<form>
+						<input type="text" placeholder="Coupon code" ng-model="ctrl.couponCode">
+						<button type="button" ng-click="ctrl.getCoupon(ctrl.couponCode)">Apply</button>
+					</form>
+				</div>
+				<div class="cart__total">
+					<h6>Cart total</h6>
+					<ul>
+						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
+						<li>Coupon <span>({{ctrl.couponDiscount}}%) {{(ctrl.couponDiscount)/100*ctrl.subTotal | number:0}}đ</span></li>
+						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
+					</ul>
+					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>
+					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
+						 style="margin-top:20px;">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						{{ctrl.isErrorMsg}}
+					</div>
 
-							</div>
-
-						</td>
-					</tr>
-					<tr>
-						<td colspan="6">
-							<div class="row">
-								<div class="col-lg-4">
-									<div class="checkout__input">
-										<p>Full Name<span>*</span></p>
-										<input type="text"  ng-model="ctrl.theOrder.shippingName">
-									</div>
-								</div>
-								<div class="col-lg-4">
-									<div class="checkout__input">
-										<p>Phone<span>*</span></p>
-										<input type="text" ng-model="ctrl.theOrder.shippingPhone">
-									</div>
-								</div>
-								<div class="col-lg-4"></div>
-							</div>
-							<div class="row">
-								<div class="col-lg-4"></div>
-								<div class="col-lg-4"></div>
-								<div class="col-lg-4"></div>
-							</div>
-							<div class="checkout__input" style="margin-bottom: 50px;">
-								<p>Address<span>*</span></p>
-								<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
-									   ng-model="ctrl.theOrder.shippingAddress">
-							</div>
-						</td>
-					</tr>
-
-				</tbody>
-			</table>
-
-
-
-
+					<div class="alert alert-success" role="alert" ng-show="ctrl.order_return_status"
+						 style="margin-top:20px;">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">success:</span>
+						Đặt hàng thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}. Vào trang cá nhân để theo dõi đơn hàng
+					</div>
+				</div>
+			</div>
 		</div>
-
-
 	</div>
 
 	<div class="container">
@@ -131,3 +108,4 @@
 	</div>
 
 </section>
+<!-- Shopping Cart Section End -->
