@@ -5,6 +5,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "order_detail")
+@NamedQueries({
+        @NamedQuery(name = "OrderDetail.findByFrameNote", query = "select o from OrderDetail o where o.frameNote = :frameNote")
+})
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +18,13 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column(name = "frame_discount_at_that_time")
-    private Integer frameDiscountAtThatTime;
+    private Integer frameDiscountAtThatTime=0;
 
     @Column(name = "frame_price_at_that_time", nullable = false)
-    private Integer framePriceAtThatTime;
+    private Integer framePriceAtThatTime=0;
+
+    @Column(name = "frame_note", length = 700)
+    private String frameNote;
 
     @Column(name = "os_vasc", length = 10)
     private String osVasc;
@@ -97,6 +103,58 @@ public class OrderDetail {
 
     @Column(name = "yob")
     private String yob;
+
+    @Column(name = "lens_price")
+    private Integer lensPrice = 0;
+
+    @Column(name = "lens_note", length = 700)
+    private String lensNote;
+
+    @Column(name = "address", length = 700)
+    private String address;
+
+    @Column(name = "order_detail_note", length = 800)
+    private String orderDetailNote;
+
+    public String getOrderDetailNote() {
+        return orderDetailNote;
+    }
+
+    public void setOrderDetailNote(String orderDetailNote) {
+        this.orderDetailNote = orderDetailNote;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLensNote() {
+        return lensNote;
+    }
+
+    public void setLensNote(String lensNote) {
+        this.lensNote = lensNote;
+    }
+
+    public Integer getLensPrice() {
+        return lensPrice;
+    }
+
+    public void setLensPrice(Integer lensPrice) {
+        this.lensPrice = lensPrice;
+    }
+
+    public String getFrameNote() {
+        return frameNote;
+    }
+
+    public void setFrameNote(String frameNote) {
+        this.frameNote = frameNote;
+    }
 
     public String getYob() {
         return yob;

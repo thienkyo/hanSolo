@@ -41,4 +41,9 @@ public class SearchController {
 
         return resultList;
     }
+
+    @RequestMapping("product/{keySearch}")
+    public List<Product> searchProduct(@PathVariable final String keySearch) {
+        return prodRepo.findByNameContainsIgnoreCaseAndStatus(keySearch, Utility.ACTIVE_STATUS);
+    }
 }

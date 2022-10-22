@@ -60,6 +60,11 @@ function OrderDetailDO () {
 	this.product = null;
 	this.framePriceAtThatTime = 0;
 	this.frameDiscountAtThatTime = 0;
+	this.framePriceAfterSale = 0;
+	this.frameNote = '';
+
+	this.lensNote = '';
+	this.lensPrice = 0;
 
 	this.osVasc = '';
 	this.osVacc = '';
@@ -84,10 +89,10 @@ function OrderDetailDO () {
 	this.name = '';
 	this.yob ='';
 	this.phone = '';
+	this.address = '';
 	this.relationship = '';
 	this.recommendedSpectacles = '';
-
-	//this.isShow = isShow;
+	this.orderDetailNote = '';
 
 	this.quantity = 1;
 	this.weight = 1;

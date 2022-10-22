@@ -1,5 +1,43 @@
+<style>
+.prescriptionInput {
+    width: 100%;
+    margin: 12px 10px 10px 10px;
+    border: 1px solid #e1e1e1;
+}
+
+.search_class{
+	background: #F0F0E9;
+    border: medium none;
+    color: #B2B2B2;
+    font-family: 'roboto';
+    font-size: 12px;
+    font-weight: 300;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    padding-top: 5px;
+    width: 100px;
+    background-image: url(../static/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 160px;
+}
+
+.md-whiteframe-z1 {
+    box-shadow: none;
+}
+
+.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+    width:500px !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
+	width: 200px;
+}
+</style>
+<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <!-- Shopping Cart Section Begin -->
-<section class="shopping-cart spad">
+<h2 style="text-align: center;">Create Order</h2>
+<section class="shopping-cart spad" style="padding-top: 50px;">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8">
@@ -8,13 +46,13 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Full Name<span>*</span></p>
-							<input type="text"  ng-model="ctrl.me.fullName" ng-change="ctrl.clearErrorMsg()">
+							<input type="text"  ng-model="ctrl.theOrder.shippingName" ng-change="ctrl.clearErrorMsg()">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>Phone<span>*</span></p>
-							<input type="text" ng-model="ctrl.me.phone" ng-change="ctrl.clearErrorMsg()">
+							<p>Shipping Phone<span>*</span></p>
+							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-change="ctrl.clearErrorMsg()">
 						</div>
 					</div>
 				</div>
@@ -22,21 +60,52 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>RelationShip</p>
-							<input type="text"  ng-model="ctrl.me.fullName" ng-change="ctrl.clearErrorMsg()">
+							<input type="text"  ng-model="ctrl.theOrder.relationship" ng-change="ctrl.clearErrorMsg()">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Deposit</p>
-							<input type="text" ng-model="ctrl.me.phone" ng-change="ctrl.clearErrorMsg()">
+							<input type="text" ng-model="ctrl.theOrder.deposit" ng-change="ctrl.clearErrorMsg()">
 						</div>
 					</div>
 				</div>
-				<div class="checkout__input" style="margin-bottom: 50px;">
-					<p>Address<span>*</span></p>
-					<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng." class="checkout__input__add"
-						   ng-model="ctrl.me.address" ng-change="ctrl.clearErrorMsg()">
+				<div class="checkout__input" >
+					<p>Shipping Address<span>*</span></p>
+					<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng."
+						   class="checkout__input__add"
+						   ng-model="ctrl.theOrder.shippingAddress" ng-change="ctrl.clearErrorMsg()">
+				</div>
 
+				<div class="row" style="margin-bottom: 50px;">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Status</p>
+							<select  ng-model="ctrl.theOrder.status"
+									 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
+									 style="height: 40px;">
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Date</p>
+							<div class='input-group date'>
+								<!--<input ng-model="dt" class="form-control" onkeydown="return false" datepicker-popup="MM/dd/yyyy"
+									   show-weeks="false" is-open="BeginDateOpen" ng-focus="BeginDateOpen=true"
+									   ng-click="BeginDateOpen=true" min-date="ctrl.MinDate" required/>
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>-->
+								<input ng-model="ctrl.theOrder.gmtCreate" class="form-control" onkeydown="return false" datepicker-popup="MM/dd/yyyy"
+									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true"
+									   ng-click="ctrl.DPisOpen=true" min-date="ctrl.MinDate" required/>
+								<span class="input-group-addon" ng-click="ctrl.openDP()">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 
 			</div>
@@ -49,13 +118,13 @@
 					</form>
 				</div>
 				<div class="cart__total">
-					<h6>Cart total</h6>
+					<h6>Order total</h6>
 					<ul>
 						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
 						<li>Coupon <span>({{ctrl.couponDiscount}}%) {{(ctrl.couponDiscount)/100*ctrl.subTotal | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
 					</ul>
-					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Place order</a>
+					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Save order</a>
 					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
 						 style="margin-top:20px;">
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -79,24 +148,300 @@
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
-			<li class="nav-item" ng-repeat="item in ctrl.orderDetailList track by $index">
-				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
-				   data-toggle="tab" href="" data-target="#home{{$index}}" >Prescription {{$index}}</a>
-			</li>
-
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.add1Tab()"> + </a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.remove1Tab()"> - </a>
 			</li>
+			<li class="nav-item" ng-repeat="item in ctrl.orderDetailList track by $index">
+				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index}}</a>
+			</li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.orderDetailList track by $index"><br>
-				<h3>HOME {{$index}}</h3>
-				<p>Lorem ipsum dolor sit amet,{{$index}} consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index}}</h3>
+				<div class="row">
+					<div class="col-lg-5">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>họ và tên<span>*</span></p>
+									<input type="text"  ng-model="item.name" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>Năm sinh</p>
+									<input type="text" ng-model="item.yob" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>Địa chỉ</p>
+									<input type="text"  ng-model="v.address" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>Số đt<span>*</span></p>
+									<input type="text" ng-model="item.phone" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+						</div>
+						<h4 style="padding-bottom: 20px;">Thị lực không kính </h4>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="checkout__input">
+									<p>Mắt phải</p>
+									<input type="text"  ng-model="item.odVasc" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="checkout__input">
+									<p>Mắt trái</p>
+									<input type="text"  ng-model="item.osVasc" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="checkout__input" >
+									<p>Note</p>
+									<input type="text" placeholder="Ghi chú nếu cần." class="checkout__input__add"
+										   ng-model="item.orderDetailNote">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-7">
+						<div style="margin-bottom: 12px;">Chi tiết </div>
+						<div class="container" style="width:100%;font-size: 18px;"> <!--begin of don kinh-->
+							<div class="row">
+								<div class="col-md-2 border bg-light">
+
+								</div>
+								<div class="col-md-2 border bg-light">
+									ĐỘ CẦU
+									(Sphere)
+								</div>
+								<div class="col-md-2 border bg-light">
+									ĐỘ TRỤC
+									(Cylinder)
+								</div>
+								<div class="col-md-2 border bg-light">
+									TRỤC
+									(Axis)
+								</div>
+								<div class="col-md-2 border bg-light">
+									LĂNG KÍNH
+									(Prism)
+								</div>
+								<div class="col-md-2 border bg-light">
+									THỊ LỰC XA
+									(VA)
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-1 border bg-light" style="padding-top: 15px;">
+									Kính nhìn xa
+								</div>
+								<div class="col-md-1 border bg-light">
+									<div class="row border" style="padding-left: 10px;">
+										MP
+										<br>
+										(OD)
+									</div>
+									<div class="row border" style="padding-left: 10px;">
+										MT<br>
+										(OS)
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odSphere" placeholder="odSphere"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osSphere" placeholder="osSphere"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odCylinder" placeholder="odCylinder"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osCylinder" placeholder="osCylinder"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odAxis" placeholder="odAxis"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osAxis" placeholder="osAxis"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odPrism" placeholder="odPrism"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osPrism" placeholder="osPrism"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odVacc" placeholder="odVacc"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osVacc" placeholder="osVacc"
+											   class="prescriptionInput">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-2 border bg-light">
+									<br><br>
+									Kính nhìn gần
+									(Near)-ADD
+								</div>
+								<div class="col-md-8 border bg-light">
+									<div class="row" style="padding-left: 10px;">
+										<div class="row">
+											<div class="col-md-7" style="padding-top: 10px;">
+												Khoảng cách đồng tử(PD):
+											</div>
+											<div class="col-md-4">
+												<input type="text"  ng-model="item.pd" placeholder="pd"
+													   class="prescriptionInput">
+											</div>
+
+										</div>
+										<div class="row">
+											<div class="col-md-7" style="padding-top: 10px;">
+												Khoảng cách làm việc(WD)
+											</div>
+											<div class="col-md-4">
+												<input type="text"  ng-model="item.wd" placeholder="wd"
+													   class="prescriptionInput">
+											</div>
+										</div>
+
+									</div>
+									<div class="row border" >
+										<div class="col-md-3 border bg-light" >
+											MP<br>
+											(OD)
+										</div>
+										<div class="col-md-3 border bg-light" >
+											<input type="text"  ng-model="item.odAdd" placeholder="odAdd"
+												   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+										</div>
+									</div>
+									<div class="row border" >
+										<div class="col-md-3 border bg-light">
+											MT<br>
+											(OS)
+										</div>
+										<div class="col-md-3 border bg-light" >
+											<input type="text"  ng-model="item.osAdd" placeholder="osAdd"
+												   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									Thị lực gần(VA):
+									<input type="text"  ng-model="item.vaNear" placeholder="vaNear"
+										   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+								</div>
+
+							</div>
+
+						</div><!--end of don kinh-->
+					</div>
+				</div>
+				<div class="row" style="border-top: 2px solid #e1e1e1; margin-top: 30px;padding-top: 20px;">
+					<div class="col-lg-1">
+						<h4>Tròng</h4>
+					</div>
+					<div class="col-lg-5">
+						<div class="checkout__input" >
+							<input type="text" placeholder="Note" ng-model="item.lensNote" >
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="checkout__input" >
+							<input type="text" placeholder="Price" ng-model="item.lensPrice" >
+						</div>
+					</div>
+				</div>
+
+				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
+					<div class="col-lg-1">
+						<h4>Gọng</h4>
+					</div>
+					<div class="col-lg-2">
+						<div class="search_box pull-left">
+							<md-autocomplete class="search_class"  flex=""
+											 ng-disabled="ctrl.isDisable"
+											 md-no-cache="ctrl.noCache"
+											 md-selected-item="ctrl.selectedItem"
+											 md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+											 md-search-text="ctrl.searchText"
+											 md-selected-item-change="ctrl.selectedItemChange(item)"
+											 md-items="item in ctrl.querySearch(ctrl.searchText)"
+											 md-item-text="item.name"
+											 md-min-length="3"
+											 md-delay="700"
+											 placeholder="search">
+								<md-item-template>
+									<div class="row" >
+										<div class="col-sm-2" >{{item.type}}</div>
+										<div class="col-sm-3" style="border-left: 10px;"><img ng-src="{{item.type == 'Frame' ? 'img/product/'+item.thumbnail : 'img/blog/'+item.thumbnail}}" alt="" style="height:40px;"/></div>
+										<div class="col-sm-7" style="border-right: 10px;">{{item.name}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{ctrl.searchText}}".
+								</md-not-found>
+							</md-autocomplete>
+						</div>
+					</div>
+					<div class="col-lg-3" style="padding-left: 40px;">
+						<div class="checkout__input" >
+							<input type="text" placeholder="Note" ng-model="item.frameNote" >
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="checkout__input" >
+							<input type="text" placeholder="Price" ng-model="item.framePriceAfterSale" >
+						</div>
+					</div>
+				</div>
+
+
+
 			</div>
 
 		</div>

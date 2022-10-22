@@ -420,7 +420,7 @@ ol {
 .header__menu ul li {
 	list-style: none;
 	display: inline-block;
-	margin-right: 27px;
+	margin-right: 28px;
 	position: relative;
 }
 
@@ -2561,12 +2561,12 @@ ol {
 }
 
 .checkout__input input {
-	height: 50px;
+	height: 40px;
 	width: 100%;
 	border: 1px solid #e1e1e1;
 	font-size: 14px;
-	color: #b7b7b7;
-	padding-left: 20px;
+	/*color: #b7b7b7;*/
+	padding-left: 10px;
 	margin-bottom: 20px;
 }
 
