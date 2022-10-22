@@ -120,9 +120,9 @@
 				<div class="cart__total">
 					<h6>Order total</h6>
 					<ul>
-						<li>Subtotal <span>{{ctrl.subTotal | number:0}}đ</span></li>
-						<li>Coupon <span>({{ctrl.couponDiscount}}%) {{(ctrl.couponDiscount)/100*ctrl.subTotal | number:0}}đ</span></li>
-						<li>Total <span>{{ctrl.total | number:0}}đ</span></li>
+						<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
+						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
+						<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
 					</ul>
 					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Save order</a>
 					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
@@ -154,7 +154,7 @@
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.remove1Tab()"> - </a>
 			</li>
-			<li class="nav-item" ng-repeat="item in ctrl.orderDetailList track by $index">
+			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
 				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
 				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index}}</a>
 			</li>
@@ -162,7 +162,7 @@
 
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.orderDetailList track by $index"><br>
+			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
 				<h3 style="padding-bottom: 20px;">Đơn kính {{$index}}</h3>
 				<div class="row">
 					<div class="col-lg-5">
@@ -385,9 +385,9 @@
 					<div class="col-lg-1">
 						<h4>Tròng</h4>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-6">
 						<div class="checkout__input" >
-							<input type="text" placeholder="Note" ng-model="item.lensNote" >
+							<input type="text" placeholder="Note: chemi, asx, UV" ng-model="item.lensNote" >
 						</div>
 					</div>
 					<div class="col-lg-3">
@@ -406,20 +406,23 @@
 							<md-autocomplete class="search_class"  flex=""
 											 ng-disabled="ctrl.isDisable"
 											 md-no-cache="ctrl.noCache"
-											 md-selected-item="ctrl.selectedItem"
+											 md-selected-item="item.product"
 											 md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
 											 md-search-text="ctrl.searchText"
-											 md-selected-item-change="ctrl.selectedItemChange(item)"
-											 md-items="item in ctrl.querySearch(ctrl.searchText)"
-											 md-item-text="item.name"
+											 md-selected-item-change="ctrl.selectedItemChange(one,item)"
+											 md-items="one in ctrl.querySearch(ctrl.searchText)"
+											 md-item-text="one.name"
 											 md-min-length="3"
 											 md-delay="700"
 											 placeholder="search">
 								<md-item-template>
 									<div class="row" >
-										<div class="col-sm-2" >{{item.type}}</div>
-										<div class="col-sm-3" style="border-left: 10px;"><img ng-src="{{item.type == 'Frame' ? 'img/product/'+item.thumbnail : 'img/blog/'+item.thumbnail}}" alt="" style="height:40px;"/></div>
-										<div class="col-sm-7" style="border-right: 10px;">{{item.name}}</div>
+										<div class="col-md-1" >{{one.id}}</div>
+										<div class="col-md-3" >
+											<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
+										</div>
+										<div class="col-md-5" style="">{{one.name}}</div>
+
 									</div>
 								</md-item-template>
 								<md-not-found>
@@ -428,9 +431,9 @@
 							</md-autocomplete>
 						</div>
 					</div>
-					<div class="col-lg-3" style="padding-left: 40px;">
+					<div class="col-lg-4" style="padding-left: 40px;">
 						<div class="checkout__input" >
-							<input type="text" placeholder="Note" ng-model="item.frameNote" >
+							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.frameNote" >
 						</div>
 					</div>
 					<div class="col-lg-3">
@@ -440,7 +443,47 @@
 					</div>
 				</div>
 
+				<!--start one product-->
+				<div class="row" ng-show="item.product">
+					<div class="col-md-9">
+						<div class="shopping__cart__table">
+							<table>
+								<tbody>
+								<tr>
+									<td class="product__cart__item" >
+										<div class="product__cart__item__pic">
+											<a href="#/productDetail/{{item.product.id}}#top" target="_blank">
+												<img src="img/product/{{item.product.thumbnail}}" alt="" style="width: 80%;">
+											</a>
+										</div>
+									</td>
+									<td class="product__cart__item" >
+										<div class="product__cart__item__text">
+											<h6>{{item.product.name}}</h6>
+											<h5>{{item.product.sellPrice*(100 - item.product.discount)/100 | number:0}}đ</h5>
+											<h5 ng-show="item.product.discount != 0"><s style="color: #0d0d0d6e;">{{item.product.sellPrice | number:0}}đ</s></h5>
+										</div>
+									</td>
 
+									<td class="quantity__item">
+										<div class="quantity">
+											<div class="pro-qty-2">
+												<input type="number" value="1" ng-model="item.quantity"
+													   autocomplete="off" style="width:40px;" min="1" max="1" disabled>
+											</div>
+										</div>
+									</td>
+									<td class="cart__price">{{(item.product.sellPrice*(100 - item.product.discount)/100) * item.quantity | number:0}}đ</td>
+									<td class="cart__close"><i class="fa fa-close" ng-click="ctrl.removeSearchResult(item)"></i></td>
+								</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!--end one product-->
 
 			</div>
 
