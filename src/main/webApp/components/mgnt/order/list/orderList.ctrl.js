@@ -57,13 +57,11 @@ angular.module('orderListModule')
 		if(self.responseStr || self.responseStrFail){
 			self.responseStr = false;
 		}
-		if(order.location == 'WEB'){
-		    self.theOrder = order;
-		}else{
+		if(order.location == 'STORE'){
 		    var url = '#/mgnt/storeOrder/'+order.id;
-		  //  $location.path(url);
-
-		    window.open(url, '_blank');
+            window.open(url, '_blank');
+		}else{
+		    self.theOrder = order;
 		}
 	}
 	
