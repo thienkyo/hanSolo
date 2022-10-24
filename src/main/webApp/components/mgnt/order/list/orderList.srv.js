@@ -2,13 +2,21 @@
 angular.module('orderListModule')
 .factory('orderListService', ['ajaxService',function(ajaxService) {
 		var orderListService = {
-			getOrdersForMgnt : getOrdersForMgnt,
+			getOrdersForMgnt : getOrdersForMgnt, // 50 order
 			getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
 			updateOrder : updateOrder,
+			getOrderById : getOrderById,
 			deleteOrder : deleteOrder
 			};
 	return orderListService;
+
+	function getOrderById(id){
+        var url = "mgnt/getOrderById/"+id;
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 	
 	function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;

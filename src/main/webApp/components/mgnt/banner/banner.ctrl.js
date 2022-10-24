@@ -6,6 +6,7 @@ angular.module('bannerModule')
 	var self = this;
 	self.theBanner = new BannerDO;
 	self.statusList = CommonStatusArray;
+	self.statusStyle = {};
 
     self.needTextList=[
     	{name : 'need text', value:true },
@@ -56,17 +57,35 @@ angular.module('bannerModule')
 				self.theBanner.image = self.picFile.result;
 			}
 		}
+
+		console.log(banner);
 		
 		self.responseStr = false;
 		self.responseStrFail = false;
 		bannerService.upsert(banner).then(function (data) {
 			self.responseStr = data;
-			if(banner.bannerId == 0){
-				self.BannerList.push(data);
+			if(banner.id == 0){
+				self.BannerList.unshift(banner);
 				self.tableParams = new NgTableParams({}, { dataset: self.BannerList});
 			}
 		});
 	}
+
+	self.deleteBanner = function(banner){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        bannerService.deleteBanner(banner).then(function (data) {
+            self.responseStr = data;
+            var index = self.BannerList.indexOf(banner);
+            self.BannerList.splice(index,1);
+            self.tableParams = new NgTableParams({}, { dataset: self.BannerList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
+        });
+    }
 	
 	self.updateBanner = function(banner){
 		self.theBanner = banner;
@@ -80,4 +99,13 @@ angular.module('bannerModule')
 		self.theBanner = new BannerDO;
 		self.picFile = null;
 	}
+
+	self.setStyle = function(status){
+        if(status==0){
+            self.statusStyle.color = "crimson";
+        }else if(status==1){
+            self.statusStyle.color = "blue";
+        }
+        return self.statusStyle;
+    }
 }]);

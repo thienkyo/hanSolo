@@ -154,6 +154,12 @@ public class ManagementController {
         return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "deleteBanner", method = RequestMethod.POST)
+    public GenericResponse deleteBanner(@RequestBody final Banner banner, final HttpServletRequest request) throws ServletException {
+        bannerRepo.delete(banner);
+        return new GenericResponse("delete_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
     //////////////////////////////Member section/////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
@@ -196,6 +202,12 @@ public class ManagementController {
         }
         coupon.setGmtModify(Utility.getCurrentDate());
         return new CouponResponse(couponRepo.save(coupon),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "deleteCoupon", method = RequestMethod.POST)
+    public GenericResponse deleteCoupon(@RequestBody final Coupon coupon, final HttpServletRequest request) throws ServletException {
+        couponRepo.delete(coupon);
+        return new GenericResponse("delete_coupon_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// blog/article ///////////////////////////////
@@ -245,6 +257,10 @@ public class ManagementController {
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
+    public Order getOrderById(@PathVariable final int orderId) throws ServletException {
+        return	orderRepo.findById(orderId).get();
+    }
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")

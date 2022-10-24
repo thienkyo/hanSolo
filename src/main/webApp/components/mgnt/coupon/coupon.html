@@ -41,30 +41,30 @@ form .progress {
 		<h3 style="padding-bottom: 40px;">Coupon management </h3>
 
 		<div class="row" style="margin-bottom: 30px;">
-			<div class="col-sm-1">
+			<div class="col-md-1">
 				<input type="number"  ng-model="ctrl.theCoupon.id" disabled="disabled" placeholder="id" style="width:60px;"/>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-md-2">
 				<input type="text"  ng-model="ctrl.theCoupon.code" placeholder="code" style="width: 100%;"/>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-md-1">
 				<input type="text"  ng-model="ctrl.theCoupon.value" placeholder="value" style="width: 100%;"/>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-md-3">
 				<input type="text"  ng-model="ctrl.theCoupon.name" placeholder="name" style="width: 100%;"/>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-md-1">
 				<input type="text"  ng-model="ctrl.theCoupon.quantity" placeholder="quantity" style="width: 100%;"/>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-md-1">
 				<input type="text"  ng-model="ctrl.theCoupon.lifespan" placeholder="lifespan" style="width: 100%;"/>
 			</div>
 
-			<div class="col-sm-2">
+			<div class="col-md-2">
 				<a ng-click="ctrl.upsert(ctrl.theCoupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
 				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-md-1">
 				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -80,8 +80,6 @@ form .progress {
 			</div>
 		</div>
 
-
-	
 		<!--data table-->
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
@@ -108,9 +106,13 @@ form .progress {
 			        	{{coupon.gmtModify | date:"yyyy-MM-dd hh:mm:ss"}}
 			        </td>
 
-			      <!--  <td title="'delete'" style="width:100px;" >
+					<td title="'status'" ng-style="ctrl.setStyle(coupon.status)">
+						{{coupon.status == 0 ? 'expired' : 'valid'  }}
+					</td>
+
+			      	<td title="'delete'" style="width:100px;" >
 			        	<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
-			        </td>-->
+			        </td>
 			    </tr>
 			</table>
         </div>

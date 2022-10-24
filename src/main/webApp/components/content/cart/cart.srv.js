@@ -10,14 +10,7 @@ angular.module('cartModule')
 		};
 	return cartService;
 
-/*
-   function getProductForCart(ids){
-		var url = "products/getProductForCart";
-		return ajaxService.post(url,ids,{}).then(function(response){
-			return response.data;
-		});
-   }
-  */
+
    function addToCart(prod,qty){
 	   prod.description = '';
    	   var currentItem={prod:prod,quantity:qty};

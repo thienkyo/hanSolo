@@ -3,7 +3,8 @@ angular.module('bannerModule')
 .factory('bannerService', ['ajaxService',function(ajaxService) {
 	var bannerService = {
 			getBannerForMgnt : getBannerForMgnt,
-			upsert : upsert
+			upsert : upsert,
+			deleteBanner : deleteBanner
 			};
 	return bannerService;
 
@@ -20,5 +21,12 @@ angular.module('bannerModule')
 			return response.data;
 		});
 	}
+
+	function deleteBanner(banner){
+        var url = "mgnt/deleteBanner";
+        return ajaxService.post(url,banner,{}).then(function(response){
+            return response.data;
+        });
+    }
 	
  }]);

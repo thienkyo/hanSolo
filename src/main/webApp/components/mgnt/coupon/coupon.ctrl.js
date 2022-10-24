@@ -5,6 +5,7 @@ angular.module('couponModule')
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theCoupon = new CouponDO;
+		self.statusStyle = {};
 
 		if(!memberService.isAdmin()){
 			$location.path('#/');
@@ -12,8 +13,9 @@ angular.module('couponModule')
 		self.currentMember = memberService.getCurrentMember();
 		
 		couponService.getAllCoupons().then(function (data) {
-		    console.log(data);
-			self.couponList = data
+			data.forEach(calculateExpiry);
+			console.log(data);
+			self.couponList = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
 		
@@ -33,26 +35,27 @@ angular.module('couponModule')
 				self.responseStr = data.errorMessage;
 				if(coupon.id == 0){
 					self.couponList.unshift(data.coupon);
+					self.couponList.forEach(calculateExpiry);
 					self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 				}
 			});
 		}
 		
-	/*	self.deleteCoupon = function(cate){
+		self.deleteCoupon = function(coupon){
 			self.responseStr = false;
 			self.responseStrFail = false;
-			couponService.deleteCoupon(cate).then(function (data) {
+			couponService.deleteCoupon(coupon).then(function (data) {
 				self.responseStr = data;
-				var index = self.cateList.indexOf(cate);
-				self.cateList.splice(index,1);
-				self.tableParams = new NgTableParams({}, { dataset: self.cateList});
+				var index = self.couponList.indexOf(coupon);
+				self.couponList.splice(index,1);
+				self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 				
 			},function(error){
 				if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
 					self.responseStrFail = error;
 				}
 			});
-		}*/
+		}
 		
 		self.clear = function(){
 			self.responseStr = false;
@@ -60,6 +63,26 @@ angular.module('couponModule')
 			self.theCoupon = new CouponDO;
 			self.isShowUploadPic = false;
 		}
+
+		function calculateExpiry(coupon){
+            var modifyDate = new Date(coupon.gmtModify);
+            modifyDate.setDate(modifyDate.getDate() + coupon.lifespan);
+
+            if(modifyDate > new Date()){
+                coupon.status = 1;
+            }else{
+                coupon.status = 0;
+            }
+        }
+
+        self.setStyle = function(status){
+            if(status==0){
+                self.statusStyle.color = "crimson";
+            }else if(status==1){
+                self.statusStyle.color = "blue";
+            }
+            return self.statusStyle;
+        }
 		
 }]);
 

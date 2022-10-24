@@ -94,6 +94,8 @@ function OrderDetailDO () {
 	this.recommendedSpectacles = '';
 	this.orderDetailNote = '';
 
+	this.searchText = ''; // for each md-autocomplete in orderDetail array
+
 	this.quantity = 1;
 	this.weight = 1;
 	this.gmtCreate = (new Date()).getTime();

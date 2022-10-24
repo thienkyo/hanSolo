@@ -27,16 +27,16 @@
 }
 
 .md-virtual-repeat-container.md-autocomplete-suggestions-container {
-    width:500px !important;
+    width:700px !important;
 }
 
 .autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
-	width: 200px;
+	width: 700px !important;
 }
 </style>
 <link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <!-- Shopping Cart Section Begin -->
-<h2 style="text-align: center;">Create Order</h2>
+<h2 style="text-align: center;">{{ctrl.theOrder.id == 0 ? 'Create Order' :  'Order ' + ctrl.theOrder.id }}</h2>
 <section class="shopping-cart spad" style="padding-top: 50px;">
 	<div class="container">
 		<div class="row">
@@ -46,13 +46,13 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Full Name<span>*</span></p>
-							<input type="text"  ng-model="ctrl.theOrder.shippingName" ng-change="ctrl.clearErrorMsg()">
+							<input type="text"  ng-model="ctrl.theOrder.shippingName" ng-change="ctrl.clearErrorMsg();ctrl.nameCopy();">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Shipping Phone<span>*</span></p>
-							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-change="ctrl.clearErrorMsg()">
+							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
 						</div>
 					</div>
 				</div>
@@ -65,16 +65,16 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>Deposit</p>
+							<p>Deposit: {{ctrl.theOrder.deposit | number:0}}đ</p>
 							<input type="text" ng-model="ctrl.theOrder.deposit" ng-change="ctrl.clearErrorMsg()">
 						</div>
 					</div>
 				</div>
 				<div class="checkout__input" >
-					<p>Shipping Address<span>*</span></p>
+					<p>Shipping Address</p>
 					<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng."
 						   class="checkout__input__add"
-						   ng-model="ctrl.theOrder.shippingAddress" ng-change="ctrl.clearErrorMsg()">
+						   ng-model="ctrl.theOrder.shippingAddress" ng-change="ctrl.clearErrorMsg();ctrl.addressCopy();">
 				</div>
 
 				<div class="row" style="margin-bottom: 50px;">
@@ -99,7 +99,7 @@
 								</span>-->
 								<input ng-model="ctrl.theOrder.gmtCreate" class="form-control" onkeydown="return false" datepicker-popup="MM/dd/yyyy"
 									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true"
-									   ng-click="ctrl.DPisOpen=true" min-date="ctrl.MinDate" required/>
+									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" required/>
 								<span class="input-group-addon" ng-click="ctrl.openDP()">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</span>
@@ -124,7 +124,7 @@
 						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
 					</ul>
-					<a href="" class="primary-btn" ng-click="ctrl.placeOrder()">Save order</a>
+					<a href="" class="primary-btn" ng-click="ctrl.saveOrder()">Save order</a>
 					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
 						 style="margin-top:20px;">
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -136,7 +136,7 @@
 						 style="margin-top:20px;">
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 						<span class="sr-only">success:</span>
-						Đặt hàng thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}. Vào trang cá nhân để theo dõi đơn hàng
+						Đặt hàng thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}
 					</div>
 				</div>
 			</div>
@@ -144,7 +144,7 @@
 	</div>
 
 	<div class="container">
-		<h2>Glass Prescription</h2>
+		<h2 style="text-align: center;">Glass Prescription</h2>
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -156,20 +156,20 @@
 			</li>
 			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
 				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
-				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index}}</a>
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1}}</a>
 			</li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index}}</h3>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}</h3>
 				<div class="row">
 					<div class="col-lg-5">
 						<div class="row">
 							<div class="col-lg-6">
 								<div class="checkout__input">
-									<p>họ và tên<span>*</span></p>
+									<p>họ và tên</p>
 									<input type="text"  ng-model="item.name" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>
@@ -184,12 +184,12 @@
 							<div class="col-lg-6">
 								<div class="checkout__input">
 									<p>Địa chỉ</p>
-									<input type="text"  ng-model="v.address" ng-change="ctrl.clearErrorMsg()">
+									<input type="text"  ng-model="item.address" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>
 							<div class="col-lg-6">
 								<div class="checkout__input">
-									<p>Số đt<span>*</span></p>
+									<p>Số đt</p>
 									<input type="text" ng-model="item.phone" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>
@@ -390,10 +390,15 @@
 							<input type="text" placeholder="Note: chemi, asx, UV" ng-model="item.lensNote" >
 						</div>
 					</div>
-					<div class="col-lg-3">
+					<div class="col-lg-2">
 						<div class="checkout__input" >
-							<input type="text" placeholder="Price" ng-model="item.lensPrice" >
+							<input type="number" placeholder="Price" ng-model="item.lensPrice" ng-change="ctrl.calculateOrderTotal()">
 						</div>
+					</div>
+					<div class="col-lg-2">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							{{item.lensPrice | number:0}}đ
+						</p>
 					</div>
 				</div>
 
@@ -407,13 +412,13 @@
 											 ng-disabled="ctrl.isDisable"
 											 md-no-cache="ctrl.noCache"
 											 md-selected-item="item.product"
-											 md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-											 md-search-text="ctrl.searchText"
+											 md-search-text-change="ctrl.searchTextChange(item.searchText)"
+											 md-search-text="item.searchText"
 											 md-selected-item-change="ctrl.selectedItemChange(one,item)"
-											 md-items="one in ctrl.querySearch(ctrl.searchText)"
+											 md-items="one in ctrl.querySearch(item.searchText)"
 											 md-item-text="one.name"
 											 md-min-length="3"
-											 md-delay="700"
+											 md-delay="600"
 											 placeholder="search">
 								<md-item-template>
 									<div class="row" >
@@ -422,6 +427,7 @@
 											<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
 										</div>
 										<div class="col-md-5" style="">{{one.name}}</div>
+										<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
 
 									</div>
 								</md-item-template>
@@ -436,10 +442,15 @@
 							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.frameNote" >
 						</div>
 					</div>
-					<div class="col-lg-3">
+					<div class="col-lg-2">
 						<div class="checkout__input" >
-							<input type="text" placeholder="Price" ng-model="item.framePriceAfterSale" >
+							<input type="number" placeholder="Price" ng-model="item.framePriceAfterSale" ng-change="ctrl.calculateOrderTotal()">
 						</div>
+					</div>
+					<div class="col-lg-2">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							{{item.framePriceAfterSale | number:0}}đ
+						</p>
 					</div>
 				</div>
 
@@ -459,6 +470,7 @@
 									</td>
 									<td class="product__cart__item" >
 										<div class="product__cart__item__text">
+											<h6>id: {{item.product.id}}</h6>
 											<h6>{{item.product.name}}</h6>
 											<h5>{{item.product.sellPrice*(100 - item.product.discount)/100 | number:0}}đ</h5>
 											<h5 ng-show="item.product.discount != 0"><s style="color: #0d0d0d6e;">{{item.product.sellPrice | number:0}}đ</s></h5>
@@ -488,6 +500,16 @@
 			</div>
 
 		</div>
+<!--
+		<div class="row" >
+			<div class="col-md-2">
+				<h6>Subtotal</h6>
+			</div>
+			<div class="col-md-2">
+				{{ctrl.theOrder.subTotal | number:0}}đ
+			</div>
+		</div>-->
+
 	</div>
 
 </section>

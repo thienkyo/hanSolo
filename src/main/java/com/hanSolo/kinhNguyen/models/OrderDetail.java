@@ -288,7 +288,7 @@ public class OrderDetail {
         return odSphere;
     }
 
-    public void setOdSphere(String od_sphere) {
+    public void setOdSphere(String odSphere) {
         this.odSphere = odSphere;
     }
 

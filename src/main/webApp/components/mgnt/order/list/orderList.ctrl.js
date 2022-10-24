@@ -9,10 +9,6 @@ angular.module('orderListModule')
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "120px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
-	/*self.statusNumber.ordered = 0;
-	self.statusNumber.paid = 0;
-	self.statusNumber.shipped = 0;
-	self.statusNumber.done = 0;*/
 	
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -25,16 +21,12 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-
-	    console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 	});
 	
 	self.updateOrder = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
-	    console.log(order);
 		orderListService.updateOrder(order).then(function(data){
-		    console.log(data);
 			self.responseStr = data.replyStr;
 			//self.theOrder.status = self.newOrderStatus;
 			//engineerOrderList();
@@ -45,7 +37,6 @@ angular.module('orderListModule')
 	self.getOrderByTerm = function(){
 		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 			self.orderList = data;;
-			//engineerOrderList();
 			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		});
 	}
@@ -66,7 +57,14 @@ angular.module('orderListModule')
 		if(self.responseStr || self.responseStrFail){
 			self.responseStr = false;
 		}
-		self.theOrder = order;
+		if(order.location == 'WEB'){
+		    self.theOrder = order;
+		}else{
+		    var url = '#/mgnt/storeOrder/'+order.id;
+		  //  $location.path(url);
+
+		    window.open(url, '_blank');
+		}
 	}
 	
 	self.deleteOrder = function(order){
@@ -112,7 +110,7 @@ angular.module('orderListModule')
 	function calculateOrderTotal(order){
         var subTotal = 0;
         for (var i = 0; i < order.orderDetails.length; i++){
-            subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity;
+            subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity + order.orderDetails[i].lensPrice;
         }
         order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
         order.subTotal = subTotal;

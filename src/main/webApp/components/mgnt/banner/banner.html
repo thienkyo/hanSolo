@@ -162,9 +162,14 @@ form .progress {
 			        <td title="'Date'" sortable="'gmtCreate'" style="width:120px;">
 			        	{{banner.gmtCreate | date:"dd-MM-yyyy HH:mm:ss"}}
 			        </td>
-			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" >
+			        <td title="'status'"   ng-style="ctrl.setStyle(banner.status)">
 			        	{{banner.status == 0 ? 'inactive' : 'active' }}
 			        </td>
+
+					<td title="'delete'" style="width:100px;" >
+						<a ng-click="ctrl.deleteBanner(banner)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+					</td>
+
 			    </tr>
 			</table>
         </div>
