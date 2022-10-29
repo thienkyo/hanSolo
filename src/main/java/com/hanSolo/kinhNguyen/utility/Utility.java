@@ -38,6 +38,7 @@ public class Utility {
     final public static String ADMIN_ROLE = "ADMIN";
     final public static String SUPERADMIN_ROLE = "SUPERADMIN";
     final public static String MOD_ROLE = "MOD";
+    final public static String ACCOUNTTANT_ROLE = "ACCOUNTTANT";
 
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";
@@ -57,6 +58,7 @@ public class Utility {
     final public static int PRODUCT_PAGE_SIZE = 9;
     final public static int COLLECTION_PAGE_SIZE = 4;
     final public static int BLOG_PAGE_SIZE = 9;
+    final public static int FIRTST_TIME_LOAD_SIZE = 50;
 
 
     final public static Date getCurrentDate() throws ParseException {

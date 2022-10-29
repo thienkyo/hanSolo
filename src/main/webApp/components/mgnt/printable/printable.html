@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="printableModule" ng-controller="printableController as ctrl">
+<head>
+	<meta charset="utf-8">
+	<!--<link rel="stylesheet" href="/components/mgnt/printable/css/printable.css">-->
+	<!-- Load paper.css for happy printing -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+	<link rel="shortcut icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<link rel="icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<style>@page { size: A5 }
+		.prescriptionInput {
+		width: 100%;
+		margin: 12px 10px 10px 10px;
+		border: 1px solid #e1e1e1;
+	}
+
+	</style>
+
+</head>
+
+<body class="A5">
+	<!-- Each sheet element should have the class "sheet" -->
+	<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+	<section class="sheet padding-10mm">
+
+
+		<!-- Write HTML just like a web page -->
+		<div class="row">
+			<div class="col-md-2">
+
+			</div>
+		</div>
+
+		<div class="container" style="width:100%;font-size: 13px;"> <!--begin of don kinh-->
+			<div class="row">
+				<div class="col-md-2 border bg-light">
+
+				</div>
+				<div class="col-md-2 border bg-light">
+					ĐỘ CẦU
+					(Sphere)
+				</div>
+				<div class="col-md-2 border bg-light">
+					ĐỘ TRỤC
+					(Cylinder)
+				</div>
+				<div class="col-md-2 border bg-light">
+					TRỤC
+					(Axis)
+				</div>
+				<div class="col-md-2 border bg-light">
+					LĂNG KÍNH
+					(Prism)
+				</div>
+				<div class="col-md-2 border bg-light">
+					THỊ LỰC XA
+					(VA)
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-1 border bg-light" style="padding-top: 15px;">
+					Kính nhìn xa
+				</div>
+				<div class="col-md-1 border bg-light">
+					<div class="row border" style="padding-left: 10px;">
+						MP
+						<br>
+						(OD)
+					</div>
+					<div class="row border" style="padding-left: 10px;">
+						MT<br>
+						(OS)
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					<div class="row border">
+						<input type="text"  ng-model="item.odSphere" placeholder="odSphere"
+							   class="prescriptionInput">
+
+					</div>
+					<div class="row border">
+						<input type="text"  ng-model="item.osSphere" placeholder="osSphere"
+							   class="prescriptionInput">
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					<div class="row border">
+						<input type="text"  ng-model="item.odCylinder" placeholder="odCylinder"
+							   class="prescriptionInput">
+
+					</div>
+					<div class="row border">
+						<input type="text"  ng-model="item.osCylinder" placeholder="osCylinder"
+							   class="prescriptionInput">
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					<div class="row border">
+						<input type="text"  ng-model="item.odAxis" placeholder="odAxis"
+							   class="prescriptionInput">
+
+					</div>
+					<div class="row border">
+						<input type="text"  ng-model="item.osAxis" placeholder="osAxis"
+							   class="prescriptionInput">
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					<div class="row border">
+						<input type="text"  ng-model="item.odPrism" placeholder="odPrism"
+							   class="prescriptionInput">
+
+					</div>
+					<div class="row border">
+						<input type="text"  ng-model="item.osPrism" placeholder="osPrism"
+							   class="prescriptionInput">
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					<div class="row border">
+						<input type="text"  ng-model="item.odVacc" placeholder="odVacc"
+							   class="prescriptionInput">
+
+					</div>
+					<div class="row border">
+						<input type="text"  ng-model="item.osVacc" placeholder="osVacc"
+							   class="prescriptionInput">
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-2 border bg-light">
+					<br><br>
+					Kính nhìn gần
+					(Near)-ADD
+				</div>
+				<div class="col-md-8 border bg-light">
+					<div class="row" style="padding-left: 10px;">
+						<div class="row">
+							<div class="col-md-7" style="padding-top: 10px;">
+								Khoảng cách đồng tử(PD):
+							</div>
+							<div class="col-md-4">
+								<input type="text"  ng-model="item.pd" placeholder="pd"
+									   class="prescriptionInput">
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-7" style="padding-top: 10px;">
+								Khoảng cách làm việc(WD)
+							</div>
+							<div class="col-md-4">
+								<input type="text"  ng-model="item.wd" placeholder="wd"
+									   class="prescriptionInput">
+							</div>
+						</div>
+
+					</div>
+					<div class="row border" >
+						<div class="col-md-3 border bg-light" >
+							MP<br>
+							(OD)
+						</div>
+						<div class="col-md-3 border bg-light" >
+							<input type="text"  ng-model="item.odAdd" placeholder="odAdd"
+								   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+						</div>
+					</div>
+					<div class="row border" >
+						<div class="col-md-3 border bg-light">
+							MT<br>
+							(OS)
+						</div>
+						<div class="col-md-3 border bg-light" >
+							<input type="text"  ng-model="item.osAdd" placeholder="osAdd"
+								   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 border bg-light">
+					Thị lực gần(VA):
+					<input type="text"  ng-model="item.vaNear" placeholder="vaNear"
+						   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+				</div>
+
+			</div>
+
+		</div><!--end of don kinh-->
+
+
+	</section>
+
+	<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+	<script type='text/javascript' src="/js/angular-1.4.9/angular.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-resource.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-route.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-cookies.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-animate.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-aria.min.js"></script>
+
+	<script type='text/javascript' src="/js/bootstrap.min.js"></script>
+
+
+	<script type='text/javascript' src="/components/mgnt/printable/printable.mdl.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/printable.srv.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/printable.ctrl.js"></script>
+
+	<script type='text/javascript' src="/shared/ajax.srv.js"></script>
+</body>
+</html>
