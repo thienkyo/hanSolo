@@ -7,7 +7,6 @@ import com.hanSolo.kinhNguyen.response.CouponResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.SupplierResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +48,8 @@ public class ManagementController {
     private ArticleRepository articleRepo;
 
     @Autowired private OrderRepository orderRepo;
+
+    @Autowired private OrderDetailRepository orderDetailRepo;
 
     @Autowired
     private Environment env;
@@ -260,6 +260,16 @@ public class ManagementController {
     @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
     public Order getOrderById(@PathVariable final int orderId) throws ServletException {
         return	orderRepo.findById(orderId).get();
+    }
+
+    @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
+    public Order getOrderDetailById(@PathVariable final int orderDetailId) throws ServletException {
+        OrderDetail orderDetail = orderDetailRepo.findById(orderDetailId).get();
+        Order order = orderRepo.findById(orderDetail.getOrderId()).get();
+        order.setOrderDetails(new ArrayList<>());
+        order.getOrderDetails().add(orderDetail);
+
+        return	order;
     }
 
     //////////////////////////// upload ///////////////////////////////

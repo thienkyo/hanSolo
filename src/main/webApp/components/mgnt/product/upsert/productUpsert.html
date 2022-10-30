@@ -90,10 +90,10 @@ form .progress {
 				name:<input type="text"  ng-model="ctrl.product.name" required/>
 			</div>
 			<div class="col-sm-2">
-				buy price:	<input type="text"  ng-model="ctrl.product.buyPrice"/>
+				buy price: {{ctrl.product.buyPrice | number:0}}đ	<input type="text"  ng-model="ctrl.product.buyPrice"/>
 			</div>
 			<div class="col-sm-2">
-				sell Price:	<input type="text"  ng-model="ctrl.product.sellPrice"/>
+				sell Price: {{ctrl.product.sellPrice | number:0}}đ	<input type="text"  ng-model="ctrl.product.sellPrice"/>
 			</div>
 			<div class="col-sm-2">
 				supplier:

@@ -119,7 +119,7 @@ angular.module('storeOrderModule')
     }
 
     self.saveOrder = function(){
-
+        console.log(self.theOrder);
         if(self.isPickDP){
             self.theOrder.gmtModify = self.theOrder.gmtCreate;
             for (var i = 0; i < self.theOrder.orderDetails.length; i++){
@@ -162,7 +162,6 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
                 }
-
         });
     }else{
         self.theOrder = new OrderDO;

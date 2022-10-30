@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="prescriptionModule" ng-controller="prescriptionController as ctrl">
+<head>
+	<meta charset="utf-8">
+	<!--<link rel="stylesheet" href="/components/mgnt/printable/css/printable.css">-->
+	<!-- Load paper.css for happy printing -->
+	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">-->
+	<link rel="stylesheet" href="/components/mgnt/printable/css/paper.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+	<link rel="shortcut icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<link rel="icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<style>
+
+	.prescriptionInput {
+	width: 100%;
+	margin: 12px 10px 10px 10px;
+	border: 1px solid #e1e1e1;
+	}
+
+	.roman {
+	 list-style-type: circle;
+	}
+	.square {
+	 list-style-type: square;
+	}
+
+	</style>
+
+</head>
+
+<body class="A5">
+	<!-- Each sheet element should have the class "sheet" -->
+	<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
+	<section class="sheet padding-10mm">
+
+
+		<!-- Write HTML just like a web page -->
+		<div class="row">
+			<div class="col-md-2">
+				<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 55px;"/>
+			</div>
+			<div class="col-md-10">
+				<div class="row">
+					<p style="margin-bottom: 0px;font-weight: bold;">MẮT KÍNH NGUYỄN</p>
+				</div>
+				<div class="row">
+					<p style="font-size: 10px;margin-bottom: 0px;">Địa chỉ: 358/5/3 Cách Mạng Tháng 8, Phường 10, Quận 3, TP. Hồ Chí Minh</p>
+					<p style="font-size: 10px;">Hotline: 090 801 73 83</p>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-7"></div>
+			<div class="col-md-5">
+				<p style="font-size: 12px;font-style: italic;float: right;">
+					Ngày {{ctrl.thePrescription.gmtCreate | date:"dd"}}
+					Tháng {{ctrl.thePrescription.gmtCreate | date:"MM"}}
+					Năm {{ctrl.thePrescription.gmtCreate | date:"yyyy"}}</p>
+			</div>
+		</div>
+
+		<h4 style="text-align: center;margin-bottom: 0px;">ĐƠN KÍNH</h4>
+		<p style="text-align: center;font-size: 10px;margin-bottom: 10px;">Mã hoá đơn: {{ctrl.thePrescription.id}}</p>
+
+		<div class="row">
+			<div class="col-md-8">
+				<span style="font-size: 12px;margin-bottom: 5px;">Họ và tên:</span>
+				<span style="font-size: 14px;margin-bottom: 5px;">{{ctrl.thePrescription.orderDetails[0].name.toUpperCase()}}</span>
+
+			</div>
+			<div class="col-md-4">
+				<span style="font-size: 12px;">SĐT:</span>
+				<span style="font-size: 14px;">{{ctrl.thePrescription.orderDetails[0].phone == '' ? ctrl.thePrescription.shippingPhone : ctrl.thePrescription.orderDetails[0].phone}}</span>
+			</div>
+		</div>
+		<div class="row" style="margin-bottom: 10px;">
+			<div class="col-md-10">
+				<span style="font-size: 12px;">Địa chỉ:</span>
+				<span style="font-size: 14px;">{{ctrl.thePrescription.shippingAddress}}</span>
+
+			</div>
+			<div class="col-md-2" style="padding-left: 5px;">
+				<span style="font-size: 12px;">NS:</span>
+				<span style="font-size: 14px;">{{ctrl.thePrescription.orderDetails[0].yob}}</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-5">
+				<ul class="roman" style="padding-left: 15px;">
+					<li>Thị lực không kính
+						<ul class="square" style="padding-left: 15px;">
+							<li>MP: 9</li>
+							<li>MT: 10</li>
+						</ul>
+					</li>
+					<li>Đơn Kính</li>
+				</ul>
+			</div>
+			<div class="col-md-7">
+				<p>Gọng: {{ctrl.thePrescription.orderDetails[0].frameNote}}</p>
+				<p>Tròng: {{ctrl.thePrescription.orderDetails[0].lensNote}}</p>
+			</div>
+
+		</div>
+
+		<div class="container" style="width:100%;font-size: 13px;"> <!--begin of don kinh-->
+			<div class="row">
+				<div class="col-md-2 border ">
+
+				</div>
+				<div class="col-md-2 border ">
+					ĐỘ CẦU
+					(Sphere)
+				</div>
+				<div class="col-md-2 border ">
+					ĐỘ TRỤC
+					(Cylinder)
+				</div>
+				<div class="col-md-2 border ">
+					TRỤC
+					(Axis)
+				</div>
+				<div class="col-md-2 border ">
+					LĂNG KÍNH
+					(Prism)
+				</div>
+				<div class="col-md-2 border ">
+					THỊ LỰC XA
+					(VA)
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-1 border " style="padding-top: 15px;padding-left: 10px;">
+					Kính nhìn xa
+				</div>
+				<div class="col-md-1 border ">
+					<div class="row border" style="padding-left: 10px;">
+						MP
+						<br>
+						(OD)
+					</div>
+					<div class="row border" style="padding-left: 10px;">
+						MT<br>
+						(OS)
+					</div>
+				</div>
+				<div class="col-md-2 border ">
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].odSphere}}
+					</div>
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].osSphere}}
+					</div>
+				</div>
+				<div class="col-md-2 border ">
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].odCylinder}}
+					</div>
+					<div class="row border">
+
+						{{ctrl.thePrescription.orderDetails[0].osCylinder}}
+					</div>
+				</div>
+				<div class="col-md-2 border ">
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].odAxis}}
+					</div>
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].osAxis}}
+					</div>
+				</div>
+				<div class="col-md-2 border ">
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].odPrism}}
+					</div>
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].osPrism}}
+					</div>
+				</div>
+				<div class="col-md-2 border ">
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].odVacc}}
+					</div>
+					<div class="row border">
+						{{ctrl.thePrescription.orderDetails[0].osVacc}}
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-2 border ">
+					<br><br>
+					Kính nhìn gần
+					(Near)-ADD
+				</div>
+				<div class="col-md-8 border ">
+					<div class="row" >
+						<div class="col-md-12" >
+							<p style="margin-top: 5px;margin-bottom: 5px;">Khoảng cách đồng tử(PD): {{ctrl.thePrescription.orderDetails[0].pd}} mm</p>
+						</div>
+						<div class="col-md-12" >
+							<p style="margin-bottom: 5px;">Khoảng cách làm việc(WD): {{ctrl.thePrescription.orderDetails[0].wd}} mm</p>
+						</div>
+					</div>
+					<div class="row border" >
+						<div class="col-md-3 border " >
+							MP<br>
+							(OD)
+						</div>
+						<div class="col-md-3 border " >
+							{{ctrl.thePrescription.orderDetails[0].odAdd}}
+						</div>
+					</div>
+					<div class="row border" >
+						<div class="col-md-3 border ">
+							MT<br>
+							(OS)
+						</div>
+						<div class="col-md-3 border " >
+
+							{{ctrl.thePrescription.orderDetails[0].osAdd}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 border " style="padding-top: 15px;">
+					Thị lực gần(VA):
+					{{ctrl.thePrescription.orderDetails[0].vaNear}}
+				</div>
+
+			</div>
+
+		</div><!--end of don kinh-->
+
+		<div class="row" style="font-size: 12px;margin-top: 10px;padding-left: 15px;">
+			<div class="col-md-8">
+				<ul class="roman" style="padding-left: 0px;">
+					<li>LỜI DẶN
+						<ul class="square" style="padding-left: 15px;">
+							<li>Đeo kính thường xuyên </li>
+							<li>Tái khám sau    tháng</li>
+							<li>Nhớ đem theo đơn kính tái khám</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				NGƯỜI KHÁM:
+			</div>
+
+		</div>
+
+	</section>
+
+	<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+	<script type='text/javascript' src="/js/angular-1.4.9/angular.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-resource.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-route.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-cookies.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-animate.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-aria.min.js"></script>
+
+	<script type='text/javascript' src="/js/bootstrap.min.js"></script>
+	<script type='text/javascript' src="https://cdn.jsdelivr.net/gh/auth0/angular-storage@master/dist/angular-storage.js" ></script>
+
+
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.mdl.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.cfg.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.inter.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.srv.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.ctrl.js"></script>
+
+	<script type='text/javascript' src="/shared/ajax.srv.js"></script>
+</body>
+</html>

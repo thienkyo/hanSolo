@@ -1,13 +1,12 @@
 package com.hanSolo.kinhNguyen.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "order_detail")
-@NamedQueries({
-        @NamedQuery(name = "OrderDetail.findByFrameNote", query = "select o from OrderDetail o where o.frameNote = :frameNote")
-})
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -115,6 +114,30 @@ public class OrderDetail {
 
     @Column(name = "order_detail_note", length = 800)
     private String orderDetailNote;
+
+   /* @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }*/
+
+    @Column(name = "order_id")
+    private Integer orderId;
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
 
     public String getOrderDetailNote() {
         return orderDetailNote;

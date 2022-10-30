@@ -163,7 +163,9 @@
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}</h3>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}
+				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}" target="_blank" ng-show="item.id">[print]</a>
+				</h3>
 				<div class="row">
 					<div class="col-lg-5">
 						<div class="row">
