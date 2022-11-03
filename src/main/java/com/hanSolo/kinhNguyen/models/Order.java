@@ -69,6 +69,17 @@ public class Order {
     @Fetch(FetchMode.JOIN)
     private Member member;
 
+    @Column(name = "gender")
+    private Boolean gender;
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
+
     public Member getMember() {
         return member;
     }

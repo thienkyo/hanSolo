@@ -78,15 +78,26 @@
 				</div>
 
 				<div class="row" style="margin-bottom: 50px;">
-					<div class="col-lg-6">
+					<div class="col-lg-3">
 						<div class="checkout__input">
 							<p>Status</p>
 							<select  ng-model="ctrl.theOrder.status"
 									 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
-									 style="height: 40px;">
+									 style="height: 40px;border: 1px solid #e1e1e1;">
 							</select>
 						</div>
 					</div>
+					<div class="col-lg-3">
+						<div class="checkout__input">
+							<p>Gender</p>
+							<select  ng-model="ctrl.theOrder.gender"
+									 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
+									 style="height: 40px;border: 1px solid #e1e1e1;">
+							</select>
+						</div>
+
+					</div>
+
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Date</p>
@@ -175,10 +186,19 @@
 									<input type="text"  ng-model="item.name" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-3">
 								<div class="checkout__input">
 									<p>Năm sinh</p>
 									<input type="text" ng-model="item.yob" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="checkout__input">
+									<p>Giới tính</p>
+									<select  ng-model="item.gender"
+											 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
+											 style="height: 40px;border: 1px solid #e1e1e1;">
+									</select>
 								</div>
 							</div>
 						</div>

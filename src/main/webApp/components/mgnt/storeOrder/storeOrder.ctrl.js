@@ -1,10 +1,11 @@
 'use strict';
 angular.module('storeOrderModule')
-	.controller('storeOrderController',['$routeParams','$location',
-										 'memberService','orderListService',
-										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','ajaxService',
+	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService',
+										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO',
+										 'ajaxService','genderArray',
 	function($routeParams,$location,memberService,orderListService,
-	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,ajaxService) {
+	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,
+	            ajaxService,genderArray) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -13,8 +14,8 @@ angular.module('storeOrderModule')
 	self.couponDiscount = 0; //%
     self.couponCode = '';
 
-//	self.orderDetailList = [new OrderDetailDO()];
 	self.OrderStatusArray=OrderStatusArray;
+	self.genderArray=genderArray;
 	self.statusStyle = { "width": "120px" };
 
 //////////////// function section ////////////

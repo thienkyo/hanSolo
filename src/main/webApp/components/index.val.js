@@ -13,6 +13,11 @@ var CommonStatusArray=[
 	{name : 'inactive', value:false }
 ];
 
+var genderArray=[
+	{name : 'Male', value:true },
+	{name : 'Female', value:false }
+];
+
 var AmountList=[
 	{name : '50', value:50 },
     {name : 'all', value:0 }
@@ -25,6 +30,7 @@ angular
 		.value('OrderDetailDO',OrderDetailDO)
 		.value('OrderStatusArray',OrderStatusArray)
 		.value('CommonStatusArray',CommonStatusArray)
+		.value('genderArray',genderArray)
 		.value('AmountList',AmountList)
 		.value('ProductDO',ProductDO)
 		.value('CategoryDO',CategoryDO)

@@ -1,7 +1,5 @@
 package com.hanSolo.kinhNguyen.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -115,21 +113,19 @@ public class OrderDetail {
     @Column(name = "order_detail_note", length = 800)
     private String orderDetailNote;
 
-   /* @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }*/
-
     @Column(name = "order_id")
     private Integer orderId;
+
+    @Column(name = "gender")
+    private Boolean gender;
+
+    public Boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
 
     public Integer getOrderId() {
         return orderId;
