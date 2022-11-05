@@ -4,5 +4,6 @@ angular.module('prescriptionModule', [
     'ngRoute',
     'ngResource',
     'angular-storage',
-    'ngCookies'
+    'ngCookies',
+    'invoiceModule'
 ]);

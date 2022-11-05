@@ -5,247 +5,185 @@
 	<!--<link rel="stylesheet" href="/components/mgnt/printable/css/printable.css">-->
 	<!-- Load paper.css for happy printing -->
 	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">-->
-	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">-->
-	<link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
-	<!--<link rel="stylesheet" href="/components/mgnt/printable/css/paper.css">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+	<link rel="stylesheet" href="/components/mgnt/printable/css/paper.css">
 	<link rel="shortcut icon" href="/static/ico/favicon3.png" type="image/x-icon">
 	<link rel="icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<!-- Set page size here: A5, A4 or A3 -->
+	<!-- Set also "landscape" if you need -->
+	<style>@page { size: A5 }</style>
+
+	<!-- Custom styles for this document -->
 	<style>
+		body   { font-family: serif }
+		h1     { font-size: 18pt;}
+		h4     { font-size: 12pt; margin: 2mm 0 0 50mm;}
+		h2 + p { font-size: 18pt; line-height: 7mm }
+		h3 + p { font-size: 14pt; line-height: 7mm }
+		li     { font-size: 11pt; line-height: 5mm }
 
-	.roman {
-	 list-style-type: circle;
-	}
-	.square {
-	 list-style-type: square;
-	}
+		h1      { margin: 0 }
+		h1 + ul { margin: 2mm 0 5mm }
+		h2, h3  { margin: 0 3mm 3mm 0; float: left }
+		h2 + p,
+		h3 + p  { margin: 0 0 3mm 50mm }
 
+		h4 + ul { margin: 5mm 0 0 50mm }
+
+		.preth  th {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		  padding-top: 10px;
+		  padding-bottom: 10px;
+		}
+
+		.preth  td {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		  padding: 5px 10px 5px 15px;
+		}
 	</style>
 
 </head>
 
-<body >
-	<!-- Each sheet element should have the class "sheet" -->
-	<!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
-	<section >
+<body class="A5">
 
-
-		<!-- Write HTML just like a web page -->
-		<div class="row">
-			<div class="col-md-2">
-				<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 55px;"/>
-			</div>
-			<div class="col-md-10">
-				<div class="row">
+	<section class="sheet padding-10mm">
+		<table>
+			<tbody>
+			<tr>
+				<td>
+					<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 65px;"/>
+				</td>
+				<td>
 					<p style="margin-bottom: 0px;font-weight: bold;">MẮT KÍNH NGUYỄN</p>
-				</div>
-				<div class="row">
-					<p style="font-size: 10px;margin-bottom: 0px;">Địa chỉ: 358/5/3 Cách Mạng Tháng 8, Phường 10, Quận 3, TP. Hồ Chí Minh</p>
-					<p style="font-size: 10px;">Hotline: 090 801 73 83</p>
-				</div>
+					<p style="font-size: 10px;margin-bottom: 0px;margin-top: 5px;">Địa chỉ: 358/5/3 Cách Mạng Tháng 8, Phường 10, Quận 3, TP. Hồ Chí Minh</p>
+					<p style="font-size: 10px;margin-top: 4px;">Hotline: 090 801 7383 - 079 990 5714</p>
 
-			</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 3mm 85mm;">
+			Ngày {{ctrl.thePrescription.gmtCreate | date:"dd"}}
+			Tháng {{ctrl.thePrescription.gmtCreate | date:"MM"}}
+			Năm {{ctrl.thePrescription.gmtCreate | date:"yyyy"}}
+		</h4>
+
+		<h1 style="text-align: center;margin-bottom: 0px;">ĐƠN KÍNH</h1>
+		<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.thePrescription.id}}/{{ctrl.thePrescription.orderDetails[0].id}}</p>
+
+		<div >
+			<p style="margin-bottom: 0mm;">
+				<span style="margin-bottom: 5px;">Họ và tên:&nbsp&nbsp&nbsp&nbsp</span> {{ctrl.thePrescription.orderDetails[0].name.toUpperCase()}}
+				<span style="float: right;"> {{ctrl.thePrescription.orderDetails[0].phone == '' ? ctrl.thePrescription.shippingPhone : ctrl.thePrescription.orderDetails[0].phone}}</span> <span style="font-size: 12pt;float: right;">SĐT:&nbsp&nbsp</span>
+			</p>
 		</div>
 
-		<div class="row">
-			<div class="col-md-7"></div>
-			<div class="col-md-5">
-				<p style="font-size: 12px;font-style: italic;float: right;">
-					Ngày {{ctrl.thePrescription.gmtCreate | date:"dd"}}
-					Tháng {{ctrl.thePrescription.gmtCreate | date:"MM"}}
-					Năm {{ctrl.thePrescription.gmtCreate | date:"yyyy"}}</p>
-			</div>
+		<div>
+			<p style="margin-top: 2mm;margin-bottom: 0mm;">
+				<span style="font-size: 12pt;">Đ.chỉ:</span> {{ctrl.thePrescription.shippingAddress}}
+				<span style="font-size: 12pt;float: right;">NS: {{ctrl.thePrescription.orderDetails[0].yob}}</span>
+			</p>
 		</div>
 
-		<h4 style="text-align: center;margin-bottom: 0px;">ĐƠN KÍNH</h4>
-		<p style="text-align: center;font-size: 10px;margin-bottom: 10px;">Mã hoá đơn: {{ctrl.thePrescription.id}}</p>
-
-		<div class="row">
-			<div class="col-md-8">
-				<span style="font-size: 12px;margin-bottom: 5px;">Họ và tên:</span>
-				<span style="font-size: 14px;margin-bottom: 5px;">{{ctrl.thePrescription.orderDetails[0].name.toUpperCase()}}</span>
-
-			</div>
-			<div class="col-md-4">
-				<span style="font-size: 12px;">SĐT:</span>
-				<span style="font-size: 14px;">{{ctrl.thePrescription.orderDetails[0].phone == '' ? ctrl.thePrescription.shippingPhone : ctrl.thePrescription.orderDetails[0].phone}}</span>
-			</div>
-		</div>
-		<div class="row" style="margin-bottom: 10px;">
-			<div class="col-md-10">
-				<span style="font-size: 12px;">Địa chỉ:</span>
-				<span style="font-size: 14px;">{{ctrl.thePrescription.shippingAddress}}</span>
-
-			</div>
-			<div class="col-md-2" style="padding-left: 5px;">
-				<span style="font-size: 12px;">NS:</span>
-				<span style="font-size: 14px;">{{ctrl.thePrescription.orderDetails[0].yob}}</span>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-5">
-				<ul class="roman" style="padding-left: 15px;">
-					<li>Thị lực không kính
-						<ul class="square" style="padding-left: 15px;">
-							<li>MP: 9</li>
-							<li>MT: 10</li>
+		<table>
+			<thead>
+			<tr>
+				<td>
+					<div style="width: 45mm;float: left;">
+						<ul class="roman" style="padding-left: 15px;margin-bottom: 5px;">
+							<li> <div style="font-weight: bold;">Thị lực không kính</div>
+								<ul class="square" style="padding-left: 15px;">
+									<li>MP: {{ctrl.thePrescription.orderDetails[0].odVasc}}</li>
+									<li>MT: {{ctrl.thePrescription.orderDetails[0].osVasc}}</li>
+								</ul>
+							</li>
+							<li style="font-weight: bold;margin-top: 10px;">Đơn Kính:</li>
 						</ul>
-					</li>
-					<li>Đơn Kính</li>
-				</ul>
-			</div>
-			<div class="col-md-7">
-				<p>Gọng: {{ctrl.thePrescription.orderDetails[0].frameNote}}</p>
-				<p>Tròng: {{ctrl.thePrescription.orderDetails[0].lensNote}}</p>
-			</div>
+					</div>
+				</td>
+				<td>
+					<div style="float: right;">
+						<p>Gọng: {{ctrl.thePrescription.orderDetails[0].frameNote}}</p>
+						<p>Tròng: {{ctrl.thePrescription.orderDetails[0].lensNote}}</p>
+					</div>
+				</td>
+			</tr>
+			</thead>
+		</table>
 
+
+
+
+
+		<table class="preth" style="border-collapse: collapse;">
+			<thead style="font-size: 10pt;">
+			<tr>
+				<th colspan="2"></th>
+				<th>ĐỘ CẦU (SPHERE)</th>
+				<th>ĐỘ TRỤC (CYLINDER)</th>
+				<th>TRỤC (AXIS)</th>
+				<th>LĂNG<br>KÍNH (PRISM)</th>
+				<th>THỊ LỰC XA (VA)</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td rowspan="2">Kính nhìn xa</td>
+				<td>MP<br>(OD)</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].odSphere}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].odCylinder}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].odAxis}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].odPrism}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].odVacc}}</td>
+			</tr>
+			<tr>
+				<td>MT<br>(OS)</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].osSphere}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].osCylinder}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].osAxis}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].osPrism}}</td>
+				<td>{{ctrl.thePrescription.orderDetails[0].osVacc}}</td>
+			</tr>
+			<tr>
+				<td colspan="2" rowspan="4">Kính nhìn gần<br> (Near)-ADD</td>
+				<td colspan="5">Khoảng cách đồng tử(PD): {{ctrl.thePrescription.orderDetails[0].pd}} mm</td>
+
+			</tr>
+			<tr>
+				<td colspan="5">Khoảng cách làm việc(WD): {{ctrl.thePrescription.orderDetails[0].wd}} mm</td>
+			</tr>
+			<tr>
+				<td>MP<br>(OD)</td>
+				<td colspan="3">{{ctrl.thePrescription.orderDetails[0].odAdd}}</td>
+				<td rowspan="2">Thị lực gần(VA): <br>&nbsp&nbsp&nbsp{{ctrl.thePrescription.orderDetails[0].vaNear}}</td>
+			</tr>
+			<tr>
+				<td>MT<br>(OS)</td>
+				<td colspan="3">{{ctrl.thePrescription.orderDetails[0].osAdd}}</td>
+			</tr>
+			</tbody>
+		</table>
+
+
+		<div style="width: 65mm;float: left;">
+			<ul class="roman" style="padding-left: 0px;">
+				<li>LỜI DẶN
+					<ul class="square" style="padding-left: 15px;">
+						<li>Đeo kính thường xuyên </li>
+						<li>Tái khám sau __ tháng</li>
+						<li>Nhớ đem theo đơn kính tái khám</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div style="float: right;margin-top: 15px;margin-right: 40px;">
+			NGƯỜI KHÁM:
 		</div>
 
-		<div class="container" style="width:100%;font-size: 13px;"> <!--begin of don kinh-->
-			<div class="row">
-				<div class="col-md-2 border ">
 
-				</div>
-				<div class="col-md-2 border ">
-					ĐỘ CẦU
-					(Sphere)
-				</div>
-				<div class="col-md-2 border ">
-					ĐỘ TRỤC
-					(Cylinder)
-				</div>
-				<div class="col-md-2 border ">
-					TRỤC
-					(Axis)
-				</div>
-				<div class="col-md-2 border ">
-					LĂNG KÍNH
-					(Prism)
-				</div>
-				<div class="col-md-2 border ">
-					THỊ LỰC XA
-					(VA)
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-1 border " style="padding-top: 15px;padding-left: 10px;">
-					Kính nhìn xa
-				</div>
-				<div class="col-md-1 border ">
-					<div class="row border" style="padding-left: 10px;">
-						MP
-						<br>
-						(OD)
-					</div>
-					<div class="row border" style="padding-left: 10px;">
-						MT<br>
-						(OS)
-					</div>
-				</div>
-				<div class="col-md-2 border ">
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].odSphere}}
-					</div>
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].osSphere}}
-					</div>
-				</div>
-				<div class="col-md-2 border ">
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].odCylinder}}
-					</div>
-					<div class="row border">
-
-						{{ctrl.thePrescription.orderDetails[0].osCylinder}}
-					</div>
-				</div>
-				<div class="col-md-2 border ">
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].odAxis}}
-					</div>
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].osAxis}}
-					</div>
-				</div>
-				<div class="col-md-2 border ">
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].odPrism}}
-					</div>
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].osPrism}}
-					</div>
-				</div>
-				<div class="col-md-2 border ">
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].odVacc}}
-					</div>
-					<div class="row border">
-						{{ctrl.thePrescription.orderDetails[0].osVacc}}
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-md-2 border ">
-					<br><br>
-					Kính nhìn gần
-					(Near)-ADD
-				</div>
-				<div class="col-md-8 border ">
-					<div class="row" >
-						<div class="col-md-12" >
-							<p style="margin-top: 5px;margin-bottom: 5px;">Khoảng cách đồng tử(PD): {{ctrl.thePrescription.orderDetails[0].pd}} mm</p>
-						</div>
-						<div class="col-md-12" >
-							<p style="margin-bottom: 5px;">Khoảng cách làm việc(WD): {{ctrl.thePrescription.orderDetails[0].wd}} mm</p>
-						</div>
-					</div>
-					<div class="row border" >
-						<div class="col-md-3 border " >
-							MP<br>
-							(OD)
-						</div>
-						<div class="col-md-3 border " >
-							{{ctrl.thePrescription.orderDetails[0].odAdd}}
-						</div>
-					</div>
-					<div class="row border" >
-						<div class="col-md-3 border ">
-							MT<br>
-							(OS)
-						</div>
-						<div class="col-md-3 border " >
-
-							{{ctrl.thePrescription.orderDetails[0].osAdd}}
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2 border " style="padding-top: 15px;">
-					Thị lực gần(VA):
-					{{ctrl.thePrescription.orderDetails[0].vaNear}}
-				</div>
-
-			</div>
-
-		</div><!--end of don kinh-->
-
-		<div class="row" style="font-size: 12px;margin-top: 10px;padding-left: 15px;">
-			<div class="col-md-8">
-				<ul class="roman" style="padding-left: 0px;">
-					<li>LỜI DẶN
-						<ul class="square" style="padding-left: 15px;">
-							<li>Đeo kính thường xuyên </li>
-							<li>Tái khám sau    tháng</li>
-							<li>Nhớ đem theo đơn kính tái khám</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div class="col-md-4">
-				NGƯỜI KHÁM:
-			</div>
-
-		</div>
 
 	</section>
 
@@ -270,5 +208,7 @@
 	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.ctrl.js"></script>
 
 	<script type='text/javascript' src="/shared/ajax.srv.js"></script>
+
+	<script type='text/javascript' src="/components/mgnt/printable/invoice/invoice.mdl.js"></script>
 </body>
 </html>

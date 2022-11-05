@@ -42,6 +42,17 @@ public class SmsUserInfo {
     @Column(name = "is_test_user")
     private Boolean isTestUser;
 
+    @Column(name = "location", length = 50)
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public Boolean getIsTestUser() {
         return isTestUser;
     }
@@ -61,10 +72,11 @@ public class SmsUserInfo {
     public SmsUserInfo() {
     }
 
-    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify) {
+    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location) {
         this.name = name;
         this.phone = phone;
         this.gender = gender;
+        this.location = location;
         this.lastSendSmsDate = lastSendSmsDate;
         this.orderCreateDate = orderCreateDate;
         this.gmtCreate = gmtCreate;

@@ -20,6 +20,10 @@ angular.module('storeOrderModule')
 
 //////////////// function section ////////////
 
+    self.updatePrice = function(){
+            self.calculateOrderTotal();
+        }
+
     self.add1Tab = function(){
         self.theOrder.orderDetails.push(new OrderDetailDO());
         console.log(self.theOrder);
@@ -96,7 +100,7 @@ angular.module('storeOrderModule')
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
         self.theOrder.couponAmount = subTotal*self.theOrder.couponDiscount/100;
-        self.theOrder.total = subTotal - self.theOrder.couponAmount;
+        self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.deposit;
     }
 
     self.getCoupon = function(code) {
@@ -163,6 +167,7 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
                 }
+                console.log(self.theOrder);
         });
     }else{
         self.theOrder = new OrderDO;

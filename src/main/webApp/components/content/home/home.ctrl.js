@@ -28,7 +28,6 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
         homeService.getHomeProduct()
                 .then(function (response) {
                     self.homeProducts = response;
-                    console.log(self.homeProducts);
 
                     $(document).ready(function() {
                         //    Gallery filter
@@ -49,7 +48,6 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
 		});
 
 		self.addToCart = function(prod){
-		console.log(prod);
 			if(prod.quantity > 0){
 				cartService.addToCart(prod,1);
 			}

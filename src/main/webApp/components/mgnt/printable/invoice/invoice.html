@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="prescriptionModule" ng-controller="invoiceController as ctrl">
+<head>
+	<meta charset="utf-8">
+	<!--<link rel="stylesheet" href="/components/mgnt/printable/css/printable.css">-->
+	<!-- Load paper.css for happy printing -->
+	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+	<link rel="stylesheet" href="/components/mgnt/printable/css/paper.css">
+	<link rel="shortcut icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<link rel="icon" href="/static/ico/favicon3.png" type="image/x-icon">
+	<!-- Set page size here: A5, A4 or A3 -->
+	<!-- Set also "landscape" if you need -->
+	<style>@page { size: A5 }</style>
+
+	<!-- Custom styles for this document -->
+	<style>
+		body   { font-family: serif }
+		h1     { font-size: 18pt;}
+		h4     { font-size: 12pt; margin: 2mm 0 0 50mm;}
+		h2 + p { font-size: 18pt; line-height: 7mm }
+		h3 + p { font-size: 14pt; line-height: 7mm }
+		li     { font-size: 11pt; line-height: 5mm }
+
+		h1      { margin: 0 }
+		h1 + ul { margin: 2mm 0 5mm }
+		h2, h3  { margin: 0 3mm 3mm 0; float: left }
+		h2 + p,
+		h3 + p  { margin: 0 0 3mm 50mm }
+
+		h4 + ul { margin: 5mm 0 0 50mm }
+
+		.preth  th {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		  padding-top: 10px;
+		  padding-bottom: 10px;
+		}
+
+		.preth  td {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		  padding: 5px 10px 5px 15px;
+		}
+	</style>
+
+</head>
+
+<body class="A5">
+
+	<section class="sheet padding-10mm">
+		<table>
+			<tbody>
+			<tr>
+				<td>
+					<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 150px;"/>
+				</td>
+				<td>
+					<p style="margin-bottom: 0px;margin-top: 0px;font-weight: bold;">CHUYÊN CÁC LOẠI KÍNH</p>
+					<p style="margin: 3px 0px 0px 15px;">- Kính Cận - Kính Viễn</p>
+					<p style="margin: 3px 0px 0px 15px;">- Kính Loạn - Kính Đa Tròng</p>
+					<p style="margin-bottom: 0px;margin-top: 15px;font-weight: bold;">KHÚC XẠ NHÃN KHOA KỸ THUẬT CAO</p>
+					<p style="font-size: 14px;margin-bottom: 0px;margin-top: 5px;">Địa chỉ: 358/5/3 CMT8, P. 10, Q. 3, TP. HCM</p>
+					<p style="font-size: 14px;margin-top: 4px;">Hotline: 090 801 7383 - 079 990 5714</p>
+
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 3mm 85mm;">
+			Ngày {{ctrl.theOrder.gmtCreate | date:"dd"}}
+			Tháng {{ctrl.theOrder.gmtCreate | date:"MM"}}
+			Năm {{ctrl.theOrder.gmtCreate | date:"yyyy"}}
+		</h4>
+
+		<h1 style="text-align: center;margin-bottom: 0px;">HOÁ ĐƠN</h1>
+		<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.theOrder.id}}</p>
+
+		<div >
+			<p style="margin-bottom: 0mm;">
+				<span style="margin-bottom: 5px;">Họ và tên:&nbsp&nbsp&nbsp&nbsp</span> {{ctrl.theOrder.shippingName.toUpperCase()}}
+				<span style="float: right;"> {{ctrl.theOrder.shippingPhone}}</span> <span style="font-size: 12pt;float: right;">SĐT:&nbsp&nbsp</span>
+			</p>
+		</div>
+
+		<div>
+			<p style="margin-top: 2mm;margin-bottom: 0mm;">
+				<span style="font-size: 12pt;">Đ.chỉ:</span> {{ctrl.theOrder.shippingAddress}}
+			</p>
+		</div>
+
+
+
+		<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 10px;">
+			<thead>
+			<tr>
+				<th>No.</th>
+				<th>Sản Phẩm</th>
+				<th>SL</th>
+				<th>Đơn giá</th>
+				<th>Thành tiền</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="item in ctrl.OrderDetailList track by $index">
+				<td>{{$index + 1}}</td>
+				<td>{{item.description}}</td>
+				<td>{{item.quantity}}</td>
+				<td>{{item.price | number:0}}{{item.price ? 'đ' : ''}}</td>
+				<td>{{item.price*item.quantity | number:0}}{{item.price ? 'đ' : ''}}</td>
+			</tr>
+			</tbody>
+		</table>
+
+<!--
+
+		<div style="float: left;margin-top: 10px;width: 100%;">
+			Cộng thành tiền(viết bằng chữ:)
+		</div>
+-->
+
+
+		<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 0px;">
+			<thead>
+			<tr>
+				<td>Thành tiền: {{ctrl.theOrder.subTotal | number:0}}đ</td>
+				<td>Giảm giá: ({{ctrl.theOrder.couponDiscount}}%) {{ctrl.theOrder.couponAmount | number:0}}đ</td>
+				<td>Cọc: {{ctrl.theOrder.deposit | number:0}}đ</td>
+				<td>Còn lại: {{ctrl.theOrder.total | number:0}}đ</td>
+			</tr>
+			</thead>
+		</table>
+
+
+	</section>
+
+	<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+	<script type='text/javascript' src="/js/angular-1.4.9/angular.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-resource.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-route.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-cookies.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-animate.min.js"></script>
+	<script type='text/javascript' src="/js/angular-1.4.9/angular-aria.min.js"></script>
+
+	<script type='text/javascript' src="/js/bootstrap.min.js"></script>
+	<script type='text/javascript' src="https://cdn.jsdelivr.net/gh/auth0/angular-storage@master/dist/angular-storage.js" ></script>
+
+
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.mdl.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.cfg.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.inter.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.srv.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.ctrl.js"></script>
+
+	<script type='text/javascript' src="/components/mgnt/printable/invoice/invoice.mdl.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/invoice/invoice.srv.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/invoice/invoice.ctrl.js"></script>
+
+	<script type='text/javascript' src="/shared/ajax.srv.js"></script>
+</body>
+</html>
