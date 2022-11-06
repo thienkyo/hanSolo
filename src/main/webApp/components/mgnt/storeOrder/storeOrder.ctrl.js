@@ -47,6 +47,10 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].address = self.theOrder.shippingAddress;
     }
 
+    self.genderCopy = function(){
+        self.theOrder.orderDetails[0].gender = self.theOrder.gender;
+    }
+
     // open datePicker
     self.openDP = function() {
         self.DPisOpen = true;

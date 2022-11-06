@@ -68,7 +68,7 @@
 			</tbody>
 		</table>
 
-		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 3mm 85mm;">
+		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 1mm 85mm;">
 			Ngày {{ctrl.theOrder.gmtCreate | date:"dd"}}
 			Tháng {{ctrl.theOrder.gmtCreate | date:"MM"}}
 			Năm {{ctrl.theOrder.gmtCreate | date:"yyyy"}}
@@ -80,7 +80,7 @@
 		<div >
 			<p style="margin-bottom: 0mm;">
 				<span style="margin-bottom: 5px;">Họ và tên:&nbsp&nbsp&nbsp&nbsp</span> {{ctrl.theOrder.shippingName.toUpperCase()}}
-				<span style="float: right;"> {{ctrl.theOrder.shippingPhone}}</span> <span style="font-size: 12pt;float: right;">SĐT:&nbsp&nbsp</span>
+				<span style="float: right;"> {{ctrl.theOrder.shippingPhone | tel}}</span> <span style="font-size: 12pt;float: right;">SĐT:&nbsp&nbsp</span>
 			</p>
 		</div>
 
@@ -107,8 +107,8 @@
 				<td>{{$index + 1}}</td>
 				<td>{{item.description}}</td>
 				<td>{{item.quantity}}</td>
-				<td>{{item.price | number:0}}{{item.price ? 'đ' : ''}}</td>
-				<td>{{item.price*item.quantity | number:0}}{{item.price ? 'đ' : ''}}</td>
+				<td style="text-align: right;">{{item.price | number:0}}{{item.price ? 'đ' : ''}}</td>
+				<td style="text-align: right;">{{item.price*item.quantity | number:0}}{{item.price ? 'đ' : ''}}</td>
 			</tr>
 			</tbody>
 		</table>
@@ -153,6 +153,7 @@
 	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.cfg.js"></script>
 	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.inter.js"></script>
 	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.srv.js"></script>
+	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.filter.js"></script>
 	<script type='text/javascript' src="/components/mgnt/printable/prescription/prescription.ctrl.js"></script>
 
 	<script type='text/javascript' src="/components/mgnt/printable/invoice/invoice.mdl.js"></script>

@@ -69,7 +69,7 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Deposit: {{ctrl.theOrder.deposit | number:0}}đ</p>
-							<input type="text" ng-model="ctrl.theOrder.deposit" ng-change="ctrl.updatePrice()">
+							<input type="text" ng-model="ctrl.theOrder.deposit" ng-change="ctrl.clearErrorMsg();ctrl.updatePrice()">
 						</div>
 					</div>
 				</div>
@@ -93,7 +93,7 @@
 					<div class="col-lg-3">
 						<div class="checkout__input">
 							<p>Gender</p>
-							<select  ng-model="ctrl.theOrder.gender"
+							<select  ng-model="ctrl.theOrder.gender" ng-change="ctrl.genderCopy();"
 									 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
 									 style="height: 40px;border: 1px solid #e1e1e1;">
 							</select>

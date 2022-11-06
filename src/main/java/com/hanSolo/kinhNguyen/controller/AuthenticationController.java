@@ -69,7 +69,7 @@ public class AuthenticationController {
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
                 order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation()));
         for(OrderDetail item : order.getOrderDetails()){
-            if(item.getPhone().isEmpty() && !item.getPhone().equals(order.getShippingPhone()) && order.getLocation().equals("STORE")){
+            if(!item.getPhone().isEmpty() && !item.getPhone().equals(order.getShippingPhone()) && order.getLocation().equals("STORE")){
                 smsUserList.add(new SmsUserInfo(item.getName(), item.getPhone(), item.getGender(),item.getGmtCreate(),item.getGmtCreate(),
                         Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation()));
             }
