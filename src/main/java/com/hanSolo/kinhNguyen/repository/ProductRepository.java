@@ -18,7 +18,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
 
-    List<Product> findByNameContainsIgnoreCaseAndStatus(@NonNull String name, Boolean status);
+    List<ProductInterface> findByNameContainsIgnoreCaseAndStatus(@NonNull String name, Boolean status);
 
     // for homePage, get 8 new product
     List<ProductInterface> findFirst8ByStatusAndDiscountOrderByGmtModifyDesc(Boolean status, Integer discount);

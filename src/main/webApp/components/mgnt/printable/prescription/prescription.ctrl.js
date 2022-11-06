@@ -5,11 +5,9 @@ angular.module('prescriptionModule')
 	var self = this;
 
     var paramValue = $location.search();
-    console.log(paramValue.orderDetailId);
 
     prescriptionService.getOnePrescription(paramValue.orderDetailId)
         .then(function (data) {
-            console.log(data);
             self.thePrescription = data;
     });
 }]);

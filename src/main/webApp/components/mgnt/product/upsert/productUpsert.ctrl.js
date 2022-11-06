@@ -52,9 +52,7 @@ angular.module('productUpsertModule')
 	
 	self.upsert = function(){
 		self.responseStr = false;
-		console.log(self.product);
 		if(self.picFile){
-		    console.log(self.picFile.result);
 			if(self.picFile.result){
 				self.product.images = self.picFile.result;
 				self.product.thumbnail=self.picFile.result.split(',')[0];

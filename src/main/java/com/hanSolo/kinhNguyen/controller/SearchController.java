@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.facade.ProductInterface;
 import com.hanSolo.kinhNguyen.models.Article;
 import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.repository.ArticleRepository;
@@ -26,7 +27,7 @@ public class SearchController {
 
     @RequestMapping("{keySearch}")
     public List<SearchResponse> search(@PathVariable final String keySearch) {
-        List<Product> prodList = prodRepo.findByNameContainsIgnoreCaseAndStatus(keySearch, Utility.ACTIVE_STATUS);
+        List<ProductInterface> prodList = prodRepo.findByNameContainsIgnoreCaseAndStatus(keySearch, Utility.ACTIVE_STATUS);
         List<SearchResponse> resultList = new ArrayList<>();
         prodList.forEach(item->{
             SearchResponse temp = new SearchResponse("Frame",item.getName(), item.getId()+"", item.getThumbnail(), Utility.SUCCESS_ERRORCODE, "Query success");
@@ -43,7 +44,7 @@ public class SearchController {
     }
 
     @RequestMapping("product/{keySearch}")
-    public List<Product> searchProduct(@PathVariable final String keySearch) {
+    public List<ProductInterface> searchProduct(@PathVariable final String keySearch) {
         return prodRepo.findByNameContainsIgnoreCaseAndStatus(keySearch, Utility.ACTIVE_STATUS);
     }
 }

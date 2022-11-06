@@ -14,7 +14,6 @@ angular.module('couponModule')
 		
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);
-			console.log(data);
 			self.couponList = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
@@ -26,12 +25,10 @@ angular.module('couponModule')
 		}
 		
 		self.upsert = function(coupon){
-		    console.log(coupon);
 
 			self.responseStr = false;
 			self.responseStrFail = false;
 			couponService.upsert(coupon).then(function (data) {
-			    console.log(data);
 				self.responseStr = data.errorMessage;
 				if(coupon.id == 0){
 					self.couponList.unshift(data.coupon);

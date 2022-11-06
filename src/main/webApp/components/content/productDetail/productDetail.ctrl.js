@@ -11,9 +11,7 @@ angular.module('productDetailModule')
 	productDetailService.getProductByProdId($routeParams.prodId)
 		.then(function (data) {
 			self.product = data;
-			console.log(data);
 			self.description=$sce.trustAsHtml(self.product.description);
-	        console.log(self.product);
 	        $rootScope.$broadcast('productNameBC', self.product);//self.product.prodName
 	});
 	

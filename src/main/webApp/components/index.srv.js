@@ -70,7 +70,6 @@ angular.module('app')
 			result += randomString(getRandomArbitrary(10,20)) +deli;
 		}
 		result += randomString(getRandomArbitrary(10,20));
-		console.log(result);
 		return btoa(result);
 	}
 	
@@ -92,7 +91,6 @@ angular.module('app')
 			result += randomString(getRandomArbitrary(10,20)) +deli;
 		}
 		result += phone;
-		console.log(result);
 		return btoa(result) +deli+ fullName;
 	}
 	

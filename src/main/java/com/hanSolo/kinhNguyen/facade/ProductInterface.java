@@ -18,7 +18,6 @@ public interface ProductInterface {
     public Boolean getStatus();
     public Integer getDiscount();
     public Integer getSellPrice();
-    public Supplier getSupplier();
     public String getName();
     public String getMerchantProductId();
     public Integer getId();

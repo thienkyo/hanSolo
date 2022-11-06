@@ -26,19 +26,17 @@ angular.module('supplierModule')
 		}
 		
 		self.upsert = function(supplier){
-		    console.log(supplier);
 
 		    if(self.picFile){
                 if(self.picFile.result){
                     self.theSupplier.logo = self.picFile.result;
                 }
             }
-            console.log(supplier);
 
 			self.responseStr = false;
 			self.responseStrFail = false;
 			supplierService.upsert(supplier).then(function (data) {
-			    console.log(data);
+
 				self.responseStr = data.errorMessage;
 				if(supplier.id == 0){
 					self.supplierList.unshift(data.supplier);

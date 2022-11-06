@@ -86,13 +86,13 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr ng-repeat="item in ctrl.theOrder.orderDetails">
+					<tr ng-repeat="item in ctrl.theOrder.newOrderDetails">
 						<td class="cart_product">
-							<a href="#/productDetail/{{item.product.id}}"><img ng-src="img/product/{{item.product.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
+							<a href="#/productDetail/{{item.frameId}}"><img ng-src="img/product/{{item.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
 						</td>
 						<td class="cart_description" style="text-align: left;">
-							<h4><a href="#/productDetail/{{item.product.prodId}}">{{item.product.name}}</a></h4>
-							<p>Store ID: {{item.product.id}}</p>
+							<h4><a href="#/productDetail/{{item.frameId}}">{{item.name}}</a></h4>
+							<p>Store ID: {{item.frameId}}</p>
 						</td>
 						<td class="cart_price" style="text-align: right;">
 							<p>{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 | number:0}} đ</p>
@@ -143,6 +143,8 @@
 									<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
 									<li>Coupon <span>{{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
 									<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+									<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
+									<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 								</ul>
 
 							</div>

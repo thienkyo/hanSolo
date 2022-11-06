@@ -22,14 +22,12 @@ angular.module('memberListModule')
 	self.amount = 50;
 	
 	memberListService.getMembersForMgnt(self.amount).then(function (data) {
-	    console.log(data);
 		self.members = data;
 		self.tableParams = new NgTableParams({}, { dataset: self.members});
 	});
 	
 	self.getMemberByTerm = function(){
 		memberListService.getMembersForMgnt(self.amount).then(function (data) {
-		    console.log(data);
 			self.members = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.members});
 		});
@@ -60,8 +58,6 @@ angular.module('memberListModule')
 	    }else if(isAdmin){
             mem.memberRoles = mem.memberRoles.filter(i => i.role != 'ADMIN');
 	    }
-
-        console.log(mem);
 		self.responseStr = false;
 		self.responseStrFail = false;
 		memberListService.upsert(mem).then(function (data) {

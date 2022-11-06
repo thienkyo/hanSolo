@@ -124,10 +124,11 @@
 		<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 0px;">
 			<thead>
 			<tr>
-				<td>Thành tiền: {{ctrl.theOrder.subTotal | number:0}}đ</td>
-				<td>Giảm giá: ({{ctrl.theOrder.couponDiscount}}%) {{ctrl.theOrder.couponAmount | number:0}}đ</td>
-				<td>Cọc: {{ctrl.theOrder.deposit | number:0}}đ</td>
-				<td>Còn lại: {{ctrl.theOrder.total | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;">Tổng: {{ctrl.theOrder.subTotal | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;">Giảm({{ctrl.theOrder.couponDiscount}}%) {{ctrl.theOrder.couponAmount | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;">Thành tiền: {{ctrl.theOrder.total | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;">Cọc: {{ctrl.theOrder.deposit | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;">Còn lại: {{ctrl.theOrder.deposit ==0 ? '0' : ctrl.theOrder.remain | number:0}}đ</td>
 			</tr>
 			</thead>
 		</table>

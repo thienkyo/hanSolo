@@ -6,7 +6,6 @@ angular.module('homeModule').controller('homeController', ['$scope','homeService
 		homeService.getBanner()
         		.then(function (response) {
         			self.banners = response.reverse();
-        			//console.log(self.banners);
         			// trigger slider
         			$(document).ready(function() {
                           $(".hero__slider").owlCarousel({

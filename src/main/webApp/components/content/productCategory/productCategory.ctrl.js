@@ -24,7 +24,6 @@ angular.module('productCategoryModule')
 		if(pageNumber != self.pagination.currentNumber && pageNumber <= self.pagination.list.length){
 			productService.getProductPage(self.cateId,pageNumber)
 			.then(function (response) {
-			console.log(response);
 				self.currentPage = response;
 				self.pagination = paginationService.builder(response);
 		    });

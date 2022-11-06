@@ -30,7 +30,6 @@ angular.module('bannerModule')
 	}
 	
 	bannerService.getBannerForMgnt().then(function (data) {
-	    console.log(data);
 	    self.shadowBannerList = data;
 		self.BannerList = data;
 		self.tableParams = new NgTableParams({}, { dataset: self.BannerList});
@@ -58,7 +57,6 @@ angular.module('bannerModule')
 			}
 		}
 
-		console.log(banner);
 		
 		self.responseStr = false;
 		self.responseStrFail = false;

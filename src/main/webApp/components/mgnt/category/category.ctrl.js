@@ -26,7 +26,6 @@ angular.module('categoryModule')
 		}
 		
 		self.upsert = function(cate){
-		    console.log(cate);
 
 		    if(self.picFile){
                 if(self.picFile.result){
@@ -38,7 +37,6 @@ angular.module('categoryModule')
 			self.responseStr = false;
 			self.responseStrFail = false;
 			categoryService.upsert(cate).then(function (data) {
-			    console.log(data);
 				self.responseStr = data.errorMessage;
 				if(cate.id == 0){
 					self.cateList.unshift(data.category);

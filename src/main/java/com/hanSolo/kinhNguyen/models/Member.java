@@ -15,7 +15,7 @@ public class Member {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "full_name", nullable = false, length = 70)
+    @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
     @Column(name = "address", length = 300)
@@ -30,7 +30,7 @@ public class Member {
     @Column(name = "city", length = 50)
     private String city;
 
-    @Column(name = "pass", length = 700)
+    @Column(name = "pass", length = 20)
     private String pass;
 
     @Column(name = "status")
@@ -65,6 +65,28 @@ public class Member {
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    @Column(name = "old_pass", length = 20)
+    private String oldPass;
+
+    @Column(name = "new_pass", length = 20)
+    private String newPass;
+
+    public String getNewPass() {
+        return newPass;
+    }
+
+    public void setNewPass(String newPass) {
+        this.newPass = newPass;
+    }
+
+    public String getOldPass() {
+        return oldPass;
+    }
+
+    public void setOldPass(String oldPass) {
+        this.oldPass = oldPass;
+    }
 
     public List<Order> getOrders() {
         return orders;

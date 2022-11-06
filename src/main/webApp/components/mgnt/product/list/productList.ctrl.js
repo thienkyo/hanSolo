@@ -24,7 +24,6 @@ angular.module('productListModule')
 	
 	productListService.getProductsForMgnt(self.categoryId,self.amount).then(function (data) {
 		self.products = data;
-		console.log(data);
 		self.tableParams = new NgTableParams({}, { dataset: self.products});
 	});
 	
@@ -37,9 +36,7 @@ angular.module('productListModule')
 	});
 	
 	self.getProductByTerm = function(cateId,amount,type){
-	    console.log(cateId);
-	    console.log(amount);
-	    console.log(type);
+
 	    switch(type) {
           case 'amount':
             self.categoryId = 0;
@@ -57,7 +54,6 @@ angular.module('productListModule')
 
 		productListService.getProductsForMgnt(cateId,amount).then(function (data) {
 			self.products = data;
-			console.log(data);
 			self.tableParams = new NgTableParams({}, { dataset: self.products});
 		});
 	}

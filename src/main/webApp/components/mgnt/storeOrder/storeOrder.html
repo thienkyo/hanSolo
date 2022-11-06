@@ -54,7 +54,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="checkout__input">
-							<p>Shipping Phone<span>*</span></p>
+							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
 							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
 						</div>
 					</div>
@@ -124,7 +124,7 @@
 
 			</div>
 			<div class="col-lg-4">
-				<div class="cart__discount">
+				<div class="cart__discount" style="margin-bottom: 15px;">
 					<h6>Discount codes</h6>
 					<form>
 						<input type="text" placeholder="Coupon code" ng-model="ctrl.couponCode">
@@ -136,8 +136,9 @@
 					<ul>
 						<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
 						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
-						<li>Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
 						<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+						<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
+						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>
 					<a href="" class="primary-btn" ng-click="ctrl.saveOrder()">Save order</a>
 					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
@@ -215,7 +216,7 @@
 							</div>
 							<div class="col-lg-6">
 								<div class="checkout__input">
-									<p>Số đt</p>
+									<p>Số đt {{item.phone | tel}}</p>
 									<input type="text" ng-model="item.phone" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>

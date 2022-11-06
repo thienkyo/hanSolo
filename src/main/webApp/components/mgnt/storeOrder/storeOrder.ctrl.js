@@ -26,7 +26,6 @@ angular.module('storeOrderModule')
 
     self.add1Tab = function(){
         self.theOrder.orderDetails.push(new OrderDetailDO());
-        console.log(self.theOrder);
     }
 
     self.remove1Tab = function(){
@@ -104,7 +103,8 @@ angular.module('storeOrderModule')
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
         self.theOrder.couponAmount = subTotal*self.theOrder.couponDiscount/100;
-        self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.deposit;
+        self.theOrder.total = subTotal - self.theOrder.couponAmount;
+        self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.deposit;
     }
 
     self.getCoupon = function(code) {
@@ -120,7 +120,6 @@ angular.module('storeOrderModule')
           //  self.isCouponApplied = true;
             self.calculateOrderTotal(self.theOrder);
             self.isErrorMsg = false;
-            console.log(self.theOrder);
          }else{
             self.isErrorMsg = data.errorMessage;
          }
@@ -128,7 +127,6 @@ angular.module('storeOrderModule')
     }
 
     self.saveOrder = function(){
-        console.log(self.theOrder);
         if(self.isPickDP){
             self.theOrder.gmtModify = self.theOrder.gmtCreate;
             for (var i = 0; i < self.theOrder.orderDetails.length; i++){
@@ -142,7 +140,6 @@ angular.module('storeOrderModule')
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data; // return after saving order, order_return_status would be orderid
                     self.newOrderId = data.replyStr;
-                    console.log(self.theOrder);
                 });
             }
         }else{
@@ -166,12 +163,10 @@ angular.module('storeOrderModule')
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
-                console.log(self.theOrder);
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
                 }
-                console.log(self.theOrder);
         });
     }else{
         self.theOrder = new OrderDO;

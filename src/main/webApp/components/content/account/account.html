@@ -29,24 +29,48 @@
 						<div class="user_option">
 							<div class="form-one">
 								<form>
-									<input type="text" placeholder="Email*" value="{{ctrl.me.email}}">
+									<input type="text" placeholder="Email" value="{{ctrl.me.email}}">
 									<input type="text" placeholder="Tên"  ng-model="ctrl.me.fullName">
+
 								</form>
 							</div>
 							<div class="form-two">
 								<form>
 									<input type="text" placeholder="Số điện thoại*" ng-model="ctrl.me.phone" readonly>
+
 								</form>
 							</div>
+
 						</div>
 					    <textarea rows="4" cols="50" placeholder="Địa chỉ shipping..." ng-model="ctrl.me.address"></textarea>
+
+						<div class="user_option" style="margin-top: 10px;">
+							<div class="form-one">
+								<form>
+									<input type="password" placeholder="pass cũ" ng-model="ctrl.oldPass">
+								</form>
+							</div>
+							<div class="form-two">
+								<form>
+									<input type="password" placeholder="pass mới" ng-model="ctrl.newPass" >
+
+								</form>
+							</div>
+
+						</div>
 						
 						<a class="btn btn-default check_out" href="" ng-click="ctrl.updateMe()" style="margin-left: 0px;">save</a>
-						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+						<div class="alert alert-success" role="alert" ng-show="ctrl.responseCode == 'SUCCESS'"
 							 style="margin: 10px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;">
 							  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 							  <span class="sr-only"></span>
 								 thành công
+						</div>
+
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseCode == 'FAIL'" style="margin-top:10px">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							{{ctrl.responseStr}}
 						</div>
 						
 					</div>
@@ -65,7 +89,7 @@
 								<div class="col-md-3"> {{item.gmtCreate | date:"dd-MM-yyyy"}}</div>
 								<div class="col-md-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.id).slice(-4)}}</a></div>
 								<div class="col-md-3" > {{item.total | number}} đ</div>
-								<div class="col-md-3"> {{item.status}}</div>
+								<div class="col-md-3"> {{item.statusText}}</div>
 							</li>
 						</ul>
 					</div>
@@ -98,14 +122,14 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr ng-repeat="item in ctrl.theOrder.orderDetails">
+					<tbody >
+						<tr ng-repeat="item in ctrl.theOrder.newOrderDetails">
 							<td class="cart_product">
-								<a href="#/productDetail/{{item.product.id}}"><img ng-src="img/product/{{item.product.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
+								<a href="#/productDetail/{{item.frameId}}"><img ng-src="img/product/{{item.thumbnail}}" style="width: 110px;margin-right: 20px;" alt=""></a>
 							</td>
 							<td class="cart_description" style="text-align: left;">
-								<h4><a href="#/productDetail/{{item.product.prodId}}">{{item.product.name}}</a></h4>
-								<p>Store ID: {{item.product.id}}</p>
+								<h4><a href="#/productDetail/{{item.frameId}}">{{item.name}}</a></h4>
+								<p>Store ID: {{item.frameId}}</p>
 							</td>
 							<td class="cart_price" style="text-align: right;">
 								<p>{{item.framePriceAtThatTime*(100 - item.frameDiscountAtThatTime)/100 | number:0}} đ</p>
@@ -156,6 +180,8 @@
 										<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
 										<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%){{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
 										<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+										<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
+										<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 									</ul>
 
 								</div>

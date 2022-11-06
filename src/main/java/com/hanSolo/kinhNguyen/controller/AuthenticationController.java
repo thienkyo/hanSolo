@@ -92,8 +92,16 @@ public class AuthenticationController {
         if (memOpt.isEmpty()) {
             return new GenericResponse("",Utility.FAIL_ERRORCODE,"member not exist or disable");
         }
-
         Member m = memOpt.get();
+        if(member.getNewPass() != null && !member.getNewPass().isEmpty()){
+            if(member.getOldPass() != null && !member.getOldPass().equals(memOpt.get().getPass())){
+                return new GenericResponse("",Utility.FAIL_ERRORCODE,"wrong pass");
+            }else{
+                m.setPass(member.getNewPass());
+            }
+        }
+
+
         m.setAddress(member.getAddress());
         m.setFullName(member.getFullName());
         m.setEmail(m.getEmail());

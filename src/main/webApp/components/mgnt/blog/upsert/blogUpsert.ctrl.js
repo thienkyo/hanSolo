@@ -35,7 +35,6 @@ angular.module('blogUpsertModule')
 		if(self.picFile){
 			if(self.picFile.result){
 				self.article.thumbnail = self.picFile.result;
-				console.log(self.article);
 			}
 		}
 		
