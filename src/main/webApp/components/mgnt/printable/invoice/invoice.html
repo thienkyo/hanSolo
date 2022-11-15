@@ -49,14 +49,14 @@
 <body class="A5">
 
 	<section class="sheet padding-10mm">
-		<table>
+		<table style="width: 100%;">
 			<tbody>
 			<tr>
 				<td>
 					<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 150px;"/>
 				</td>
 				<td>
-					<p style="margin-bottom: 0px;margin-top: 0px;font-weight: bold;">CHUYÊN CÁC LOẠI KÍNH</p>
+					<p style="margin-bottom: 0px;margin-top: 0px;font-weight: bold;">CHUYÊN CÁC LOẠI KÍNH <span style="float: right;font-size: 14px;font-weight: 400;">Mã: {{ctrl.theOrder.id}}</span></p>
 					<p style="margin: 3px 0px 0px 15px;">- Kính Cận - Kính Viễn</p>
 					<p style="margin: 3px 0px 0px 15px;">- Kính Loạn - Kính Đa Tròng</p>
 					<p style="margin-bottom: 0px;margin-top: 15px;font-weight: bold;">KHÚC XẠ NHÃN KHOA KỸ THUẬT CAO</p>
@@ -75,7 +75,7 @@
 		</h4>
 
 		<h1 style="text-align: center;margin-bottom: 0px;">HOÁ ĐƠN</h1>
-		<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.theOrder.id}}</p>
+		<!--<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.theOrder.id}}</p>-->
 
 		<div >
 			<p style="margin-bottom: 0mm;">
@@ -124,11 +124,11 @@
 		<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 0px;">
 			<thead>
 			<tr>
-				<td style="padding: 5px 0 0 5px;">Tổng: {{ctrl.theOrder.subTotal | number:0}}đ</td>
-				<td style="padding: 5px 0 0 5px;">Giảm({{ctrl.theOrder.couponDiscount}}%) {{ctrl.theOrder.couponAmount | number:0}}đ</td>
-				<td style="padding: 5px 0 0 5px;">Thành tiền: {{ctrl.theOrder.total | number:0}}đ</td>
-				<td style="padding: 5px 0 0 5px;">Cọc: {{ctrl.theOrder.deposit | number:0}}đ</td>
-				<td style="padding: 5px 0 0 5px;">Còn lại: {{ctrl.theOrder.deposit ==0 ? '0' : ctrl.theOrder.remain | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;line-height: 25px;">Tổng: {{ctrl.theOrder.subTotal | number:0}}đ </td>
+				<td style="padding: 5px 0 0 5px;line-height: 25px;">Giảm({{ctrl.theOrder.couponDiscount}}%) {{ctrl.theOrder.couponAmount | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;line-height: 25px;">Thành tiền: {{ctrl.theOrder.total | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;line-height: 25px;">Cọc: {{ctrl.theOrder.deposit | number:0}}đ</td>
+				<td style="padding: 5px 0 0 5px;line-height: 25px;">Còn lại: {{ctrl.theOrder.deposit ==0 ? '0' : ctrl.theOrder.remain | number:0}}đ</td>
 			</tr>
 			</thead>
 		</table>

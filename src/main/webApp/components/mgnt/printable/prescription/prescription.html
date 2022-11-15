@@ -61,6 +61,9 @@
 					<p style="font-size: 10px;margin-top: 4px;">Hotline: 090 801 7383 - 079 990 5714</p>
 
 				</td>
+				<td style="width: 95px;text-align: right;float: left;">
+					Mã:  {{ctrl.thePrescription.id}}/{{ctrl.thePrescription.orderDetails[0].id}}
+				</td>
 			</tr>
 			</tbody>
 		</table>
@@ -72,7 +75,7 @@
 		</h4>
 
 		<h1 style="text-align: center;margin-bottom: 0px;">ĐƠN KÍNH</h1>
-		<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.thePrescription.id}}/{{ctrl.thePrescription.orderDetails[0].id}}</p>
+		<!--<p style="text-align: center;font-size: 10px;margin: 0mm 0mm 5mm 0mm;">Mã hoá đơn: {{ctrl.thePrescription.id}}/{{ctrl.thePrescription.orderDetails[0].id}}</p>-->
 
 		<div >
 			<p style="margin-bottom: 0mm;">
@@ -94,7 +97,7 @@
 				<td>
 					<div style="width: 45mm;float: left;">
 						<ul class="roman" style="padding-left: 15px;margin-bottom: 5px;">
-							<li> <div style="font-weight: bold;">Thị lực không kính</div>
+							<li> <div style="font-weight: bold;">Thị lực không kính:</div>
 								<ul class="square" style="padding-left: 15px;">
 									<li>MP: {{ctrl.thePrescription.orderDetails[0].odVasc}}</li>
 									<li>MT: {{ctrl.thePrescription.orderDetails[0].osVasc}}</li>
