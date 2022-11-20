@@ -272,6 +272,12 @@ public class ManagementController {
         return	order;
     }
 
+    @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
+    public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
+        orderRepo.delete(order);
+        return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)

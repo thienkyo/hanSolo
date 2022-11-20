@@ -50,6 +50,7 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].gender = self.theOrder.gender;
     }
 
+
     // open datePicker
     self.openDP = function() {
         self.DPisOpen = true;
@@ -137,9 +138,13 @@ angular.module('storeOrderModule')
 
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
+                self.isSaveButtonPressed=true;
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data; // return after saving order, order_return_status would be orderid
                     self.newOrderId = data.replyStr;
+                    self.isSaveButtonPressed=false;
+                    self.isErrorMsg=false;
+                    $location.path('/mgnt/storeOrder/'+self.newOrderId);
                 });
             }
         }else{
@@ -170,10 +175,15 @@ angular.module('storeOrderModule')
         });
     }else{
         self.theOrder = new OrderDO;
+        console.log(self.theOrder);
         self.theOrder.location='STORE';
         self.theOrder.orderDetails = [new OrderDetailDO()];
+        self.theOrder.gender=true;
+        self.theOrder.orderDetails[0].gender=true;
     }
 
+
+    self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
 
 
 }]);

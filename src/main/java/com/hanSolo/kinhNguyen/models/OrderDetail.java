@@ -119,6 +119,28 @@ public class OrderDetail {
     @Column(name = "gender")
     private Boolean gender;
 
+    @Column(name = "od_previous_prescript", length = 40)
+    private String odPreviousPrescript;
+
+    @Column(name = "os_previous_prescript", length = 40)
+    private String osPreviousPrescript;
+
+    public String getOsPreviousPrescript() {
+        return osPreviousPrescript;
+    }
+
+    public void setOsPreviousPrescript(String osPreviousPrescript) {
+        this.osPreviousPrescript = osPreviousPrescript;
+    }
+
+    public String getOdPreviousPrescript() {
+        return odPreviousPrescript;
+    }
+
+    public void setOdPreviousPrescript(String odPreviousPrescript) {
+        this.odPreviousPrescript = odPreviousPrescript;
+    }
+
     public Boolean getGender() {
         return gender;
     }

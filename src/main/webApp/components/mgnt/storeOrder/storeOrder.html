@@ -33,6 +33,19 @@
 .autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
 	width: 700px !important;
 }
+
+.inactive {
+	color: #ccc;
+	pointer-events: none;
+	cursor: default;
+
+  	display: block;
+	padding: 12px 10px;
+	text-align: center;
+	letter-spacing: 2px;
+	background-color: darkgray;
+
+ }
 </style>
 <link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <!-- Shopping Cart Section Begin -->
@@ -140,7 +153,7 @@
 						<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
 						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>
-					<a href="" class="primary-btn" ng-click="ctrl.saveOrder()">Save order</a>
+					<a href="" ng-click="ctrl.saveOrder()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order'}}</a>
 					<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
 						 style="margin-top:20px;">
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -226,13 +239,13 @@
 							<div class="col-md-6">
 								<div class="checkout__input">
 									<p>Mắt phải</p>
-									<input type="text"  ng-model="item.odVasc" ng-change="ctrl.clearErrorMsg()">
+									<input type="text"  ng-model="item.odVasc" >
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="checkout__input">
 									<p>Mắt trái</p>
-									<input type="text"  ng-model="item.osVasc" ng-change="ctrl.clearErrorMsg()">
+									<input type="text"  ng-model="item.osVasc" >
 								</div>
 							</div>
 						</div>

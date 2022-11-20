@@ -44,6 +44,15 @@
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
 					<td title="'from'" filter="{ 'location' : 'text'}"  sortable="'location'" style="width:100px;">{{order.location}}</td>
 			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(order.status)">{{order.statusName}}</td>
+					<td title="'delete'" style="width:fit-content;" >
+						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+						<p ng-show="ctrl.deletingOrderId == order.id">
+							Are you sure?
+							<a ng-click="ctrl.deleteOrder(order)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete(order)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+						</p>
+
+					</td>
 			    </tr>
 			</table>
         </div>

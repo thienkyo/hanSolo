@@ -16,6 +16,10 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 
     Page<ProductInterface> findByStatusOrderByGmtModifyDesc(Boolean status, Pageable pageable);
 
+    Page<ProductInterface> findByCategories_IdNotOrderByGmtModifyDesc(@NonNull Integer id, Pageable pageable);
+
+    Page<Product> findByCategories_IdNotAndStatusOrderByGmtModifyDesc(@NonNull Integer id, Boolean status, Pageable pageable);
+
     List<Product> findFirst8ByStatusOrderByGmtModifyDesc(int status);
 
     List<ProductInterface> findByNameContainsIgnoreCaseAndStatus(@NonNull String name, Boolean status);

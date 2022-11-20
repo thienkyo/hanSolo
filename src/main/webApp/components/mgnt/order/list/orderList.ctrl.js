@@ -6,6 +6,7 @@ angular.module('orderListModule')
 	function($rootScope, $routeParams,$location,memberService,orderListService,NgTableParams,OrderStatusArray,cartService,AmountList) {
 	var self = this;
 	self.orderList = [];
+	self.dynamicTooltipText = "thest";
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "120px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
@@ -33,6 +34,23 @@ angular.module('orderListModule')
 		});
 		
 	}
+
+	self.deleteOrder = function(order){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        orderListService.deleteOrder(order).then(function (data) {
+            self.responseStr = data;
+            console.log(data);
+            var index = self.orderList.indexOf(order);
+            self.orderList.splice(index,1);
+            self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
+        });
+    }
 	
 	self.getOrderByTerm = function(){
 		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
@@ -64,12 +82,14 @@ angular.module('orderListModule')
 		    self.theOrder = order;
 		}
 	}
-	
-	self.deleteOrder = function(order){
-		orderListService.deleteOrder(order).then(function (data) {
-			self.responseStr = data;
-		});
-	}
+
+    self.promptDelete = function(orderId){
+
+        self.deletingOrderId = self.deletingOrderId ? false : orderId;
+    }
+    self.resetDelete = function(){
+        self.deletingOrderId = false;
+    }
 	
 	function engineerOrderList(){
 		self.statusNumber.ordered = 0;

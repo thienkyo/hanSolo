@@ -127,7 +127,8 @@ angular.module('app')
         })
         .otherwise(
             { redirectTo: '/'}
-        );
+        )
+        ;
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
     $httpProvider.interceptors.push('APIInterceptor');
 });
