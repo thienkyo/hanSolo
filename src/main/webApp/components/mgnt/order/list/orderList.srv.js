@@ -5,7 +5,7 @@ angular.module('orderListModule')
 			getOrdersForMgnt : getOrdersForMgnt, // 50 order
 			getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
-			updateOrder : updateOrder,
+			/*updateOrder : updateOrder,*/
 			getOrderById : getOrderById,
 			deleteOrder : deleteOrder
 			};
@@ -31,20 +31,21 @@ angular.module('orderListModule')
 			return response.data;
 		});
 	}
-	
-	function updateOrderStatus(orderId,status){
-		var url = "mgnt/updateOrderStatus/"+orderId+"/"+status;
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}
 
+	function updateOrderStatus(order){
+        var url = "mgnt/updateOrderStatus";
+        return ajaxService.post(url,order,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+/*
 	function updateOrder(order){
     		var url = "mgnt/updateOrder";
     		return ajaxService.post(url,order,{}).then(function(response){
     			return response.data;
     		});
-    	}
+    	}*/
 	
 	function deleteOrder(order){
 		var url = "mgnt/deleteOrder";

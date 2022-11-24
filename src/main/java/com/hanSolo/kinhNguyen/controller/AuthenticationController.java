@@ -75,6 +75,9 @@ public class AuthenticationController {
             }
         }
         for(SmsUserInfo userInfo : smsUserList){
+            if(userInfo.getPhone().replace(" ","").length() < 10){
+                continue;
+            }
             Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(userInfo.getPhone());
             if(userInfoDBOtp.isPresent()){
                 userInfo.setId(userInfoDBOtp.get().getId());

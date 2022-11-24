@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -241,18 +242,18 @@ public class ManagementController {
     /////////////////////////Orders section///////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
-    public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
+    public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
         if(amount==50){
-            orderList =  orderRepo.findFirst50ByOrderByGmtModifyDesc();
+            orderList =  orderRepo.findFirst50ByOrderByIdDesc();
         }else{
-            orderList = orderRepo.findAllByOrderByGmtModifyDesc();
+            orderList = orderRepo.findAllByOrderByIdDesc();
         }
         return orderList;
     }
 
-    @RequestMapping(value = "updateOrder", method = RequestMethod.POST)
-    public GenericResponse updateOrder(@RequestBody final Order order) throws ServletException, ParseException {
+    @RequestMapping(value = "updateOrderStatus", method = RequestMethod.POST)
+    public GenericResponse updateOrder(@RequestBody final Order order) throws ParseException {
         orderRepo.updateStatusAndGmtModifyById(order.getStatus(),Utility.getCurrentDate(),order.getId());
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }

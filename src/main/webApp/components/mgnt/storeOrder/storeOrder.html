@@ -68,7 +68,8 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
-							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
+							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{10,10}$/"
+								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
 						</div>
 					</div>
 				</div>

@@ -6,10 +6,10 @@ angular.module('orderListModule')
 	function($rootScope, $routeParams,$location,memberService,orderListService,NgTableParams,OrderStatusArray,cartService,AmountList) {
 	var self = this;
 	self.orderList = [];
-	self.dynamicTooltipText = "thest";
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "120px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
+	self.isUpdatingOrderStatus = false; // disable/able the select for update order status
 	
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -25,11 +25,13 @@ angular.module('orderListModule')
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 	});
 	
-	self.updateOrder = function(order){
+	self.updateOrderStatus = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
-		orderListService.updateOrder(order).then(function(data){
+	    self.isUpdatingOrderStatus = true;
+	    setTimeout(function(){ console.log("After 5 seconds!"); }, 5000);
+		orderListService.updateOrderStatus(order).then(function(data){
 			self.responseStr = data.replyStr;
-			//self.theOrder.status = self.newOrderStatus;
+			self.isUpdatingOrderStatus = false;
 			//engineerOrderList();
 		});
 		
@@ -54,7 +56,8 @@ angular.module('orderListModule')
 	
 	self.getOrderByTerm = function(){
 		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
-			self.orderList = data;;
+			self.orderList = data;
+			self.orderList.forEach(calculateOrderTotal);
 			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		});
 	}

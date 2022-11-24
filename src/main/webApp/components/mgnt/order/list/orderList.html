@@ -40,10 +40,17 @@
 			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"dd-MM-yyyy  HH:mm:ss"}}</a>
 			        </td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;">{{order.total | number:0 }}đ</td>
-			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'">{{order.shippingPhone}}</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'">{{order.shippingPhone | tel}}</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
 					<td title="'from'" filter="{ 'location' : 'text'}"  sortable="'location'" style="width:100px;">{{order.location}}</td>
-			        <td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" ng-style="ctrl.setStyle(order.status)">{{order.statusName}}</td>
+			        <td title="'status'"  >
+						<!--{{order.statusName}}-->
+						<select  ng-model="order.status"  ng-change="ctrl.updateOrderStatus(order)"
+								 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
+								 ng-disabled="ctrl.isUpdatingOrderStatus"
+								 style="height: 40px;" ng-style="ctrl.setStyle(order.status)">
+						</select>
+					</td>
 					<td title="'delete'" style="width:fit-content;" >
 						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
 						<p ng-show="ctrl.deletingOrderId == order.id">
@@ -62,7 +69,7 @@
 		<div class="container">
 			<div class="row" >
 				<div class="col-sm-3">
-					<select  ng-model="ctrl.theOrder.status"  ng-change="ctrl.updateOrder(ctrl.theOrder)"
+					<select  ng-model="ctrl.theOrder.status"  ng-change="ctrl.updateOrderStatus(ctrl.theOrder)"
 							 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
 							 style="height: 40px;">
 				    </select> 

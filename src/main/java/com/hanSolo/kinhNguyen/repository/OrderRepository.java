@@ -12,8 +12,9 @@ import java.util.List;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer> {
     List<Order> findByShippingPhoneOrderByIdDesc(@NonNull String shippingPhone);
-    List<Order> findFirst50ByOrderByGmtModifyDesc();
-    List<Order> findAllByOrderByGmtModifyDesc();
+    List<Order> findFirst50ByOrderByIdDesc();
+
+    List<Order> findAllByOrderByIdDesc();
 
     @Transactional
     @Modifying

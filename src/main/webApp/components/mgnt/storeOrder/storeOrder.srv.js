@@ -1,14 +1,14 @@
 'use strict';
 angular.module('storeOrderModule')
 .factory('storeOrderService', ['ajaxService',function(ajaxService) {
-		var orderListService = {
+		var storeOrderService = {
 			getOrdersForMgnt : getOrdersForMgnt,
 			getAllOrdersForMgnt : getAllOrdersForMgnt,
-			updateOrderStatus : updateOrderStatus,
+			/*updateOrderStatus : updateOrderStatus,*/
 			updateOrder : updateOrder,
 			deleteOrder : deleteOrder
 			};
-	return orderListService;
+	return storeOrderService;
 	
 	function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;
@@ -23,13 +23,13 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}
-	
+	/*
 	function updateOrderStatus(orderId,status){
 		var url = "mgnt/updateOrderStatus/"+orderId+"/"+status;
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}
+	}*/
 
 	function updateOrder(order){
     		var url = "mgnt/updateOrder";
