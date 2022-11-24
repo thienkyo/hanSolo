@@ -7,7 +7,7 @@ angular.module('orderListModule')
 	var self = this;
 	self.orderList = [];
 	self.OrderStatusArray=OrderStatusArray;
-	self.statusStyle = { "width": "120px" };
+	self.statusStyle = { "width": "100px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
 	self.isUpdatingOrderStatus = false; // disable/able the select for update order status
 	
@@ -69,7 +69,7 @@ angular.module('orderListModule')
 			self.statusStyle.color = "blue";
 		}
 		else{
-			self.statusStyle = { "width": "120px" }
+			self.statusStyle = { "width": "100px" }
 		}
 		return self.statusStyle;
 	}
