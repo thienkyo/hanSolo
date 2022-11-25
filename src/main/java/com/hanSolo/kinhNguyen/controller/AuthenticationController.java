@@ -74,16 +74,19 @@ public class AuthenticationController {
                         Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation()));
             }
         }
-        for(SmsUserInfo userInfo : smsUserList){
-            if(userInfo.getPhone().replace(" ","").length() < 10){
+        List<SmsUserInfo> smsUserResult = new ArrayList<>();
+        for(SmsUserInfo smsUserInfo : smsUserList){
+            if(smsUserInfo.getPhone().replace(" ","").length() < 10){
+
                 continue;
             }
-            Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(userInfo.getPhone());
+            Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
             if(userInfoDBOtp.isPresent()){
-                userInfo.setId(userInfoDBOtp.get().getId());
+                continue;
             }
+            smsUserResult.add(smsUserInfo);
         }
-        smsUserInfoRepo.saveAll(smsUserList);
+        smsUserInfoRepo.saveAll(smsUserResult);
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }

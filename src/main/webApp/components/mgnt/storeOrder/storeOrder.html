@@ -68,7 +68,7 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
-							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{10,10}$/"
+							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{2,17}$/"
 								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
 						</div>
 					</div>
@@ -235,18 +235,39 @@
 								</div>
 							</div>
 						</div>
-						<h4 style="padding-bottom: 20px;">Thị lực không kính </h4>
 						<div class="row">
 							<div class="col-md-6">
+								<h4 style="padding-bottom: 0px;">Thị lực không kính </h4>
+							</div>
+							<div class="col-md-6">
+								<h4 style="padding-bottom: 0px;">Độ kính cũ </h4>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-3">
 								<div class="checkout__input">
 									<p>Mắt phải</p>
 									<input type="text"  ng-model="item.odVasc" >
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="checkout__input">
 									<p>Mắt trái</p>
 									<input type="text"  ng-model="item.osVasc" >
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="checkout__input">
+									<p>Mắt phải</p>
+									<input type="text"  ng-model="item.odPreviousPrescript" >
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="checkout__input">
+									<p>Mắt trái</p>
+									<input type="text"  ng-model="item.osPreviousPrescript" >
 								</div>
 							</div>
 						</div>

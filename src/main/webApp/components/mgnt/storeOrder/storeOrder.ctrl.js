@@ -148,7 +148,7 @@ angular.module('storeOrderModule')
                 });
             }
         }else{
-            self.isErrorMsg ='Cần nhập tên/số điện thoại.';
+            self.isErrorMsg ='Cần nhập tên/số điện thoại(tối thiểu 3 số).';
         }
 
     }
@@ -168,6 +168,7 @@ angular.module('storeOrderModule')
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
+                console.log(self.theOrder);
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
