@@ -6,6 +6,8 @@ angular.module('couponModule')
 		self.statusList = CommonStatusArray;
 		self.theCoupon = new CouponDO;
 		self.statusStyle = {};
+		self.discountOrderNumber = 0;
+		self.totalDiscountAmount = 0;
 
 		if(!memberService.isAdmin()){
 			$location.path('#/');
@@ -17,6 +19,13 @@ angular.module('couponModule')
 			self.couponList = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
+
+		couponService.loadUsedCouponHistory().then(function (data) {
+		    console.log(data);
+		    data.forEach(calculateUserCoupon);
+            self.usedCouponList = data;
+            self.usedCouponTableParams = new NgTableParams({}, { dataset: self.usedCouponList});
+        });
 		
 		self.updateCoupon = function(coupon){
 			self.theCoupon = coupon;
@@ -70,6 +79,11 @@ angular.module('couponModule')
             }else{
                 coupon.status = 0;
             }
+        }
+
+        function calculateUserCoupon(usedCoupon){
+            usedCoupon.discountAmount = usedCoupon.couponValue*usedCoupon.orderAmount/100;
+            self.totalDiscountAmount += usedCoupon.discountAmount;
         }
 
         self.setStyle = function(status){

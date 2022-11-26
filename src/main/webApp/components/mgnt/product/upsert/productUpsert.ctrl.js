@@ -49,7 +49,6 @@ angular.module('productUpsertModule')
 
     }
 
-	
 	self.upsert = function(){
 		self.responseStr = false;
 		if(self.picFile){

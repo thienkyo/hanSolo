@@ -4,7 +4,8 @@ angular.module('couponModule')
 		var couponService = {
 				getAllCoupons : getAllCoupons,
 				upsert : upsert,
-				deleteCoupon : deleteCoupon
+				deleteCoupon : deleteCoupon,
+				loadUsedCouponHistory : loadUsedCouponHistory
 			};
 	return couponService;
 
@@ -29,5 +30,12 @@ angular.module('couponModule')
 			return response.data;
 		});
 	}
+
+	function loadUsedCouponHistory(coupon){
+        var url = "mgnt/loadUsedCouponHistory";
+        return ajaxService.post(url,coupon,{}).then(function(response){
+            return response.data;
+        });
+    }
 
  }]);

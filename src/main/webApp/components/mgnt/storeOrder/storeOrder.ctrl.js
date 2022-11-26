@@ -24,15 +24,35 @@ angular.module('storeOrderModule')
             self.calculateOrderTotal();
         }
 
+    self.copy1Tab = function(tab){
+        var newTab = Object.assign({}, tab);
+        newTab.id = null;
+        newTab.product = null;
+        newTab.framePriceAfterSale = 0;
+        newTab.framePriceAtThatTime = 0;
+        newTab.frameDiscountAtThatTime = 0;
+        newTab.frameNote = "";
+        newTab.lensNote = "";
+        newTab.lensPrice = 0;
+        self.theOrder.orderDetails.push(newTab);
+        console.log(self.theOrder);
+    }
+
     self.add1Tab = function(){
         self.theOrder.orderDetails.push(new OrderDetailDO());
     }
 
-    self.remove1Tab = function(){
+    self.removeLastTab = function(){
          if(self.theOrder.orderDetails.length > 1){
             self.theOrder.orderDetails.pop();
         }
     }
+
+    self.remove1Tab = function(index){
+             if(self.theOrder.orderDetails.length > 1){
+                self.theOrder.orderDetails.splice(index,1);
+            }
+        }
 
     self.nameCopy = function(){
         self.theOrder.orderDetails[0].name = self.theOrder.shippingName;
@@ -49,7 +69,6 @@ angular.module('storeOrderModule')
     self.genderCopy = function(){
         self.theOrder.orderDetails[0].gender = self.theOrder.gender;
     }
-
 
     // open datePicker
     self.openDP = function() {
@@ -68,14 +87,29 @@ angular.module('storeOrderModule')
             return {id:0,name:'no result',type:1,image:''};
         }
     }
+    self.querySearchLens = function(searchText){
+            if(searchText){
+                var url = "search/productMngt/"+searchText;
+                return ajaxService.get(url,null,{}).then(function(response){
+                    return response.data;
+                });
+
+            }else{
+                return {id:0,name:'no result',type:1,image:''};
+            }
+        }
 
     self.searchTextChange =function(text) {
         //console.log('Text changed to ' + text);
     }
 
+    self.searchLensTextChange =function(text) {
+        //console.log('Text changed to ' + text);
+    }
+
     self.selectedItemChange = function(one,orderDetail) {
         if(one){
-          console.log('selectedItemChange in if');
+       //   console.log('selectedItemChange in if');
           orderDetail.product = one;
           orderDetail.frameNote = one.name;
          // orderDetail.framePriceAtThatTime = one.name;
@@ -83,6 +117,15 @@ angular.module('storeOrderModule')
         }
         self.calculateOrderTotal();
     }
+
+    self.selectedLensChange = function(one,orderDetail) {
+            if(one){
+              console.log('selectedLensChange in if');
+              orderDetail.lensNote = one.name;
+              orderDetail.lensPrice = one.sellPrice;
+            }
+            self.calculateOrderTotal();
+        }
 
     self.removeSearchResult = function(orderDetail){
         orderDetail.product = null;

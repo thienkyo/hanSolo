@@ -68,7 +68,7 @@
 			</tbody>
 		</table>
 
-		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 3mm 85mm;">
+		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 3mm 80mm;">
 			Ngày {{ctrl.thePrescription.gmtCreate | date:"dd"}}
 			Tháng {{ctrl.thePrescription.gmtCreate | date:"MM"}}
 			Năm {{ctrl.thePrescription.gmtCreate | date:"yyyy"}}
@@ -116,8 +116,6 @@
 			</tr>
 			</thead>
 		</table>
-
-
 
 
 
@@ -176,17 +174,27 @@
 				<li>LỜI DẶN
 					<ul class="square" style="padding-left: 15px;">
 						<li>Đeo kính thường xuyên </li>
-						<li>Tái khám sau __ tháng</li>
-						<li>Nhớ đem theo đơn kính tái khám</li>
+						<li>Tái khám sau 6 tháng</li>
+						<li>{{ctrl.thePrescription.orderDetails[0].orderDetailNoteForCus}}</li>
 					</ul>
 				</li>
 			</ul>
 		</div>
-		<div style="float: right;margin-top: 15px;margin-right: 40px;">
-			NGƯỜI KHÁM:
+
+		<div style="width: 40mm;float: left;margin-left: 15px;">
+			<ul class="roman" style="padding-left: 0px;">
+				<li>Độ kính cũ:
+					<ul class="square" style="padding-left: 15px;">
+						<li>MP: {{ctrl.thePrescription.orderDetails[0].odPreviousPrescript}} </li>
+						<li>MT: {{ctrl.thePrescription.orderDetails[0].osPreviousPrescript}} </li>
+					</ul>
+				</li>
+			</ul>
 		</div>
 
-
+		<!--<div style="float: right;margin-top: 15px;margin-right: 40px;">
+			NGƯỜI KHÁM:
+		</div>-->
 
 	</section>
 

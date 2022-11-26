@@ -116,5 +116,38 @@ form .progress {
 			    </tr>
 			</table>
         </div>
+
+		<h3 style="padding-bottom: 40px;">History: discount order: {{ctrl.usedCouponList.length}} |  tolal: {{ctrl.totalDiscountAmount | number:0}}đ</h3>
+		<!--data table-->
+		<div class="table-responsive" style="width: fit-content;">
+			<table ng-table="ctrl.usedCouponTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+				<tr ng-repeat="usedCoupon in $data">
+					<td title="'orderId'" filter="{ 'orderId': 'number'}" sortable="'orderId'" style="width:120px;text-align: center;">
+						<a href="#/mgnt/storeOrder/{{usedCoupon.orderId}}" target="_blank" >{{usedCoupon.orderId}}</a>
+					</td>
+					<td title="'code'" filter="{ 'code': 'text'}" sortable="'code'"  style="width:130px;">
+						{{usedCoupon.code}}
+					</td>
+					<td title="'value'" filter="{ 'couponValue': 'text'}" sortable="'couponValue'"  style="width:120px;text-align: center;">
+						{{usedCoupon.couponValue}}%
+					</td>
+					<td title="'amount'" filter="{ 'orderAmount' : 'text'}" sortable="'orderAmount'" style="text-align: right;width:120px;">
+						{{usedCoupon.orderAmount | number:0}}đ
+					</td>
+					<td title="'discount'" filter="{ 'discountAmount': 'number'}" sortable="'discountAmount'"  style="text-align: right;width:130px;">
+						{{usedCoupon.discountAmount | number:0}}đ
+					</td>
+					<td title="'order date'" filter="{ 'orderDate' : 'text'}" sortable="'orderDate'" >
+						{{usedCoupon.orderDate | date:"yyyy-MM-dd hh:mm:ss"}}
+					</td>
+
+					<!--<td title="'delete'" style="width:100px;" >
+						<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+					</td>-->
+				</tr>
+			</table>
+		</div>
+
+
 	</div>
 </section>

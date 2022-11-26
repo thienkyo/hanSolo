@@ -28,13 +28,11 @@ angular.module('orderListModule')
 	self.updateOrderStatus = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
 	    self.isUpdatingOrderStatus = true;
-	    setTimeout(function(){ console.log("After 5 seconds!"); }, 5000);
 		orderListService.updateOrderStatus(order).then(function(data){
 			self.responseStr = data.replyStr;
 			self.isUpdatingOrderStatus = false;
 			//engineerOrderList();
 		});
-		
 	}
 
 	self.deleteOrder = function(order){

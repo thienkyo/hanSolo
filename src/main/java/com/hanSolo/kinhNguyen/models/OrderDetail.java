@@ -125,6 +125,17 @@ public class OrderDetail {
     @Column(name = "os_previous_prescript", length = 40)
     private String osPreviousPrescript;
 
+    @Column(name = "order_detail_note_for_cus", length = 600)
+    private String orderDetailNoteForCus;
+
+    public String getOrderDetailNoteForCus() {
+        return orderDetailNoteForCus;
+    }
+
+    public void setOrderDetailNoteForCus(String orderDetailNoteForCus) {
+        this.orderDetailNoteForCus = orderDetailNoteForCus;
+    }
+
     public String getOsPreviousPrescript() {
         return osPreviousPrescript;
     }

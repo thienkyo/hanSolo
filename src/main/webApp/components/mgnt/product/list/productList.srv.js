@@ -3,7 +3,8 @@ angular.module('productListModule')
 .factory('productListService', ['ajaxService',function(ajaxService) {
 		var productListService = {
 			get20Products : get20Products,
-			getProductsForMgnt : getProductsForMgnt
+			getProductsForMgnt : getProductsForMgnt,
+			updateProductStatus : updateProductStatus
 			};
 	return productListService;
 	
@@ -20,5 +21,11 @@ angular.module('productListModule')
 			return response.data;
 		});
 	}
-      
+
+    function updateProductStatus(product){
+        var url = "mgnt/updateProductStatus";
+        return ajaxService.post(url,product,{}).then(function(response){
+            return response.data;
+        });
+    }
  }]);

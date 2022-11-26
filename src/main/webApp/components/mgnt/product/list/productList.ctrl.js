@@ -1,11 +1,15 @@
 'use strict';
 angular.module('productListModule')
 	.controller('productListController',['$rootScope','$location',
-										 'memberService','productListService',
+										 'memberService','productListService','CommonStatusArray',
 										 'NgTableParams','categoryService','AmountList','CategoryDO',
-	function($rootScope,$location,memberService,productListService,NgTableParams,categoryService,AmountList,CategoryDO) {
+	function($rootScope,$location,
+	        memberService,productListService,CommonStatusArray,
+	        NgTableParams,categoryService,AmountList,CategoryDO) {
 	var self = this;
-	self.statusStyle = { "width": "100px" };
+	self.statusStyle = { "width": "80px" };
+	self.statusList = CommonStatusArray;
+
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}
@@ -65,9 +69,18 @@ angular.module('productListModule')
 			self.statusStyle.color = "blue";
 		}
 		else{
-			self.statusStyle = { "width": "100px" }
+			self.statusStyle = { "width": "80px" }
 		}
 		return self.statusStyle;
 	}
+
+	self.updateProductStatus = function(product){
+        self.isUpdatingProductStatus = true;
+        productListService.updateProductStatus(product).then(function(data){
+            self.responseStr = data.replyStr;
+            console.log(data);
+            self.isUpdatingProductStatus = false;
+        });
+    }
 	
 }]);

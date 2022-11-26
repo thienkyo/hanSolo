@@ -1,10 +1,7 @@
 package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.models.*;
-import com.hanSolo.kinhNguyen.repository.CouponRepository;
-import com.hanSolo.kinhNguyen.repository.MemberRepository;
-import com.hanSolo.kinhNguyen.repository.OrderRepository;
-import com.hanSolo.kinhNguyen.repository.SmsUserInfoRepository;
+import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.response.MemberResponse;
@@ -12,6 +9,7 @@ import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +31,7 @@ public class AuthenticationController {
     @Autowired private OrderRepository orderRepo;
     @Autowired private CouponRepository couponRepo;
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
+    @Autowired private UsedCouponsRepository usedCouponsRepo;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public MemberResponse getMe(final HttpServletRequest request) throws ServletException {
@@ -77,7 +76,6 @@ public class AuthenticationController {
         List<SmsUserInfo> smsUserResult = new ArrayList<>();
         for(SmsUserInfo smsUserInfo : smsUserList){
             if(smsUserInfo.getPhone().replace(" ","").length() < 10){
-
                 continue;
             }
             Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
@@ -87,6 +85,15 @@ public class AuthenticationController {
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);
+
+        if(StringUtils.hasText(or.getCouponCode())){
+            int orderAmount = 0;
+            for( OrderDetail orderDetail : or.getOrderDetails()){
+                orderAmount += orderDetail.getFramePriceAtThatTime() + orderDetail.getLensPrice();
+            }
+            usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate()));
+        }
+
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }

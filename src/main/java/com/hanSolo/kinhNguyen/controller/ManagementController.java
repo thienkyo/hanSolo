@@ -21,36 +21,30 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/mgnt")
 public class ManagementController {
 
-    @Autowired
-    CategoryRepository categoryRepo;
+    @Autowired private CategoryRepository categoryRepo;
 
-    @Autowired
-    SupplierRepository supplierRepo;
+    @Autowired private SupplierRepository supplierRepo;
 
-    @Autowired
-    private ProductRepository prodRepo;
+    @Autowired private ProductRepository prodRepo;
 
-    @Autowired
-    private BannerRepository bannerRepo;
+    @Autowired private BannerRepository bannerRepo;
 
-    @Autowired
-    private MemberRepository memberRepo;
+    @Autowired private MemberRepository memberRepo;
 
-    @Autowired
-    private CouponRepository couponRepo;
+    @Autowired private CouponRepository couponRepo;
 
-    @Autowired
-    private ArticleRepository articleRepo;
+    @Autowired private ArticleRepository articleRepo;
 
     @Autowired private OrderRepository orderRepo;
 
     @Autowired private OrderDetailRepository orderDetailRepo;
+
+    @Autowired private UsedCouponsRepository usedCouponsRepo;
 
     @Autowired
     private Environment env;
@@ -132,10 +126,16 @@ public class ManagementController {
     @RequestMapping(value = "getProductById/{prodId}", method = RequestMethod.GET)
     public Product getProductById(@PathVariable final int prodId, final HttpServletRequest request) throws ServletException {
         return	prodRepo.findById(prodId).get();
-
     }
 
-    //////////////////////////// banner ///////////////////////////////
+    @RequestMapping(value = "updateProductStatus", method = RequestMethod.POST)
+    public GenericResponse updateProductStatus(@RequestBody final Product product) throws ParseException, InterruptedException {
+        prodRepo.updateStatusAndGmtModifyById(product.getStatus(),Utility.getCurrentDate(),product.getId());
+        //TimeUnit.SECONDS.sleep( 4);
+        return new GenericResponse("upsert_product_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// banner section ///////////////////////////////
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getBannerForMgnt", method = RequestMethod.GET)
@@ -188,7 +188,7 @@ public class ManagementController {
         return new GenericResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    //////////////////////////// Coupon ///////////////////////////////
+    //////////////////////////// Coupon section ///////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getAllCoupons", method = RequestMethod.GET)
     public List<Coupon> getAllCoupons(final HttpServletRequest request) throws ServletException {
@@ -211,7 +211,12 @@ public class ManagementController {
         return new GenericResponse("delete_coupon_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    //////////////////////////// blog/article ///////////////////////////////
+    @RequestMapping(value = "loadUsedCouponHistory", method = RequestMethod.POST)
+    public List<UsedCoupons> loadUsedCouponHistory(final HttpServletRequest request) throws ServletException {
+        return usedCouponsRepo.findByOrderByOrderDateDesc();
+    }
+
+    //////////////////////////// blog/article section ///////////////////////////////
     @RequestMapping(value = "getArticlesForMgnt/{amount}", method = RequestMethod.GET)
     public List<Article> getArticlesForMgnt(@PathVariable final int amount) throws ServletException {
         List<Article> articleList;
@@ -245,9 +250,9 @@ public class ManagementController {
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
         if(amount==50){
-            orderList =  orderRepo.findFirst50ByOrderByIdDesc();
+            orderList =  orderRepo.findFirst50ByOrderByGmtCreateDesc();
         }else{
-            orderList = orderRepo.findAllByOrderByIdDesc();
+            orderList = orderRepo.findAllByOrderByGmtCreateDesc();
         }
         return orderList;
     }
