@@ -12,7 +12,7 @@ angular.module('couponModule')
 		if(!memberService.isAdmin()){
 			$location.path('#/');
 		}
-		self.currentMember = memberService.getCurrentMember();
+		//self.currentMember = memberService.getCurrentMember();
 		
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);

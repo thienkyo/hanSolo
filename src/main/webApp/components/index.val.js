@@ -8,6 +8,11 @@ var OrderStatusArray=[
 	{name : 'khách xoá', value:5 }
 ];
 
+var BizExpenseStatusArray=[
+	{name : 'đã tạo', value:0 },
+	{name : 'xong', value:1 }
+];
+
 var CommonStatusArray=[
 	{name : 'active', value:true },
 	{name : 'inactive', value:false }
@@ -37,9 +42,11 @@ angular
 		.value('SupplierDO',SupplierDO)
 		.value('ArticleDO',ArticleDO)
 		.value('BannerDO',BannerDO)
+		.value('BizExpenseDO',BizExpenseDO)
 		.value('CouponDO',CouponDO)
 		.value('ShipCostDO',ShipCostDO)
 		.value('PaginationItemDO',PaginationItemDO)
+		.value('BizExpenseStatusArray',BizExpenseStatusArray)
 		.value('PaginationDO',PaginationDO);
 
 function OrderDO () {
@@ -221,7 +228,7 @@ function ArticleDO(){
 
 function BannerDO(){
 	this.id = 0;
-	this.name = 'banner name';
+	this.name = '';
 	this.status = true;
 	this.needText = true;
 	this.gmtCreate = (new Date()).getTime();
@@ -230,6 +237,18 @@ function BannerDO(){
 	this.description='description';
 	this.link='';
 	this.type='HOMEBANNER';
+}
+
+function BizExpenseDO(){
+	this.id = 0;
+	this.description = '';
+	this.status = 0;
+	this.orderId = null;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+	this.image='';
+	this.amount=null;
+	this.billDate=null;
 }
 
 function ShipCostDO(){

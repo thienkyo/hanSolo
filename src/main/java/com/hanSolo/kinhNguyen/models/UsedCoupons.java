@@ -10,12 +10,13 @@ public class UsedCoupons {
     public UsedCoupons() {
     }
 
-    public UsedCoupons(Integer orderId, String code, Integer couponValue, Integer orderAmount, Date orderDate) {
+    public UsedCoupons(Integer orderId, String code, Integer couponValue, Integer orderAmount, Date orderDate, String name) {
         this.orderId = orderId;
         this.code = code;
         this.couponValue = couponValue;
         this.orderAmount = orderAmount;
         this.orderDate = orderDate;
+        this.name = name;
     }
 
     @Id
@@ -34,6 +35,17 @@ public class UsedCoupons {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "order_date")
     private Date orderDate;
+
+    @Column(name = "name", length = 100)
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Date getOrderDate() {
         return orderDate;

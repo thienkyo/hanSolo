@@ -22,6 +22,7 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
+		console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 	});
 	
@@ -57,6 +58,7 @@ angular.module('orderListModule')
 			self.orderList = data;
 			self.orderList.forEach(calculateOrderTotal);
 			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+			engineerOrderList();
 		});
 	}
 	
@@ -85,7 +87,6 @@ angular.module('orderListModule')
 	}
 
     self.promptDelete = function(orderId){
-
         self.deletingOrderId = self.deletingOrderId ? false : orderId;
     }
     self.resetDelete = function(){

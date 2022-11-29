@@ -19,6 +19,7 @@ angular.module('loginModule')
                     var a = angular.fromJson(decodedString);
                     self.member.roles = a.roles;
                     self.member.name = a.name;
+                    self.member.phone = a.sub;
                     memberService.setCurrentMember(self.member);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');

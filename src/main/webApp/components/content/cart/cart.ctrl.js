@@ -6,7 +6,7 @@ angular.module('cartModule')
 	function($rootScope, cartService,cartStoreService,memberService,OrderDO,accountService,OrderDetailDO,MemberDO,$timeout) {
 		var self = this;
 		self.isShow = false;
-		self.currentMember = memberService.getCurrentMember();
+	//	self.currentMember = memberService.getCurrentMember();
 		self.currentCart = cartStoreService.getCurrentCart();
 		self.subTotal = 0;
 		self.total = 0;

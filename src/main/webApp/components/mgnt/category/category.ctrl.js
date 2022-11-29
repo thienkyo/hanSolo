@@ -11,7 +11,7 @@ angular.module('categoryModule')
 		if(!memberService.isAdmin()){
 			$location.path('#/');
 		}
-		self.currentMember = memberService.getCurrentMember();
+		//self.currentMember = memberService.getCurrentMember();
 		
 		categoryService.getAllCategories().then(function (data) {
 		//    console.log(data);

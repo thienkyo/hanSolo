@@ -38,7 +38,7 @@ public class Utility {
     final public static String ADMIN_ROLE = "ADMIN";
     final public static String SUPERADMIN_ROLE = "SUPERADMIN";
     final public static String MOD_ROLE = "MOD";
-    final public static String ACCOUNTTANT_ROLE = "ACCOUNTTANT";
+    final public static String ACCOUNTANT_ROLE = "ACCOUNTANT";
 
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";

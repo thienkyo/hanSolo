@@ -11,7 +11,7 @@ angular.module('supplierModule')
 		if(!memberService.isAdmin()){
 			$location.path('#/');
 		}
-		self.currentMember = memberService.getCurrentMember();
+		//self.currentMember = memberService.getCurrentMember();
 		
 		supplierService.getAllSuppliers().then(function (data) {
 			self.supplierList = data

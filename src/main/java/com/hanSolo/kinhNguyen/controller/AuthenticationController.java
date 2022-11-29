@@ -91,7 +91,7 @@ public class AuthenticationController {
             for( OrderDetail orderDetail : or.getOrderDetails()){
                 orderAmount += orderDetail.getFramePriceAtThatTime() + orderDetail.getLensPrice();
             }
-            usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate()));
+            usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
 
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");

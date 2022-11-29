@@ -7,6 +7,7 @@ import com.hanSolo.kinhNguyen.response.CouponResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.SupplierResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -46,26 +47,27 @@ public class ManagementController {
 
     @Autowired private UsedCouponsRepository usedCouponsRepo;
 
-    @Autowired
-    private Environment env;
+    @Autowired private BizExpenseRepository bizExpenseRepo;
+
+    @Autowired private Environment env;
 
     ////////////////////////////category section//////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getAllCategories", method = RequestMethod.GET)
-    public List<Category> getAllCategories(final HttpServletRequest request) throws ServletException {
+    public List<Category> getAllCategories(final HttpServletRequest request) {
         return categoryRepo.findByOrderByIdDesc();
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertCategory", method = RequestMethod.POST)
-    public CategoryResponse upsertCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
+    public CategoryResponse upsertCategory(@RequestBody final Category cate, final HttpServletRequest request) {
         Category newCate = categoryRepo.save(cate);
         return new CategoryResponse(newCate,Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "deleteCategory", method = RequestMethod.POST)
-    public GenericResponse deleteCategory(@RequestBody final Category cate, final HttpServletRequest request) throws ServletException {
+    public GenericResponse deleteCategory(@RequestBody final Category cate, final HttpServletRequest request)  {
         categoryRepo.delete(cate);
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
@@ -74,7 +76,7 @@ public class ManagementController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getAllSuppliers", method = RequestMethod.GET)
-    public List<Supplier> getAllSuppliers(final HttpServletRequest request) throws ServletException {
+    public List<Supplier> getAllSuppliers(final HttpServletRequest request) {
         return supplierRepo.findByOrderByGmtModifyDesc();
     }
 
@@ -156,9 +158,54 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteBanner", method = RequestMethod.POST)
-    public GenericResponse deleteBanner(@RequestBody final Banner banner, final HttpServletRequest request) throws ServletException {
+    public GenericResponse deleteBanner(@RequestBody final Banner banner, final HttpServletRequest request) {
         bannerRepo.delete(banner);
         return new GenericResponse("delete_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// Biz expense section ///////////////////////////////
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getBizExpenseForMgnt/{amount}", method = RequestMethod.GET)
+    public List<BizExpense> getBizExpenseForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+
+        List<BizExpense> bizExpenseList;
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(((List<String>) claims.get("roles")).contains(Utility.ACCOUNTANT_ROLE)){
+            if(amount==50){
+                bizExpenseList =  bizExpenseRepo.findFirst50ByOrderByGmtCreateDesc();
+            }else{
+                bizExpenseList = bizExpenseRepo.findByOrderByGmtCreateDesc();
+            }
+        }else{
+            if(amount==50){
+                bizExpenseList =  bizExpenseRepo.findFirst50ByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
+            }else{
+                bizExpenseList = bizExpenseRepo.findByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
+            }
+        }
+
+        return bizExpenseList;
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "upsertBizExpense", method = RequestMethod.POST)
+    public GenericResponse upsertBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
+        bizExpense.setGmtModify(Utility.getCurrentDate());
+        bizExpenseRepo.save(bizExpense);
+        return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "deleteBizExpense", method = RequestMethod.POST)
+    public GenericResponse deleteBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request)  {
+        bizExpenseRepo.delete(bizExpense);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "updateBizExpenseStatus", method = RequestMethod.POST)
+    public GenericResponse updateBizExpenseStatus(@RequestBody final BizExpense bizExpense) throws ParseException {
+        bizExpenseRepo.updateStatusAndGmtModifyById(bizExpense.getStatus(),Utility.getCurrentDate(),bizExpense.getId());
+        return new GenericResponse("upsert_bizExpense_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////////Member section/////////////////////////////
@@ -306,6 +353,9 @@ public class ManagementController {
                 break;
             case "BLOG.DETAIL":
                 dir = env.getProperty("hanSolo.uploadedFiles.blog.detail");
+                break;
+            case "BIZEXPENSE":
+                dir = env.getProperty("hanSolo.uploadedFiles.bizExpense");
                 break;
             default:
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

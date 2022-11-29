@@ -110,6 +110,11 @@ angular.module('app')
             controller: 'bannerController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/bizExpense',{
+            templateUrl: 'components/mgnt/bizExpense/bizExpense.html',
+            controller: 'bizExpenseController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/shipCost',{
             templateUrl: 'components/mgnt/shipCost/shipCost.html',
             controller: 'shipCostController',

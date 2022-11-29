@@ -5,7 +5,6 @@ angular.module('app', [
 		'ngCookies',
 		'networkServices', // ajax service
 		'productCategoryModule',
-	//	'chieffancypants.loadingBar',
 		'homeModule',
 		'collectionModule',
 		'productDetailModule',
@@ -28,6 +27,6 @@ angular.module('app', [
 		'blogListModule',
 		'blogUpsertModule',
 		'bannerModule',
+		'bizExpenseModule',
 		'ui.tinymce'
-
 ]);

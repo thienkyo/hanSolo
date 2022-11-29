@@ -15,6 +15,8 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     List<Order> findFirst50ByOrderByGmtCreateDesc();
 
+    List<Order> findFirst100ByOrderByGmtCreateDesc();
+
     List<Order> findAllByOrderByGmtCreateDesc();
 
     @Transactional

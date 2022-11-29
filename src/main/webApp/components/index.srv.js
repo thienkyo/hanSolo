@@ -10,6 +10,7 @@ angular.module('app')
 	//	makeSignupStr : makeSignupStr,
 		isLogin : isLogin,
 		isAdmin :isAdmin,
+		isAccountant :isAccountant,
 		isMod : isMod
 		};
 	return memberService;
@@ -51,6 +52,13 @@ angular.module('app')
 		}
 		return false;
 	}
+
+	function isAccountant(){
+        if(isLogin() && currentMember.roles.indexOf("ACCOUNTANT") != -1){
+            return true;
+        }
+        return false;
+    }
 	
 	function makeLoginStr(email,pass){
 		var deli = 'd3m';

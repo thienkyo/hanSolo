@@ -131,6 +131,9 @@ form .progress {
 					<td title="'value'" filter="{ 'couponValue': 'text'}" sortable="'couponValue'"  style="width:120px;text-align: center;">
 						{{usedCoupon.couponValue}}%
 					</td>
+					<td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
+						{{usedCoupon.name }}
+					</td>
 					<td title="'amount'" filter="{ 'orderAmount' : 'text'}" sortable="'orderAmount'" style="text-align: right;width:120px;">
 						{{usedCoupon.orderAmount | number:0}}đ
 					</td>
