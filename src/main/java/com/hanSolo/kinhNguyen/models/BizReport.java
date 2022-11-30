@@ -17,11 +17,11 @@ public class BizReport {
     @Column(name = "month", length = 2)
     private String month;
 
-    @Column(name = "in")
-    private Integer in;
+    @Column(name = "income")
+    private Integer income;
 
-    @Column(name = "out")
-    private Integer out;
+    @Column(name = "outcome")
+    private Integer outcome;
 
     @Column(name = "gmt_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -47,20 +47,20 @@ public class BizReport {
         this.gmtCreate = gmtCreate;
     }
 
-    public Integer getOut() {
-        return out;
+    public Integer getOutcome() {
+        return outcome;
     }
 
-    public void setOut(Integer out) {
-        this.out = out;
+    public void setOutcome(Integer outcome) {
+        this.outcome = outcome;
     }
 
-    public Integer getIn() {
-        return in;
+    public Integer getIncome() {
+        return income;
     }
 
-    public void setIn(Integer in) {
-        this.in = in;
+    public void setIncome(Integer income) {
+        this.income = income;
     }
 
     public String getMonth() {
