@@ -13,7 +13,6 @@ angular.module('bizExpenseModule')
 		$location.path('#/');
 	}
 
-	console.log(memberService.getCurrentMember());
 	self.currentMember = memberService.getCurrentMember();
 	self.theBizExpense.owner = self.currentMember.name;
 	self.theBizExpense.ownerPhone = self.currentMember.phone;

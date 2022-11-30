@@ -28,5 +28,7 @@ angular.module('app', [
 		'blogUpsertModule',
 		'bannerModule',
 		'bizExpenseModule',
+		'prescriptionListModule',
+		'customerSourceModule',
 		'ui.tinymce'
 ]);

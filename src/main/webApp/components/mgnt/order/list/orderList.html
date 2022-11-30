@@ -33,20 +33,28 @@
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
 			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.id}}</a>
 			        </td>
 			        <td title="'Date'" sortable="'gmtCreate'" style="width:180px;">
 			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"dd-MM-yyyy  HH:mm:ss"}}</a>
 			        </td>
-			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;">{{order.total | number:0 }}đ</td>
-			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'">{{order.shippingPhone | tel}}</td>
+			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:130px;">{{order.shippingPhone | tel}}</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
-					<td title="'from'" filter="{ 'location' : 'text'}"  sortable="'location'" style="width:100px;">{{order.location}}</td>
+					<td title="'from'" filter="{ 'location' : 'text'}"  sortable="'location'" style="width:80px;">{{order.location}}</td>
+
+					<td title="'source'" style="width:120px;">
+						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
+								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList"
+								 ng-disabled="ctrl.isUpdatingOrder" ng-show="order.location == 'STORE'">
+						</select>
+					</td>
+
 			        <td title="'status'"  sortable="'status'">
 						<select  ng-model="order.status"  ng-change="ctrl.updateOrderStatus(order)"
 								 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
-								 ng-disabled="ctrl.isUpdatingOrderStatus"
+								 ng-disabled="ctrl.isUpdatingOrder"
 								 style="height: 40px;" ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>

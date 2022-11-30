@@ -2,10 +2,7 @@ package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
-import com.hanSolo.kinhNguyen.response.CategoryResponse;
-import com.hanSolo.kinhNguyen.response.CouponResponse;
-import com.hanSolo.kinhNguyen.response.GenericResponse;
-import com.hanSolo.kinhNguyen.response.SupplierResponse;
+import com.hanSolo.kinhNguyen.response.*;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +46,8 @@ public class ManagementController {
     @Autowired private UsedCouponsRepository usedCouponsRepo;
 
     @Autowired private BizExpenseRepository bizExpenseRepo;
+
+    @Autowired private CustomerSourceRepository customerSourceRepo;
 
     @Autowired private Environment env;
 
@@ -239,7 +239,7 @@ public class ManagementController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getAllCoupons", method = RequestMethod.GET)
     public List<Coupon> getAllCoupons(final HttpServletRequest request) throws ServletException {
-        return couponRepo.findByOrderByGmtModifyDesc();
+        return couponRepo.findAllByOrderByGmtCreateDesc();
     }
 
     @SuppressWarnings("unchecked")
@@ -261,6 +261,22 @@ public class ManagementController {
     @RequestMapping(value = "loadUsedCouponHistory", method = RequestMethod.POST)
     public List<UsedCoupons> loadUsedCouponHistory(final HttpServletRequest request) throws ServletException {
         return usedCouponsRepo.findByOrderByOrderDateDesc();
+    }
+
+    //////////////////////////// customer Source section ///////////////////////////////
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getAllCustomerSource", method = RequestMethod.GET)
+    public List<CustomerSource> getAllCustomerSource(final HttpServletRequest request) throws ServletException {
+        return customerSourceRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "upsertCustomerSource", method = RequestMethod.POST)
+    public CustomerSourceResponse upsertCustomerSource(@RequestBody final CustomerSource customerSource, final HttpServletRequest request) throws ParseException {
+        if(customerSource.getId() == 0){
+            customerSource.setGmtCreate(Utility.getCurrentDate());
+        }
+        customerSource.setGmtModify(Utility.getCurrentDate());
+        return new CustomerSourceResponse(customerSourceRepo.save(customerSource),Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// blog/article section ///////////////////////////////
@@ -315,6 +331,12 @@ public class ManagementController {
         return	orderRepo.findById(orderId).get();
     }
 
+    @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
+    public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
+        orderRepo.delete(order);
+        return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
     @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
     public Order getOrderDetailById(@PathVariable final int orderDetailId) throws ServletException {
         OrderDetail orderDetail = orderDetailRepo.findById(orderDetailId).get();
@@ -325,10 +347,38 @@ public class ManagementController {
         return	order;
     }
 
-    @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
-    public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
-        orderRepo.delete(order);
-        return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    @RequestMapping(value = "getPrescriptionsForMgnt/{amount}", method = RequestMethod.GET)
+    public List<OrderDetail> getPrescriptionsForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+        List<OrderDetail> orderDetailListList ;
+        if(amount==100){
+            orderDetailListList =  orderDetailRepo.findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
+        }else{
+            orderDetailListList = orderDetailRepo.findByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
+        }
+        return orderDetailListList;
+    }
+
+    @RequestMapping(value = "updateCusSource", method = RequestMethod.POST)
+    public GenericResponse updateCusSource(@RequestBody final Order order) throws ParseException {
+        orderRepo.updateGmtModifyAndCusSourceById(Utility.getCurrentDate(),order.getCusSource(),order.getId());
+
+        Optional<CustomerSource>  customerSourceOpt = customerSourceRepo.findById(order.getCusSource());
+        if(customerSourceOpt.isPresent()){
+            CustomerSource customerSource = customerSourceOpt.get();
+            customerSource.setCount(customerSource.getCount() + 1);
+            customerSourceRepo.save(customerSource);
+        }
+
+        if(order.getCurrentCusSource() != null){
+            Optional<CustomerSource>  currentCustomerSourceOpt = customerSourceRepo.findById(order.getCurrentCusSource());
+            if(currentCustomerSourceOpt.isPresent()){
+                CustomerSource currentCustomerSource = currentCustomerSourceOpt.get();
+                currentCustomerSource.setCount(currentCustomerSource.getCount() - 1);
+                customerSourceRepo.save(currentCustomerSource);
+            }
+        }
+
+        return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// upload ///////////////////////////////

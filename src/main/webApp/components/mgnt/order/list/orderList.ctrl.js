@@ -1,15 +1,18 @@
 'use strict';
 angular.module('orderListModule')
 	.controller('orderListController',['$rootScope','$routeParams','$location',
-										 'memberService','orderListService',
+										 'memberService','orderListService','customerSourceService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList',
-	function($rootScope, $routeParams,$location,memberService,orderListService,NgTableParams,OrderStatusArray,cartService,AmountList) {
+	function($rootScope, $routeParams,$location,
+	        memberService,orderListService,customerSourceService,
+	        NgTableParams,OrderStatusArray,cartService,AmountList) {
 	var self = this;
 	self.orderList = [];
+	self.cusSourceList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "100px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
-	self.isUpdatingOrderStatus = false; // disable/able the select for update order status
+	self.isUpdatingOrder = false; // disable/able the select for update order status
 	
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -18,7 +21,12 @@ angular.module('orderListModule')
 	self.amountList=AmountList;
 	self.amount = 50;
 
-	
+	customerSourceService.getAll().then(function (data) {
+        self.cusSourceList = data;
+        console.log(self.cusSourceList);
+        self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
+    });
+
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
@@ -28,13 +36,20 @@ angular.module('orderListModule')
 	
 	self.updateOrderStatus = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
-	    self.isUpdatingOrderStatus = true;
+	    self.isUpdatingOrder = true;
 		orderListService.updateOrderStatus(order).then(function(data){
 			self.responseStr = data.replyStr;
-			self.isUpdatingOrderStatus = false;
-			//engineerOrderList();
+			self.isUpdatingOrder = false;
 		});
 	}
+
+	self.updateCusSource = function(order){
+        self.isUpdatingOrder = true;
+        orderListService.updateCusSource(order).then(function(data){
+            self.responseStr = data.replyStr;
+            self.isUpdatingOrder = false;
+        });
+    }
 
 	self.deleteOrder = function(order){
         self.responseStr = false;
@@ -134,6 +149,7 @@ angular.module('orderListModule')
         }
         order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
         order.subTotal = subTotal;
+        order.currentCusSource = order.cusSource;
         order.couponAmount = subTotal*order.couponDiscount/100;
         order.total = subTotal - order.couponAmount;
 

@@ -1,0 +1,40 @@
+<link href="css/main2.css" rel="stylesheet">
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="margin-bottom: 20px;">Prescription History </h3>
+		
+		<div class="row" style="margin-bottom: 15px;">
+			
+			<div class="col-sm-2">
+				<select  ng-model="ctrl.amount"  ng-change="ctrl.getPrescriptionsByTerm()"
+					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+					 style="width: 100%;height: 40px;">
+		    	</select> 
+			</div>
+
+		</div>
+		
+		
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="one in $data">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+			        	{{one.id}}
+			        </td>
+			        <td title="'Date'" sortable="'gmtCreate'" style="width:180px;">
+			        	{{one.gmtCreate | date:"dd-MM-yyyy  HH:mm:ss"}}
+			        </td>
+
+			        <td title="'phone'" filter="{ 'phone' : 'text'}"  sortable="'shippingPhone'">{{one.phone | tel}}</td>
+					<td title="'name'" filter="{ 'name' : 'text'}"  sortable="'name'">{{one.name}}</td>
+					<td title="'order id'" filter="{ 'orderId' : 'text'}"  sortable="'orderId'" style="width:100px;">
+
+						<a href="#/mgnt/storeOrder/{{one.orderId}}" target="_blank" >{{one.orderId}}</a>
+					</td>
+
+
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>

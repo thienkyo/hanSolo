@@ -3,10 +3,11 @@ angular.module('orderListModule')
 .factory('orderListService', ['ajaxService',function(ajaxService) {
 		var orderListService = {
 			getOrdersForMgnt : getOrdersForMgnt, // 50 order
-			getAllOrdersForMgnt : getAllOrdersForMgnt,
+			// getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
 			/*updateOrder : updateOrder,*/
 			getOrderById : getOrderById,
+			updateCusSource : updateCusSource,
 			deleteOrder : deleteOrder
 			};
 	return orderListService;
@@ -25,12 +26,19 @@ angular.module('orderListModule')
 		});
 	}
 	
-	function getAllOrdersForMgnt(){
+	/*function getAllOrdersForMgnt(){
 		var url = "mgnt/getAllOrdersForMgnt/";
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}
+	}*/
+
+	function updateCusSource(order){
+        var url = "mgnt/updateCusSource";
+        return ajaxService.post(url,order,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function updateOrderStatus(order){
         var url = "mgnt/updateOrderStatus";

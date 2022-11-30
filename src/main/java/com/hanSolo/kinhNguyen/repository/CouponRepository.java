@@ -12,4 +12,6 @@ public interface CouponRepository extends PagingAndSortingRepository<Coupon, Int
 
     List<Coupon> findByOrderByGmtModifyDesc();
 
+    List<Coupon> findAllByOrderByGmtCreateDesc();
+
 }

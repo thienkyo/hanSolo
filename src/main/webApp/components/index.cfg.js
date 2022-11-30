@@ -115,9 +115,14 @@ angular.module('app')
             controller: 'bizExpenseController',
             controllerAs:'ctrl'
         })
-        .when('/mgnt/shipCost',{
-            templateUrl: 'components/mgnt/shipCost/shipCost.html',
-            controller: 'shipCostController',
+        .when('/mgnt/prescriptionList',{
+            templateUrl: 'components/mgnt/prescriptionList/prescriptionList.html',
+            controller: 'prescriptionListController',
+            controllerAs:'ctrl'
+        })
+        .when('/mgnt/customerSource',{
+            templateUrl: 'components/mgnt/customerSource/customerSource.html',
+            controller: 'customerSourceController',
             controllerAs:'ctrl'
         })
         .when('/mgnt/member',{

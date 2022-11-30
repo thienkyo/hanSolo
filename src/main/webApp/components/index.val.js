@@ -4,7 +4,7 @@ var OrderStatusArray=[
 	{name : 'nhận tiền', value:1 },
 	{name : 'đã chuyển hàng ', value:2 },
 	{name : 'xong', value:3 },
-	{name : 'shop xoá', value:4 },
+	{name : 'nhận cọc', value:4 },
 	{name : 'khách xoá', value:5 }
 ];
 
@@ -47,6 +47,7 @@ angular
 		.value('ShipCostDO',ShipCostDO)
 		.value('PaginationItemDO',PaginationItemDO)
 		.value('BizExpenseStatusArray',BizExpenseStatusArray)
+		.value('CustomerSourceDO',CustomerSourceDO)
 		.value('PaginationDO',PaginationDO);
 
 function OrderDO () {
@@ -66,6 +67,7 @@ function OrderDO () {
 	this.shippingName = '';
 	this.shippingPhone ='';
 	this.orderDetails = [];
+	this.cusSource = 0;
 }
 
 function OrderDetailDO () {
@@ -237,6 +239,14 @@ function BannerDO(){
 	this.description='description';
 	this.link='';
 	this.type='HOMEBANNER';
+}
+
+function CustomerSourceDO(){
+	this.id = 0;
+	this.name = '';
+	this.count = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function BizExpenseDO(){

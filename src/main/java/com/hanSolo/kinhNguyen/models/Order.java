@@ -72,6 +72,27 @@ public class Order {
     @Column(name = "gender")
     private Boolean gender;
 
+    @Column(name = "cus_source")
+    private Integer cusSource;
+
+    private Integer currentCusSource;
+
+    public Integer getCurrentCusSource() {
+        return currentCusSource;
+    }
+
+    public void setCurrentCusSource(Integer currentCusSource) {
+        this.currentCusSource = currentCusSource;
+    }
+
+    public Integer getCusSource() {
+        return cusSource;
+    }
+
+    public void setCusSource(Integer cusSource) {
+        this.cusSource = cusSource;
+    }
+
     public Boolean getGender() {
         return gender;
     }
