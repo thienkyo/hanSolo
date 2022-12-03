@@ -24,7 +24,7 @@ var genderArray=[
 ];
 
 var AmountList=[
-	{name : '50', value:50 },
+	{name : '100', value:100 },
     {name : 'all', value:0 }
 ];
 
@@ -77,6 +77,8 @@ function OrderDO () {
 	this.shippingPhone ='';
 	this.orderDetails = [];
 	this.cusSource = 0;
+	this.lensNumber = 0;
+	this.frameNumber = 0;
 }
 
 function OrderDetailDO () {

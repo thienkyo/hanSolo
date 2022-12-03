@@ -368,8 +368,8 @@ public class ManagementController {
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
-        if(amount==50){
-            orderList =  orderRepo.findFirst50ByOrderByGmtCreateDesc();
+        if(amount==100){
+            orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             orderList = orderRepo.findAllByOrderByGmtCreateDesc();
         }

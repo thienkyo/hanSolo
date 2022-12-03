@@ -10,7 +10,7 @@ angular.module('orderListModule')
 	self.orderList = [];
 	self.cusSourceList = [];
 	self.OrderStatusArray=OrderStatusArray;
-	self.statusStyle = { "width": "100px" };
+	self.statusStyle = { "width": "80px" };
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
 	self.isUpdatingOrder = false; // disable/able the select for update order status
 	self.showLoadingText = true; // disable/able Loading..
@@ -20,7 +20,7 @@ angular.module('orderListModule')
 	}
 	
 	self.amountList=AmountList;
-	self.amount = 50;
+	self.amount = 100;
 
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
@@ -31,6 +31,7 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
+	    console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -82,9 +83,11 @@ angular.module('orderListModule')
 			self.statusStyle.color = "limegreen";
 		}else if(status==1){
 			self.statusStyle.color = "blue";
-		}
+		}else if(status==4){
+            self.statusStyle.color = "brown";
+        }
 		else{
-			self.statusStyle = { "width": "100px" }
+			self.statusStyle = { "width": "80px" }
 		}
 		return self.statusStyle;
 	}
@@ -144,8 +147,16 @@ angular.module('orderListModule')
 
 	function calculateOrderTotal(order){
         var subTotal = 0;
+        order.frameNumber = 0;
+        order.lensNumber = 0;
         for (var i = 0; i < order.orderDetails.length; i++){
             subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity + order.orderDetails[i].lensPrice;
+            if(order.orderDetails[i].framePriceAtThatTime > 1000){
+                order.frameNumber +=1;
+            }
+            if(order.orderDetails[i].lensPrice > 1000){
+                order.lensNumber +=1;
+            }
         }
         order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
         order.subTotal = subTotal;
