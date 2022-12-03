@@ -30,5 +30,6 @@ angular.module('app', [
 		'bizExpenseModule',
 		'prescriptionListModule',
 		'customerSourceModule',
+		'bizReportModule',
 		'ui.tinymce'
 ]);

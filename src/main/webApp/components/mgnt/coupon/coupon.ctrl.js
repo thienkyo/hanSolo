@@ -21,7 +21,7 @@ angular.module('couponModule')
 		});
 
 		couponService.loadUsedCouponHistory().then(function (data) {
-		    console.log(data);
+		    //console.log(data);
 		    data.forEach(calculateUserCoupon);
             self.usedCouponList = data;
             self.usedCouponTableParams = new NgTableParams({}, { dataset: self.usedCouponList});

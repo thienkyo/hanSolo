@@ -115,6 +115,11 @@ angular.module('app')
             controller: 'bizExpenseController',
             controllerAs:'ctrl'
         })
+         .when('/mgnt/bizReport',{
+            templateUrl: 'components/mgnt/bizReport/bizReport.html',
+            controller: 'bizReportController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/prescriptionList',{
             templateUrl: 'components/mgnt/prescriptionList/prescriptionList.html',
             controller: 'prescriptionListController',

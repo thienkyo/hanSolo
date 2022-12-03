@@ -33,6 +33,17 @@ form .progress {
   margin-top: -3px;
   padding: 7px 17px;
 }
+
+.inactive {
+	color: #ccc;
+	pointer-events: none;
+	cursor: default;
+	padding: 8px 4px;
+	text-align: center;
+	letter-spacing: 2px;
+	background-color: darkgray;
+
+}
 </style>
 <link href="css/main2.css" rel="stylesheet">
 <!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
@@ -103,7 +114,9 @@ form .progress {
 			</div>
 
 			<div class="col-sm-2">
-				<a ng-click="ctrl.upsert(ctrl.theBizExpense)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">save</a>
+				<a ng-click="ctrl.upsert(ctrl.theBizExpense)" href=""
+				   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+				   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
 				
 				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 			</div>
@@ -130,9 +143,9 @@ form .progress {
 	    	<div class="col-sm-5">
 	    	</div>
 	    </div>
-	
 
-		<!-- banner table-->
+
+		<!-- biz expense table-->
 		<h3 style="margin-top: 20px;">Biz Expense List </h3>
 		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
 			<div class="col-sm-2">
@@ -165,14 +178,14 @@ form .progress {
 			        <td title="'Date'" sortable="'gmtCreate'" style="width:180px;">
 			        	{{bizExpense.gmtCreate | date:"dd-MM-yyyy HH:mm:ss"}}
 			        </td>
-			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(bizExpense.status)" style="width:100px;" ng-if="ctrl.isAccountant">
+			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(bizExpense.status)" style="width:100px;" ng-if="ctrl.isSuperAccountant">
 						<select  ng-model="bizExpense.status"  ng-change="ctrl.updateBizExpenseStatus(bizExpense)"
 								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
 								 ng-disabled="ctrl.isUpdatingBizExpenseStatus"
 								 style="height: 40px;" ng-style="ctrl.setStyle(bizExpense.status)">
 						</select>
 			        </td>
-					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(bizExpense.status)" style="width:95px;" ng-if="!ctrl.isAccountant">
+					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(bizExpense.status)" style="width:95px;" ng-if="!ctrl.isSuperAccountant">
 						{{bizExpense.status == 0 ? 'đã tạo' : 'xong' }}
 					</td>
 

@@ -10,7 +10,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +48,8 @@ public class ManagementController {
     @Autowired private BizExpenseRepository bizExpenseRepo;
 
     @Autowired private CustomerSourceRepository customerSourceRepo;
+
+    @Autowired private BizReportRepository bizReportRepo;
 
     @Autowired private Environment env;
 
@@ -192,6 +194,7 @@ public class ManagementController {
     public GenericResponse upsertBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
         bizExpense.setGmtModify(Utility.getCurrentDate());
         bizExpenseRepo.save(bizExpense);
+       // TimeUnit.SECONDS.sleep( 4);
         return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
@@ -203,8 +206,11 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "updateBizExpenseStatus", method = RequestMethod.POST)
-    public GenericResponse updateBizExpenseStatus(@RequestBody final BizExpense bizExpense) throws ParseException {
-        bizExpenseRepo.updateStatusAndGmtModifyById(bizExpense.getStatus(),Utility.getCurrentDate(),bizExpense.getId());
+    public GenericResponse updateBizExpenseStatus(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(((List<String>) claims.get("roles")).contains(Utility.SUPER_ACCOUNTANT_ROLE)){
+            bizExpenseRepo.updateStatusAndGmtModifyById(bizExpense.getStatus(),Utility.getCurrentDate(),bizExpense.getId());
+        }
         return new GenericResponse("upsert_bizExpense_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
@@ -277,6 +283,56 @@ public class ManagementController {
         }
         customerSource.setGmtModify(Utility.getCurrentDate());
         return new CustomerSourceResponse(customerSourceRepo.save(customerSource),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// biz report section ///////////////////////////////
+    @RequestMapping(value = "getAllBizReport", method = RequestMethod.GET)
+    public List<BizReport> getAllBizReport(final HttpServletRequest request) throws ServletException {
+        return bizReportRepo.findByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "upsertBizReport", method = RequestMethod.POST)
+    public BizReportResponse upsertBizReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
+        if(bizReport.getId() == 0){
+            bizReport.setGmtCreate(Utility.getCurrentDate());
+        }
+        bizReport.setGmtModify(Utility.getCurrentDate());
+        return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "calculateReport", method = RequestMethod.POST)
+    public BizReportResponse calculateReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
+        bizReport.setGmtModify(Utility.getCurrentDate());
+
+        Date startDate = Utility.getFirstDateOfMonth(bizReport.getYear(),bizReport.getMonth());
+        Date endDate = Utility.getLastDateOfMonth(bizReport.getYear(),bizReport.getMonth());
+        List<BizExpense> expenses = bizExpenseRepo.findByGmtCreateBetween(startDate,endDate);
+        int expAmount = 0;
+        for(BizExpense exp : expenses){
+            expAmount += exp.getAmount();
+        }
+        bizReport.setOutcome(expAmount);
+
+        List<Order> orderList = orderRepo.findByGmtCreateBetween(startDate,endDate);
+        int incomeAmount = 0;
+        for(Order or : orderList){
+            int amount = 0;
+            for(OrderDetail orderDetail : or.getOrderDetails()){
+                int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
+                amount += orderDetail.getFramePriceAtThatTime() + lensPrice;
+            }
+            incomeAmount += amount*(100-or.getCouponDiscount())/100;
+        }
+        bizReport.setIncome(incomeAmount);
+        bizReport.setOrderQuantity(orderList.size());
+
+        return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "deleteBizReport", method = RequestMethod.POST)
+    public GenericResponse deleteBizReport(@RequestBody final BizReport bizReport) {
+        bizReportRepo.delete(bizReport);
+        return new GenericResponse("delete_bizReport_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// blog/article section ///////////////////////////////

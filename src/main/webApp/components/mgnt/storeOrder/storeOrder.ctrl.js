@@ -35,7 +35,6 @@ angular.module('storeOrderModule')
         newTab.lensNote = "";
         newTab.lensPrice = 0;
         self.theOrder.orderDetails.push(newTab);
-        console.log(self.theOrder);
     }
 
     self.add1Tab = function(){
@@ -120,7 +119,6 @@ angular.module('storeOrderModule')
 
     self.selectedLensChange = function(one,orderDetail) {
             if(one){
-              console.log('selectedLensChange in if');
               orderDetail.lensNote = one.name;
               orderDetail.lensPrice = one.sellPrice;
             }
@@ -211,7 +209,6 @@ angular.module('storeOrderModule')
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
-                console.log(self.theOrder);
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
@@ -219,7 +216,6 @@ angular.module('storeOrderModule')
         });
     }else{
         self.theOrder = new OrderDO;
-        console.log(self.theOrder);
         self.theOrder.location='STORE';
         self.theOrder.orderDetails = [new OrderDetailDO()];
         self.theOrder.gender=true;

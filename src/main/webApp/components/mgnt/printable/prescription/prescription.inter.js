@@ -14,8 +14,6 @@ angular.module('prescriptionModule')
     	 if (response.status === 401) {
              $rootScope.$broadcast('unauthorized');
          }
-
-         console.log(response);
     	 if (response.status === 500 && response.data.path == '/authenticated/me') {
     	    $rootScope.$broadcast('ExpiredJwt');
          }

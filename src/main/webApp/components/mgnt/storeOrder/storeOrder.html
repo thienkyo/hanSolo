@@ -196,9 +196,9 @@
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
 				<a ng-click="ctrl.remove1Tab($index)" href="" ng-show="$index > 0" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">remove</a>
 				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">copy</a>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}
-					<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}" target="_blank" ng-show="item.id">[print]</a>
-				</h3>
+				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
+				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale + item.lensPrice | number:0}}đ</h3>
 
 				<div class="row">
 					<div class="col-lg-5">

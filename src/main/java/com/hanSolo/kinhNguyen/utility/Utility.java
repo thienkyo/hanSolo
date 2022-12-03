@@ -15,10 +15,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class Utility {
 
@@ -36,9 +33,10 @@ public class Utility {
 
     final public static String MEMBER_ROLE = "MEMBER";
     final public static String ADMIN_ROLE = "ADMIN";
-    final public static String SUPERADMIN_ROLE = "SUPERADMIN";
+    final public static String SUPERADMIN_ROLE = "SUPER_ADMIN";
     final public static String MOD_ROLE = "MOD";
     final public static String ACCOUNTANT_ROLE = "ACCOUNTANT";
+    final public static String SUPER_ACCOUNTANT_ROLE = "SUPER_ACCOUNTANT";
 
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";
@@ -67,6 +65,24 @@ public class Utility {
         String currentTime = df.format(new Date());
         return df.parse(currentTime);
     }
+
+    final public static Date getFirstDateOfMonth(String year, String month) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        month = month.length() > 1 ? month : "0"+month;
+        return df.parse(year+month+"01_000000");
+    }
+
+    final public static Date getLastDateOfMonth(String year, String month) throws ParseException {
+        Date firstDate = getFirstDateOfMonth(year,month);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(firstDate);
+        int res = calendar.getActualMaximum(Calendar.DATE);
+
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        month = month.length() > 1 ? month : "0"+month;
+        return df.parse(year+month+res+"_235959");
+    }
+
     final public static ResponseEntity<String> savefile(String dir, MultipartFile uploadfile, String oldName){
         HttpHeaders headers = new HttpHeaders();
         String oldFilepath = "";

@@ -73,7 +73,7 @@ form .progress {
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="one in $data">
 			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
-			        	<a href="" ng-click="ctrl.updateCoupon(one)">{{one.id}}</a>
+			        	<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
 			        </td>
 					<td title="'name'" filter="{ 'name': 'text'}" sortable="'name'"  style="width:180px;">
 						<a href="" ng-click="ctrl.setTheOne(one)">{{one.name}} </a>

@@ -14,7 +14,6 @@ angular.module('categoryModule')
 		//self.currentMember = memberService.getCurrentMember();
 		
 		categoryService.getAllCategories().then(function (data) {
-		//    console.log(data);
 			self.cateList = data
 			self.tableParams = new NgTableParams({}, { dataset: self.cateList});
 		});

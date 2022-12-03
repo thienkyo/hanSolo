@@ -11,7 +11,7 @@ public class BizReport {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "year", length = 2)
+    @Column(name = "year", length = 4)
     private String year;
 
     @Column(name = "month", length = 2)
@@ -30,6 +30,17 @@ public class BizReport {
     @Column(name = "gmt_modify", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
+
+    @Column(name = "quantity")
+    private Integer orderQuantity;
+
+    public Integer getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(Integer orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
 
     public Date getGmtModify() {
         return gmtModify;

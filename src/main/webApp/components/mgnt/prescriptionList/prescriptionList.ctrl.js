@@ -20,7 +20,7 @@ angular.module('prescriptionListModule')
 	
 	prescriptionListService.getPrescriptionsForMgnt(self.amount).then(function (data) {
 		self.prescriptionList = data;
-		console.log(self.prescriptionList);
+		//console.log(self.prescriptionList);
 		self.tableParams = new NgTableParams({}, { dataset: self.prescriptionList});
 	});
 

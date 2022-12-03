@@ -78,7 +78,6 @@ angular.module('productListModule')
         self.isUpdatingProductStatus = true;
         productListService.updateProductStatus(product).then(function(data){
             self.responseStr = data.replyStr;
-            console.log(data);
             self.isUpdatingProductStatus = false;
         });
     }

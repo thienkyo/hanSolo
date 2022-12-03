@@ -11,6 +11,7 @@ angular.module('app')
 		isLogin : isLogin,
 		isAdmin :isAdmin,
 		isAccountant :isAccountant,
+		isSuperAccountant :isSuperAccountant,
 		isMod : isMod
 		};
 	return memberService;
@@ -55,6 +56,14 @@ angular.module('app')
 
 	function isAccountant(){
         if(isLogin() && currentMember.roles.indexOf("ACCOUNTANT") != -1){
+            return true;
+        }
+        return false;
+    }
+
+    function isSuperAccountant(){
+
+        if(isLogin() && isAccountant() && currentMember.roles.indexOf("SUPER_ACCOUNTANT") != -1){
             return true;
         }
         return false;

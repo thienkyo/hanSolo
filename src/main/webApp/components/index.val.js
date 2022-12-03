@@ -48,7 +48,16 @@ angular
 		.value('PaginationItemDO',PaginationItemDO)
 		.value('BizExpenseStatusArray',BizExpenseStatusArray)
 		.value('CustomerSourceDO',CustomerSourceDO)
+		.value('BizReportDO',BizReportDO)
+		.value('modifiedReportDO',modifiedReportDO)
 		.value('PaginationDO',PaginationDO);
+
+function modifiedReportDO(year){
+	this.year = year;
+	this.details = [];
+	this.income = 0;
+	this.outcome = 0;
+}
 
 function OrderDO () {
 	this.id = 0;
@@ -245,6 +254,16 @@ function CustomerSourceDO(){
 	this.id = 0;
 	this.name = '';
 	this.count = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function BizReportDO(){
+	this.id = 0;
+	this.month = '';
+	this.year = '';
+	this.income = 0;
+	this.outcome = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

@@ -8,6 +8,7 @@ angular.module('bizExpenseModule')
 	self.theBizExpense = new BizExpenseDO;
 	self.statusList = BizExpenseStatusArray;
 	self.statusStyle = {};
+	self.isSaveButtonPressed=false;
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -17,7 +18,7 @@ angular.module('bizExpenseModule')
 	self.theBizExpense.owner = self.currentMember.name;
 	self.theBizExpense.ownerPhone = self.currentMember.phone;
 	self.isAccountant = memberService.isAccountant();
-	console.log(self.isAccountant);
+	self.isSuperAccountant = memberService.isSuperAccountant();
 
 	self.amountList=AmountList;
     self.amount = 50;
@@ -34,6 +35,7 @@ angular.module('bizExpenseModule')
 
 
 	self.upsert = function(bizExpense){
+	    self.isSaveButtonPressed=true;
 		if(self.picFile){ // need to be written like this to access "result".
 			if(self.picFile.result){
 				self.theBizExpense.image = self.picFile.result;
@@ -44,6 +46,7 @@ angular.module('bizExpenseModule')
 		self.responseStrFail = false;
 		bizExpenseService.upsert(bizExpense).then(function (data) {
 			self.responseStr = data;
+			self.isSaveButtonPressed=false;
 			if(bizExpense.id == 0){
 				self.BizExpenseList.unshift(bizExpense);
 				self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
@@ -78,7 +81,7 @@ angular.module('bizExpenseModule')
     self.getBizExpenseByTerm = function(){
         bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
             self.BizExpenseList = data;
-            console.log(data);
+
             self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
         });
     }

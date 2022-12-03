@@ -18,7 +18,6 @@ angular.module('customerSourceModule')
 			console.log(data);
 			self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
 		});
-
 		
 		self.setTheOne = function(one){
 			self.theOne = one;
@@ -32,7 +31,7 @@ angular.module('customerSourceModule')
 			self.responseStrFail = false;
 			customerSourceService.upsert(customerSource).then(function (data) {
 				self.responseStr = data.errorMessage;
-				console.log(data);
+				//console.log(data);
 				if(customerSource.id == 0){
 					self.customerSourceList.unshift(data.customerSource);
 					self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});

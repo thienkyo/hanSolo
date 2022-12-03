@@ -11,8 +11,9 @@ angular.module('orderListModule')
 	self.cusSourceList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "100px" };
-	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "shopDelete":0, "userDelete":0};
+	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
 	self.isUpdatingOrder = false; // disable/able the select for update order status
+	self.showLoadingText = true; // disable/able Loading..
 	
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -23,15 +24,15 @@ angular.module('orderListModule')
 
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
-        console.log(self.cusSourceList);
+       // console.log(self.cusSourceList);
         self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
     });
 
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-		console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+		self.showLoadingText = false;
 	});
 	
 	self.updateOrderStatus = function(order){
@@ -56,7 +57,6 @@ angular.module('orderListModule')
         self.responseStrFail = false;
         orderListService.deleteOrder(order).then(function (data) {
             self.responseStr = data;
-            console.log(data);
             var index = self.orderList.indexOf(order);
             self.orderList.splice(index,1);
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -113,7 +113,7 @@ angular.module('orderListModule')
         self.statusNumber.paid = 0;
         self.statusNumber.shipped = 0;
         self.statusNumber.done = 0;
-        self.statusNumber.shopDelete = 0;
+        self.statusNumber.deposit = 0;
         self.statusNumber.userDelete = 0;
 		
 		for(var i = 0; i < self.orderList.length; i++){
@@ -132,7 +132,7 @@ angular.module('orderListModule')
                   self.statusNumber.done += 1;
                   break;
               case 4:
-                  self.statusNumber.shopDelete += 1;
+                  self.statusNumber.deposit += 1;
                   break;
               case 5:
                   self.statusNumber.userDelete += 1;
@@ -167,7 +167,7 @@ angular.module('orderListModule')
               self.statusNumber.done += 1;
               break;
           case 4:
-              self.statusNumber.shopDelete += 1;
+              self.statusNumber.deposit += 1;
               break;
           case 5:
               self.statusNumber.userDelete += 1;

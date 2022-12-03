@@ -29,4 +29,8 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     @Query("update Order o set o.gmtModify = ?1, o.cusSource = ?2 where o.id = ?3")
     int updateGmtModifyAndCusSourceById(@NonNull Date gmtModify, @NonNull Integer cusSource, @NonNull Integer id);
 
+    List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
+
+
+
 }
