@@ -1,11 +1,11 @@
 'use strict';
 angular.module('orderListModule')
-	.controller('orderListController',['$rootScope','$routeParams','$location',
+	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize',
 										 'memberService','orderListService','customerSourceService',
-										 'NgTableParams','OrderStatusArray','cartService','AmountList',
-	function($rootScope, $routeParams,$location,
+										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
+	function($rootScope, $routeParams,$location,FirstTimeLoadSize,
 	        memberService,orderListService,customerSourceService,
-	        NgTableParams,OrderStatusArray,cartService,AmountList) {
+	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
@@ -14,24 +14,29 @@ angular.module('orderListModule')
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
 	self.isUpdatingOrder = false; // disable/able the select for update order status
 	self.showLoadingText = true; // disable/able Loading..
-	
+	self.tempArray=[];
+	self.detailArray=[];
+    self.tempAmount=0;
+    self.tempFrameNumber=0;
+    self.tempLensNumber=0;
+
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}
 	
 	self.amountList=AmountList;
-	self.amount = 100;
+	self.amount = FirstTimeLoadSize;
 
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
        // console.log(self.cusSourceList);
-        self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
+      //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
     });
 
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-	    console.log(self.orderList);
+	    //console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -51,6 +56,53 @@ angular.module('orderListModule')
             self.responseStr = data.replyStr;
             self.isUpdatingOrder = false;
         });
+    }
+
+    self.clearAmount = function() {
+        self.tempAmount = 0;
+        self.tempArray.forEach((dataOne, index, array) => {
+           dataOne.picked = false;
+       });
+        self.tempArray=[];
+        self.detailArray = [];
+    }
+
+    self.selectAllAmount = function() {
+        self.tempAmount = 0;
+        self.tempFrameNumber=0;
+        self.tempLensNumber=0;
+        self.detailArray = [];
+        self.tempArray = self.tableParams.data;
+        self.tempArray.forEach((dataOne, index, array) => {
+           dataOne.picked = true;
+           self.tempAmount += dataOne.total;
+           self.tempFrameNumber += dataOne.frameNumber;
+           self.tempLensNumber += dataOne.lensNumber;
+           self.detailArray = self.detailArray.concat(dataOne.orderDetails);
+       });
+    }
+
+    self.calculateAmount = function(one) {
+        self.tempAmount = 0;
+        self.tempFrameNumber=0;
+        self.tempLensNumber=0;
+        if(one.picked){
+            self.tempArray.push(one);
+            self.detailArray = self.detailArray.concat(one.orderDetails);
+        }else{
+            var index = self.tempArray.indexOf(one);
+            self.tempArray.splice(index,1);
+            self.detailArray = self.detailArray.filter(i => i.orderId != one.id);
+        }
+        self.tempArray.forEach((dataOne, index, array) => {
+           self.tempAmount += dataOne.total;
+           self.tempFrameNumber += dataOne.frameNumber;
+           self.tempLensNumber += dataOne.lensNumber;
+       });
+//       console.log(self.tempArray);
+//       console.log(self.tableParams);
+
+
     }
 
 	self.deleteOrder = function(order){
@@ -187,5 +239,24 @@ angular.module('orderListModule')
         }
 
     }
-	
+//////////// modal section start here. /////////////////
+     self.setModal = function(one) {
+     self.detailArray = [];
+     self.detailArray = self.detailArray.concat(one.orderDetails);
+     console.log(self.detailArray);
+
+    }
+
+    $('#exampleModal').on('hidden.bs.modal', function (e) {
+      console.log(e);
+      self.tempAmount = 0;
+      console.log(self.tempArray);
+      self.tempArray.forEach((dataOne, index, array) => {
+         dataOne.picked = false;
+      });
+      self.tempArray=[];
+      self.detailArray = [];
+    })
+
+
 }]);

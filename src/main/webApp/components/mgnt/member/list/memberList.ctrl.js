@@ -1,8 +1,9 @@
 'use strict';
 angular.module('memberListModule')
-	.controller('memberListController',['$rootScope','$location','memberService',
+	.controller('memberListController',['$rootScope','$location','memberService','FirstTimeLoadSize',
 										 'memberListService','NgTableParams','CommonStatusArray','AmountList',
-	function($rootScope,$location,memberService,memberListService,NgTableParams,CommonStatusArray,AmountList) {
+	function($rootScope,$location,memberService,FirstTimeLoadSize,
+	        memberListService,NgTableParams,CommonStatusArray,AmountList) {
 	var self = this;
 	self.statusList = CommonStatusArray;
 	self.statusStyle = { "width": "100px" };
@@ -19,7 +20,7 @@ angular.module('memberListModule')
 	}
 	
 	self.amountList=AmountList;
-	self.amount = 50;
+	self.amount = FirstTimeLoadSize;
 	
 	memberListService.getMembersForMgnt(self.amount).then(function (data) {
 		self.members = data;

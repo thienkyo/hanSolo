@@ -1,9 +1,9 @@
 'use strict';
 angular.module('productListModule')
-	.controller('productListController',['$rootScope','$location',
+	.controller('productListController',['$rootScope','$location','FirstTimeLoadSize',
 										 'memberService','productListService','CommonStatusArray',
 										 'NgTableParams','categoryService','AmountList','CategoryDO',
-	function($rootScope,$location,
+	function($rootScope,$location,FirstTimeLoadSize,
 	        memberService,productListService,CommonStatusArray,
 	        NgTableParams,categoryService,AmountList,CategoryDO) {
 	var self = this;
@@ -18,14 +18,12 @@ angular.module('productListModule')
 
 	var firstCategory = new CategoryDO('all categorise');
 	var firstBrand = new CategoryDO('all brand');
-	//firstCategory.name = 'all categorise';
-	//self.categoryList =[firstCategory];
 
 	self.amountList=AmountList;
-	self.amount = 50;
+	self.amount = FirstTimeLoadSize;
 	self.categoryId = 0;
 	self.brandId = 0;
-	
+
 	productListService.getProductsForMgnt(self.categoryId,self.amount).then(function (data) {
 		self.products = data;
 		self.tableParams = new NgTableParams({}, { dataset: self.products});

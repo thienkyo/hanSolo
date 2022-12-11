@@ -2,7 +2,7 @@
 angular.module('orderListModule')
 .factory('orderListService', ['ajaxService',function(ajaxService) {
 		var orderListService = {
-			getOrdersForMgnt : getOrdersForMgnt, // 50 order
+			getOrdersForMgnt : getOrdersForMgnt, // 100 order
 			// getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
 			/*updateOrder : updateOrder,*/

@@ -1,9 +1,11 @@
 'use strict';
 angular.module('prescriptionListModule')
 	.controller('prescriptionListController',['$rootScope','$routeParams','$location',
-										 'memberService','prescriptionListService',
+										 'memberService','prescriptionListService','FirstTimeLoadSize',
 										 'NgTableParams','OrderStatusArray','cartService',
-	function($rootScope, $routeParams,$location,memberService,prescriptionListService,NgTableParams,OrderStatusArray,cartService) {
+	function($rootScope, $routeParams,$location,
+	        memberService,prescriptionListService,FirstTimeLoadSize,
+	        NgTableParams,OrderStatusArray,cartService) {
 	var self = this;
 	self.prescriptionList = [];
 
@@ -15,7 +17,7 @@ angular.module('prescriptionListModule')
         {name : '100', value:100 },
         {name : 'all', value:0 }
     ];;
-	self.amount = 100;
+	self.amount = FirstTimeLoadSize;
 
 	
 	prescriptionListService.getPrescriptionsForMgnt(self.amount).then(function (data) {

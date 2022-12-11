@@ -1,15 +1,70 @@
 <link href="css/main2.css" rel="stylesheet">
+<!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
 <section>
 	<div class="container" ng-cloak>
-		<h3 style="margin-bottom: 20px;">Order management </h3>
-		
+		<h3 style="margin-bottom: 20px;">Order management
+			<span ng-show="ctrl.tempAmount > 0" style="">
+				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >Clear</a>
+				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
+				   style="margin: 0px 0px 0px 0px;" ng-show="ctrl.tableParams.data.length < 20" >sum all</a>
+				<!-- Button trigger modal -->
+				<button type="button" class="btn btn-primary" data-toggle="modal"
+						data-target="#exampleModal" style="margin-top: 0px;">
+					brief
+				</button>
+				Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
+			</span>
+
+		</h3>
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="exampleModalLabel">order summary</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						{{ctrl.theModal.shippingName}}
+						<div class="container" style="width:100%;font-size: 18px;">
+							<div class="row">
+								<div class="col-sm-2 border">order</div>
+								<div class="col-sm-3 border">Name</div>
+								<div class="col-sm-3 border">Detail</div>
+								<div class="col-sm-3 border">Index</div>
+							</div>
+							<div class="row" ng-repeat="item in ctrl.detailArray ">
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.orderId}}</div>
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
+								<div class="col-sm-3 border" >
+									<div class="row" style="margin-left: 3px;">{{item.odSphere}} {{item.odCylinder}}</div>
+									<div class="row" style="margin-left: 3px;">{{item.osSphere}} {{item.osCylinder}}</div>
+								</div>
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}}</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 		<div class="row" style="margin-bottom: 15px;">
 			
 			<div class="col-sm-2">
 				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderByTerm()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 					 style="width: 100%;height: 40px;">
-		    	</select> 
+		    	</select>
+
 			</div>
 			<!--<div class="col-sm-1"></div>-->
 			<div class="col-sm-2" style="font-size: large;color:limegreen;">
@@ -34,16 +89,19 @@
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
-			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.id}}</a>
+			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:50px;text-align: center;">
+			        	<a href="" ng-click="ctrl.setModal(order)" data-toggle="modal" data-target="#exampleModal">{{order.id}}</a>
 			        </td>
 			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
-			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"dd-MM-yyyy  HH:mm:ss"}}</a>
+			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}</a>
 			        </td>
+					<td title="''"  style="text-align: center;">
+						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
+					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
 			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:130px;">{{order.shippingPhone | tel}}</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
-					<td title="'cont'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
+					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
@@ -56,7 +114,7 @@
 						<select  ng-model="order.status"  ng-change="ctrl.updateOrderStatus(order)"
 								 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
 								 ng-disabled="ctrl.isUpdatingOrder"
-								 style="height: 40px;" ng-style="ctrl.setStyle(order.status)">
+								 ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>
 					<td title="'delete'" style="width:fit-content;" >

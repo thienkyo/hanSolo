@@ -2,7 +2,7 @@
 angular.module('prescriptionListModule')
 .factory('prescriptionListService', ['ajaxService',function(ajaxService) {
 		var prescriptionListService = {
-			getPrescriptionsForMgnt : getPrescriptionsForMgnt, // 50 order
+			getPrescriptionsForMgnt : getPrescriptionsForMgnt, // 100 order
 		//	getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
 

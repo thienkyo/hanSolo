@@ -23,7 +23,7 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, I
 
     List<Article> findByOrderByGmtModifyDesc();
 
-    List<Article> findFirst50ByOrderByGmtModifyDesc();
+    List<Article> findFirst100ByOrderByGmtModifyDesc();
 
 
 }

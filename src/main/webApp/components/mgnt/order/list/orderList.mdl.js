@@ -1,2 +1,2 @@
 'use strict';
-angular.module('orderListModule', ['ngTable']);
+angular.module('orderListModule', ['ngTable','ngAnimate','ui.bootstrap']);

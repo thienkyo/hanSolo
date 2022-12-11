@@ -56,7 +56,7 @@ public class Utility {
     final public static int PRODUCT_PAGE_SIZE = 9;
     final public static int COLLECTION_PAGE_SIZE = 4;
     final public static int BLOG_PAGE_SIZE = 9;
-    final public static int FIRTST_TIME_LOAD_SIZE = 50;
+    final public static int FIRTST_TIME_LOAD_SIZE = 100;
 
 
     final public static Date getCurrentDate() throws ParseException {

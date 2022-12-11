@@ -13,6 +13,8 @@ var BizExpenseStatusArray=[
 	{name : 'xong', value:1 }
 ];
 
+var FirstTimeLoadSize=100;
+
 var CommonStatusArray=[
 	{name : 'active', value:true },
 	{name : 'inactive', value:false }
@@ -50,6 +52,7 @@ angular
 		.value('CustomerSourceDO',CustomerSourceDO)
 		.value('BizReportDO',BizReportDO)
 		.value('modifiedReportDO',modifiedReportDO)
+		.value('FirstTimeLoadSize',FirstTimeLoadSize)
 		.value('PaginationDO',PaginationDO);
 
 function modifiedReportDO(year){

@@ -41,9 +41,9 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, I
 
     Optional<Product> findByIdAndStatus(Integer id, Boolean status);
 
-    List<Product> findFirst50ByOrderByGmtModifyDesc();
+    List<Product> findFirst100ByOrderByGmtModifyDesc();
 
-    List<Product> findFirst50ByCategories_IdOrderByGmtModifyDesc(Integer id);
+    List<Product> findFirst100ByCategories_IdOrderByGmtModifyDesc(Integer id);
 
     List<Product> findByCategories_IdOrderByGmtModifyDesc(Integer id);
 

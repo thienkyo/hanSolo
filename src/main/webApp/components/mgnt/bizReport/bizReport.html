@@ -72,6 +72,9 @@ form .progress {
 							<td title="'outcome'" >
 								{{one.outcome | number:0}}đ
 							</td>
+							<td title="'yield'" >
+								{{one.income - one.outcome | number:0}}đ
+							</td>
 							<td title="'rate'" >
 								{{(one.income - one.outcome)/one.outcome*100 | number:0}}%
 							</td>

@@ -98,14 +98,14 @@ public class ManagementController {
     public List<Product> getProductsForMgnt(@PathVariable final int cateId, @PathVariable final int amount, final HttpServletRequest request) throws ServletException {
         List<Product> productList;
             if(cateId==0){
-                if(amount==50){
-                    productList =  prodRepo.findFirst50ByOrderByGmtModifyDesc();
+                if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                    productList =  prodRepo.findFirst100ByOrderByGmtModifyDesc();
                 }else{
                     productList =  prodRepo.findByOrderByGmtModifyDesc();
                 }
             }else{
-                if(amount==50){
-                    productList =  prodRepo.findFirst50ByCategories_IdOrderByGmtModifyDesc(cateId);
+                if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                    productList =  prodRepo.findFirst100ByCategories_IdOrderByGmtModifyDesc(cateId);
                 }else{
                     productList =  prodRepo.findByCategories_IdOrderByGmtModifyDesc(cateId);
                 }
@@ -173,14 +173,14 @@ public class ManagementController {
         List<BizExpense> bizExpenseList;
         final Claims claims = (Claims) request.getAttribute("claims");
         if(((List<String>) claims.get("roles")).contains(Utility.ACCOUNTANT_ROLE)){
-            if(amount==50){
-                bizExpenseList =  bizExpenseRepo.findFirst50ByOrderByGmtCreateDesc();
+            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                bizExpenseList =  bizExpenseRepo.findFirst100ByOrderByGmtCreateDesc();
             }else{
                 bizExpenseList = bizExpenseRepo.findByOrderByGmtCreateDesc();
             }
         }else{
-            if(amount==50){
-                bizExpenseList =  bizExpenseRepo.findFirst50ByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
+            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                bizExpenseList =  bizExpenseRepo.findFirst100ByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
             }else{
                 bizExpenseList = bizExpenseRepo.findByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
             }
@@ -219,8 +219,8 @@ public class ManagementController {
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
     public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
         List<Member> memberList;
-            if(amount==50){
-                memberList =  memberRepo.findFirst50ByOrderByGmtModifyDesc();
+            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                memberList =  memberRepo.findFirst100ByOrderByGmtModifyDesc();
             }else{
                 memberList = memberRepo.findByOrderByGmtModifyDesc();
             }
@@ -339,8 +339,8 @@ public class ManagementController {
     @RequestMapping(value = "getArticlesForMgnt/{amount}", method = RequestMethod.GET)
     public List<Article> getArticlesForMgnt(@PathVariable final int amount) throws ServletException {
         List<Article> articleList;
-        if(amount==50){
-            articleList =  articleRepo.findFirst50ByOrderByGmtModifyDesc();
+        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+            articleList =  articleRepo.findFirst100ByOrderByGmtModifyDesc();
         }else{
             articleList = articleRepo.findByOrderByGmtModifyDesc();
         }

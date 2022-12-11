@@ -1,7 +1,9 @@
 'use strict';
 angular.module('blogListModule')
-	.controller('blogListController',['$rootScope','$location','memberService','blogListService','NgTableParams','AmountList',
-	function($rootScope,$location,memberService,blogListService,NgTableParams,AmountList) {
+	.controller('blogListController',['$rootScope','$location','memberService','blogListService',
+	                                 'NgTableParams','AmountList','FirstTimeLoadSize',
+	function($rootScope,$location,memberService,blogListService,
+	          NgTableParams,AmountList,FirstTimeLoadSize) {
 	var self = this;
 	self.statusStyle = { "width": "100px" };
 	if(!memberService.isAdmin()){
@@ -9,8 +11,7 @@ angular.module('blogListModule')
 	}
 	
 	self.amountList=AmountList;
-	
-	self.amount = 50;
+	self.amount = FirstTimeLoadSize;
 	
 	
 	blogListService.getBlogsForMgnt(self.amount).then(function (data) {

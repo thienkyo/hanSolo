@@ -2,13 +2,17 @@
 angular.module('bizExpenseModule')
 	.controller('bizExpenseController',['$rootScope','$location','memberService','bizExpenseService','AmountList',
 									'NgTableParams','BizExpenseStatusArray','BizExpenseDO','uploadService','$timeout',
+									'FirstTimeLoadSize',
 	function($rootScope,$location,memberService,bizExpenseService,AmountList,
-	        NgTableParams,BizExpenseStatusArray,BizExpenseDO,uploadService,$timeout) {
+	        NgTableParams,BizExpenseStatusArray,BizExpenseDO,uploadService,$timeout,
+	        FirstTimeLoadSize) {
 	var self = this;
 	self.theBizExpense = new BizExpenseDO;
 	self.statusList = BizExpenseStatusArray;
 	self.statusStyle = {};
 	self.isSaveButtonPressed=false;
+	self.tempArray=[];
+	self.tempAmount=0;
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -21,7 +25,7 @@ angular.module('bizExpenseModule')
 	self.isSuperAccountant = memberService.isSuperAccountant();
 
 	self.amountList=AmountList;
-    self.amount = 50;
+    self.amount = FirstTimeLoadSize;
 	
 	bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
 		self.BizExpenseList = data;
@@ -33,6 +37,36 @@ angular.module('bizExpenseModule')
 	    self.isShowUploadPic = true;
 	}
 
+	self.clearAmount = function() {
+        self.tempAmount = 0;
+        self.tempArray.forEach((dataOne, index, array) => {
+           dataOne.picked = false;
+       });
+        self.tempArray=[];
+    }
+
+    self.selectAllAmount = function() {
+        self.tempAmount = 0;
+        self.tempArray = self.tableParams.data;
+        self.tempArray.forEach((dataOne, index, array) => {
+           dataOne.picked = true;
+           self.tempAmount += dataOne.amount;
+       });
+    }
+
+	self.calculateAmount = function(one) {
+	    self.tempAmount = 0;
+        if(one.picked){
+            self.tempArray.push(one);
+        }else{
+            var index = self.tempArray.indexOf(one);
+            self.tempArray.splice(index,1);
+        }
+       self.tempArray.forEach((dataOne, index, array) => {
+           self.tempAmount += dataOne.amount;
+       });
+       console.log(self.tableParams);
+    }
 
 	self.upsert = function(bizExpense){
 	    self.isSaveButtonPressed=true;

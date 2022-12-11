@@ -21,7 +21,7 @@ angular.module('loginModule')
                     self.member.name = a.name;
                     self.member.phone = a.sub;
                     memberService.setCurrentMember(self.member);
-                    console.log(self.member);
+                    //console.log(self.member);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');
 			    }else{

@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpense, Integer> {
 
-    List<BizExpense> findFirst50ByOrderByGmtCreateDesc();
+    List<BizExpense> findFirst100ByOrderByGmtCreateDesc();
 
-    List<BizExpense> findFirst50ByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
+    List<BizExpense> findFirst100ByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
 
     List<BizExpense> findByOrderByGmtCreateDesc();
 
