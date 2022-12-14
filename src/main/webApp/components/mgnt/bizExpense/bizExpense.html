@@ -139,7 +139,8 @@ form .progress {
 
 		<div class="row" style="margin-top: 20px;">
 	    	<div class="col-sm-7">
-	    		<textarea name="description" placeholder="description" rows="3"  ng-model="ctrl.theBizExpense.description" ng-cloak ></textarea>
+	    		<textarea name="description" placeholder="description" rows="5"  style="white-space: pre-line;"
+						  ng-model="ctrl.theBizExpense.description" ng-cloak ></textarea>
 	    	</div>
 	    	<div class="col-sm-5">
 	    	</div>
@@ -167,19 +168,19 @@ form .progress {
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="one in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:90px;text-align: center;">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:40px;text-align: center;">
 			        	<a href="" ng-click="ctrl.updateBizExpense(one)">{{one.id}}</a>
 			        </td>
-			        <td title="'image'"   style="width:150px;">
+			        <td title="'image'"   style="width:50px;">
 			        	<a href="" ng-click="ctrl.updateBizExpense(one)"><img ng-src="img/bizExpense/{{one.image}}" style="width:100%;"/></a>
 			        </td>
-			        <td title="'description'" filter="{ 'description' : 'text'}" sortable="'description'" style="text-align: left;">
+			        <td title="'description'" filter="{ 'description' : 'text'}" sortable="'description'" style="text-align: left;white-space: pre-line;">
 			        	{{one.description}}
 			        </td>
-					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;">
+					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:70px;">
 						{{one.amount | number:0}}đ
 					</td>
-					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;">
+					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:75px;">
 						{{one.owner}}
 					</td>
 					<td title="''"  style="text-align: center;">

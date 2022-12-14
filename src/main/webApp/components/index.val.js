@@ -4,7 +4,7 @@ var OrderStatusArray=[
 	{name : 'nhận tiền', value:1 },
 	{name : 'đã chuyển hàng ', value:2 },
 	{name : 'xong', value:3 },
-	{name : 'nhận cọc', value:4 },
+	{name : 'cọc', value:4 },
 	{name : 'khách xoá', value:5 }
 ];
 

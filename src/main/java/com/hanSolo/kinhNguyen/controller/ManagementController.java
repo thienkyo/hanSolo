@@ -315,14 +315,24 @@ public class ManagementController {
 
         List<Order> orderList = orderRepo.findByGmtCreateBetween(startDate,endDate);
         int incomeAmount = 0;
+        int lensQty = 0;
+        int frameQty = 0;
         for(Order or : orderList){
             int amount = 0;
             for(OrderDetail orderDetail : or.getOrderDetails()){
                 int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
                 amount += orderDetail.getFramePriceAtThatTime() + lensPrice;
+                if(orderDetail.getFramePriceAtThatTime() > 1000){
+                    frameQty += 1;
+                }
+                if(orderDetail.getLensPrice() != null && orderDetail.getLensPrice() > 1000){
+                    lensQty += 1;
+                }
             }
             incomeAmount += amount*(100-or.getCouponDiscount())/100;
         }
+        bizReport.setFrameQuantity(frameQty);
+        bizReport.setLensQuantity(lensQty);
         bizReport.setIncome(incomeAmount);
         bizReport.setOrderQuantity(orderList.size());
 

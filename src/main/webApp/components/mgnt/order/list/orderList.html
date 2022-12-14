@@ -33,23 +33,28 @@
 						<div class="container" style="width:100%;font-size: 18px;">
 							<div class="row">
 								<div class="col-sm-2 border">order</div>
-								<div class="col-sm-3 border">Name</div>
+								<div class="col-sm-4 border">Name</div>
 								<div class="col-sm-3 border">Detail</div>
 								<div class="col-sm-3 border">Index</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.detailArray ">
-								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.orderId}}</div>
-								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
-								<div class="col-sm-3 border" >
-									<div class="row" style="margin-left: 3px;">{{item.odSphere}} {{item.odCylinder}}</div>
-									<div class="row" style="margin-left: 3px;">{{item.osSphere}} {{item.osCylinder}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">
+									<a href="#/mgnt/storeOrder/{{item.orderId}}" target="_blank" >{{item.orderId}}</a>
 								</div>
-								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}}</div>
+								<div class="col-sm-4 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
+								<div class="col-sm-3 border" >
+									<div class="row" style="margin-left: 3px;margin-top: 5px">{{item.reading ? item.odReading : item.odSphere}} {{item.odCylinder}}</div>
+									<div class="row" style="margin-left: 3px;">{{item.reading ? item.osReading : item.osSphere}} {{item.osCylinder}}</div>
+								</div>
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? '1cái' : ''}} {{item.reading ? 'đọc sách' : ''}}</div>
 							</div>
+
 						</div>
+						<textarea id="js-copytextarea" rows="3" ng-model="ctrl.copyText" style="margin-top: 15px;white-space: pre-wrap;"></textarea>
 
 					</div>
 					<div class="modal-footer">
+						<button type="button" class="btn btn-info" ng-click="ctrl.copyClipBoard()">copy</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
 					</div>
 				</div>

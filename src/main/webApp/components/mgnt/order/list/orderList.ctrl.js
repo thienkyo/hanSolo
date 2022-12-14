@@ -36,7 +36,7 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-	    //console.log(self.orderList);
+	    console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -65,6 +65,27 @@ angular.module('orderListModule')
        });
         self.tempArray=[];
         self.detailArray = [];
+        self.copyText = '';
+    }
+
+    self.copyClipBoard = function() {
+
+
+       console.log(self.copyText);
+
+
+       var copyTextarea = angular.element(document.getElementById("js-copytextarea"));
+         copyTextarea.focus();
+         copyTextarea.select();
+
+         try {
+           var successful = document.execCommand('copy');
+           var msg = successful ? 'successful' : 'unsuccessful';
+           console.log('Copying text command was ' + msg);
+         } catch (err) {
+           console.log('Oops, unable to copy');
+         }
+
     }
 
     self.selectAllAmount = function() {
@@ -99,10 +120,7 @@ angular.module('orderListModule')
            self.tempFrameNumber += dataOne.frameNumber;
            self.tempLensNumber += dataOne.lensNumber;
        });
-//       console.log(self.tempArray);
-//       console.log(self.tableParams);
-
-
+       buildText();
     }
 
 	self.deleteOrder = function(order){
@@ -207,7 +225,15 @@ angular.module('orderListModule')
                 order.frameNumber +=1;
             }
             if(order.orderDetails[i].lensPrice > 1000){
-                order.lensNumber +=1;
+                if(order.orderDetails[i].monoLens){
+                     order.lensNumber +=0.5;
+                }else{
+                     order.lensNumber +=1;
+                }
+            }
+            if(order.orderDetails[i].reading){
+                order.orderDetails[i].odReading = Number(order.orderDetails[i].odSphere) + Number(order.orderDetails[i].odAdd);
+                order.orderDetails[i].osReading = Number(order.orderDetails[i].osSphere) + Number(order.orderDetails[i].osAdd);
             }
         }
         order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
@@ -239,23 +265,39 @@ angular.module('orderListModule')
         }
 
     }
+
+    function buildText(){
+        self.copyText='';
+         self.detailArray.forEach((dataOne, index, array) => {
+            var mono =  dataOne.monoLens ? '1cái' : '';
+            var reading = dataOne.reading ? 'đọc sách' : '';
+            self.copyText = self.copyText + '[' + dataOne.orderId +'-'+ dataOne.id +':'+
+                                             '('+dataOne.odSphere +' '+dataOne.odCylinder + ')' +
+                                             '('+dataOne.osSphere +' '+dataOne.osCylinder + ')/' +
+                                             dataOne.lensNote +' '+ mono +' '+ reading +
+                                             ']\n'
+
+            ;
+        });
+
+    }
+
+
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {
      self.detailArray = [];
      self.detailArray = self.detailArray.concat(one.orderDetails);
-     console.log(self.detailArray);
-
+     buildText();
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {
-      console.log(e);
       self.tempAmount = 0;
-      console.log(self.tempArray);
       self.tempArray.forEach((dataOne, index, array) => {
          dataOne.picked = false;
       });
       self.tempArray=[];
       self.detailArray = [];
+      self.copyText = '';
     })
 
 

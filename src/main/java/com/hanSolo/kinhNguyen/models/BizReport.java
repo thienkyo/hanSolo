@@ -34,6 +34,28 @@ public class BizReport {
     @Column(name = "quantity")
     private Integer orderQuantity;
 
+    @Column(name = "lens_quantity")
+    private Integer lensQuantity;
+
+    @Column(name = "frame_quantity")
+    private Integer frameQuantity;
+
+    public Integer getFrameQuantity() {
+        return frameQuantity;
+    }
+
+    public void setFrameQuantity(Integer frameQuantity) {
+        this.frameQuantity = frameQuantity;
+    }
+
+    public Integer getLensQuantity() {
+        return lensQuantity;
+    }
+
+    public void setLensQuantity(Integer lensQuantity) {
+        this.lensQuantity = lensQuantity;
+    }
+
     public Integer getOrderQuantity() {
         return orderQuantity;
     }

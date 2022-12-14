@@ -29,6 +29,7 @@ angular.module('bizExpenseModule')
 	
 	bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
 		self.BizExpenseList = data;
+		console.log(data);
 		self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
 	});
 

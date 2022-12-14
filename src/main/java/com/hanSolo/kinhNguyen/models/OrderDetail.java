@@ -86,6 +86,8 @@ public class OrderDetail {
     @Column(name = "recommended_spectacles", length = 300)
     private String recommendedSpectacles;
 
+
+
     @Column(name = "gmt_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtCreate;
@@ -127,6 +129,28 @@ public class OrderDetail {
 
     @Column(name = "order_detail_note_for_cus", length = 600)
     private String orderDetailNoteForCus;
+
+    @Column(name = "reading")
+    private Boolean reading;
+
+    @Column(name = "mono_lens")
+    private Boolean monoLens;
+
+    public Boolean getMonoLens() {
+        return monoLens;
+    }
+
+    public void setMonoLens(Boolean monoLens) {
+        this.monoLens = monoLens;
+    }
+
+    public Boolean getReading() {
+        return reading;
+    }
+
+    public void setReading(Boolean reading) {
+        this.reading = reading;
+    }
 
     public String getOrderDetailNoteForCus() {
         return orderDetailNoteForCus;

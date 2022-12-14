@@ -187,7 +187,7 @@
 			</li>-->
 			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
 				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
-				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1}}</a>
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1 + ' ('+item.orderId+'-'+item.id+')'}}</a>
 			</li>
 		</ul>
 
@@ -198,7 +198,7 @@
 				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">copy</a>
 				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
 				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale + item.lensPrice | number:0}}đ</h3>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}( {{item.orderId+'-'+item.id}}): {{item.framePriceAfterSale + item.lensPrice | number:0}}đ</h3>
 
 				<div class="row">
 					<div class="col-lg-5">
@@ -276,12 +276,16 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-10">
 								<div class="checkout__input" >
-									<p>Lời dặn:</p>
+									<p>Lời dặn: </p>
 									<input type="text" placeholder="Ghi chú nếu cần." class="checkout__input__add"
 										   ng-model="item.orderDetailNoteForCus">
 								</div>
+							</div>
+							<div class="col-md-2" style="padding: 0 0 0 0;">
+								<p>đọc sách:</p>
+								<input type="checkbox"  ng-model="item.reading"/>
 							</div>
 						</div>
 						<div class="row">
@@ -462,7 +466,6 @@
 					</div>
 
 
-
 					<div class="col-lg-2">
 						<div class="search_box pull-left">
 							<md-autocomplete class="search_class"  flex=""
@@ -511,6 +514,12 @@
 					<div class="col-lg-2">
 						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
 							{{item.lensPrice | number:0}}đ
+						</p>
+					</div>
+					<div class="col-lg-1" style="padding: 0 0 0 0;">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							mono:
+							<input type="checkbox"  ng-model="item.monoLens" />
 						</p>
 					</div>
 				</div>
