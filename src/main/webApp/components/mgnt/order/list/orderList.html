@@ -63,42 +63,54 @@
 
 		<!--summary Modal -->
 		<div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="summaryModalLabel">Order [<a href="#/mgnt/storeOrder/{{ctrl.theSummaryModal.id}}" target="_blank" >{{ctrl.theSummaryModal.id}}</a>] </h4>
+						<h4 class="modal-title" id="summaryModalLabel">Order [<a href="#/mgnt/storeOrder/{{ctrl.theSummaryModal.id}}" target="_blank" >{{ctrl.theSummaryModal.id}}</a>] status:{{ctrl.theSummaryModal.statusName}} </h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 60px 0px 60px;font-weight: bolder;">
-							<h6>Order total</h6>
-							<ul>
-								<li>Subtotal <span>{{ctrl.theSummaryModal.subTotal | number:0}}đ</span></li>
-								<li>Coupon <span>({{ctrl.theSummaryModal.couponDiscount}}%) {{(ctrl.theSummaryModal.couponDiscount)/100*ctrl.theSummaryModal.subTotal | number:0}}đ</span></li>
-								<li>Total <span>{{ctrl.theSummaryModal.total | number:0}}đ</span></li>
-								<li ng-show="ctrl.theSummaryModal.deposit > 0">Deposit <span>{{ctrl.theSummaryModal.deposit | number:0}}đ</span></li>
-								<li ng-show="ctrl.theSummaryModal.deposit > 0">Remain <span>{{ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit | number:0}}đ</span></li>
-							</ul>
+						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 60px 20px 60px;font-weight: bolder;">
+
+							<table  style="width: 100%;border-collapse: collapse;margin-top: 0px;">
+								<thead>
+								<tr>
+									<td style="padding: 5px 0 0 5px;line-height: 25px;">Tổng: {{ctrl.theSummaryModal.subTotal | number:0}}đ </td>
+									<td style="padding: 5px 0 0 5px;line-height: 25px;">Giảm({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</td>
+									<td style="padding: 5px 0 0 5px;line-height: 25px;">Thành tiền: {{ctrl.theSummaryModal.total | number:0}}đ</td>
+									<td style="padding: 5px 0 0 5px;line-height: 25px;">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</td>
+									<td style="padding: 5px 0 0 5px;line-height: 25px;">Còn lại: {{ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit | number:0}}đ</td>
+								</tr>
+								</thead>
+							</table>
+
+
 						</div>
 
 						<div class="container" style="width:100%;font-size: 18px;">
 							<div class="row">
 								<div class="col-sm-2 border">id</div>
-								<div class="col-sm-4 border">Name</div>
-								<div class="col-sm-3 border">Lens</div>
+								<div class="col-sm-3 border">Name</div>
+								<div class="col-sm-2 border">Lens</div>
 								<div class="col-sm-3 border">Detail</div>
+								<div class="col-sm-2 border">Detail</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
 								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
-								<div class="col-sm-4 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
-								<div class="col-sm-3 border" >
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
+								<div class="col-sm-2 border" >
 									<div class="row" style="margin-left: 3px;margin-top: 5px">{{item.reading ? item.odReading : item.odSphere}} {{item.odCylinder}}</div>
 									<div class="row" style="margin-left: 3px;">{{item.reading ? item.osReading : item.osSphere}} {{item.osCylinder}}</div>
 								</div>
 								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? '1cái' : ''}} {{item.reading ? 'đọc sách' : ''}}</div>
+								<div class="col-sm-2 border">
+									{{item.orderDetailNoteForCus}}
+									{{item.orderDetailNote}}
+								</div>
 							</div>
+
 
 						</div>
 
