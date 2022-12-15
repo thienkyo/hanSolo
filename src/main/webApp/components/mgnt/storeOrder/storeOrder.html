@@ -163,12 +163,14 @@
 						{{ctrl.isErrorMsg}}
 					</div>
 
-					<div class="alert alert-success" role="alert" ng-show="ctrl.order_return_status"
-						 style="margin-top:20px;">
+
+					<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.order_return_status"
+						   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-						<span class="sr-only">success:</span>
-						Thành công. Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}
-					</div>
+						Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}
+					</alert>
+
+
 				</div>
 			</div>
 		</div>
@@ -198,7 +200,7 @@
 				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">copy</a>
 				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
 				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}( {{item.orderId+'-'+item.id}}): {{item.framePriceAfterSale + item.lensPrice | number:0}}đ</h3>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}({{item.orderId+'-'+item.id}}): {{item.framePriceAfterSale + item.lensPrice | number:0}}đ</h3>
 
 				<div class="row">
 					<div class="col-lg-5">

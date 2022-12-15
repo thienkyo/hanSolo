@@ -36,7 +36,6 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-	    console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -285,9 +284,14 @@ angular.module('orderListModule')
 
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {
-     self.detailArray = [];
-     self.detailArray = self.detailArray.concat(one.orderDetails);
-     buildText();
+         self.detailArray = [];
+         self.detailArray = self.detailArray.concat(one.orderDetails);
+         buildText();
+     }
+
+    self.setSummaryModal = function(one) {
+        self.theSummaryModal = one;
+        console.log(one);
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {

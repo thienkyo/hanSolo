@@ -169,6 +169,7 @@ angular.module('storeOrderModule')
     }
 
     self.saveOrder = function(){
+       // $('.alert').alert();
         self.order_return_status = null;
         if(self.isPickDP){
             self.theOrder.gmtModify = self.theOrder.gmtCreate;
@@ -198,6 +199,10 @@ angular.module('storeOrderModule')
     self.calculateFramePriceAfterSale = function(orderDetail){
         orderDetail.framePriceAfterSale = orderDetail.framePriceAtThatTime*(100 - orderDetail.frameDiscountAtThatTime)/100 * orderDetail.quantity;
     }
+
+    self.closeAlert = function(index) {
+        self.order_return_status = false;
+    };
 
 ////// run when loading page/////
 

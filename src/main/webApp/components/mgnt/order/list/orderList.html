@@ -6,7 +6,7 @@
 			<span ng-show="ctrl.tempAmount > 0" style="">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >Clear</a>
 				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;" ng-show="ctrl.tableParams.data.length < 20" >sum all</a>
+				   style="margin: 0px 0px 0px 0px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
 				<!-- Button trigger modal -->
 				<button type="button" class="btn btn-primary" data-toggle="modal"
 						data-target="#exampleModal" style="margin-top: 0px;">
@@ -29,13 +29,12 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						{{ctrl.theModal.shippingName}}
 						<div class="container" style="width:100%;font-size: 18px;">
 							<div class="row">
 								<div class="col-sm-2 border">order</div>
 								<div class="col-sm-4 border">Name</div>
+								<div class="col-sm-3 border">Lens</div>
 								<div class="col-sm-3 border">Detail</div>
-								<div class="col-sm-3 border">Index</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.detailArray ">
 								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">
@@ -60,7 +59,57 @@
 				</div>
 			</div>
 		</div>
+		<!-- end Modal -->
 
+		<!--summary Modal -->
+		<div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="summaryModalLabel">Order [<a href="#/mgnt/storeOrder/{{ctrl.theSummaryModal.id}}" target="_blank" >{{ctrl.theSummaryModal.id}}</a>] </h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 60px 0px 60px;font-weight: bolder;">
+							<h6>Order total</h6>
+							<ul>
+								<li>Subtotal <span>{{ctrl.theSummaryModal.subTotal | number:0}}đ</span></li>
+								<li>Coupon <span>({{ctrl.theSummaryModal.couponDiscount}}%) {{(ctrl.theSummaryModal.couponDiscount)/100*ctrl.theSummaryModal.subTotal | number:0}}đ</span></li>
+								<li>Total <span>{{ctrl.theSummaryModal.total | number:0}}đ</span></li>
+								<li ng-show="ctrl.theSummaryModal.deposit > 0">Deposit <span>{{ctrl.theSummaryModal.deposit | number:0}}đ</span></li>
+								<li ng-show="ctrl.theSummaryModal.deposit > 0">Remain <span>{{ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit | number:0}}đ</span></li>
+							</ul>
+						</div>
+
+						<div class="container" style="width:100%;font-size: 18px;">
+							<div class="row">
+								<div class="col-sm-2 border">id</div>
+								<div class="col-sm-4 border">Name</div>
+								<div class="col-sm-3 border">Lens</div>
+								<div class="col-sm-3 border">Detail</div>
+							</div>
+							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
+								<div class="col-sm-4 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
+								<div class="col-sm-3 border" >
+									<div class="row" style="margin-left: 3px;margin-top: 5px">{{item.reading ? item.odReading : item.odSphere}} {{item.odCylinder}}</div>
+									<div class="row" style="margin-left: 3px;">{{item.reading ? item.osReading : item.osSphere}} {{item.osCylinder}}</div>
+								</div>
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? '1cái' : ''}} {{item.reading ? 'đọc sách' : ''}}</div>
+							</div>
+
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end summary Modal -->
 
 		<div class="row" style="margin-bottom: 15px;">
 			
@@ -69,7 +118,6 @@
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 					 style="width: 100%;height: 40px;">
 		    	</select>
-
 			</div>
 			<!--<div class="col-sm-1"></div>-->
 			<div class="col-sm-2" style="font-size: large;color:limegreen;">
@@ -87,7 +135,6 @@
 			<div class="col-sm-2" style="font-size: large">
 				done: {{ctrl.statusNumber.done}}
 			</div>
-
 		</div>
 		
 		
@@ -105,7 +152,9 @@
 					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
 			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:130px;">{{order.shippingPhone | tel}}</td>
-					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">{{order.shippingName}}</td>
+					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
+						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
+					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 
 					<td title="'source'" style="width:100px;">
@@ -198,7 +247,6 @@
 							<td colspan="2" style="padding-left: 30px;vertical-align: baseline;padding-top: 62px;">
 								<h6 class="checkout__title">Shipping Details</h6>
 
-
 								<div class="row">
 									<div class="col-lg-6">
 										<div class="checkout__input">
@@ -231,9 +279,7 @@
 										<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%){{ctrl.theOrder.couponAmount | number:0}}đ</span></li>
 										<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
 									</ul>
-
 								</div>
-
 							</td>
 						</tr>
 						
