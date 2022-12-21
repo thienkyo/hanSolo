@@ -76,7 +76,6 @@ angular.module('orderListModule')
          try {
            var successful = document.execCommand('copy');
            var msg = successful ? 'successful' : 'unsuccessful';
-           console.log('Copying text command was ' + msg);
          } catch (err) {
            console.log('Oops, unable to copy');
          }
@@ -151,8 +150,6 @@ angular.module('orderListModule')
                 self.OneDayReport.actualAmount += dataOne.total;
             }
         });
-
-        console.log(self.OneDayReport);
     }
 
     function sameDay(d1, d2) {
@@ -333,7 +330,7 @@ angular.module('orderListModule')
                                             ']\n'
             ;
         });
-        console.log(self.detailArray);
+        //console.log(self.detailArray);
     }
 
 
@@ -346,7 +343,6 @@ angular.module('orderListModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
-        console.log(one);
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {
