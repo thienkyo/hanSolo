@@ -168,7 +168,7 @@ form .progress {
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="one in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:40px;text-align: center;">
+			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
 			        	<a href="" ng-click="ctrl.updateBizExpense(one)">{{one.id}}</a>
 			        </td>
 			        <td title="'image'"   style="width:50px;">
@@ -180,23 +180,23 @@ form .progress {
 					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:70px;">
 						{{one.amount | number:0}}đ
 					</td>
-					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:75px;">
+					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:80px;">
 						{{one.owner}}
 					</td>
 					<td title="''"  style="text-align: center;">
 						<input type="checkbox"  ng-model="one.picked" ng-click="ctrl.calculateAmount(one)" />
 					</td>
-			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
+			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:110px;">
 			        	{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 			        </td>
-			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(one.status)" style="width:100px;" ng-if="ctrl.isSuperAccountant">
+			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="ctrl.isSuperAccountant">
 						<select  ng-model="one.status"  ng-change="ctrl.updateBizExpenseStatus(one)"
 								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
 								 ng-disabled="ctrl.isUpdatingBizExpenseStatus"
 								 style="height: 40px;" ng-style="ctrl.setStyle(one.status)">
 						</select>
 			        </td>
-					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(one.status)" style="width:95px;" ng-if="!ctrl.isSuperAccountant">
+					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="!ctrl.isSuperAccountant">
 						{{one.status == 0 ? 'đã tạo' : 'xong' }}
 					</td>
 

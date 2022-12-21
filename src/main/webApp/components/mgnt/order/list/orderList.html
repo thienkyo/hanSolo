@@ -1,5 +1,20 @@
 <link href="css/main2.css" rel="stylesheet">
 <!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
+<style>
+	.preth  th {
+		  border: 1px solid black;
+		  border-collapse: collapse;
+		  padding-top: 10px;
+		  padding-bottom: 10px;
+		  text-align: center;
+		}
+
+	.preth  td {
+	  border: 1px solid black;
+	  border-collapse: collapse;
+	  padding: 5px 10px 5px 15px;
+	}
+</style>
 <section>
 	<div class="container" ng-cloak>
 		<h3 style="margin-bottom: 20px;">Order management
@@ -11,6 +26,11 @@
 				<button type="button" class="btn btn-primary" data-toggle="modal"
 						data-target="#exampleModal" style="margin-top: 0px;">
 					brief
+				</button>
+				<!-- Button trigger modal : one day report -->
+				<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ctrl.getOneDayReport()"
+						data-target="#oneDayModal" style="margin-top: 0px;">
+					one day
 				</button>
 				Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
 			</span>
@@ -31,7 +51,7 @@
 					<div class="modal-body">
 						<div class="container" style="width:100%;font-size: 18px;">
 							<div class="row">
-								<div class="col-sm-2 border">order</div>
+								<div class="col-sm-2 border">id</div>
 								<div class="col-sm-4 border">Name</div>
 								<div class="col-sm-3 border">Lens</div>
 								<div class="col-sm-3 border">Detail</div>
@@ -45,7 +65,7 @@
 									<div class="row" style="margin-left: 3px;margin-top: 5px">{{item.reading ? item.odReading : item.odSphere}} {{item.odCylinder}}</div>
 									<div class="row" style="margin-left: 3px;">{{item.reading ? item.osReading : item.osSphere}} {{item.osCylinder}}</div>
 								</div>
-								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? '1cái' : ''}} {{item.reading ? 'đọc sách' : ''}}</div>
+								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}</div>
 							</div>
 
 						</div>
@@ -72,48 +92,48 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 60px 20px 60px;font-weight: bolder;">
+						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
 
-							<table  style="width: 100%;border-collapse: collapse;margin-top: 0px;">
-								<thead>
-								<tr>
-									<td style="padding: 5px 0 0 5px;line-height: 25px;">Tổng: {{ctrl.theSummaryModal.subTotal | number:0}}đ </td>
-									<td style="padding: 5px 0 0 5px;line-height: 25px;">Giảm({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</td>
-									<td style="padding: 5px 0 0 5px;line-height: 25px;">Thành tiền: {{ctrl.theSummaryModal.total | number:0}}đ</td>
-									<td style="padding: 5px 0 0 5px;line-height: 25px;">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</td>
-									<td style="padding: 5px 0 0 5px;line-height: 25px;">Còn lại: {{ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit | number:0}}đ</td>
-								</tr>
-								</thead>
-							</table>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-2">Name: {{ctrl.theSummaryModal.shippingName}}</div>
+								<div class="col-sm-3">Phone: {{ctrl.theSummaryModal.shippingPhone | tel}}</div>
+								<div class="col-sm-7">Address: {{ctrl.theSummaryModal.shippingAddress}}</div>
+							</div>
 
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-2">Tổng: {{ctrl.theSummaryModal.subTotal | number:0}}đ</div>
+								<div class="col-sm-3">Giảm: ({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</div>
+								<div class="col-sm-3">Thành tiền: {{ctrl.theSummaryModal.total | number:0}}đ</div>
+								<div class="col-sm-2">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</div>
+								<div class="col-sm-2">Còn lại: {{ctrl.theSummaryModal.deposit > 1000 ?  ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit : '0' | number:0}}đ</div>
+							</div>
 
 						</div>
 
 						<div class="container" style="width:100%;font-size: 18px;">
-							<div class="row">
-								<div class="col-sm-2 border">id</div>
-								<div class="col-sm-3 border">Name</div>
-								<div class="col-sm-2 border">Lens</div>
-								<div class="col-sm-3 border">Detail</div>
+							<div class="row" style="background-color: beige;font-weight: bolder;">
+								<div class="col-sm-1 border">id</div>
+								<div class="col-sm-2 border">Name</div>
+								<div class="col-sm-3 border">Lens</div>
 								<div class="col-sm-2 border">Detail</div>
+								<div class="col-sm-2 border">Frame</div>
+								<div class="col-sm-2 border">Note</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
-								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
-								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.name}}</div>
-								<div class="col-sm-2 border" >
-									<div class="row" style="margin-left: 3px;margin-top: 5px">{{item.reading ? item.odReading : item.odSphere}} {{item.odCylinder}}</div>
-									<div class="row" style="margin-left: 3px;">{{item.reading ? item.osReading : item.osSphere}} {{item.osCylinder}}</div>
+								<div class="col-sm-1 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.name}}({{item.yob}})</div>
+								<div class="col-sm-3 border" >
+									<div class="row" style="margin-left: 3px;margin-top: 5px">{{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}}</div>
+									<div class="row" style="margin-left: 3px;">{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}</div>
 								</div>
-								<div class="col-sm-3 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? '1cái' : ''}} {{item.reading ? 'đọc sách' : ''}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.frameNote}}</div>
 								<div class="col-sm-2 border">
 									{{item.orderDetailNoteForCus}}
 									{{item.orderDetailNote}}
 								</div>
 							</div>
-
-
 						</div>
-
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
@@ -122,6 +142,65 @@
 			</div>
 		</div>
 		<!-- end summary Modal -->
+
+		<!-- one day Modal -->
+		<div class="modal fade" id="oneDayModal" tabindex="-1" role="dialog" aria-labelledby="oneDayModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="oneDayModalLabel">One Day Report: {{ctrl.OneDayReport.date}}</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;">
+							<div class="row" style="margin-right: 0px;margin-left: 0px;">
+								<div class="col-sm-3 border">Tổng thành tiền: {{ctrl.OneDayReport.totalAmount | number:0}}đ</div>
+								<div class="col-sm-3 border">tiền thực nhận: {{ctrl.OneDayReport.actualAmount | number:0}}đ</div>
+								<div class="col-sm-2 border">cọc: {{ctrl.OneDayReport.depositAmount | number:0}}đ</div>
+								<div class="col-sm-3 border">Tổng còn lại: {{ctrl.OneDayReport.remainAmount | number:0}}đ</div>
+								<div class="col-sm-1 border">{{ctrl.OneDayReport.frameNumber}}G+{{ctrl.OneDayReport.lensNumber}}T</div>
+							</div>
+						</div>
+
+						<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 10px;">
+							<thead>
+							<tr>
+								<th>id</th>
+								<th style="width: 200px;">name</th>
+								<th>tổng</th>
+								<th style="width: 160px;">Giảm</th>
+								<th>Thành tiền</th>
+								<th>cọc</th>
+								<th>Còn lại</th>
+								<th>Detail</th>
+								<th>Status</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="item in ctrl.OneDayReport.data ">
+								<td><a href="#/mgnt/storeOrder/{{item.id}}" target="_blank" >{{item.id}}</a></td>
+								<td>{{item.shippingName}}</td>
+								<td style="text-align: right;">{{item.subTotal | number:0}}đ</td>
+								<td style="text-align: right;">({{item.couponDiscount}}%) {{item.couponAmount | number:0}}đ</td>
+								<td style="text-align: right;">{{item.total | number:0}}đ</td>
+								<td style="text-align: right;">{{item.deposit | number:0}}đ</td>
+								<td style="text-align: right;">{{item.deposit ==0 ? '0' : item.remain | number:0}}đ</td>
+								<td>{{item.frameNumber}}G+{{item.lensNumber}}T</td>
+								<td>{{item.statusName}}</td>
+							</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end one day Modal -->
 
 		<div class="row" style="margin-bottom: 15px;">
 			

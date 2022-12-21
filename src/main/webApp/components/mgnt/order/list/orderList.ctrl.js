@@ -19,6 +19,7 @@ angular.module('orderListModule')
     self.tempAmount=0;
     self.tempFrameNumber=0;
     self.tempLensNumber=0;
+    self.OneDayReport={};
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -68,11 +69,6 @@ angular.module('orderListModule')
     }
 
     self.copyClipBoard = function() {
-
-
-       console.log(self.copyText);
-
-
        var copyTextarea = angular.element(document.getElementById("js-copytextarea"));
          copyTextarea.focus();
          copyTextarea.select();
@@ -84,7 +80,6 @@ angular.module('orderListModule')
          } catch (err) {
            console.log('Oops, unable to copy');
          }
-
     }
 
     self.selectAllAmount = function() {
@@ -120,6 +115,50 @@ angular.module('orderListModule')
            self.tempLensNumber += dataOne.lensNumber;
        });
        buildText();
+
+       // for one day report modal
+       self.tempForOneDayReport = one;
+    }
+
+    self.getOneDayReport = function() {
+        self.OneDayReport.totalAmount = 0;
+        self.OneDayReport.subTotalAmount = 0;
+        self.OneDayReport.couponAmount = 0;
+        self.OneDayReport.depositAmount = 0;
+        self.OneDayReport.frameNumber = 0;
+        self.OneDayReport.lensNumber = 0;
+        self.OneDayReport.actualAmount = 0;
+        self.OneDayReport.remainAmount = 0;
+
+        self.OneDayReport.data = self.orderList.filter(i => sameDay(new Date(i.gmtCreate), new Date(self.tempForOneDayReport.gmtCreate)));
+        var date = (new Date(self.tempForOneDayReport.gmtCreate)).getDate();
+        date =  date > 9 ? date : '0' + date;
+        var month = (new Date(self.tempForOneDayReport.gmtCreate)).getMonth();
+        month =  month + 1 > 9 ? month +1 : '0' + month;
+
+        self.OneDayReport.date = (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() +'-'+ month +'-'+ date;
+
+        self.OneDayReport.data.forEach((dataOne, index, array) => {
+            self.OneDayReport.totalAmount += dataOne.total;
+            self.OneDayReport.subTotalAmount += dataOne.subTotal;
+            self.OneDayReport.depositAmount += dataOne.deposit;
+            self.OneDayReport.frameNumber += dataOne.frameNumber;
+            self.OneDayReport.lensNumber += dataOne.lensNumber;
+            if(dataOne.deposit > 1000 && dataOne.status == 4){
+                self.OneDayReport.actualAmount += dataOne.deposit;
+                self.OneDayReport.remainAmount += dataOne.remain;
+            }else{
+                self.OneDayReport.actualAmount += dataOne.total;
+            }
+        });
+
+        console.log(self.OneDayReport);
+    }
+
+    function sameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
     }
 
 	self.deleteOrder = function(order){
@@ -231,8 +270,17 @@ angular.module('orderListModule')
                 }
             }
             if(order.orderDetails[i].reading){
-                order.orderDetails[i].odReading = Number(order.orderDetails[i].odSphere) + Number(order.orderDetails[i].odAdd);
-                order.orderDetails[i].osReading = Number(order.orderDetails[i].osSphere) + Number(order.orderDetails[i].osAdd);
+                var odSphere = Number(order.orderDetails[i].odSphere) ? Number(order.orderDetails[i].odSphere) : 0;
+                var osSphere = Number(order.orderDetails[i].osSphere) ? Number(order.orderDetails[i].osSphere) : 0;
+                order.orderDetails[i].odReading = odSphere + Number(order.orderDetails[i].odAdd);
+                order.orderDetails[i].osReading = osSphere + Number(order.orderDetails[i].osAdd);
+
+                if(order.orderDetails[i].odReading > 0){
+                    order.orderDetails[i].odReading = '+' + order.orderDetails[i].odReading;
+                }
+                if(order.orderDetails[i].osReading > 0){
+                    order.orderDetails[i].osReading = '+' + order.orderDetails[i].osReading;
+                }
             }
         }
         order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
@@ -240,6 +288,12 @@ angular.module('orderListModule')
         order.currentCusSource = order.cusSource;
         order.couponAmount = subTotal*order.couponDiscount/100;
         order.total = subTotal - order.couponAmount;
+        order.remain = 0;
+        if(order.status == 4){
+            order.remain = subTotal - order.couponAmount - order.deposit;
+        }
+
+
 
         switch(order.status) {
           case 0:
@@ -267,18 +321,19 @@ angular.module('orderListModule')
 
     function buildText(){
         self.copyText='';
-         self.detailArray.forEach((dataOne, index, array) => {
-            var mono =  dataOne.monoLens ? '1cái' : '';
-            var reading = dataOne.reading ? 'đọc sách' : '';
+        self.detailArray.forEach((dataOne, index, array) => {
+            var mono =  dataOne.monoLens ? ', 1cái' : '';
+            var reading = dataOne.reading ? ', đọc sách' : '';
+            var odSphere = dataOne.reading ? dataOne.odReading : dataOne.odSphere;
+            var osSphere = dataOne.reading ? dataOne.osReading : dataOne.osSphere;
             self.copyText = self.copyText + '[' + dataOne.orderId +'-'+ dataOne.id +':'+
-                                             '('+dataOne.odSphere +' '+dataOne.odCylinder + ')' +
-                                             '('+dataOne.osSphere +' '+dataOne.osCylinder + ')/' +
-                                             dataOne.lensNote +' '+ mono +' '+ reading +
-                                             ']\n'
-
+                                            '('+odSphere +' '+dataOne.odCylinder + ')' +
+                                            '('+osSphere +' '+dataOne.osCylinder + ')/' +
+                                            dataOne.lensNote + mono +' '+ reading +
+                                            ']\n'
             ;
         });
-
+        console.log(self.detailArray);
     }
 
 

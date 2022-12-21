@@ -66,11 +66,11 @@ public class AuthenticationController {
 
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
-                order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation()));
+                order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(), order.getShippingAddress()));
         for(OrderDetail item : order.getOrderDetails()){
             if(!item.getPhone().isEmpty() && !item.getPhone().equals(order.getShippingPhone()) && order.getLocation().equals("STORE")){
                 smsUserList.add(new SmsUserInfo(item.getName(), item.getPhone(), item.getGender(),item.getGmtCreate(),item.getGmtCreate(),
-                        Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation()));
+                        Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),item.getAddress()));
             }
         }
         List<SmsUserInfo> smsUserResult = new ArrayList<>();

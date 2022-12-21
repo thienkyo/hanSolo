@@ -16,7 +16,8 @@ angular.module('app')
          }
 
          console.log(response);
-    	 if (response.status === 500 && response.data.path == '/authenticated/me') {
+
+    	 if (response.status === 500 && response.data.path.includes('mgnt')) {
     	    $rootScope.$broadcast('ExpiredJwt');
          }
     	 

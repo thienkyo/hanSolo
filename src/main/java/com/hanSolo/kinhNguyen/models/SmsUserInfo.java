@@ -45,6 +45,17 @@ public class SmsUserInfo {
     @Column(name = "location", length = 50)
     private String location;
 
+    @Column(name = "address", length = 400)
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -72,13 +83,14 @@ public class SmsUserInfo {
     public SmsUserInfo() {
     }
 
-    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location) {
+    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location, String address) {
         this.name = name;
         this.phone = phone;
         this.gender = gender;
         this.location = location;
         this.lastSendSmsDate = lastSendSmsDate;
         this.orderCreateDate = orderCreateDate;
+        this.address = address;
         this.gmtCreate = gmtCreate;
         this.gmtModify = gmtModify;
     }
