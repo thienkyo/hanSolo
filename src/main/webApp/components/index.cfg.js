@@ -120,6 +120,11 @@ angular.module('app')
             controller: 'bizReportController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/SmsUserInfo',{
+            templateUrl: 'components/mgnt/smsUserInfo/smsUserInfo.html',
+            controller: 'smsUserInfoController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/prescriptionList',{
             templateUrl: 'components/mgnt/prescriptionList/prescriptionList.html',
             controller: 'prescriptionListController',

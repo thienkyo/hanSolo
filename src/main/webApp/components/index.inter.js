@@ -14,13 +14,11 @@ angular.module('app')
     	 if (response.status === 401) {
              $rootScope.$broadcast('unauthorized');
          }
-
          console.log(response);
-
     	 if (response.status === 500 && response.data.path.includes('mgnt')) {
     	    $rootScope.$broadcast('ExpiredJwt');
+    	    console.log('interrupt');
          }
-    	 
          return $q.reject(response);;
     };
     

@@ -19,17 +19,17 @@
 	<div class="container" ng-cloak>
 		<h3 style="margin-bottom: 20px;">Order management
 			<span ng-show="ctrl.tempAmount > 0" style="">
-				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >Clear</a>
+				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
 				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
+				   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
 				<!-- Button trigger modal -->
 				<button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#exampleModal" style="margin-top: 0px;">
+						data-target="#exampleModal" style="margin-top: 0px;height: 32px;">
 					brief
 				</button>
 				<!-- Button trigger modal : one day report -->
 				<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ctrl.getOneDayReport()"
-						data-target="#oneDayModal" style="margin-top: 0px;">
+						data-target="#oneDayModal" style="margin-top: 0px;height: 32px;">
 					one day
 				</button>
 				Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T

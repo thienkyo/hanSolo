@@ -136,6 +136,28 @@ public class OrderDetail {
     @Column(name = "mono_lens")
     private Boolean monoLens;
 
+    @Column(name = "other_price")
+    private Integer otherPrice;
+
+    @Column(name = "other_note", length = 600)
+    private String otherNote;
+
+    public String getOtherNote() {
+        return otherNote;
+    }
+
+    public void setOtherNote(String otherNote) {
+        this.otherNote = otherNote;
+    }
+
+    public Integer getOtherPrice() {
+        return otherPrice;
+    }
+
+    public void setOtherPrice(Integer otherPrice) {
+        this.otherPrice = otherPrice;
+    }
+
     public Boolean getMonoLens() {
         return monoLens;
     }

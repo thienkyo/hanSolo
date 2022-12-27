@@ -7,9 +7,11 @@ function($scope,$location,bizReportService,NgTableParams,memberService,modifiedR
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new BizReportDO;
-    self.statusStyle = {};
     self.allIncome = 0;
     self.allOutcome = 0;
+    self.allOrders = 0;
+    self.allFrames = 0;
+    self.allLenses = 0;
     self.modifiedReports = [
         new modifiedReportDO('2022'),
         new modifiedReportDO('2023'),
@@ -21,7 +23,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,modifiedR
         new modifiedReportDO('2029'),
         new modifiedReportDO('2030')
     ];
-    self.modifiedReports2 = [];
+    self.modifiedReports2 = [];// array of modifiedReportDO
 
 
     if(!memberService.isAdmin()){
@@ -32,6 +34,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,modifiedR
     }
 
     bizReportService.getAll().then(function (data) {
+        console.log(data);
         self.bizReportList = data;
         self.setModifiedReports(data);
         self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
@@ -44,10 +47,16 @@ function($scope,$location,bizReportService,NgTableParams,memberService,modifiedR
                     reportOne.details.push(dataOne);
                     reportOne.income += dataOne.income;
                     reportOne.outcome += dataOne.outcome;
+                    reportOne.orders += dataOne.orderQuantity;
+                    reportOne.frames += dataOne.frameQuantity;
+                    reportOne.lenses += dataOne.lensQuantity;
                 }
             });
             self.allIncome += dataOne.income;
             self.allOutcome += dataOne.outcome;
+            self.allOrders += dataOne.orderQuantity;
+            self.allFrames += dataOne.frameQuantity;
+            self.allLenses += dataOne.lensQuantity;
         });
 
         self.modifiedReports.reverse();

@@ -53,6 +53,7 @@ angular
 		.value('BizReportDO',BizReportDO)
 		.value('modifiedReportDO',modifiedReportDO)
 		.value('FirstTimeLoadSize',FirstTimeLoadSize)
+		.value('smsUserInfoDO',smsUserInfoDO)
 		.value('PaginationDO',PaginationDO);
 
 function modifiedReportDO(year){
@@ -60,6 +61,24 @@ function modifiedReportDO(year){
 	this.details = [];
 	this.income = 0;
 	this.outcome = 0;
+	this.orders = 0;
+	this.frames = 0;
+	this.lenses = 0;
+}
+
+function smsUserInfoDO(){
+    this.id = 0;
+    this.phone = '';
+    this.gender = false;
+    this.lastSendSmsDate = (new Date()).getTime();
+    this.orderCreateDate = (new Date()).getTime();
+    this.name = '';
+    this.jobIdList = '';
+    this.location = '';
+    this.address = '';
+    this.isTestUser = false;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function OrderDO () {

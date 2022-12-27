@@ -13,6 +13,7 @@ angular.module('bizExpenseModule')
 	self.isSaveButtonPressed=false;
 	self.tempArray=[];
 	self.tempAmount=0;
+	self.OneDayExpense={};
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -55,6 +56,30 @@ angular.module('bizExpenseModule')
        });
     }
 
+    self.getOneDayExpense = function() {
+        self.OneDayExpense.totalAmount = 0;
+        self.OneDayExpense.data = self.BizExpenseList.filter(i => sameDay(new Date(i.gmtCreate), new Date(self.tempForOneDayExpense.gmtCreate)));
+        var date = (new Date(self.tempForOneDayExpense.gmtCreate)).getDate();
+        date =  date > 9 ? date : '0' + date;
+        var month = (new Date(self.tempForOneDayExpense.gmtCreate)).getMonth();
+        month =  month + 1 > 9 ? month +1 : '0' + month;
+
+        self.OneDayExpense.date = (new Date(self.tempForOneDayExpense.gmtCreate)).getFullYear() +'-'+ month +'-'+ date;
+
+        self.OneDayExpense.data.forEach((dataOne, index, array) => {
+            self.OneDayExpense.totalAmount += dataOne.amount;
+
+        });
+        self.tempAmount = self.OneDayExpense.totalAmount;
+        console.log(self.OneDayExpense);
+    }
+
+    function sameDay(d1, d2) {
+      return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
+    }
+
 	self.calculateAmount = function(one) {
 	    self.tempAmount = 0;
         if(one.picked){
@@ -66,7 +91,9 @@ angular.module('bizExpenseModule')
        self.tempArray.forEach((dataOne, index, array) => {
            self.tempAmount += dataOne.amount;
        });
-       console.log(self.tableParams);
+       //console.log(self.tableParams);
+       // for one day report modal
+       self.tempForOneDayExpense = one;
     }
 
 	self.upsert = function(bizExpense){
@@ -82,6 +109,7 @@ angular.module('bizExpenseModule')
 		bizExpenseService.upsert(bizExpense).then(function (data) {
 			self.responseStr = data;
 			self.isSaveButtonPressed=false;
+			console.log(data);
 			if(bizExpense.id == 0){
 				self.BizExpenseList.unshift(bizExpense);
 				self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
@@ -120,6 +148,10 @@ angular.module('bizExpenseModule')
             self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
         });
     }
+
+    self.closeAlert = function(index) {
+        self.responseStr = false;
+    };
 
     self.promptDelete = function(id){
         self.deletingId = self.deletingId ? false : id;

@@ -26,30 +26,19 @@ import java.util.Optional;
 public class ManagementController {
 
     @Autowired private CategoryRepository categoryRepo;
-
     @Autowired private SupplierRepository supplierRepo;
-
     @Autowired private ProductRepository prodRepo;
-
     @Autowired private BannerRepository bannerRepo;
-
     @Autowired private MemberRepository memberRepo;
-
     @Autowired private CouponRepository couponRepo;
-
     @Autowired private ArticleRepository articleRepo;
-
     @Autowired private OrderRepository orderRepo;
-
     @Autowired private OrderDetailRepository orderDetailRepo;
-
     @Autowired private UsedCouponsRepository usedCouponsRepo;
-
     @Autowired private BizExpenseRepository bizExpenseRepo;
-
     @Autowired private CustomerSourceRepository customerSourceRepo;
-
     @Autowired private BizReportRepository bizReportRepo;
+    @Autowired private SmsUserInfoRepository smsUserInfoRepo;
 
     @Autowired private Environment env;
 
@@ -445,6 +434,24 @@ public class ManagementController {
         }
 
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// smsUserInfo section /////////////////////////////
+    @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
+    public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+        List<SmsUserInfo> SmsUserInfoList ;
+        if(amount==100){
+            SmsUserInfoList =  smsUserInfoRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            SmsUserInfoList = smsUserInfoRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return SmsUserInfoList;
+    }
+
+    @RequestMapping(value = "upsertSmsUserInfo", method = RequestMethod.POST)
+    public SmsUserInfoResponse upsertSmsUserInfo(@RequestBody final SmsUserInfo one, final HttpServletRequest request) {
+        SmsUserInfo newOne = smsUserInfoRepo.save(one);
+        return new SmsUserInfoResponse(newOne,Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// upload ///////////////////////////////
