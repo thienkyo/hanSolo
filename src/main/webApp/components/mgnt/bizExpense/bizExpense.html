@@ -153,8 +153,9 @@ form .progress {
 				<select  ng-model="ctrl.amount"
 						 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 						 ng-change="ctrl.getBizExpenseByTerm(ctrl.amount)"
-						 style="width: 100%;height: 30px;">
+						 style="width: 80px;height: 30px;">
 				</select>
+				size: {{ctrl.size}}
 			</div>
 			<div ng-show="ctrl.tempAmount > 0">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
@@ -178,10 +179,10 @@ form .progress {
 			        <td title="'description'" filter="{ 'description' : 'text'}" sortable="'description'" style="text-align: left;white-space: pre-line;">
 			        	{{one.description}}
 			        </td>
-					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:70px;">
+					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:80px;">
 						{{one.amount | number:0}}đ
 					</td>
-					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:100px;">
+					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:120px;">
 						{{one.owner}}
 					</td>
 					<td title="''"  style="text-align: center;">

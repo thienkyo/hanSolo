@@ -169,7 +169,6 @@ angular.module('storeOrderModule')
     }
 
     self.saveOrder = function(){
-       // $('.alert').alert();
         self.order_return_status = null;
         if(self.isPickDP){
             self.theOrder.gmtModify = self.theOrder.gmtCreate;

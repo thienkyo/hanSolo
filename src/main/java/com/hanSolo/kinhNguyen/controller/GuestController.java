@@ -6,6 +6,7 @@ import com.hanSolo.kinhNguyen.models.Order;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.OrderRepository;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
+import com.hanSolo.kinhNguyen.response.QueueSmsResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,19 @@ public class GuestController {
     @RequestMapping("getGuestOrder/{phone}")
     public List<Order> getOrdersByPhone(@PathVariable String phone) {
         return orderRepo.findByShippingPhoneOrderByIdDesc(phone);
+    }
+
+    @RequestMapping("getQueueSms")
+    public QueueSmsResponse getQueueSms() {
+        return new QueueSmsResponse("022","0902948191","KinhNguyen test sms");
+    }
+
+    @RequestMapping("getSmsStatus")
+    public String getSmsStatus(@RequestParam String id) {
+        if(id == "022"){
+            return "Success";
+        }
+
+        return "Fail";
     }
 }

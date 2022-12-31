@@ -13,6 +13,7 @@ angular.module('bizExpenseModule')
 	self.isSaveButtonPressed=false;
 	self.tempArray=[];
 	self.tempAmount=0;
+	self.size=0;
 	self.OneDayExpense={};
 
 	if(!memberService.isAdmin()){
@@ -30,7 +31,7 @@ angular.module('bizExpenseModule')
 	
 	bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
 		self.BizExpenseList = data;
-		console.log(data);
+		self.size=self.BizExpenseList.length;
 		self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
 	});
 
@@ -144,7 +145,7 @@ angular.module('bizExpenseModule')
     self.getBizExpenseByTerm = function(){
         bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
             self.BizExpenseList = data;
-
+            self.size=self.BizExpenseList.length;
             self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
         });
     }
