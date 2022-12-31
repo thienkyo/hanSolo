@@ -3,8 +3,10 @@ package com.hanSolo.kinhNguyen.controller;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.models.Order;
+import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.OrderRepository;
+import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.QueueSmsResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
@@ -28,6 +30,8 @@ public class GuestController {
     private MemberRepository memberRepo;
     @Autowired
     private OrderRepository orderRepo;
+    @Autowired
+    private SmsQueueRepository smsQueueRepo;
 
     @RequestMapping(value = "saveOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +70,8 @@ public class GuestController {
 
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() {
-        return new QueueSmsResponse("022","0902948191","KinhNguyen test sms");
+        List<SmsQueue> smsQueueList = smsQueueRepo.findByOrderByGmtCreateDesc();
+        return new QueueSmsResponse(smsQueueList.get(0).getId().toString(),smsQueueList.get(0).getReceiverPhone(),smsQueueList.get(0).getContent());
     }
 
     @RequestMapping("getSmsStatus")
