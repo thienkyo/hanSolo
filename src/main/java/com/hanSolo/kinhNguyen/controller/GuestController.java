@@ -71,10 +71,11 @@ public class GuestController {
 
     @RequestMapping("getSmsStatus")
     public String getSmsStatus(@RequestParam String id) {
-        if(id == "022"){
+        /*if(id == "022"){
             return "Success";
         }
 
-        return "Fail";
+        return "Fail";*/
+        return id;
     }
 }
