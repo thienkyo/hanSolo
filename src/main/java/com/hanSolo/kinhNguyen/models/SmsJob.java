@@ -22,8 +22,8 @@ public class SmsJob {
     @Column(name = "job_name", length = 100)
     private String jobName;
 
-    @Column(name = "interval")
-    private Integer interval;
+    @Column(name = "intervalTime")
+    private Integer intervalTime;
 
     @Column(name = "msg_content_template", length = 450)
     private String msgContentTemplate;
@@ -36,6 +36,19 @@ public class SmsJob {
 
     @Column(name = "no_sms_days")
     private Integer noSmsDays;
+
+    @Column(name = "is_test")
+    private Boolean isTest;
+
+
+
+    public Boolean getIsTest() {
+        return isTest;
+    }
+
+    public void setIsTest(Boolean isTest) {
+        this.isTest = isTest;
+    }
 
     public Integer getNoSmsDays() {
         return noSmsDays;
@@ -69,12 +82,12 @@ public class SmsJob {
         this.msgContentTemplate = msgContentTemplate;
     }
 
-    public Integer getInterval() {
-        return interval;
+    public Integer getIntervalTime() {
+        return intervalTime;
     }
 
-    public void setInterval(Integer interval) {
-        this.interval = interval;
+    public void setIntervalTime(Integer intervalTime) {
+        this.intervalTime = intervalTime;
     }
 
     public String getJobName() {

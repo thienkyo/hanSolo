@@ -58,6 +58,9 @@ public class Utility {
     final public static int BLOG_PAGE_SIZE = 9;
     final public static int FIRTST_TIME_LOAD_SIZE = 100;
 
+    final public static String SMS_QUEUE_INIT = "INIT";
+    final public static String SMS_QUEUE_SENDING = "SENDING";
+    final public static String SMS_QUEUE_SENT = "SENT";
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

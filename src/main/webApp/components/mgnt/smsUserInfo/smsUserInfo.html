@@ -48,119 +48,249 @@ form .progress {
 <link href="css/main2.css" rel="stylesheet">
 <section>
 	<div class="container" ng-cloak>
-		<h3 style="margin-bottom: 20px;">New/Update </h3>
 
-		<div class="row" >
-			<div class="col-sm-1">
-				<input type="number"  ng-model="ctrl.theSmsUserInfo.id" disabled="disabled" placeholder="id" style="width:50px;"/>
-			</div>
-			<div class="col-sm-3">
-				<input type="text"  ng-model="ctrl.theSmsUserInfo.phone" placeholder="phone" style="width: 100px;"/>
-				{{ctrl.theSmsUserInfo.phone | tel}}
-			</div>
-			<div class="col-sm-2">
-				<input type="text"  ng-model="ctrl.theSmsUserInfo.name" placeholder="name" style="width: 100%;"/>
-			</div>
-			<div class="col-sm-4">
-				<input type="text"  ng-model="ctrl.theSmsUserInfo.address" placeholder="address" style="width: 100%;"/>
-			</div>
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" data-toggle="tab" href="" data-target="#config">Sms Config</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#queue">Sms queue</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#info">Sms user info</a>
+			</li>
+		</ul>
 
-			<div class="col-sm-1">
-				tester:
-				<input type="checkbox"  ng-model="ctrl.theSmsUserInfo.isTestUser" />
-			</div>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- config tab pane-->
+			<div id="config" class="container tab-pane active"><br>
+				config
+			</div><br>
+			<!-- sms queue tab pane-->
+			<div id="queue" class="container tab-pane"><br>
+				<div class="row" >
+					<div class="col-sm-1">
+						<input type="number"  ng-model="ctrl.theSmsQueue.id" disabled="disabled" placeholder="id" style="width:50px;"/>
+					</div>
 
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.theSmsQueue.receiverName" placeholder="name" style="width: 100%;"/>
+					</div>
 
-		</div>
+					<div class="col-sm-1" style="margin-top: 5px;">
+						male:
+						<input type="checkbox"  ng-model="ctrl.theSmsQueue.gender" />
+					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsQueue.status" placeholder="status" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-4">
+						<input type="text"  ng-model="ctrl.theSmsQueue.receiverPhone" placeholder="phone" style="width: 160px;"/>
+						{{ctrl.theSmsQueue.receiverPhone | tel}}
+					</div>
 
-		<div class="row" style="margin-top: 20px;">
+				</div>
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-7">
+						<textarea name="content" placeholder="content" rows="5"  style="white-space: pre-line;"
+						  ng-model="ctrl.theSmsQueue.content" maxlength="160" ng-cloak ></textarea>
+						<div id="the-count">
+							<span>{{ctrl.theSmsQueue.content.length}}</span>
+							<span>/ 160</span>
+						</div>
+					</div>
 
-			<div class="col-sm-5"></div>
-			<div class="col-sm-2">
-				<a ng-click="ctrl.upsert(ctrl.theSmsUserInfo)" href=""
-				   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
-				   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
+					<div class="col-sm-2">
+						<a ng-click="ctrl.upsertSmsQueue(ctrl.theSmsQueue)" href=""
+						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
 
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
-			</div>
-			<div class="col-sm-4">
+						<a ng-click="ctrl.clearSmsQueue()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-sm-1">
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
 
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span class="sr-only"></span>
-					thất bại
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+					</div>
 				</div>
 
-				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
-					   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
-					thành công
-				</alert>
+				<!-- sms queue insert/update-->
+				<h3 style="margin-top: 20px;">Sms queue </h3>
+				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+					<div class="col-sm-2">
+						<select  ng-model="ctrl.smsQueueAmount"
+								 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+								 ng-change="ctrl.getSmsQueueByTerm(ctrl.smsQueueAmount)"
+								 style="width: 100%;height: 30px;">
+						</select>
+					</div>
+				</div>
+				<!-- sms queue table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.smsQueueTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheSmsQueue(one)">{{one.id}}</a>
+							</td>
+							<td title="'phone'" filter="{ 'receiverPhone' : 'text'}" sortable="'receiverPhone'" style="text-align: left;width:150px;">
+								{{one.receiverPhone | tel}}
+							</td>
+							<td title="'name'" filter="{ 'receiverName' : 'text'}" sortable="'receiverName'" style="text-align: right;width:150px;">
+								{{one.receiverName}}
+							</td>
+							<td title="'content'" filter="{ 'content' : 'text'}" sortable="'content'" style="text-align: left;">
+								{{one.content}}
+							</td>
+							<td title="'male'"  style="text-align: center;">
+								<input type="checkbox"  ng-model="one.gender"/>
+							</td>
+							<td title="'create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:130px;">
+								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+							</td>
 
+							<td title="'status'" filter="{ 'status' : 'text'}" sortable="'status'" style="width:100px;text-align: center;">
+								{{one.status}}
+							</td>
+
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+								<p ng-show="ctrl.deletingId == one.id">
+									Are you sure?
+									<a ng-click="ctrl.deleteSmsQueue(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+								</p>
+							</td>
+
+						</tr>
+					</table>
+				</div>
 			</div>
-			<div class="col-sm-1"></div>
-	    </div>
+			<!-- sms info tab pane -->
+			<div id="info" class="container tab-pane"><br>
+				<div class="row" >
+					<div class="col-sm-1">
+						<input type="number"  ng-model="ctrl.theSmsUserInfo.id" disabled="disabled" placeholder="id" style="width:50px;"/>
+					</div>
+					<div class="col-sm-3">
+						<input type="text"  ng-model="ctrl.theSmsUserInfo.phone" placeholder="phone" style="width: 100px;"/>
+						{{ctrl.theSmsUserInfo.phone | tel}}
+					</div>
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.theSmsUserInfo.name" placeholder="name" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-4">
+						<input type="text"  ng-model="ctrl.theSmsUserInfo.address" placeholder="address" style="width: 100%;"/>
+					</div>
+
+					<div class="col-sm-1">
+						tester:
+						<input type="checkbox"  ng-model="ctrl.theSmsUserInfo.isTestUser" />
+					</div>
+
+				</div>
+
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-2">
+						<a ng-click="ctrl.upsert(ctrl.theSmsUserInfo)" href=""
+						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
+
+						<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-sm-4">
+
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+
+					</div>
+					<div class="col-sm-5"></div>
+					<div class="col-sm-1"></div>
+				</div>
+
+				<!-- sms user info table-->
+				<h3 style="margin-top: 20px;">Sms User Info List </h3>
+				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+					<div class="col-sm-2">
+						<select  ng-model="ctrl.amount"
+								 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+								 ng-change="ctrl.getSmsUserInfoByTerm(ctrl.amount)"
+								 style="width: 100%;height: 30px;">
+						</select>
+					</div>
+					<div ng-show="ctrl.tempAmount > 0">
+						<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
+						<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
+						   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 60" >Select all</a>
+						<a ng-click="ctrl.getOneDayExpense()" href="" class="btn btn-default check_out"
+						   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 100" >one day</a>
+						Total: {{ctrl.tempAmount | number:0}}đ
+					</div>
+				</div>
+				<!-- sms user info table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
+							</td>
+							<td title="'phone'" filter="{ 'phone' : 'text'}" sortable="'phone'" style="text-align: left;width:130px;">
+								{{one.phone | tel}}
+							</td>
+							<td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
+								{{one.name}}
+							</td>
+							<td title="'address'" filter="{ 'address' : 'text'}" sortable="'address'" style="text-align: right;">
+								{{one.address}}
+							</td>
+							<td title="'tester'"  style="text-align: center;">
+								<input type="checkbox"  ng-model="one.isTestUser"/>
+							</td>
+							<td title="'order date'" filter="{ 'orderCreateDate' : 'text'}" sortable="'orderCreateDate'" style="text-align: left;width:130px;">
+								{{one.orderCreateDate | date:"yyyy-MM-dd HH:mm:ss"}}
+							</td>
+
+							<td title="'last send'" filter="{ 'lastSendSmsDate' : 'text'}" sortable="'lastSendSmsDate'" style="width:110px;">
+								{{one.lastSendSmsDate | date:"yyyy-MM-dd HH:mm:ss"}}
+							</td>
+
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+								<p ng-show="ctrl.deletingId == one.id">
+									Are you sure?
+									<a ng-click="ctrl.deleteSmsUserInfo(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+								</p>
 
 
-		<!-- biz expense table-->
-		<h3 style="margin-top: 20px;">Sms User Info List </h3>
-		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-			<div class="col-sm-2">
-				<select  ng-model="ctrl.amount"
-						 ng-options="opt.value as opt.name for opt in ctrl.amountList"
-						 ng-change="ctrl.getSmsUserInfoByTerm(ctrl.amount)"
-						 style="width: 100%;height: 30px;">
-				</select>
-			</div>
-			<div ng-show="ctrl.tempAmount > 0">
-				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
-				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 60" >Select all</a>
-				<a ng-click="ctrl.getOneDayExpense()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 100" >one day</a>
-				Total: {{ctrl.tempAmount | number:0}}đ
+							</td>
+
+						</tr>
+					</table>
+				</div>
+
+
 			</div>
 		</div>
+		<!-- end Tab panes -->
 
-        <div class="table-responsive">
-            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
-			    <tr ng-repeat="one in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
-			        	<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
-			        </td>
-			        <td title="'phone'" filter="{ 'phone' : 'text'}" sortable="'phone'" style="text-align: left;width:130px;">
-			        	{{one.phone | tel}}
-			        </td>
-					<td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="text-align: right;">
-						{{one.name}}
-					</td>
-					<td title="'address'" filter="{ 'address' : 'text'}" sortable="'address'" style="text-align: right;">
-						{{one.address}}
-					</td>
-					<td title="'tester'"  style="text-align: center;">
-						<input type="checkbox"  ng-model="one.isTestUser"/>
-					</td>
-					<td title="'order date'" filter="{ 'orderCreateDate' : 'text'}" sortable="'orderCreateDate'" style="text-align: left;width:130px;">
-						{{one.orderCreateDate | date:"yyyy-MM-dd HH:mm:ss"}}
-					</td>
-
-			        <td title="'last send'" filter="{ 'lastSendSmsDate' : 'text'}" sortable="'lastSendSmsDate'" style="width:110px;">
-			        	{{one.lastSendSmsDate | date:"yyyy-MM-dd HH:mm:ss"}}
-			        </td>
-
-					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
-						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
-						<p ng-show="ctrl.deletingId == one.id">
-							Are you sure?
-							<a ng-click="ctrl.deletesmsUserInfo(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
-							<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
-						</p>
-
-
-					</td>
-
-			    </tr>
-			</table>
-        </div>
 	</div>
 </section>

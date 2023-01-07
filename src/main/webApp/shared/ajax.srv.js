@@ -1,7 +1,7 @@
 angular.module('networkServices',[])
 	.factory('ajaxService',['$http','$cookies',function($http,$cookies){
 		
-		//var urlbase = "http://146.190.6.177:8080/";
+		//var urlbase = "http://192.168.1.20:8080/";
 		//var urlbase = "http://kyoshop.org/";
 		var urlbase = "http://localhost:8080/";
 		//var urlbase = "http://matkinhnguyen.com/";

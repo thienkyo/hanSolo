@@ -32,7 +32,7 @@ angular.module('invoiceModule')
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,1,self.theOrder.orderDetails[i].lensNote));
             }
         }
-        var temp = 10 - self.OrderDetailList.length;
+        var temp = 12 - self.OrderDetailList.length;
         for (var i = 0; i < temp; i++){
             self.OrderDetailList.push(new MiniOrderDetailDO());
         }

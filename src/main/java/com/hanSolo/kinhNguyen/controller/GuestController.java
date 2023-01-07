@@ -30,8 +30,6 @@ public class GuestController {
     private MemberRepository memberRepo;
     @Autowired
     private OrderRepository orderRepo;
-    @Autowired
-    private SmsQueueRepository smsQueueRepo;
 
     @RequestMapping(value = "saveOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,21 +64,5 @@ public class GuestController {
     @RequestMapping("getGuestOrder/{phone}")
     public List<Order> getOrdersByPhone(@PathVariable String phone) {
         return orderRepo.findByShippingPhoneOrderByIdDesc(phone);
-    }
-
-    @RequestMapping("getQueueSms")
-    public QueueSmsResponse getQueueSms() {
-        List<SmsQueue> smsQueueList = smsQueueRepo.findByOrderByGmtCreateDesc();
-        return new QueueSmsResponse(smsQueueList.get(0).getId().toString(),smsQueueList.get(0).getReceiverPhone(),smsQueueList.get(0).getContent());
-    }
-
-    @RequestMapping("getSmsStatus")
-    public String getSmsStatus(@RequestParam String id) {
-        /*if(id == "022"){
-            return "Success";
-        }
-
-        return "Fail";*/
-        return id;
     }
 }

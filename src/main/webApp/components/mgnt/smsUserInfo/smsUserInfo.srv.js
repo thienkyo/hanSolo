@@ -22,11 +22,72 @@ angular.module('smsUserInfoModule')
 		});
 	}
 
-	function deleteSmsUserInfo(smsUserInfo){
+	function deleteSmsUserInfo(one){
         var url = "mgnt/deleteSmsUserInfo";
-        return ajaxService.post(url,smsUserInfo,{}).then(function(response){
+        return ajaxService.post(url,one,{}).then(function(response){
             return response.data;
         });
     }
 
- }]);
+ }])
+.factory('smsQueueService', ['ajaxService',function(ajaxService) {
+	var smsQueueService = {
+			getDataForMgnt : getDataForMgnt,
+			upsert : upsert,
+			deleteOne : deleteOne
+			};
+	return smsQueueService;
+
+	function getDataForMgnt(amount){
+		var url = "mgnt/getSmsQueueForMgnt/"+amount;
+		return ajaxService.get(url,null,{}).then(function(response){
+			return response.data;
+		});
+	}
+
+	function upsert(one){
+		var url = "mgnt/upsertSmsQueue";
+		return ajaxService.post(url,one,{}).then(function(response){
+			return response.data;
+		});
+	}
+
+	function deleteOne(one){
+        var url = "mgnt/deleteSmsQueue";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+ }])
+.factory('smsJobService', ['ajaxService',function(ajaxService) {
+	var smsJobService = {
+			getDataForMgnt : getDataForMgnt,
+			upsert : upsert,
+			deleteOne : deleteOne
+			};
+	return smsJobService;
+
+	function getDataForMgnt(amount){
+		var url = "mgnt/getSmsQueueForMgnt/"+amount;
+		return ajaxService.get(url,null,{}).then(function(response){
+			return response.data;
+		});
+	}
+
+	function upsert(one){
+		var url = "mgnt/upsertSmsQueue";
+		return ajaxService.post(url,one,{}).then(function(response){
+			return response.data;
+		});
+	}
+
+	function deleteOne(one){
+        var url = "mgnt/deleteSmsQueue";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+ }])
+;

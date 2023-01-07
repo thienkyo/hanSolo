@@ -4,11 +4,12 @@ angular.module('app')
     return function (tel) {
         if (!tel) { return ''; }
 
-        var value = tel.toString().trim().replace(/^\+/, '');
+     //   var value = tel.toString().trim().replace(/^\+/, '');
+        var value = tel.toString().trim();
 
-        if (value.match(/[^0-9]/)) {
+       /* if (value.match(/[^0-9]/)) {
             return tel;
-        }
+        }*/
 
         var country, city, number;
 

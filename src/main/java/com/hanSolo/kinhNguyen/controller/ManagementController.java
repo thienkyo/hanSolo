@@ -39,6 +39,7 @@ public class ManagementController {
     @Autowired private CustomerSourceRepository customerSourceRepo;
     @Autowired private BizReportRepository bizReportRepo;
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
+    @Autowired private SmsQueueRepository smsQueueRepo;
 
     @Autowired private Environment env;
 
@@ -367,7 +368,7 @@ public class ManagementController {
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
-        if(amount==100){
+        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
             orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             orderList = orderRepo.findAllByOrderByGmtCreateDesc();
@@ -405,7 +406,7 @@ public class ManagementController {
     @RequestMapping(value = "getPrescriptionsForMgnt/{amount}", method = RequestMethod.GET)
     public List<OrderDetail> getPrescriptionsForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<OrderDetail> orderDetailListList ;
-        if(amount==100){
+        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
             orderDetailListList =  orderDetailRepo.findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
         }else{
             orderDetailListList = orderDetailRepo.findByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
@@ -440,7 +441,7 @@ public class ManagementController {
     @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<SmsUserInfo> SmsUserInfoList ;
-        if(amount==100){
+        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
             SmsUserInfoList =  smsUserInfoRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             SmsUserInfoList = smsUserInfoRepo.findAllByOrderByGmtCreateDesc();
@@ -449,9 +450,49 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "upsertSmsUserInfo", method = RequestMethod.POST)
-    public SmsUserInfoResponse upsertSmsUserInfo(@RequestBody final SmsUserInfo one, final HttpServletRequest request) {
+    public SmsUserInfoResponse upsertSmsUserInfo(@RequestBody final SmsUserInfo one, final HttpServletRequest request) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+
         SmsUserInfo newOne = smsUserInfoRepo.save(one);
         return new SmsUserInfoResponse(newOne,Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "deleteSmsUserInfo", method = RequestMethod.POST)
+    public GenericResponse deleteSmsUserInfo(@RequestBody final SmsUserInfo one)  {
+        smsUserInfoRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// sms queue section /////////////////////////////
+    @RequestMapping(value = "getSmsQueueForMgnt/{amount}", method = RequestMethod.GET)
+    public List<SmsQueue> getSmsQueueForMgnt(@PathVariable final int amount) {
+        List<SmsQueue> SmsQueueList ;
+        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+            SmsQueueList =  smsQueueRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            SmsQueueList = smsQueueRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return SmsQueueList;
+    }
+
+    @RequestMapping(value = "upsertSmsQueue", method = RequestMethod.POST)
+    public SmsQueueResponse upsertSmsQueue(@RequestBody final SmsQueue one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+
+        SmsQueue newOne = smsQueueRepo.save(one);
+        return new SmsQueueResponse(newOne,Utility.SUCCESS_ERRORCODE,"Save sms queue success");
+    }
+
+    @RequestMapping(value = "deleteSmsQueue", method = RequestMethod.POST)
+    public GenericResponse deleteSmsQueue(@RequestBody final SmsQueue one)  {
+        smsQueueRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// upload ///////////////////////////////

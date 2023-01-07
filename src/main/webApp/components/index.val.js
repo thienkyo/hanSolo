@@ -54,6 +54,7 @@ angular
 		.value('modifiedReportDO',modifiedReportDO)
 		.value('FirstTimeLoadSize',FirstTimeLoadSize)
 		.value('smsUserInfoDO',smsUserInfoDO)
+		.value('smsQueueDO',smsQueueDO)
 		.value('PaginationDO',PaginationDO);
 
 function modifiedReportDO(year){
@@ -77,6 +78,17 @@ function smsUserInfoDO(){
     this.location = '';
     this.address = '';
     this.isTestUser = false;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function smsQueueDO(){
+    this.id = 0;
+    this.receiverName = '';
+    this.receiverPhone = '';
+    this.gender = false;
+    this.content = '';
+    this.status = 'INIT';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }
