@@ -1,11 +1,11 @@
 'use strict';
 angular.module('storeOrderModule')
-	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService',
-										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO',
-										 'ajaxService','genderArray',
-	function($routeParams,$location,memberService,orderListService,
-	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,
-	            ajaxService,genderArray) {
+	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
+										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
+										 'ajaxService','genderArray','smsJobService',
+	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
+	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
+	            ajaxService,genderArray,smsJobService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -13,16 +13,22 @@ angular.module('storeOrderModule')
 	self.DPisOpen = false;
 	self.couponDiscount = 0; //%
     self.couponCode = '';
+    self.theSpecificSmsUserInfo = new SmsUserInfoDO();
 
 	self.OrderStatusArray=OrderStatusArray;
 	self.genderArray=genderArray;
 	self.statusStyle = { "width": "120px" };
+    var firstSmsJob = new SmsJobDO();
+	self.smsJobList = [firstSmsJob];
 
 //////////////// function section ////////////
 
     self.updatePrice = function(){
-            self.calculateOrderTotal();
+        self.calculateOrderTotal();
+        if(self.theOrder.deposit > 1000){
+            self.theOrder.status = 4; // 4 = deposit
         }
+    }
 
     self.copy1Tab = function(tab){
         var newTab = Object.assign({}, tab);
@@ -178,6 +184,9 @@ angular.module('storeOrderModule')
             }
         }
 
+        self.theOrder.specificJobId = self.selectedJob.id;
+        self.theOrder.specificJobName = self.selectedJob.jobName;
+
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
@@ -203,8 +212,11 @@ angular.module('storeOrderModule')
         self.order_return_status = false;
     };
 
-////// run when loading page/////
+    self.tempF = function() {
+        console.log(self.selectedJob);
+    };
 
+////// run when loading page/////
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}
@@ -218,6 +230,24 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
                 }
+                console.log(self.theOrder);
+
+                if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){
+                    var smsJobOption = self.smsJobList.find(i => i.id == self.theOrder.specificJobId);
+                    if(smsJobOption){
+                        self.selectedJob = smsJobOption;
+                    }else{
+                        var tempSmsJob = new SmsJobDO();
+                        tempSmsJob.id = self.theOrder.specificJobId;
+                        tempSmsJob.jobName = self.theOrder.specificJobName;
+                        self.smsJobList.unshift(tempSmsJob);
+                        self.selectedJob = tempSmsJob;
+                    }
+                }else{
+                    self.selectedJob = firstSmsJob;
+                    console.log('test');
+                    console.log(self.selectedJob);
+                }
         });
     }else{
         self.theOrder = new OrderDO;
@@ -227,8 +257,16 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].gender=true;
     }
 
-
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
 
+    //// collect specific job.
+    smsJobService.getDataForMgnt(0).then(function (data) {
+        console.log(self.theOrder);
+        var tempArray = data.filter(i => i.jobType == 'SPECIFIC' && i.status == true );
+        console.log(tempArray);
+        self.smsJobList = self.smsJobList.concat(tempArray);
+
+        console.log(self.smsJobList);
+    });
 
 }]);

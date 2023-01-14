@@ -77,6 +77,28 @@ public class Order {
 
     private Integer currentCusSource;
 
+    @Column(name = "specific_job_id")
+    private Integer specificJobId;
+
+    @Column(name = "specific_job_name")
+    private String specificJobName;
+
+    public String getSpecificJobName() {
+        return specificJobName;
+    }
+
+    public void setSpecificJobName(String specificJobName) {
+        this.specificJobName = specificJobName;
+    }
+
+    public Integer getSpecificJobId() {
+        return specificJobId;
+    }
+
+    public void setSpecificJobId(Integer specificJobId) {
+        this.specificJobId = specificJobId;
+    }
+
     public Integer getCurrentCusSource() {
         return currentCusSource;
     }

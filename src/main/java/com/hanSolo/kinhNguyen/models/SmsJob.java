@@ -40,7 +40,16 @@ public class SmsJob {
     @Column(name = "is_test")
     private Boolean isTest;
 
+    @Column(name = "job_type", length = 30)
+    private String jobType;
 
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
 
     public Boolean getIsTest() {
         return isTest;

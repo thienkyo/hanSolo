@@ -34,6 +34,17 @@ public class SmsQueue {
     @Column(name = "status", length = 30)
     private String status;
 
+    @Column(name = "job_id")
+    private Integer jobId;
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
     public String getStatus() {
         return status;
     }

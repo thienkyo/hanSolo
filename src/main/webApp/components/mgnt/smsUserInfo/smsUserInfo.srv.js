@@ -69,25 +69,54 @@ angular.module('smsUserInfoModule')
 	return smsJobService;
 
 	function getDataForMgnt(amount){
-		var url = "mgnt/getSmsQueueForMgnt/"+amount;
+		var url = "mgnt/getSmsJobForMgnt/"+amount;
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
 	}
 
 	function upsert(one){
-		var url = "mgnt/upsertSmsQueue";
+		var url = "mgnt/upsertSmsJob";
 		return ajaxService.post(url,one,{}).then(function(response){
 			return response.data;
 		});
 	}
 
 	function deleteOne(one){
-        var url = "mgnt/deleteSmsQueue";
+        var url = "mgnt/deleteSmsJob";
         return ajaxService.post(url,one,{}).then(function(response){
             return response.data;
         });
     }
-
  }])
+ .factory('specificSmsUserInfoService', ['ajaxService',function(ajaxService) {
+ 	var specificSmsUserInfoService = {
+ 			getDataForMgnt : getDataForMgnt,
+ 			upsert : upsert,
+ 			deleteOne : deleteOne
+ 			};
+ 	return specificSmsUserInfoService;
+
+ 	function getDataForMgnt(amount){
+ 		var url = "mgnt/getSpecificSmsUserInfoForMgnt/"+amount;
+ 		return ajaxService.get(url,null,{}).then(function(response){
+ 			return response.data;
+ 		});
+ 	}
+
+ 	function upsert(one){
+ 		var url = "mgnt/upsertSpecificSmsUserInfo";
+ 		return ajaxService.post(url,one,{}).then(function(response){
+ 			return response.data;
+ 		});
+ 	}
+
+ 	function deleteOne(one){
+         var url = "mgnt/deleteSpecificSmsUserInfo";
+         return ajaxService.post(url,one,{}).then(function(response){
+             return response.data;
+         });
+    }
+ }])
+
 ;

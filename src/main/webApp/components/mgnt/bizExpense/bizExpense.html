@@ -155,7 +155,7 @@ form .progress {
 						 ng-change="ctrl.getBizExpenseByTerm(ctrl.amount)"
 						 style="width: 80px;height: 30px;">
 				</select>
-				size: {{ctrl.size}}
+				size: {{ctrl.BizExpenseList.length}}
 			</div>
 			<div ng-show="ctrl.tempAmount > 0">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>

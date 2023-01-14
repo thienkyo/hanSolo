@@ -30,6 +30,7 @@ public class Utility {
     final public static String LOGIN_DILIMITER = "d3m";
     final public static String DEFAULT_PW = "a2luaG5ndXllbg==";//kinhnguyen
     final public static String SECRET_KEY = "kinhNguyenSecretKey";
+    final public static String SECRET_KEY_API_SMS = "kinhNguyenAPI";
 
     final public static String MEMBER_ROLE = "MEMBER";
     final public static String ADMIN_ROLE = "ADMIN";
@@ -61,6 +62,9 @@ public class Utility {
     final public static String SMS_QUEUE_INIT = "INIT";
     final public static String SMS_QUEUE_SENDING = "SENDING";
     final public static String SMS_QUEUE_SENT = "SENT";
+
+    final public static String SMS_JOB_COMMON = "COMMON";
+    final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

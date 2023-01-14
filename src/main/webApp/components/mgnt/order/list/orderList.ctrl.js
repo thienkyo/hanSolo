@@ -132,8 +132,8 @@ angular.module('orderListModule')
         self.OneDayReport.data = self.orderList.filter(i => sameDay(new Date(i.gmtCreate), new Date(self.tempForOneDayReport.gmtCreate)));
         var date = (new Date(self.tempForOneDayReport.gmtCreate)).getDate();
         date =  date > 9 ? date : '0' + date;
-        var month = (new Date(self.tempForOneDayReport.gmtCreate)).getMonth();
-        month =  month + 1 > 9 ? month +1 : '0' + month;
+        var month = (new Date(self.tempForOneDayReport.gmtCreate)).getMonth() + 1;
+        month =  month > 9 ? month : '0' + month;
 
         self.OneDayReport.date = (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() +'-'+ month +'-'+ date;
 

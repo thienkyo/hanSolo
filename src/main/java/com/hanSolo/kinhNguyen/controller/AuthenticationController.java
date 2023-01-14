@@ -32,6 +32,7 @@ public class AuthenticationController {
     @Autowired private CouponRepository couponRepo;
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
     @Autowired private UsedCouponsRepository usedCouponsRepo;
+    @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public MemberResponse getMe(final HttpServletRequest request) throws ServletException {
@@ -85,6 +86,32 @@ public class AuthenticationController {
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);
+
+        Optional<SpecificSmsUserInfo> specSmsDBOtp = specificSmsUserInfoRepo.findByPhone(order.getShippingPhone());
+        if(order.getSpecificJobId() != 0 ){
+            SpecificSmsUserInfo specSms;
+            if(specSmsDBOtp.isEmpty()){
+                specSms = new SpecificSmsUserInfo();
+                specSms.setGender(order.getGender());
+                specSms.setLastSendSmsDate(order.getGmtCreate());
+                specSms.setOrderCreateDate(order.getGmtCreate());
+                specSms.setGmtCreate(Utility.getCurrentDate());
+                specSms.setAddress(order.getShippingAddress());
+                specSms.setPhone(order.getShippingPhone());
+                specSms.setName(order.getShippingName());
+                specSms.setJobIdList("");
+                specSms.setLocation("STORE");
+            }else{
+                specSms = specSmsDBOtp.get();
+            }
+            specSms.setJobIdToRun(order.getSpecificJobId().toString());
+            specSms.setGmtModify(Utility.getCurrentDate());
+            specificSmsUserInfoRepo.save(specSms);
+        }else{
+            if(specSmsDBOtp.isPresent()){
+                specificSmsUserInfoRepo.delete(specSmsDBOtp.get());
+            }
+        }
 
         if(StringUtils.hasText(or.getCouponCode())){
             int orderAmount = 0;

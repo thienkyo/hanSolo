@@ -21,8 +21,8 @@ angular.module('app')
                 break;
 
             case 11: // +CPPP####### -> CCC (PP) ###-####
-                country = value[0];
-                city = value.slice(1, 4);
+                country = "";
+                city = value.slice(0, 4);
                 number = value.slice(4);
                 break;
 

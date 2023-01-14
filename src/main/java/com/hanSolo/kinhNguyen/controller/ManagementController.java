@@ -40,6 +40,8 @@ public class ManagementController {
     @Autowired private BizReportRepository bizReportRepo;
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
     @Autowired private SmsQueueRepository smsQueueRepo;
+    @Autowired private SmsJobRepository smsJobRepo;
+    @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
 
     @Autowired private Environment env;
 
@@ -494,6 +496,57 @@ public class ManagementController {
         smsQueueRepo.delete(one);
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
+
+    //////////////////////////// sms Job section /////////////////////////////
+    @RequestMapping(value = "getSmsJobForMgnt/{amount}", method = RequestMethod.GET)
+    public List<SmsJob> getSmsJobForMgnt(@PathVariable final int amount) {
+        return smsJobRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "upsertSmsJob", method = RequestMethod.POST)
+    public SmsJobResponse upsertSmsJob(@RequestBody final SmsJob one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new SmsJobResponse(smsJobRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save sms queue success");
+    }
+
+    @RequestMapping(value = "deleteSmsJob", method = RequestMethod.POST)
+    public GenericResponse deleteSmsJob(@RequestBody final SmsJob one)  {
+        smsJobRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// specific smsUserInfo section /////////////////////////////
+    @RequestMapping(value = "getSpecificSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
+    public List<SpecificSmsUserInfo> getSpecificSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+        List<SpecificSmsUserInfo> specificSmsUserInfoList ;
+        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+            specificSmsUserInfoList =  specificSmsUserInfoRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            specificSmsUserInfoList = specificSmsUserInfoRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return specificSmsUserInfoList;
+    }
+
+    @RequestMapping(value = "upsertSpecificSmsUserInfo", method = RequestMethod.POST)
+    public SpecificSmsUserInfoResponse upsertSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one, final HttpServletRequest request) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+
+        SpecificSmsUserInfo newOne = specificSmsUserInfoRepo.save(one);
+        return new SpecificSmsUserInfoResponse(newOne,Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "deleteSpecificSmsUserInfo", method = RequestMethod.POST)
+    public GenericResponse deleteSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one)  {
+        specificSmsUserInfoRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")

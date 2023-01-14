@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "sms_user_info")
-public class SmsUserInfo {
+@Table(name = "specific_sms_user_info")
+public class SpecificSmsUserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -51,7 +51,16 @@ public class SmsUserInfo {
     @Column(name = "address", length = 400)
     private String address;
 
+    @Column(name = "job_id_to_run")
+    private String jobIdToRun;
 
+    public String getJobIdToRun() {
+        return jobIdToRun;
+    }
+
+    public void setJobIdToRun(String jobIdToRun) {
+        this.jobIdToRun = jobIdToRun;
+    }
 
     public String getAddress() {
         return address;
@@ -85,10 +94,10 @@ public class SmsUserInfo {
         this.name = name;
     }
 
-    public SmsUserInfo() {
+    public SpecificSmsUserInfo() {
     }
 
-    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location, String address) {
+    public SpecificSmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location, String address) {
         this.name = name;
         this.phone = phone;
         this.gender = gender;

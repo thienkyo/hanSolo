@@ -29,6 +29,11 @@ var AmountList=[
 	{name : '100', value:100 },
     {name : 'all', value:0 }
 ];
+// for sms job
+var JobTypeList=[
+	{name : 'COMMON', value:'COMMON' },
+    {name : 'SPECIFIC', value:'SPECIFIC' }
+];
 
 angular
 		.module('app') 
@@ -51,13 +56,15 @@ angular
 		.value('BizExpenseStatusArray',BizExpenseStatusArray)
 		.value('CustomerSourceDO',CustomerSourceDO)
 		.value('BizReportDO',BizReportDO)
-		.value('modifiedReportDO',modifiedReportDO)
+		.value('ModifiedReportDO',ModifiedReportDO)
 		.value('FirstTimeLoadSize',FirstTimeLoadSize)
-		.value('smsUserInfoDO',smsUserInfoDO)
-		.value('smsQueueDO',smsQueueDO)
+		.value('SmsUserInfoDO',SmsUserInfoDO)
+		.value('SmsQueueDO',SmsQueueDO)
+		.value('SmsJobDO',SmsJobDO)
+		.value('JobTypeList',JobTypeList)
 		.value('PaginationDO',PaginationDO);
 
-function modifiedReportDO(year){
+function ModifiedReportDO(year){
 	this.year = year;
 	this.details = [];
 	this.income = 0;
@@ -67,7 +74,7 @@ function modifiedReportDO(year){
 	this.lenses = 0;
 }
 
-function smsUserInfoDO(){
+function SmsUserInfoDO(){
     this.id = 0;
     this.phone = '';
     this.gender = false;
@@ -75,20 +82,33 @@ function smsUserInfoDO(){
     this.orderCreateDate = (new Date()).getTime();
     this.name = '';
     this.jobIdList = '';
-    this.location = '';
+    this.location = 'MANUAL';
     this.address = '';
     this.isTestUser = false;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }
 
-function smsQueueDO(){
+function SmsQueueDO(){
     this.id = 0;
     this.receiverName = '';
     this.receiverPhone = '';
     this.gender = false;
     this.content = '';
     this.status = 'INIT';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function SmsJobDO(){
+    this.id = 0;
+    this.jobName = '';
+    this.intervalTime = '';
+    this.msgContentTemplate = '';
+    this.status = false;
+    this.specificPhones = '';
+    this.noSmsDays = 1;
+    this.isTest = true;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

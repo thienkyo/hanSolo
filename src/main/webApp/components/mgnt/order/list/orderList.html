@@ -228,7 +228,6 @@
 			</div>
 		</div>
 		
-		
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
@@ -242,7 +241,7 @@
 						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
 					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
-			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:130px;">{{order.shippingPhone | tel}}</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">{{order.shippingPhone | tel}}</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
 						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
 					</td>
@@ -378,6 +377,5 @@
 				</table>
 				<a ng-click="ctrl.deleteOrder(ctrl.theOrder)" href="" class="btn btn-default check_out" style="margin: 0px 0px 30px 30px;">delete</a>
 			</div>
-
 		</div>
 </section>

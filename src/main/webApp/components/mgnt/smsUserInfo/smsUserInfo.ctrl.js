@@ -1,14 +1,20 @@
 'use strict';
 angular.module('smsUserInfoModule')
 	.controller('smsUserInfoController',['$rootScope','$location','memberService','smsUserInfoService','AmountList',
-									'NgTableParams','smsUserInfoDO','uploadService','$timeout',
-									'FirstTimeLoadSize','smsQueueDO','smsQueueService',
+									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
+									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
+									'CommonStatusArray','specificSmsUserInfoService',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
-	        NgTableParams,smsUserInfoDO,uploadService,$timeout,
-	        FirstTimeLoadSize,smsQueueDO,smsQueueService) {
+	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
+	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
+	        CommonStatusArray,specificSmsUserInfoService) {
 	var self = this;
-	self.theSmsUserInfo = new smsUserInfoDO();
-	self.theSmsQueue = new smsQueueDO();
+	self.theSmsUserInfo = new SmsUserInfoDO();
+	self.theSmsQueue = new SmsQueueDO();
+	self.theSmsJob = new SmsJobDO();
+	self.theSpecificSmsUserInfo = new SmsUserInfoDO();
+	self.jobTypeList = JobTypeList; // sms job
+	self.statusList = CommonStatusArray;
 	self.statusStyle = {};
 	self.isSaveButtonPressed=false;
 	self.tempArray=[];
@@ -26,7 +32,7 @@ angular.module('smsUserInfoModule')
 
 	smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
 		self.smsUserInfoList = data;
-		//console.log(data);
+		console.log(data);
 		self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
 	});
 
@@ -90,7 +96,7 @@ angular.module('smsUserInfoModule')
 	self.clear = function(){
 		self.responseStr = false;
 		self.responseStrFail = false;
-		self.theSmsUserInfo = new smsUserInfoDO;
+		self.theSmsUserInfo = new SmsUserInfoDO();
 		self.picFile = null;
 	}
 
@@ -113,29 +119,26 @@ angular.module('smsUserInfoModule')
     self.getSmsQueueByTerm = function(){
         smsQueueService.getDataForMgnt(self.amount).then(function (data) {
             self.smsQueueList = data;
-            console.log(data);
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }
 
     self.setTheSmsQueue = function(one){
         self.theSmsQueue = one;
-        self.responseStrSmsQueue = false;
-
+        self.responseStr = false;
     }
 
     self.clearSmsQueue = function(){
-        self.responseStrSmsQueue = false;
-        self.theSmsQueue = new smsQueueDO();
+        self.responseStr = false;
+        self.theSmsQueue = new SmsQueueDO();
     }
 
     self.upsertSmsQueue = function(one){
         self.isSaveButtonPressed=true;
-        self.responseStrSmsQueue = false;
+        self.responseStr = false;
         smsQueueService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
-            console.log(data);
             if(one.id == 0){
                 self.smsQueueList.unshift(data.smsQueue);
                 self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
@@ -160,7 +163,95 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms job //////
+    smsJobService.getDataForMgnt(0).then(function (data) {
+        self.smsJobList = data;
+        console.log(data);
+        self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+    });
 
+    self.upsertSmsJob = function(one){
+        self.isSaveButtonPressed=true;
+        self.responseStr = false;
+        smsJobService.upsert(one).then(function (data) {
+            self.responseStr = data;
+            self.isSaveButtonPressed=false;
+            console.log(data);
+            if(one.id == 0){
+                self.smsJobList.unshift(data.smsJob);
+                self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+            }
+        });
+    }
 
+    self.setTheSmsJob = function(one){
+        self.theSmsJob = one;
+        self.responseStr = false;
+    }
+
+    self.clearSmsJob = function(){
+        self.responseStr = false;
+        self.theSmsJob = new SmsJobDO();
+    }
+
+    self.deleteSmsJob = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        smsJobService.deleteOne(one).then(function (data) {
+            self.responseStr = data;
+            var index = self.smsJobList.indexOf(one);
+            self.smsJobList.splice(index,1);
+            self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
+        });
+    }
+
+//////// specific sms user info //////
+    self.loadSpecificSmsUserInfo = function(){
+        specificSmsUserInfoService.getDataForMgnt(self.amount).then(function (data) {
+                self.specificSmsUserInfoList = data;
+                console.log(data);
+                self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
+            });
+    }
+
+    self.deleteSpecificSmsUserInfo = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        specificSmsUserInfoService.deleteOne(one).then(function (data) {
+            self.responseStr = data;
+            var index = self.specificSmsUserInfoList.indexOf(one);
+            self.specificSmsUserInfoList.splice(index,1);
+            self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
+        });
+    }
+
+    self.upsertSpecificSmsUserInfo = function(one){
+        self.isSaveButtonPressed=true;
+        self.responseStr = false;
+        self.responseStrFail = false;
+        specificSmsUserInfoService.upsert(one).then(function (data) {
+            self.responseStr = data;
+            self.isSaveButtonPressed=false;
+            console.log(data);
+            if(one.id == 0){
+                self.specificSmsUserInfoList.unshift(data.specificSmsUserInfo);
+                self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
+            }
+        });
+    }
+
+    self.setTheSpecificSmsUserInfo = function(one){
+        self.theSpecificSmsUserInfo = one;
+        self.responseStr = false;
+    }
 
 }]);
