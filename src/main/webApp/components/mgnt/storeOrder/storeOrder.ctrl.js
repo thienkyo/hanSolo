@@ -245,8 +245,6 @@ angular.module('storeOrderModule')
                     }
                 }else{
                     self.selectedJob = firstSmsJob;
-                    console.log('test');
-                    console.log(self.selectedJob);
                 }
         });
     }else{
@@ -255,6 +253,7 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails = [new OrderDetailDO()];
         self.theOrder.gender=true;
         self.theOrder.orderDetails[0].gender=true;
+        self.selectedJob = firstSmsJob;
     }
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.

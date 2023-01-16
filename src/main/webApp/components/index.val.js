@@ -5,7 +5,8 @@ var OrderStatusArray=[
 	{name : 'đã chuyển hàng ', value:2 },
 	{name : 'xong', value:3 },
 	{name : 'cọc', value:4 },
-	{name : 'khách xoá', value:5 }
+	{name : 'khách xoá', value:5 },
+	{name : 'Không đặt', value:6 }
 ];
 
 var BizExpenseStatusArray=[
