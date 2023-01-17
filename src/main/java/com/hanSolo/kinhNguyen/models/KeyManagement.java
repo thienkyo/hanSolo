@@ -38,6 +38,17 @@ public class KeyManagement {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "is_activate")
+    private Boolean isActivate;
+
+    public Boolean getIsActivate() {
+        return isActivate;
+    }
+
+    public void setIsActivate(Boolean isActivate) {
+        this.isActivate = isActivate;
+    }
+
     public String getName() {
         return name;
     }

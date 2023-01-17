@@ -32,7 +32,6 @@ angular.module('smsUserInfoModule')
 
 	smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
 		self.smsUserInfoList = data;
-		console.log(data);
 		self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
 	});
 
@@ -44,7 +43,6 @@ angular.module('smsUserInfoModule')
 		smsUserInfoService.upsert(smsUserInfo).then(function (data) {
 			self.responseStr = data;
 			self.isSaveButtonPressed=false;
-			console.log(data);
 			if(smsUserInfo.id == 0){
 				self.smsUserInfoList.unshift(data.smsUserInfo);
 				self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
@@ -112,7 +110,6 @@ angular.module('smsUserInfoModule')
 ////////  sms queue//////
     smsQueueService.getDataForMgnt(self.amount).then(function (data) {
         self.smsQueueList = data;
-        console.log(data);
         self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
     });
 
@@ -121,6 +118,21 @@ angular.module('smsUserInfoModule')
             self.smsQueueList = data;
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
+    }
+
+     self.delete100SmsQueue = function(){
+        self.responseStr = false;
+        smsQueueService.delete100().then(function (data) {
+            self.responseStr = data;
+            self.isDelete100 = false;
+        });
+    }
+
+    self.promptDelete100 = function(){
+        self.isDelete100 = true;
+    }
+    self.resetDelete100 = function(){
+        self.isDelete100 = false;
     }
 
     self.setTheSmsQueue = function(one){
@@ -165,7 +177,6 @@ angular.module('smsUserInfoModule')
 ////////  sms job //////
     smsJobService.getDataForMgnt(0).then(function (data) {
         self.smsJobList = data;
-        console.log(data);
         self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
     });
 
@@ -175,7 +186,6 @@ angular.module('smsUserInfoModule')
         smsJobService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
-            console.log(data);
             if(one.id == 0){
                 self.smsJobList.unshift(data.smsJob);
                 self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
@@ -213,7 +223,6 @@ angular.module('smsUserInfoModule')
     self.loadSpecificSmsUserInfo = function(){
         specificSmsUserInfoService.getDataForMgnt(self.amount).then(function (data) {
                 self.specificSmsUserInfoList = data;
-                console.log(data);
                 self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
             });
     }
@@ -241,7 +250,6 @@ angular.module('smsUserInfoModule')
         specificSmsUserInfoService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
-            console.log(data);
             if(one.id == 0){
                 self.specificSmsUserInfoList.unshift(data.specificSmsUserInfo);
                 self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});

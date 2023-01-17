@@ -8,6 +8,7 @@ angular.module('app')
 	self.currentCart = cartStoreService.getCurrentCart();
 	self.orderQuantity = cartStoreService.getQuantity();
 	self.isAdmin = memberService.isAdmin();
+	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.isSuperAccountant = memberService.isSuperAccountant();
 	self.isMod = memberService.isMod();
 

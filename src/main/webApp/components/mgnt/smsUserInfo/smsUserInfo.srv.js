@@ -34,6 +34,7 @@ angular.module('smsUserInfoModule')
 	var smsQueueService = {
 			getDataForMgnt : getDataForMgnt,
 			upsert : upsert,
+			delete100 : delete100,
 			deleteOne : deleteOne
 			};
 	return smsQueueService;
@@ -55,6 +56,13 @@ angular.module('smsUserInfoModule')
 	function deleteOne(one){
         var url = "mgnt/deleteSmsQueue";
         return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function delete100(){
+        var url = "mgnt/delete100SmsQueue";
+        return ajaxService.post(url,null,{}).then(function(response){
             return response.data;
         });
     }

@@ -139,13 +139,13 @@ form .progress {
 					</div>
 				</div>
 
-				<!-- sms queue insert/update-->
+				<!-- sms job insert/update-->
 				<h3 style="margin-top: 20px;">Sms job </h3>
-				<!-- sms queue table-->
+				<!-- sms job table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
-							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:70px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheSmsJob(one)">{{one.id}}</a>
 							</td>
 
@@ -256,9 +256,19 @@ form .progress {
 						<select  ng-model="ctrl.smsQueueAmount"
 								 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 								 ng-change="ctrl.getSmsQueueByTerm(ctrl.smsQueueAmount)"
-								 style="width: 70px;height: 30px;">
+								 style="width: 90px;height: 30px;">
 						</select>
 						size:{{ctrl.smsQueueList.length}}
+					</div>
+					<div class="col-sm-5">
+						<a ng-click="ctrl.promptDelete100()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete 100</a>
+						<span ng-show="ctrl.isDelete100">
+							Are you sure?
+							<a ng-click="ctrl.delete100SmsQueue()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete100()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+						</span>
+
+
 					</div>
 				</div>
 				<!-- sms queue table-->
@@ -389,7 +399,7 @@ form .progress {
 							<td title="'jobId'" filter="{ 'jobIdList' : 'text'}" sortable="'jobIdList'" style="text-align: right;">
 								{{one.jobIdList}}
 							</td>
-							<td title="'tester'"  style="text-align: center;">
+							<td title="'tester'" filter="{ 'isTestUser' : 'text'}"  style="text-align: center;">
 								<input type="checkbox"  ng-model="one.isTestUser"/>
 							</td>
 							<td title="'order date'" filter="{ 'orderCreateDate' : 'text'}" sortable="'orderCreateDate'" style="text-align: left;width:130px;">
@@ -507,7 +517,7 @@ form .progress {
 							<td title="'runId'" filter="{ 'jobIdToRun' : 'text'}" sortable="'jobIdToRun'" style="text-align: right;width:100px;">
 								{{one.jobIdToRun}}
 							</td>
-							<td title="'tester'"  style="text-align: center;">
+							<td title="'tester'" filter="{ 'isTestUser' : 'text'}"  style="text-align: center;">
 								<input type="checkbox"  ng-model="one.isTestUser"/>
 							</td>
 							<td title="'order date'" filter="{ 'orderCreateDate' : 'text'}" sortable="'orderCreateDate'" style="text-align: left;width:130px;">

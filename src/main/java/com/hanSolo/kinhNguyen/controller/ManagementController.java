@@ -497,6 +497,16 @@ public class ManagementController {
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "delete100SmsQueue", method = RequestMethod.POST)
+    public GenericResponse delete100SmsQueue()  {
+        List<SmsQueue> smsQueueList = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENT);
+
+        if(!smsQueueList.isEmpty()){
+            smsQueueRepo.deleteAll(smsQueueList);
+        }
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
     //////////////////////////// sms Job section /////////////////////////////
     @RequestMapping(value = "getSmsJobForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsJob> getSmsJobForMgnt(@PathVariable final int amount) {

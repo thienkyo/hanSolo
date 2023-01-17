@@ -10,6 +10,7 @@ angular.module('app')
 	//	makeSignupStr : makeSignupStr,
 		isLogin : isLogin,
 		isAdmin :isAdmin,
+		isSuperAdmin :isSuperAdmin,
 		isAccountant :isAccountant,
 		isSuperAccountant :isSuperAccountant,
 		isMod : isMod
@@ -46,6 +47,13 @@ angular.module('app')
 		}
 		return false;
 	}
+
+	function isSuperAdmin(){
+        if(isLogin() && currentMember.roles.indexOf("SUPER_ADMIN") != -1){
+            return true;
+        }
+        return false;
+    }
 	
 	function isMod(){
 		if(isLogin() && currentMember.roles.indexOf("MOD") != -1){

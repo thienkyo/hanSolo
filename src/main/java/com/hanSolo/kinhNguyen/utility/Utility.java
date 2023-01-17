@@ -53,6 +53,7 @@ public class Utility {
     final public static int ORDER_STATUS_DONE = 3;
     final public static int ORDER_USER_DELETE = 4;
     final public static int ORDER_SHOP_DELETE = 5;
+    final public static int ORDER_NOT_BOOK = 6;
 
     final public static int PRODUCT_PAGE_SIZE = 9;
     final public static int COLLECTION_PAGE_SIZE = 4;

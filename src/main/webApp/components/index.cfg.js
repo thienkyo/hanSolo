@@ -140,6 +140,11 @@ angular.module('app')
             controller: 'memberListController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/keyManagement',{
+            templateUrl: 'components/mgnt/keyManagement/keyManagement.html',
+            controller: 'keyManagementController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/storeOrder/:orderId',{
             templateUrl: 'components/mgnt/storeOrder/storeOrder.html',
             controller: 'storeOrderController',
