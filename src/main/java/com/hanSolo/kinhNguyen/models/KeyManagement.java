@@ -22,8 +22,8 @@ public class KeyManagement {
     @Column(name = "key_purpose", length = 20)
     private String keyPurpose;
 
-    @Column(name = "secretkey", length = 100)
-    private String secretkey;
+    @Column(name = "secretKey", length = 100)
+    private String secretKey;
 
     // day
     @Column(name = "timeout")
@@ -81,12 +81,12 @@ public class KeyManagement {
         this.timeout = timeout;
     }
 
-    public String getSecretkey() {
-        return secretkey;
+    public String getSecretKey() {
+        return secretKey;
     }
 
-    public void setSecretkey(String secretkey) {
-        this.secretkey = secretkey;
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 
     public String getKeyPurpose() {

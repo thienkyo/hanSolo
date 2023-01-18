@@ -38,7 +38,7 @@ form .progress {
 <link href="css/main2.css" rel="stylesheet">
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-		<h2>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | {{ctrl.allOrders}}| {{ctrl.allFrames}}| {{ctrl.allLenses}}</h2>
+		<h3>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ | {{ctrl.allOrders}}| {{ctrl.allFrames}}| {{ctrl.allLenses}}</h3>
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -57,7 +57,7 @@ form .progress {
 				 ng-repeat="item in ctrl.modifiedReports2 track by $index" >
 				<br>
 				<!--<a ng-click="" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">reload</a>-->
-				<h3 style="padding-bottom: 20px;">Income: {{item.income | number:0}}đ | outcome: {{item.outcome | number:0}}đ | Rate: {{(item.income - item.outcome)/item.outcome*100 | number:0}}% |{{item.orders}}|{{item.frames}}|{{item.lenses}}</h3>
+				<h4 style="padding-bottom: 20px;">Income: {{item.income | number:0}}đ | outcome: {{item.outcome | number:0}}đ | yield: {{item.income-item.outcome | number:0}}đ  | Rate: {{(item.income - item.outcome)/item.outcome*100 | number:0}}% |{{item.orders}}|{{item.frames}}|{{item.lenses}}</h4>
 
 				<div class="table-responsive">
 					<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="true" style="width: auto;">

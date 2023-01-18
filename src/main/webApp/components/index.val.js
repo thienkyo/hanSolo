@@ -63,7 +63,21 @@ angular
 		.value('SmsQueueDO',SmsQueueDO)
 		.value('SmsJobDO',SmsJobDO)
 		.value('JobTypeList',JobTypeList)
+		.value('KeyManagementDO',KeyManagementDO)
 		.value('PaginationDO',PaginationDO);
+
+function KeyManagementDO(){
+	this.id = 0;
+	this.keyPurpose = '';
+	this.secretKey = 'secretkey';
+	this.timeout = 0;
+	this.token = '';
+	this.roles = '';
+	this.name = '';
+	this.isActivate = false;
+    this.lastSendSmsDate = (new Date()).getTime();
+    this.orderCreateDate = (new Date()).getTime();
+}
 
 function ModifiedReportDO(year){
 	this.year = year;

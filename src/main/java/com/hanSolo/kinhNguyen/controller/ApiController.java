@@ -31,11 +31,9 @@ public class ApiController {
     public QueueSmsResponse getQueueSms() throws ParseException {
         List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
         List<SmsQueue> smsQueueList = new ArrayList<>();
-
-        Calendar calendarCreateOrder = Calendar.getInstance();
-        Calendar calendarNoSmsDay = Calendar.getInstance();
         for (SmsJob job : smsJobList) {
-
+            Calendar calendarCreateOrder = Calendar.getInstance();
+            Calendar calendarNoSmsDay = Calendar.getInstance();
             if(job.getIntervalTime() >= 1){
                 calendarCreateOrder.add(Calendar.DAY_OF_MONTH, -job.getIntervalTime());
             }

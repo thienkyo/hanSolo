@@ -32,5 +32,6 @@ angular.module('app', [
 		'customerSourceModule',
 		'bizReportModule',
 		'smsUserInfoModule',
+		'keyManagementModule',
 		'ui.tinymce'
 ]);

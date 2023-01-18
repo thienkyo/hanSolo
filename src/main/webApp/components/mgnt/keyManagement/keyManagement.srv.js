@@ -4,6 +4,7 @@ angular.module('keyManagementModule')
 		var mainService = {
 				getAll : getAll,
 				upsert : upsert,
+				renewKey : renewKey,
 				deleteOne : deleteOne
 			};
 	return mainService;
@@ -22,6 +23,13 @@ angular.module('keyManagementModule')
 			return response.data;
 		});
 	}
+
+	function renewKey(one){
+        var url = "mgnt/renewKey";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function deleteOne(one){
 		var url = "mgnt/deleteKeyManagement";

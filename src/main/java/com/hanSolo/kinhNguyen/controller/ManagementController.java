@@ -5,6 +5,8 @@ import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.*;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -12,9 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +46,7 @@ public class ManagementController {
     @Autowired private SmsQueueRepository smsQueueRepo;
     @Autowired private SmsJobRepository smsJobRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
+    @Autowired private KeyManagementRepository keyManagementRepo;
 
     @Autowired private Environment env;
 
@@ -301,7 +306,7 @@ public class ManagementController {
         List<BizExpense> expenses = bizExpenseRepo.findByGmtCreateBetween(startDate,endDate);
         int expAmount = 0;
         for(BizExpense exp : expenses){
-            expAmount += exp.getAmount();
+            expAmount += exp.getAmount() != null ? exp.getAmount() : 0;
         }
         bizReport.setOutcome(expAmount);
 
@@ -557,6 +562,42 @@ public class ManagementController {
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    //////////////////////////// key Management section /////////////////////////////
+    @RequestMapping(value = "getAllKeyManagement", method = RequestMethod.GET)
+    public List<KeyManagement> getAllKeyManagement() {
+        return keyManagementRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "upsertKeyManagement", method = RequestMethod.POST)
+    public KeyManagementResponse upsertKeyManagement(@RequestBody final KeyManagement one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new KeyManagementResponse(keyManagementRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+
+    @RequestMapping(value = "deleteKeyManagement", method = RequestMethod.POST)
+    public GenericResponse deleteKeyManagement(@RequestBody final KeyManagement one)  {
+        keyManagementRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "renewKey", method = RequestMethod.POST)
+    public KeyManagementResponse renewKey(@RequestBody final KeyManagement one, final HttpServletRequest request) throws UnsupportedEncodingException, ParseException {
+        String secretKey = RandomStringUtils.randomAlphanumeric(15);
+        Claims claims = (Claims) request.getAttribute("claims");
+        String token = Jwts.builder()
+                .setSubject("")
+                .claim("roles",  claims.get("roles"))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + one.getTimeout()*24*60*60*1000))
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes("UTF-8"))
+                .compact();
+        one.setToken(token);one.setSecretKey(secretKey);
+        one.setGmtModify(Utility.getCurrentDate());
+        return new KeyManagementResponse(keyManagementRepo.save(one),Utility.SUCCESS_ERRORCODE,"Success");
+    }
 
     //////////////////////////// upload ///////////////////////////////
     @SuppressWarnings("unchecked")

@@ -17,7 +17,6 @@ angular.module('app')
          console.log(response);
     	 if (response.status === 500 && response.data.path.includes('mgnt')) {
     	    $rootScope.$broadcast('ExpiredJwt');
-    	    console.log('interrupt');
          }
          return $q.reject(response);;
     };
