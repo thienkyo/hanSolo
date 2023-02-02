@@ -38,7 +38,7 @@ form .progress {
 <link href="css/main2.css" rel="stylesheet">
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-		<h3>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ | {{ctrl.allOrders}}| {{ctrl.allFrames}}| {{ctrl.allLenses}}</h3>
+		<h3>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ |{{ctrl.allOrders}}|{{ctrl.allFrames}}|{{ctrl.allLenses}}</h3>
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -66,25 +66,25 @@ form .progress {
 							<td title="'month'"  style="width:10px;text-align: center;">
 								{{one.month}}
 							</td>
-							<td title="'income'"  style="width:130px;">
+							<td title="'income'"  style="width:130px;text-align: right;">
 								{{one.income | number:0}}đ
 							</td>
-							<td title="'outcome'" >
+							<td title="'outcome'" style="text-align: right;">
 								{{one.outcome | number:0}}đ
 							</td>
-							<td title="'yield'" >
+							<td title="'yield'" style="text-align: right;">
 								{{one.income - one.outcome | number:0}}đ
 							</td>
-							<td title="'rate'" >
+							<td title="'rate'" style="text-align: right;">
 								{{one.income/one.outcome*100 | number:0}}%
 							</td>
-							<td title="'order qty'" >
+							<td title="'order qty'" style="text-align: center;">
 								{{one.orderQuantity}}
 							</td>
-							<td title="'frame qty'" >
+							<td title="'frame qty'" style="text-align: center;">
 								{{one.frameQuantity}}
 							</td>
-							<td title="'lens qty'" >
+							<td title="'lens qty'" style="text-align: center;">
 								{{one.lensQuantity}}
 							</td>
 

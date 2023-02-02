@@ -108,14 +108,20 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms queue//////
-    smsQueueService.getDataForMgnt(self.amount).then(function (data) {
-        self.smsQueueList = data;
-        self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
-    });
+
+    self.loadSmsQueue = function(){
+        smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
+            self.smsQueueList = data;
+            console.log(data)
+            console.log(self.smsQueueAmount)
+            self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
+        });
+    }
 
     self.getSmsQueueByTerm = function(){
-        smsQueueService.getDataForMgnt(self.amount).then(function (data) {
+        smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
             self.smsQueueList = data;
+            console.log(self.smsQueueAmount);
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }

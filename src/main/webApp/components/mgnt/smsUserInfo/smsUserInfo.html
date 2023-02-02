@@ -55,7 +55,7 @@ form .progress {
 				<a class="nav-link active" data-toggle="tab" href="" data-target="#job">Sms job</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#queue">Sms queue</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#queue" ng-click="ctrl.loadSmsQueue()">Sms queue</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#info">Sms user info</a>
@@ -152,7 +152,7 @@ form .progress {
 							<td title="'name'" filter="{ 'jobName' : 'text'}" sortable="'jobName'" style="text-align: right;width:150px;">
 								{{one.jobName}}
 							</td>
-							<td title="'content'" filter="{ 'msgContentTemplate' : 'text'}" sortable="'msgContentTemplate'" style="text-align: left;">
+							<td title="'message'" filter="{ 'msgContentTemplate' : 'text'}" sortable="'msgContentTemplate'" style="text-align: left;">
 								{{one.msgContentTemplate}}
 							</td>
 							<td title="'noDay'"  style="text-align: left;width:80px;">
@@ -168,13 +168,13 @@ form .progress {
 										 ng-style="ctrl.setStyle(one.status)">
 								</select>
 							</td>
-							<td title="'isTest'"  style="width:80px;text-align: center;">
+							<td title="'isTest'"  style="width:80px;text-align: center;" ng-style="ctrl.setStyle(one.isTest)">
 								{{one.isTest}}
 							</td>
 							<td title="'type'"  style="width:100px;text-align: center;">
 								{{one.jobType}}
 							</td>
-							<td title="'create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:130px;">
+							<td title="'create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;">
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
@@ -287,12 +287,12 @@ form .progress {
 							<td title="'content'" filter="{ 'content' : 'text'}" sortable="'content'" style="text-align: left;">
 								{{one.content}}
 							</td>
-							<td title="'jobId'" filter="{ 'jobId' : 'text'}" sortable="'jobId'" style="text-align: center;width:80px;">
+							<td title="'jobId'" filter="{ 'jobId' : 'text'}" sortable="'jobId'" style="text-align: center;width:90px;">
 								{{one.jobId}}
 							</td>
-							<td title="'male'"  style="text-align: center;">
+							<!--<td title="'male'"  style="text-align: center;">
 								<input type="checkbox"  ng-model="one.gender"/>
-							</td>
+							</td>-->
 							<td title="'create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:130px;">
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
