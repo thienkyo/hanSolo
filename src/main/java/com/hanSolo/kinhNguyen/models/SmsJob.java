@@ -43,6 +43,18 @@ public class SmsJob {
     @Column(name = "job_type", length = 30)
     private String jobType;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_date")
+    private Date startDate;
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
     public String getJobType() {
         return jobType;
     }

@@ -9,23 +9,6 @@
     margin-bottom: 20px;
 }
 
-form .progress {
-    line-height: 15px;
-}
-}
-
-.progress {
-    display: inline-block;
-    width: 100px;
-    border: 3px groove #CCC;
-}
-
-.progress div {
-    font-size: smaller;
-    background: orange;
-    width: 0;
-}
-
 .bt {
   background: #FE980F;
   border: medium none;
@@ -55,6 +38,9 @@ form .progress {
 			</div>
 			<div class="col-md-2">
 				<input type="text"  ng-model="ctrl.theOne.roles" placeholder="roles" style="width: 100%;" disabled="disabled"/>
+			</div>
+			<div class="col-md-2">
+				<input type="text"  ng-model="ctrl.theOne.secretKey" placeholder="secretKey" style="width: 100%;" disabled="disabled"/>
 			</div>
 			<div class="col-sm-1" style="margin-top: 5px;">
 				Active:

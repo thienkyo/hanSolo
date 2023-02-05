@@ -183,6 +183,7 @@ angular.module('smsUserInfoModule')
 ////////  sms job //////
     smsJobService.getDataForMgnt(0).then(function (data) {
         self.smsJobList = data;
+        console.log(data);
         self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
     });
 
@@ -198,6 +199,12 @@ angular.module('smsUserInfoModule')
             }
         });
     }
+
+    // open datePicker
+    self.openDP = function() {
+        self.DPisOpen = true;
+        self.isPickDP = true;
+    };
 
     self.setTheSmsJob = function(one){
         self.theSmsJob = one;
