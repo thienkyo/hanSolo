@@ -112,8 +112,6 @@ angular.module('smsUserInfoModule')
     self.loadSmsQueue = function(){
         smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
             self.smsQueueList = data;
-            console.log(data)
-            console.log(self.smsQueueAmount)
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }
@@ -181,9 +179,14 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms job //////
+
+    smsJobService.getCount().then(function (data) {
+        self.countCheck = data;
+        console.log(data);
+    });
+
     smsJobService.getDataForMgnt(0).then(function (data) {
         self.smsJobList = data;
-        console.log(data);
         self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
     });
 
@@ -236,6 +239,7 @@ angular.module('smsUserInfoModule')
     self.loadSpecificSmsUserInfo = function(){
         specificSmsUserInfoService.getDataForMgnt(self.amount).then(function (data) {
                 self.specificSmsUserInfoList = data;
+                console.log(data);
                 self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
             });
     }
@@ -273,6 +277,11 @@ angular.module('smsUserInfoModule')
     self.setTheSpecificSmsUserInfo = function(one){
         self.theSpecificSmsUserInfo = one;
         self.responseStr = false;
+    }
+
+    self.clearTheSpecificSmsUserInfo = function(){
+        self.responseStr = false;
+        self.TheSpecificSmsUserInfo = new SmsUserInfoDO();
     }
 
 }]);

@@ -72,6 +72,7 @@ angular.module('smsUserInfoModule')
 	var smsJobService = {
 			getDataForMgnt : getDataForMgnt,
 			upsert : upsert,
+			getCount : getCount,
 			deleteOne : deleteOne
 			};
 	return smsJobService;
@@ -89,6 +90,13 @@ angular.module('smsUserInfoModule')
 			return response.data;
 		});
 	}
+
+	function getCount(){
+        var url = "mgnt/getCount";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function deleteOne(one){
         var url = "mgnt/deleteSmsJob";

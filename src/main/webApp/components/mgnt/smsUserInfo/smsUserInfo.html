@@ -115,7 +115,8 @@ form .progress {
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-5">
-						<textarea name="content" placeholder="specificPhones" rows="5"  style="white-space: pre-line;"
+						Heartbeat: {{ctrl.countCheck}}
+						<textarea name="content" placeholder="specificPhones" rows="4"  style="white-space: pre-line;"
 								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
 					</div>
 					<div class="col-sm-7">
@@ -445,7 +446,7 @@ form .progress {
 						<input type="number"  ng-model="ctrl.theSpecificSmsUserInfo.id" disabled="disabled" placeholder="id" style="width:50px;"/>
 					</div>
 					<div class="col-sm-3">
-						<input type="text"  ng-model="ctrl.theSpecificSmsUserInfo.phone" placeholder="phone2" style="width: 100px;"/>
+						<input type="text"  ng-model="ctrl.theSpecificSmsUserInfo.phone" placeholder="phone" style="width: 100px;"/>
 						{{ctrl.theSpecificSmsUserInfo.phone | tel}}
 					</div>
 					<div class="col-sm-2">
@@ -474,7 +475,7 @@ form .progress {
 						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
 						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
 
-						<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+						<a ng-click="ctrl.clearTheSpecificSmsUserInfo()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 					</div>
 					<div class="col-sm-4">
 

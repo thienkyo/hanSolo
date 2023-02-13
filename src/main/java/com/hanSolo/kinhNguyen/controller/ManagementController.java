@@ -533,6 +533,11 @@ public class ManagementController {
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "getCount", method = RequestMethod.POST)
+    public Integer checkCount()  {
+        return Utility.SMS_HEARTBEAT;
+    }
+
     //////////////////////////// specific smsUserInfo section /////////////////////////////
     @RequestMapping(value = "getSpecificSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SpecificSmsUserInfo> getSpecificSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {

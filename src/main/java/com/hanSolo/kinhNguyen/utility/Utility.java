@@ -67,6 +67,8 @@ public class Utility {
     final public static String SMS_JOB_COMMON = "COMMON";
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
 
+    public static Integer SMS_HEARTBEAT = 100;
+
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
         df.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));

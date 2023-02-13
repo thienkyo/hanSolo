@@ -81,8 +81,13 @@ public class AuthenticationController {
             }
             Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
             if(userInfoDBOtp.isPresent()){
-                continue;
+                smsUserInfo = userInfoDBOtp.get();
+                if(0 ==  order.getId()){
+                    smsUserInfo.setJobIdList("");
+                    smsUserInfo.setOrderCreateDate(order.getGmtCreate());
+                }
             }
+            smsUserInfo.setAddress(order.getShippingAddress());
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);
@@ -96,14 +101,18 @@ public class AuthenticationController {
                 specSms.setLastSendSmsDate(order.getGmtCreate());
                 specSms.setOrderCreateDate(order.getGmtCreate());
                 specSms.setGmtCreate(Utility.getCurrentDate());
-                specSms.setAddress(order.getShippingAddress());
                 specSms.setPhone(order.getShippingPhone());
                 specSms.setName(order.getShippingName());
                 specSms.setJobIdList("");
                 specSms.setLocation("STORE");
             }else{
                 specSms = specSmsDBOtp.get();
+                if( 0 ==  order.getId()){
+                    specSms.setJobIdList("");
+                    specSms.setOrderCreateDate(order.getGmtCreate());
+                }
             }
+            specSms.setAddress(order.getShippingAddress());
             specSms.setJobIdToRun(order.getSpecificJobId().toString());
             specSms.setGmtModify(Utility.getCurrentDate());
             specificSmsUserInfoRepo.save(specSms);
