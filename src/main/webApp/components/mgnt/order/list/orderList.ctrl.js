@@ -135,7 +135,7 @@ angular.module('orderListModule')
         var month = (new Date(self.tempForOneDayReport.gmtCreate)).getMonth() + 1;
         month =  month > 9 ? month : '0' + month;
 
-        self.OneDayReport.date = (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() +'-'+ month +'-'+ date;
+        self.OneDayReport.date =  date +'-'+ month +'-'+ (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() ;
 
         self.OneDayReport.data.forEach((dataOne, index, array) => {
             self.OneDayReport.totalAmount += dataOne.total;
@@ -150,6 +150,8 @@ angular.module('orderListModule')
                 self.OneDayReport.actualAmount += dataOne.total;
             }
         });
+
+        console.log(self.OneDayReport);
     }
 
     function sameDay(d1, d2) {

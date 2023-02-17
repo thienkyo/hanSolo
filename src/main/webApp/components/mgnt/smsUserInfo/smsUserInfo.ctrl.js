@@ -182,7 +182,6 @@ angular.module('smsUserInfoModule')
 
     smsJobService.getCount().then(function (data) {
         self.countCheck = data;
-        console.log(data);
     });
 
     smsJobService.getDataForMgnt(0).then(function (data) {
@@ -239,7 +238,6 @@ angular.module('smsUserInfoModule')
     self.loadSpecificSmsUserInfo = function(){
         specificSmsUserInfoService.getDataForMgnt(self.amount).then(function (data) {
                 self.specificSmsUserInfoList = data;
-                console.log(data);
                 self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
             });
     }

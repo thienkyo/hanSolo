@@ -81,13 +81,16 @@ public class AuthenticationController {
             }
             Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
             if(userInfoDBOtp.isPresent()){
+                String name = smsUserInfo.getName();
                 smsUserInfo = userInfoDBOtp.get();
                 if(0 ==  order.getId()){
                     smsUserInfo.setJobIdList("");
                     smsUserInfo.setOrderCreateDate(order.getGmtCreate());
                 }
+                smsUserInfo.setName(name);
             }
             smsUserInfo.setAddress(order.getShippingAddress());
+            smsUserInfo.setGmtModify(Utility.getCurrentDate());
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);

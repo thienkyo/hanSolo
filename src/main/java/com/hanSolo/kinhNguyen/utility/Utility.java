@@ -66,6 +66,7 @@ public class Utility {
 
     final public static String SMS_JOB_COMMON = "COMMON";
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
+    final public static String SMS_JOB_PARTICULAR = "PARTICULAR";
 
     public static Integer SMS_HEARTBEAT = 100;
 

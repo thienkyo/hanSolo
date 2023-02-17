@@ -33,7 +33,8 @@ var AmountList=[
 // for sms job
 var JobTypeList=[
 	{name : 'COMMON', value:'COMMON' },
-    {name : 'SPECIFIC', value:'SPECIFIC' }
+    {name : 'SPECIFIC', value:'SPECIFIC' },
+    {name : 'PARTICULAR', value:'PARTICULAR' }
 ];
 
 angular

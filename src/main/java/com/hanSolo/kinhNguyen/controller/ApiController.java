@@ -85,6 +85,18 @@ public class ApiController {
                 }
                 specificSmsUserInfoRepo.saveAll(specSmsUserInfos);
             }
+
+            if(Utility.SMS_JOB_PARTICULAR.equals(job.getJobType())){
+                if(!job.getSpecificPhones().isEmpty()){
+                    List<String> phones = Arrays.asList(job.getSpecificPhones().split("\\s*,\\s*"));
+                    for(String phone : phones){
+                        SmsQueue smsQueue = generateSmsQueue3(job,phone);
+                        smsQueueList.add(smsQueue);
+                    }
+                    job.setSpecificPhones("");
+                    smsJobRepo.save(job);
+                }
+            }
         }
         smsQueueRepo.saveAll(smsQueueList);
 
@@ -92,6 +104,7 @@ public class ApiController {
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
             smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
+            smsQueue.setGmtModify(Utility.getCurrentDate());
             smsQueueRepo.save(smsQueue);
             return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
         }
@@ -99,11 +112,12 @@ public class ApiController {
     }
 
     @RequestMapping("getSmsStatus")
-    public String getSmsStatus(@RequestParam String id) {
+    public String getSmsStatus(@RequestParam String id) throws ParseException {
         Optional<SmsQueue> oneSmsOpt = smsQueueRepo.findById(Integer.parseInt(id));
         if(oneSmsOpt.isPresent()){
             SmsQueue oneSms = oneSmsOpt.get();
             oneSms.setStatus(Utility.SMS_QUEUE_SENT);
+            oneSms.setGmtModify(Utility.getCurrentDate());
             smsQueueRepo.save(oneSms);
             return "SUCCESS";
         }
