@@ -31,7 +31,7 @@ angular.module('prescriptionListModule')
 		prescriptionListService.getPrescriptionsForMgnt(self.amount).then(function (data) {
 			self.prescriptionList = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.prescriptionList});
-			engineerOrderList();
+			//engineerOrderList();
 		});
 	}
 	

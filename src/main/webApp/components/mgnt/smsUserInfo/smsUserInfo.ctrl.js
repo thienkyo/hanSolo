@@ -180,8 +180,9 @@ angular.module('smsUserInfoModule')
 
 ////////  sms job //////
 
-    smsJobService.getCount().then(function (data) {
-        self.countCheck = data;
+    smsJobService.getLastHeartBeatTime().then(function (data) {
+        self.lastHeartBeatTime = data;
+        console.log(data);
     });
 
     smsJobService.getDataForMgnt(0).then(function (data) {

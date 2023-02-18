@@ -68,7 +68,15 @@ public class Utility {
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
     final public static String SMS_JOB_PARTICULAR = "PARTICULAR";
 
-    public static Integer SMS_HEARTBEAT = 100;
+    public static Date LAST_SMS_HEARTBEAT_TIME;
+
+    static {
+        try {
+            LAST_SMS_HEARTBEAT_TIME = getCurrentDate();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

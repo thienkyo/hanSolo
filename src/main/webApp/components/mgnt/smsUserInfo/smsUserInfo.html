@@ -115,7 +115,7 @@ form .progress {
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-5">
-						Heartbeat: {{ctrl.countCheck}}
+						Last api call: {{ctrl.lastHeartBeatTime | date:"dd-MM-yyyy HH:mm:ss"}}
 						<textarea name="content" placeholder="specificPhones" rows="4"  style="white-space: pre-line;"
 								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
 					</div>

@@ -29,7 +29,7 @@ public class ApiController {
 
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() throws ParseException {
-        Utility.SMS_HEARTBEAT++;
+        Utility.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
         List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
         List<SmsQueue> smsQueueList = new ArrayList<>();
         for (SmsJob job : smsJobList) {

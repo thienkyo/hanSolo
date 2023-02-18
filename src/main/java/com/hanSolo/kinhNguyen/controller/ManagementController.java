@@ -533,9 +533,9 @@ public class ManagementController {
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    @RequestMapping(value = "getCount", method = RequestMethod.POST)
-    public Integer checkCount()  {
-        return Utility.SMS_HEARTBEAT;
+    @RequestMapping(value = "getLastHeartBeatTime", method = RequestMethod.POST)
+    public Date checkCount()  {
+        return Utility.LAST_SMS_HEARTBEAT_TIME;
     }
 
     //////////////////////////// specific smsUserInfo section /////////////////////////////

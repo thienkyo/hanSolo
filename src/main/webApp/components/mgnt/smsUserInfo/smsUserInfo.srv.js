@@ -72,7 +72,7 @@ angular.module('smsUserInfoModule')
 	var smsJobService = {
 			getDataForMgnt : getDataForMgnt,
 			upsert : upsert,
-			getCount : getCount,
+			getLastHeartBeatTime : getLastHeartBeatTime,
 			deleteOne : deleteOne
 			};
 	return smsJobService;
@@ -91,8 +91,8 @@ angular.module('smsUserInfoModule')
 		});
 	}
 
-	function getCount(){
-        var url = "mgnt/getCount";
+	function getLastHeartBeatTime(){
+        var url = "mgnt/getLastHeartBeatTime";
         return ajaxService.post(url,null,{}).then(function(response){
             return response.data;
         });
