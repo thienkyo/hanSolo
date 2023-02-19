@@ -4,9 +4,10 @@ angular.module('invoiceModule')
 	function($routeParams,$location,invoiceService) {
 	var self = this;
 	self.OrderDetailList=[];
-	function MiniOrderDetailDO (price,quantity,description) {
+	function MiniOrderDetailDO (price,quantity,description,discount) {
     	this.price = price;
     	this.quantity = quantity;
+    	this.discount = discount;
     	this.description = description;
     }
 
@@ -21,15 +22,28 @@ angular.module('invoiceModule')
 
     self.calculateOrderTotal = function(){
         var subTotal = 0;
+        var temp = 0;
         for (var i = 0; i < self.theOrder.orderDetails.length; i++){
             self.theOrder.orderDetails[i].framePriceAfterSale = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100 * self.theOrder.orderDetails[i].quantity;
-            subTotal += self.theOrder.orderDetails[i].framePriceAfterSale + self.theOrder.orderDetails[i].lensPrice;
+
+
+            temp = self.theOrder.orderDetails[i].framePriceAfterSale;
+            // apply discount
+            if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
+                temp = self.theOrder.orderDetails[i].framePriceAfterSale*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
+            }
+            subTotal += temp + self.theOrder.orderDetails[i].lensPrice*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
+
             if(self.theOrder.orderDetails[i].framePriceAfterSale > 0){
-                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,1,self.theOrder.orderDetails[i].frameNote));
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,1,self.theOrder.orderDetails[i].frameNote,self.theOrder.orderDetails[i].frameDiscountAmount));
             }
 
             if(self.theOrder.orderDetails[i].lensPrice > 0 ){
-                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,1,self.theOrder.orderDetails[i].lensNote));
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,1,self.theOrder.orderDetails[i].lensNote,self.theOrder.orderDetails[i].lensDiscountAmount));
+            }
+
+            if(self.theOrder.orderDetails[i].lensPrice && self.theOrder.orderDetails[i].otherPrice > 0 ){
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].otherPrice,1,self.theOrder.orderDetails[i].otherNote,0));
             }
         }
         var temp = 12 - self.OrderDetailList.length;

@@ -6,6 +6,7 @@ angular.module('cartModule')
 			addToCart : addToCart,
 			placeOrder : placeOrder,
 			getCoupon : getCoupon,
+			getCoupon2 : getCoupon2,
 			placeGuestOrder : placeGuestOrder
 		};
 	return cartService;
@@ -56,6 +57,13 @@ angular.module('cartModule')
    		return ajaxService.get(url,null,{}).then(function(data){
    			return data.data;
    		});
-   	}
+   }
+
+    function getCoupon2(code,type){
+        var url = "coupon/getByCode2/" + code +"/"+ type;
+        return ajaxService.get(url,null,{}).then(function(data){
+            return data.data;
+        });
+    }
 
  }]);

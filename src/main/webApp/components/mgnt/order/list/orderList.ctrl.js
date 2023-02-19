@@ -37,6 +37,7 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
+		console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -254,10 +255,16 @@ angular.module('orderListModule')
 
 	function calculateOrderTotal(order){
         var subTotal = 0;
+        var temp = 0;
         order.frameNumber = 0;
         order.lensNumber = 0;
         for (var i = 0; i < order.orderDetails.length; i++){
-            subTotal += order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity + order.orderDetails[i].lensPrice;
+            temp = order.orderDetails[i].framePriceAtThatTime;
+            // apply discount coupon for frame
+            if(order.orderDetails[i].frameDiscountAmount && order.orderDetails[i].frameDiscountAmount > 0){
+                temp = order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAmount)/100
+            }
+            subTotal += temp*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity + order.orderDetails[i].lensPrice*(100 - order.orderDetails[i].lensDiscountAmount)/100 + order.orderDetails[i].otherPrice;
             if(order.orderDetails[i].framePriceAtThatTime > 1000){
                 order.frameNumber +=1;
             }

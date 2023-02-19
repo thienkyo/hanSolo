@@ -2,10 +2,10 @@
 angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
-										 'ajaxService','genderArray','smsJobService',
+										 'ajaxService','genderArray','smsJobService','AreaCodeList',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
-	            ajaxService,genderArray,smsJobService) {
+	            ajaxService,genderArray,smsJobService,AreaCodeList) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -17,6 +17,7 @@ angular.module('storeOrderModule')
 
 	self.OrderStatusArray=OrderStatusArray;
 	self.genderArray=genderArray;
+	self.AreaCodeList=AreaCodeList;
 	self.statusStyle = { "width": "120px" };
     var firstSmsJob = new SmsJobDO();
 	self.smsJobList = [firstSmsJob];
@@ -114,7 +115,6 @@ angular.module('storeOrderModule')
 
     self.selectedItemChange = function(one,orderDetail) {
         if(one){
-       //   console.log('selectedItemChange in if');
           orderDetail.product = one;
           orderDetail.frameNote = one.name;
          // orderDetail.framePriceAtThatTime = one.name;
@@ -138,6 +138,7 @@ angular.module('storeOrderModule')
 
     self.calculateOrderTotal = function(){
         var subTotal = 0;
+        var temp = 0;
         for (var i = 0; i < self.theOrder.orderDetails.length; i++){
             if(self.theOrder.orderDetails[i].product){
                 self.theOrder.orderDetails[i].framePriceAtThatTime = self.theOrder.orderDetails[i].product.sellPrice;
@@ -146,7 +147,11 @@ angular.module('storeOrderModule')
                 self.theOrder.orderDetails[i].framePriceAtThatTime = self.theOrder.orderDetails[i].framePriceAfterSale;
                 self.theOrder.orderDetails[i].frameDiscountAtThatTime = 0;
             }
-            subTotal += self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity + self.theOrder.orderDetails[i].lensPrice;
+            temp = self.theOrder.orderDetails[i].framePriceAtThatTime;
+            if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
+                temp = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
+            }
+            subTotal += temp*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity + self.theOrder.orderDetails[i].lensPrice*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
         }
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
@@ -157,21 +162,70 @@ angular.module('storeOrderModule')
 
     self.getCoupon = function(code) {
         if(code ==''){
-            self.isErrorMsg ='Cần nhập coupon code.';
+            //self.isErrorMsg ='Cần nhập coupon code.';
+            self.theOrder.couponDiscount = 0;
+            self.theOrder.couponCode = '';
+            self.calculateOrderTotal(self.theOrder);
             return;
         }
-         cartService.getCoupon(code).then(function (data) {
-
-         if(data.errorCode == 'SUCCESS'){
-            self.theOrder.couponDiscount = data.replyStr;
-            self.theOrder.couponCode = code;
-          //  self.isCouponApplied = true;
-            self.calculateOrderTotal(self.theOrder);
-            self.isErrorMsg = false;
-         }else{
-            self.isErrorMsg = data.errorMessage;
-         }
+         cartService.getCoupon2(code,'BILL').then(function (data) {
+             if(data.errorCode == 'SUCCESS'){
+                self.theOrder.couponDiscount = data.replyStr;
+                self.theOrder.couponCode = code;
+              //  self.isCouponApplied = true;
+                self.calculateOrderTotal(self.theOrder);
+                self.isErrorMsg = false;
+             }else{
+                self.isErrorMsg = data.errorMessage;
+             }
          });
+    }
+
+    self.getFrameCoupon = function(orderDetail) {
+        if(orderDetail.frameDiscountCode.length >4){
+            cartService.getCoupon2(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
+                 if(data.errorCode == 'SUCCESS'){
+                    orderDetail.frameDiscountAmount = data.replyStr;
+                    console.log(orderDetail);
+                    console.log(self.theOrder);
+                    self.calculateOrderTotal(self.theOrder);
+                    self.isErrorMsg = false;
+                 }else{
+                    self.isErrorMsg = data.errorMessage;
+                    orderDetail.frameDiscountAmount = 0;
+                    orderDetail.frameDiscountCode = '';
+                 }
+             });
+
+        }else if(orderDetail.frameDiscountCode.length == 0){
+            orderDetail.frameDiscountAmount = 0;
+            orderDetail.frameDiscountCode = '';
+            self.calculateOrderTotal(self.theOrder);
+        }
+    }
+
+    ///// get lens coupon
+    self.getLensCoupon = function(orderDetail) {
+        if(orderDetail.lensDiscountCode.length >4){
+            cartService.getCoupon2(orderDetail.lensDiscountCode,'LENS').then(function (data) {
+                 if(data.errorCode == 'SUCCESS'){
+                    orderDetail.lensDiscountAmount = data.replyStr;
+                    console.log(orderDetail);
+                    console.log(self.theOrder);
+                    self.calculateOrderTotal(self.theOrder);
+                    self.isErrorMsg = false;
+                 }else{
+                    self.isErrorMsg = data.errorMessage;
+                    orderDetail.lensDiscountAmount = 0;
+                    orderDetail.lensDiscountCode = '';
+                 }
+             });
+
+        }else if(orderDetail.lensDiscountCode.length == 0){
+            orderDetail.lensDiscountAmount = 0;
+            orderDetail.lensDiscountCode = '';
+            self.calculateOrderTotal(self.theOrder);
+        }
     }
 
     self.saveOrder = function(){
@@ -183,13 +237,13 @@ angular.module('storeOrderModule')
                 self.theOrder.orderDetails[i].gmtModify = self.theOrder.gmtCreate;
             }
         }
-
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
-
+       // console.log(self.theOrder);
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
+                console.log(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data; // return after saving order, order_return_status would be orderid
                     self.newOrderId = data.replyStr;
@@ -210,6 +264,7 @@ angular.module('storeOrderModule')
 
     self.closeAlert = function(index) {
         self.order_return_status = false;
+        self.isErrorMsg = false;
     };
 
     self.tempF = function() {
@@ -232,6 +287,7 @@ angular.module('storeOrderModule')
                 }
                 console.log(self.theOrder);
 
+                // load jobid for sms send
                 if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){
                     var smsJobOption = self.smsJobList.find(i => i.id == self.theOrder.specificJobId);
                     if(smsJobOption){
@@ -260,12 +316,8 @@ angular.module('storeOrderModule')
 
     //// collect specific job.
     smsJobService.getDataForMgnt(0).then(function (data) {
-        console.log(self.theOrder);
         var tempArray = data.filter(i => i.jobType == 'SPECIFIC' && i.status == true );
-        console.log(tempArray);
         self.smsJobList = self.smsJobList.concat(tempArray);
-
-        console.log(self.smsJobList);
     });
 
 }]);

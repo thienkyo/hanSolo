@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface CouponRepository extends PagingAndSortingRepository<Coupon, Integer> {
     Optional<Coupon> findByCode(@NonNull String code);
-
     List<Coupon> findByOrderByGmtModifyDesc();
-
     List<Coupon> findAllByOrderByGmtCreateDesc();
-
+    Optional<Coupon> findByCodeAndCouponType(@NonNull String code, @NonNull String couponType);
 }

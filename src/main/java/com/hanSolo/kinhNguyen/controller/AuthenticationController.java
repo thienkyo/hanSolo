@@ -56,23 +56,20 @@ public class AuthenticationController {
         order.setMember(memOpt.get());
         Order or = orderRepo.save(order);
 
-        if(!or.getCouponCode().isBlank()){
-            Optional<Coupon>  couponOpt = couponRepo.findByCode(or.getCouponCode());
-            if(couponOpt.isPresent()){
-                Coupon coupon = couponOpt.get();
-                coupon.setQuantity(coupon.getQuantity()-1);
-                couponRepo.save(coupon);
-            }
-        }
+        updateCouponQuantity(or.getCouponCode());
 
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
-                order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(), order.getShippingAddress()));
+                order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),
+                order.getShippingAddress(),order.getAreaCode()));
         for(OrderDetail item : order.getOrderDetails()){
             if(!item.getPhone().isEmpty() && !item.getPhone().equals(order.getShippingPhone()) && order.getLocation().equals("STORE")){
                 smsUserList.add(new SmsUserInfo(item.getName(), item.getPhone(), item.getGender(),item.getGmtCreate(),item.getGmtCreate(),
-                        Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),item.getAddress()));
+                        Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),item.getAddress(), order.getAreaCode()));
             }
+
+            updateCouponQuantity(item.getFrameDiscountCode());
+            updateCouponQuantity(item.getLensDiscountCode());
         }
         List<SmsUserInfo> smsUserResult = new ArrayList<>();
         for(SmsUserInfo smsUserInfo : smsUserList){
@@ -83,12 +80,14 @@ public class AuthenticationController {
             if(userInfoDBOtp.isPresent()){
                 String name = smsUserInfo.getName();
                 smsUserInfo = userInfoDBOtp.get();
+                // new order but with same patient.
                 if(0 ==  order.getId()){
                     smsUserInfo.setJobIdList("");
                     smsUserInfo.setOrderCreateDate(order.getGmtCreate());
                 }
                 smsUserInfo.setName(name);
             }
+            smsUserInfo.setAreaCode(order.getAreaCode());
             smsUserInfo.setAddress(order.getShippingAddress());
             smsUserInfo.setGmtModify(Utility.getCurrentDate());
             smsUserResult.add(smsUserInfo);
@@ -125,6 +124,7 @@ public class AuthenticationController {
             }
         }
 
+        /// coupon
         if(StringUtils.hasText(or.getCouponCode())){
             int orderAmount = 0;
             for( OrderDetail orderDetail : or.getOrderDetails()){
@@ -161,6 +161,19 @@ public class AuthenticationController {
 
         memberRepo.save(m);
         return new GenericResponse(m.getId()+"",Utility.SUCCESS_ERRORCODE,"save member success");
+    }
+
+    private void updateCouponQuantity(String code){
+        if( code != null && !code.isEmpty()){
+            Optional<Coupon>  couponOpt = couponRepo.findByCode(code);
+            if(couponOpt.isPresent()){
+                Coupon coupon = couponOpt.get();
+                if(coupon.getQuantity() > 0){
+                    coupon.setQuantity(coupon.getQuantity()-1);
+                    couponRepo.save(coupon);
+                }
+            }
+        }
     }
 
 }

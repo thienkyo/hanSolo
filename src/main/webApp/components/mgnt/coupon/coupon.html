@@ -59,23 +59,38 @@ form .progress {
 			<div class="col-md-1">
 				<input type="text"  ng-model="ctrl.theCoupon.lifespan" placeholder="lifespan" style="width: 100%;"/>
 			</div>
+			<div class="col-md-1">
+				<select  ng-model="ctrl.theCoupon.couponType"
+						 ng-options="opt.value as opt.name for opt in ctrl.CouponTypeList"
+						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
+				</select>
+			</div>
+			<div class="col-md-1">
+				<select  ng-model="ctrl.theCoupon.createdBy"
+						 ng-options="opt.value as opt.name for opt in ctrl.CouponCreatedByList"
+						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
+				</select>
+			</div>
 
+
+		</div>
+		<div class="row" style="margin-bottom: 30px;">
 			<div class="col-md-2">
 				<a ng-click="ctrl.upsert(ctrl.theCoupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
 				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 			</div>
 			<div class="col-md-1">
-				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
+				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 thành công
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only"></span>
+					thành công
 				</div>
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
+				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 có sản phẩm
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only"></span>
+					có sản phẩm
 				</div>
 			</div>
 		</div>
@@ -102,16 +117,24 @@ form .progress {
 					<td title="'lifespan'" filter="{ 'lifespan' : 'text'}" sortable="'lifespan'" style="text-align: right;width:120px;">
 						{{coupon.lifespan}}
 					</td>
-			        <td title="'Modify date'" filter="{ 'gmtModify' : 'text'}" sortable="'gmtModify'" >
+					<td title="'Type'" filter="{ 'couponType' : 'text'}" sortable="'couponType'" style="text-align: right;width:80px;">
+						{{coupon.couponType}}
+					</td>
+			        <td title="'Modify'" filter="{ 'gmtModify' : 'text'}" sortable="'gmtModify'" >
 			        	{{coupon.gmtModify | date:"yyyy-MM-dd hh:mm:ss"}}
 			        </td>
 
 					<td title="'status'" ng-style="ctrl.setStyle(coupon.status)">
-						{{coupon.status == 0 ? 'expired' : 'valid'  }}
+						{{coupon.status == 0 ? 'invalid' : 'valid'  }}
 					</td>
 
 			      	<td title="'delete'" style="width:100px;" >
-			        	<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
+						<a ng-click="ctrl.promptDelete(coupon.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+						<p ng-show="ctrl.deletingId == coupon.id">
+							Are you sure?
+							<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+						</p>
 			        </td>
 			    </tr>
 			</table>

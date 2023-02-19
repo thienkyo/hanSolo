@@ -125,9 +125,10 @@
 								<div class="col-sm-3 border" >
 									<div class="row" style="margin-left: 3px;margin-top: 5px">{{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}}</div>
 									<div class="row" style="margin-left: 3px;">{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}</div>
+									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">(discount:{{item.lensDiscountAmount}}%)</div>
 								</div>
 								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}</div>
-								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.frameNote}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}</div>
 								<div class="col-sm-2 border">
 									{{item.orderDetailNoteForCus}}
 									{{item.orderDetailNote}}
@@ -202,8 +203,8 @@
 		</div>
 		<!-- end one day Modal -->
 
+		<!-- order type counting -->
 		<div class="row" style="margin-bottom: 15px;">
-			
 			<div class="col-sm-2">
 				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderByTerm()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"

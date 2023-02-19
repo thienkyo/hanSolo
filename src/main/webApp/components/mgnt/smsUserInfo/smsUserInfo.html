@@ -67,7 +67,7 @@ form .progress {
 
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<!-- config tab pane-->
+			<!-- config job tab pane-->
 			<div id="job" class="container tab-pane active"><br>
 				<div class="row" >
 					<div class="col-sm-1">
@@ -159,7 +159,7 @@ form .progress {
 				<div class="table-responsive">
 					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
-							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:70px;text-align: center;">
+							<td title="'id'" filter="{ 'id': 'number'}"  style="width:70px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheSmsJob(one)">{{one.id}}</a>
 							</td>
 
@@ -188,7 +188,7 @@ form .progress {
 							<td title="'type'"  style="width:100px;text-align: center;">
 								{{one.jobType}}
 							</td>
-							<td title="'start'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width: 110px;">
+							<td title="'start'" filter="{ 'startDate' : 'text'}"  style="text-align: left;width: 110px;">
 								{{one.startDate | date:"yyyy-MM-dd"}}
 							</td>
 
@@ -357,6 +357,21 @@ form .progress {
 
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-2">
+						<select  ng-model="ctrl.theSmsUserInfo.areaCode"
+								 ng-options="opt.value as opt.name for opt in ctrl.AreaCodeList"
+								 style="height: 40px;border: 1px solid #e1e1e1;width: 100%;">
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<select  ng-model="ctrl.theSmsUserInfo.gender"
+								 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
+								 style="height: 40px;border: 1px solid #e1e1e1;width: 100%;">
+						</select>
+					</div>
+				</div>
+
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-2">
 						<a ng-click="ctrl.upsert(ctrl.theSmsUserInfo)" href=""
 						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
 						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
@@ -378,8 +393,7 @@ form .progress {
 						</alert>
 
 					</div>
-					<div class="col-sm-5"></div>
-					<div class="col-sm-1"></div>
+					<div class="col-sm-6"></div>
 				</div>
 
 				<!-- sms user info table-->
@@ -413,7 +427,13 @@ form .progress {
 							<td title="'jobId'" filter="{ 'jobIdList' : 'text'}" sortable="'jobIdList'" style="text-align: right;">
 								{{one.jobIdList}}
 							</td>
-							<td title="'tester'" filter="{ 'isTestUser' : 'text'}"  style="text-align: center;">
+							<td title="'area'" filter="{ 'areaCode' : 'text'}" sortable="'areaCode'" style="text-align: right;">
+								{{one.areaCode}}
+							</td>
+							<td title="'M/F'" filter="{ 'gender' : 'text'}"  style="text-align: right;">
+								{{one.gender }}
+							</td>
+							<td title="'tester'" filter="{ 'isTestUser' : 'text'}"  style="text-align: center;width: 10px;">
 								<input type="checkbox"  ng-model="one.isTestUser"/>
 							</td>
 							<td title="'order date'" filter="{ 'orderCreateDate' : 'text'}" sortable="'orderCreateDate'" style="text-align: left;width:130px;">

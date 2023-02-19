@@ -136,11 +136,55 @@ public class OrderDetail {
     @Column(name = "mono_lens")
     private Boolean monoLens;
 
-    @Column(name = "other_price")
+    @Column(name = "other_price", columnDefinition = "integer default 0")
     private Integer otherPrice;
 
     @Column(name = "other_note", length = 600)
     private String otherNote;
+
+    @Column(name = "frame_discount_code", length = 20)
+    private String frameDiscountCode;
+
+    @Column(name = "frame_discount_amount", columnDefinition = "integer default 0")
+    private Integer frameDiscountAmount;
+
+    @Column(name = "lens_discount_code", length = 20)
+    private String lensDiscountCode;
+
+    @Column(name = "lens_discount_amount", columnDefinition = "integer default 0")
+    private Integer lensDiscountAmount;
+
+    public Integer getLensDiscountAmount() {
+        return lensDiscountAmount;
+    }
+
+    public void setLensDiscountAmount(Integer lensDiscountAmount) {
+        this.lensDiscountAmount = lensDiscountAmount;
+    }
+
+    public String getLensDiscountCode() {
+        return lensDiscountCode;
+    }
+
+    public void setLensDiscountCode(String lensDiscountCode) {
+        this.lensDiscountCode = lensDiscountCode;
+    }
+
+    public Integer getFrameDiscountAmount() {
+        return frameDiscountAmount;
+    }
+
+    public void setFrameDiscountAmount(Integer frameDiscountAmount) {
+        this.frameDiscountAmount = frameDiscountAmount;
+    }
+
+    public String getFrameDiscountCode() {
+        return frameDiscountCode;
+    }
+
+    public void setFrameDiscountCode(String frameDiscountCode) {
+        this.frameDiscountCode = frameDiscountCode;
+    }
 
     public String getOtherNote() {
         return otherNote;

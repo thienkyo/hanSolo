@@ -3,11 +3,11 @@ angular.module('smsUserInfoModule')
 	.controller('smsUserInfoController',['$rootScope','$location','memberService','smsUserInfoService','AmountList',
 									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
-									'CommonStatusArray','specificSmsUserInfoService',
+									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
-	        CommonStatusArray,specificSmsUserInfoService) {
+	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
@@ -15,6 +15,8 @@ angular.module('smsUserInfoModule')
 	self.theSpecificSmsUserInfo = new SmsUserInfoDO();
 	self.jobTypeList = JobTypeList; // sms job
 	self.statusList = CommonStatusArray;
+	self.AreaCodeList = AreaCodeList;
+	self.genderArray=genderArray;
 	self.statusStyle = {};
 	self.isSaveButtonPressed=false;
 	self.tempArray=[];

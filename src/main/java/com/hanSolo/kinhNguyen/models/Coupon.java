@@ -37,6 +37,28 @@ public class Coupon {
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtModify;
 
+    @Column(name = "coupon_type", length = 20, columnDefinition = "varchar(20) default 'BILL'")
+    private String couponType;
+
+    @Column(name = "created_by", length = 20, columnDefinition = "varchar(20) default 'MANUAL'")
+    private String createdBy;
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getCouponType() {
+        return couponType;
+    }
+
+    public void setCouponType(String couponType) {
+        this.couponType = couponType;
+    }
+
     public Date getGmtModify() {return gmtModify;}
 
     public void setGmtModify(Date gmtModify) {

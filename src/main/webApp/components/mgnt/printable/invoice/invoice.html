@@ -90,8 +90,6 @@
 			</p>
 		</div>
 
-
-
 		<table class="preth" style="width: 100%;border-collapse: collapse;margin-top: 10px;">
 			<thead>
 			<tr>
@@ -99,6 +97,7 @@
 				<th>Sản Phẩm</th>
 				<th>SL</th>
 				<th>Đơn giá</th>
+				<th>Giảm</th>
 				<th>Thành tiền</th>
 			</tr>
 			</thead>
@@ -108,7 +107,8 @@
 				<td>{{item.description}}</td>
 				<td>{{item.quantity}}</td>
 				<td style="text-align: right;">{{item.price | number:0}}{{item.price ? 'đ' : ''}}</td>
-				<td style="text-align: right;">{{item.price*item.quantity | number:0}}{{item.price ? 'đ' : ''}}</td>
+				<td style="text-align: right;">{{item.discount}}{{item.discount >= 0 ? '%' : ''}}</td>
+				<td style="text-align: right;">{{item.price*item.quantity*(100-item.discount)/100 | number:0}}{{item.price ? 'đ' : ''}}</td>
 			</tr>
 			</tbody>
 		</table>

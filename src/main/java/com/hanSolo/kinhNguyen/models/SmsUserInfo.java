@@ -51,7 +51,16 @@ public class SmsUserInfo {
     @Column(name = "address", length = 400)
     private String address;
 
+    @Column(name = "area_code", length = 20)
+    private String areaCode;
 
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
 
     public String getAddress() {
         return address;
@@ -88,7 +97,8 @@ public class SmsUserInfo {
     public SmsUserInfo() {
     }
 
-    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate, Date gmtModify,String location, String address) {
+    public SmsUserInfo(String name,String phone, Boolean gender, Date lastSendSmsDate, Date orderCreateDate,Date gmtCreate,
+                       Date gmtModify,String location, String address, String areaCode) {
         this.name = name;
         this.phone = phone;
         this.gender = gender;
@@ -99,6 +109,7 @@ public class SmsUserInfo {
         this.gmtCreate = gmtCreate;
         this.gmtModify = gmtModify;
         this.jobIdList = "";
+        this.areaCode = areaCode;
     }
 
 

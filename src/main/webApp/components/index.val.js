@@ -37,6 +37,22 @@ var JobTypeList=[
     {name : 'PARTICULAR', value:'PARTICULAR' }
 ];
 
+var AreaCodeList=[
+	{name : 'HCM,Thủ Đức,Đồng Nai,Tây Ninh,Vũng Tàu,Long An, Tiền Giang', value:'NEARHCM' },
+    {name : '---khác---', value:'OTHERS' },
+];
+
+var CouponTypeList=[
+	{name : 'BILL', value:'BILL' },
+    {name : 'FRAME', value:'FRAME' },
+    {name : 'LENS', value:'LENS' }
+];
+
+var CouponCreatedByList=[
+	{name : 'MANUAL', value:'MANUAL' },
+    {name : 'TOOL', value:'TOOL' }
+];
+
 angular
 		.module('app') 
 		.value('MemberDO', MemberDO)
@@ -65,6 +81,9 @@ angular
 		.value('SmsJobDO',SmsJobDO)
 		.value('JobTypeList',JobTypeList)
 		.value('KeyManagementDO',KeyManagementDO)
+		.value('AreaCodeList',AreaCodeList)
+		.value('CouponTypeList',CouponTypeList)
+		.value('CouponCreatedByList',CouponCreatedByList)
 		.value('PaginationDO',PaginationDO);
 
 function KeyManagementDO(){
@@ -149,6 +168,7 @@ function OrderDO () {
 	this.cusSource = 0;
 	this.lensNumber = 0;
 	this.frameNumber = 0;
+	this.areaCode = '';
 }
 
 function OrderDetailDO () {
@@ -158,9 +178,17 @@ function OrderDetailDO () {
 	this.frameDiscountAtThatTime = 0;
 	this.framePriceAfterSale = 0;
 	this.frameNote = '';
+	this.frameDiscountCode = '';
+	this.frameDiscountAmount = 0;
+	this.tempFramePrice = 0;
 
 	this.lensNote = '';
 	this.lensPrice = 0;
+	this.lensDiscountCode = '';
+	this.lensDiscountAmount = 0;
+
+	this.otherNote = '';
+    this.otherPrice = 0;
 
 	this.osVasc = '';
 	this.osVacc = '';
@@ -286,13 +314,15 @@ function SupplierDO(){
 
 function CouponDO(){
 	this.id = 0;
-	this.name = 'coupon name';
+	this.name = null;
 	this.status = true;
 	this.value = null;
 	this.image = '';
 	this.code = '';
 	this.lifespan = null;
 	this.quantity = null;
+	this.couponType = 'BILL';
+	this.createdBy = 'MANUAL';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

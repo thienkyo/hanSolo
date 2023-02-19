@@ -83,6 +83,17 @@ public class Order {
     @Column(name = "specific_job_name")
     private String specificJobName;
 
+    @Column(name = "area_code")
+    private String areaCode;
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
     public String getSpecificJobName() {
         return specificJobName;
     }

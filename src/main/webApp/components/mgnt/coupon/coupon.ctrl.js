@@ -1,9 +1,13 @@
 'use strict';
 angular.module('couponModule')
-.controller('couponController', ['$scope','couponService','NgTableParams','memberService','CommonStatusArray','CouponDO','Upload','$timeout','uploadService',
-	function($scope,couponService,NgTableParams,memberService,CommonStatusArray,CouponDO,Upload,$timeout,uploadService) {
+.controller('couponController', ['$scope','couponService','NgTableParams','memberService','CommonStatusArray','CouponDO',
+            'Upload','$timeout','uploadService','CouponTypeList','CouponCreatedByList',
+	function($scope,couponService,NgTableParams,memberService,CommonStatusArray,CouponDO,
+	         Upload,$timeout,uploadService,CouponTypeList,CouponCreatedByList) {
 		var self = this;
 		self.statusList = CommonStatusArray;
+		self.CouponTypeList = CouponTypeList;
+		self.CouponCreatedByList = CouponCreatedByList;
 		self.theCoupon = new CouponDO;
 		self.statusStyle = {};
 		self.discountOrderNumber = 0;
@@ -62,6 +66,13 @@ angular.module('couponModule')
 				}
 			});
 		}
+
+		self.promptDelete = function(id){
+            self.deletingId = self.deletingId ? false : id;
+        }
+        self.resetDelete = function(){
+            self.deletingId = false;
+        }
 		
 		self.clear = function(){
 			self.responseStr = false;
@@ -74,7 +85,7 @@ angular.module('couponModule')
             var modifyDate = new Date(coupon.gmtModify);
             modifyDate.setDate(modifyDate.getDate() + coupon.lifespan);
 
-            if(modifyDate > new Date()){
+            if(modifyDate > new Date() && coupon.quantity >0){
                 coupon.status = 1;
             }else{
                 coupon.status = 0;
