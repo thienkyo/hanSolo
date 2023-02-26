@@ -17,7 +17,7 @@ public class Order {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "coupon_code", length = 20)
+    @Column(name = "coupon_code", length = 40)
     private String couponCode;
 
     @Column(name = "coupon_discount")
@@ -85,6 +85,35 @@ public class Order {
 
     @Column(name = "area_code")
     private String areaCode;
+
+    @Transient
+    private String currentCouponCode;
+
+    @Override
+    public boolean equals(Object obj) {
+        Order o = (Order)obj;
+        return this.getShippingPhone().equalsIgnoreCase(o.getShippingPhone())
+                && this.getShippingName().equalsIgnoreCase(o.getShippingName())
+                && this.getId() == o.getId();
+    }
+
+    public Order() {}
+
+    public Order(Integer id, String shippingName, String shippingPhone,String shippingAddress, Date gmtCreate) {
+        this.id = id;
+        this.shippingAddress = shippingAddress;
+        this.shippingName = shippingName;
+        this.shippingPhone = shippingPhone;
+        this.gmtCreate = gmtCreate;
+    }
+
+    public String getCurrentCouponCode() {
+        return currentCouponCode;
+    }
+
+    public void setCurrentCouponCode(String currentCouponCode) {
+        this.currentCouponCode = currentCouponCode;
+    }
 
     public String getAreaCode() {
         return areaCode;

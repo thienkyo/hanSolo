@@ -23,6 +23,23 @@
     background-position: 160px;
 }
 
+.search_class3{
+	background: #FFFFFF;
+    border: 1px solid #e1e1e1;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    padding-top: 5px;
+    width: 100%;
+    background-image: url(../static/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 330px;
+    float: left;
+    margin-bottom: 20px;
+}
+
 .md-whiteframe-z1 {
     box-shadow: none;
 }
@@ -64,16 +81,80 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Full Name<span>*</span></p>
-							<input type="text"  ng-model="ctrl.theOrder.shippingName" ng-change="ctrl.clearErrorMsg();ctrl.nameCopy();">
+							<!--<input type="text"  ng-model="ctrl.theOrder.shippingName" style="width: 35%;float: left;"
+								   ng-change="ctrl.clearErrorMsg();ctrl.nameCopy();">-->
+
+
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="false"
+											 md-selected-item="ctrl.theSelectedOrder"
+											 md-search-text-change="ctrl.searchOrderTextChange(ctrl.theOrder.shippingName)"
+											 md-search-text="ctrl.theOrder.shippingName"
+											 md-selected-item-change="ctrl.selectedOrderChange(ctrl.theOrder.shippingName)"
+											 md-items="one in ctrl.querySearchOrder(ctrl.theOrder.shippingName)"
+											 md-item-text="one.shippingName"
+											 md-min-length="3"
+											 md-delay="700"
+											 md-clear-button="true"
+											 md-autoselect="false"
+											 >
+								<md-item-template>
+									<div class="row" >
+										<div class="col-md-1" >{{one.id}}</div>
+										<div class="col-md-2" >{{one.gmtCreate | date:"dd-MM-yyyy"}}</div>
+										<div class="col-md-2" >{{one.shippingPhone | tel}}</div>
+										<div class="col-md-3" >{{one.shippingName}}</div>
+										<div class="col-md-3" >{{one.shippingAddress}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{ctrl.theOrder.shippingName}}".
+								</md-not-found>
+							</md-autocomplete>
 						</div>
 					</div>
+
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
-							<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{2,17}$/"
-								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();">
+							<!--<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{2,17}$/"
+								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();" style="width: 35%;float: left;">-->
+
+
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="false"
+											 md-selected-item="ctrl.theSelectedOrder"
+											 md-search-text-change="ctrl.searchOrderByPhoneTextChange(ctrl.theOrder.shippingPhone)"
+											 md-search-text="ctrl.theOrder.shippingPhone"
+											 md-selected-item-change="ctrl.selectedOrderChange(ctrl.theOrder.shippingPhone)"
+											 md-items="one in ctrl.querySearchOrderByPhone(ctrl.theOrder.shippingPhone)"
+											 md-item-text="one.shippingPhone"
+											 md-min-length="3"
+											 md-delay="700"
+											 md-clear-button="true"
+											 md-autoselect="false"
+							>
+								<md-item-template>
+									<div class="row" >
+										<div class="col-md-1" >{{one.id}}</div>
+										<div class="col-md-2" >{{one.gmtCreate | date:"dd-MM-yyyy"}}</div>
+										<div class="col-md-2" >{{one.shippingPhone | tel}}</div>
+										<div class="col-md-3" >{{one.shippingName}}</div>
+										<div class="col-md-3" >{{one.shippingAddress}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{ctrl.theOrder.shippingPhone}}".
+								</md-not-found>
+							</md-autocomplete>
+
+
+
 						</div>
 					</div>
+
 				</div>
 				<div class="row">
 					<div class="col-lg-6">
@@ -514,7 +595,7 @@
 									</div>
 								</md-item-template>
 								<md-not-found>
-									không có kết quả cho "{{ctrl.searchLensText}}".
+									không có kết quả cho "{{item.searchLensText}}".
 								</md-not-found>
 							</md-autocomplete>
 						</div>

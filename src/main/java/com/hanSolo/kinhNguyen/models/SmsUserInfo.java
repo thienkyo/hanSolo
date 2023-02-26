@@ -54,6 +54,17 @@ public class SmsUserInfo {
     @Column(name = "area_code", length = 20)
     private String areaCode;
 
+    @Column(name = "status", columnDefinition = "boolean default true")
+    private Boolean status;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
     public String getAreaCode() {
         return areaCode;
     }

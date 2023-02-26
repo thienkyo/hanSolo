@@ -45,4 +45,16 @@ angular.module('app')
         return (country + " " + city + " " + number).trim();
     };
 })
+.filter('arrayToString', function () {
+    return function (array) {
+        if (!array) { return ''; }
+        var returnStr='';
+        array.forEach((dataOne, index, array) => {
+            returnStr +=  dataOne.name + ',';
+
+        });
+        return returnStr;
+    };
+})
+
 ;

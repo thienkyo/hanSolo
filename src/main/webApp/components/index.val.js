@@ -151,6 +151,7 @@ function SmsJobDO(){
 function OrderDO () {
 	this.id = 0;
 	this.couponCode = '';
+	this.currentCouponCode = '';
 	this.couponDiscount = 0;
 	this.extInfo = '';
 	this.shippingAddress = '';

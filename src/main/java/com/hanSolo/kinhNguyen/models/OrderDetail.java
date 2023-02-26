@@ -86,8 +86,6 @@ public class OrderDetail {
     @Column(name = "recommended_spectacles", length = 300)
     private String recommendedSpectacles;
 
-
-
     @Column(name = "gmt_create", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date gmtCreate;
@@ -153,6 +151,37 @@ public class OrderDetail {
 
     @Column(name = "lens_discount_amount", columnDefinition = "integer default 0")
     private Integer lensDiscountAmount;
+
+    @Transient
+    private String currentLensDiscountCode;
+
+    @Transient
+    private String currentFrameDiscountCode;
+
+    public OrderDetail( ) {}
+
+    public OrderDetail( String name, String phone, String address, Date gmtCreate) {
+        this.name = name;
+        this.phone = phone;
+        this.gmtCreate = gmtCreate;
+        this.address = address;
+    }
+
+    public String getCurrentFrameDiscountCode() {
+        return currentFrameDiscountCode;
+    }
+
+    public void setCurrentFrameDiscountCode(String currentFrameDiscountCode) {
+        this.currentFrameDiscountCode = currentFrameDiscountCode;
+    }
+
+    public String getCurrentLensDiscountCode() {
+        return currentLensDiscountCode;
+    }
+
+    public void setCurrentLensDiscountCode(String currentLensDiscountCode) {
+        this.currentLensDiscountCode = currentLensDiscountCode;
+    }
 
     public Integer getLensDiscountAmount() {
         return lensDiscountAmount;

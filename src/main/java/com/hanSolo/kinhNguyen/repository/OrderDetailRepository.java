@@ -7,14 +7,9 @@ import java.util.List;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
     List<OrderDetail> findAllByOrderByGmtCreateDesc();
-
-    List<OrderDetail> findFirst100ByOrderByGmtCreateDesc();
-
-    List<OrderDetail> findByNameNotNullAndPhoneNotNullOrderByGmtCreateDesc();
-
     List<OrderDetail> findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
-
     List<OrderDetail> findByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
-
+    List<OrderDetail> findFirst30ByNameContains(String name);
+    List<OrderDetail> findFirst30ByPhoneContains(String phone);
 
 }

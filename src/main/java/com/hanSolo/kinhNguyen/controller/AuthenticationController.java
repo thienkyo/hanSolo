@@ -56,7 +56,7 @@ public class AuthenticationController {
         order.setMember(memOpt.get());
         Order or = orderRepo.save(order);
 
-        updateCouponQuantity(or.getCouponCode());
+        updateCouponQuantity(order,order.getCurrentCouponCode(),order.getCouponCode());
 
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
@@ -68,8 +68,8 @@ public class AuthenticationController {
                         Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),item.getAddress(), order.getAreaCode()));
             }
 
-            updateCouponQuantity(item.getFrameDiscountCode());
-            updateCouponQuantity(item.getLensDiscountCode());
+            updateCouponQuantity(order,item.getCurrentFrameDiscountCode(),item.getFrameDiscountCode());
+            updateCouponQuantity(order,item.getCurrentLensDiscountCode(),item.getLensDiscountCode());
         }
         List<SmsUserInfo> smsUserResult = new ArrayList<>();
         for(SmsUserInfo smsUserInfo : smsUserList){
@@ -79,13 +79,16 @@ public class AuthenticationController {
             Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
             if(userInfoDBOtp.isPresent()){
                 String name = smsUserInfo.getName();
+                boolean gender = smsUserInfo.getGender();
                 smsUserInfo = userInfoDBOtp.get();
                 // new order but with same patient.
                 if(0 ==  order.getId()){
                     smsUserInfo.setJobIdList("");
                     smsUserInfo.setOrderCreateDate(order.getGmtCreate());
+                    smsUserInfo.setLastSendSmsDate(order.getGmtCreate());
                 }
                 smsUserInfo.setName(name);
+                smsUserInfo.setGender(gender);
             }
             smsUserInfo.setAreaCode(order.getAreaCode());
             smsUserInfo.setAddress(order.getShippingAddress());
@@ -115,6 +118,7 @@ public class AuthenticationController {
                 }
             }
             specSms.setAddress(order.getShippingAddress());
+            specSms.setGender(order.getGender());
             specSms.setJobIdToRun(order.getSpecificJobId().toString());
             specSms.setGmtModify(Utility.getCurrentDate());
             specificSmsUserInfoRepo.save(specSms);
@@ -152,25 +156,40 @@ public class AuthenticationController {
                 m.setPass(member.getNewPass());
             }
         }
-
-
         m.setAddress(member.getAddress());
         m.setFullName(member.getFullName());
         m.setEmail(m.getEmail());
         m.setGmtModify(new Date());
-
         memberRepo.save(m);
         return new GenericResponse(m.getId()+"",Utility.SUCCESS_ERRORCODE,"save member success");
     }
 
-    private void updateCouponQuantity(String code){
-        if( code != null && !code.isEmpty()){
-            Optional<Coupon>  couponOpt = couponRepo.findByCode(code);
-            if(couponOpt.isPresent()){
-                Coupon coupon = couponOpt.get();
-                if(coupon.getQuantity() > 0){
-                    coupon.setQuantity(coupon.getQuantity()-1);
-                    couponRepo.save(coupon);
+    private void updateCouponQuantity(Order order,String currentCode, String newCode){
+        if(!StringUtils.hasText(newCode)){
+            if(StringUtils.hasText(currentCode)){
+                Optional<Coupon>  currentCouponOpt = couponRepo.findByCode(currentCode);
+                Coupon currentCoupon = currentCouponOpt.get();
+                currentCoupon.setQuantity(currentCoupon.getQuantity()+1);
+                couponRepo.save(currentCoupon);
+            }
+            return;
+        }
+        Optional<Coupon>  newCouponOpt = couponRepo.findByCode(newCode);
+        if(newCouponOpt.isPresent()){
+            Coupon coupon = newCouponOpt.get();
+            // new order
+            if(order.getId() == 0){
+                coupon.setQuantity(coupon.getQuantity()-1);
+                couponRepo.save(coupon);
+            }else if( StringUtils.hasText(newCode) && !newCode.equals(currentCode)){
+                // update existing order with new code and subtract amount of new code
+                coupon.setQuantity(coupon.getQuantity()-1);
+                couponRepo.save(coupon);
+                if(StringUtils.hasText(currentCode)){
+                    Optional<Coupon>  currentCouponOpt = couponRepo.findByCode(currentCode);
+                    Coupon currentCoupon = currentCouponOpt.get();
+                    currentCoupon.setQuantity(currentCoupon.getQuantity()+1);
+                    couponRepo.save(currentCoupon);
                 }
             }
         }

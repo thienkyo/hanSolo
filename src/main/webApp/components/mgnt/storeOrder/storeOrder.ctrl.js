@@ -45,7 +45,9 @@ angular.module('storeOrderModule')
     }
 
     self.add1Tab = function(){
-        self.theOrder.orderDetails.push(new OrderDetailDO());
+        var newOrderDetail = new OrderDetailDO();
+        newOrderDetail.address = self.theOrder.orderDetails[0].address;
+        self.theOrder.orderDetails.push(newOrderDetail);
     }
 
     self.removeLastTab = function(){
@@ -94,16 +96,34 @@ angular.module('storeOrderModule')
         }
     }
     self.querySearchLens = function(searchText){
-            if(searchText){
-                var url = "search/productMngt/"+searchText;
-                return ajaxService.get(url,null,{}).then(function(response){
-                    return response.data;
-                });
+        if(searchText){
+            var url = "search/productMngt/"+searchText;
+            return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
 
-            }else{
-                return {id:0,name:'no result',type:1,image:''};
-            }
         }
+    }
+
+    self.querySearchOrder = function(searchText){
+        console.log("trigger querySearchOrder");
+        if(searchText){
+            var url = "search/orderMngt/"+searchText;
+            return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
+        }
+    }
+
+    self.querySearchOrderByPhone = function(searchText){
+        console.log("trigger querySearchOrderByPhone");
+        if(searchText){
+            var url = "search/orderByPhoneMngt/"+searchText;
+            return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
+        }
+    }
 
     self.searchTextChange =function(text) {
         //console.log('Text changed to ' + text);
@@ -124,17 +144,48 @@ angular.module('storeOrderModule')
     }
 
     self.selectedLensChange = function(one,orderDetail) {
-            if(one){
-              orderDetail.lensNote = one.name;
-              orderDetail.lensPrice = one.sellPrice;
-            }
-            self.calculateOrderTotal();
+        if(one){
+          orderDetail.lensNote = one.name;
+          orderDetail.lensPrice = one.sellPrice;
         }
+        self.calculateOrderTotal();
+    }
 
     self.removeSearchResult = function(orderDetail){
         orderDetail.product = null;
         self.calculateOrderTotal();
     }
+
+    self.searchOrderTextChange =function(text) {
+        console.log('md-search-text-change ' + text);
+       if(self.copyActive){
+            self.nameCopy();
+        }
+    }
+
+    self.selectedOrderChange = function(searchText) {
+        console.log("md-selected-item-change "+searchText);
+        console.log("theSelectedOrder:"+self.theSelectedOrder);
+        if(self.theSelectedOrder){
+            self.theOrder.shippingName = self.theSelectedOrder.shippingName;
+            self.theOrder.shippingPhone = self.theSelectedOrder.shippingPhone;
+            self.theOrder.shippingAddress = self.theSelectedOrder.shippingAddress;
+
+            self.theOrder.orderDetails[0].name = self.theSelectedOrder.shippingName;
+            self.theOrder.orderDetails[0].phone = self.theSelectedOrder.shippingPhone;
+            self.theOrder.orderDetails[0].address = self.theSelectedOrder.shippingAddress;
+        }
+        self.copyActive = false; // disable nameCopy.
+    }
+
+/////////// md-autoComplete for phone////////
+    self.searchOrderByPhoneTextChange =function(text) {
+        console.log('md-search-text-change ' + text);
+       if(self.copyActive){
+            self.phoneCopy();
+        }
+    }
+
 
     self.calculateOrderTotal = function(){
         var subTotal = 0;
@@ -239,12 +290,15 @@ angular.module('storeOrderModule')
         }
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
-       // console.log(self.theOrder);
+        console.log(self.theOrder);
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
+
                 console.log(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
+                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
+                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.order_return_status = data; // return after saving order, order_return_status would be orderid
                     self.newOrderId = data.replyStr;
                     self.isSaveButtonPressed=false;
@@ -260,6 +314,8 @@ angular.module('storeOrderModule')
 
     self.calculateFramePriceAfterSale = function(orderDetail){
         orderDetail.framePriceAfterSale = orderDetail.framePriceAtThatTime*(100 - orderDetail.frameDiscountAtThatTime)/100 * orderDetail.quantity;
+        orderDetail.currentLensDiscountCode = orderDetail.lensDiscountCode;
+        orderDetail.currentFrameDiscountCode = orderDetail.frameDiscountCode;
     }
 
     self.closeAlert = function(index) {
@@ -268,7 +324,7 @@ angular.module('storeOrderModule')
     };
 
     self.tempF = function() {
-        console.log(self.selectedJob);
+       // console.log(self.selectedJob);
     };
 
 ////// run when loading page/////
@@ -276,11 +332,13 @@ angular.module('storeOrderModule')
 		$location.path('#/');
 	}
 
+    self.theOrder = new OrderDO;
 	 // load product
     if($routeParams.orderId > 0){
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
+                self.theOrder.currentCouponCode = self.theOrder.couponCode;
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
@@ -310,6 +368,7 @@ angular.module('storeOrderModule')
         self.theOrder.gender=true;
         self.theOrder.orderDetails[0].gender=true;
         self.selectedJob = firstSmsJob;
+        self.copyActive = true;
     }
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
