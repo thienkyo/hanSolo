@@ -12,6 +12,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     self.allOrders = 0;
     self.allFrames = 0;
     self.allLenses = 0;
+    self.allDiscountAmount = 0;
     self.modifiedReports = [
         new ModifiedReportDO('2022'),
         new ModifiedReportDO('2023'),
@@ -21,7 +22,8 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         new ModifiedReportDO('2027'),
         new ModifiedReportDO('2028'),
         new ModifiedReportDO('2029'),
-        new ModifiedReportDO('2030')
+        new ModifiedReportDO('2030'),
+        new ModifiedReportDO('2031')
     ];
     self.modifiedReports2 = [];// array of ModifiedReportDO
 
@@ -35,7 +37,9 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
 
     bizReportService.getAll().then(function (data) {
         self.bizReportList = data;
+        console.log(data);
         self.setModifiedReports(data);
+        console.log(self.modifiedReports);
         self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
     });
 
@@ -49,6 +53,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                     reportOne.orders += dataOne.orderQuantity;
                     reportOne.frames += dataOne.frameQuantity;
                     reportOne.lenses += dataOne.lensQuantity;
+                    reportOne.discountAmount += dataOne.discountAmount;
                 }
             });
             self.allIncome += dataOne.income;
@@ -56,6 +61,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
             self.allOrders += dataOne.orderQuantity;
             self.allFrames += dataOne.frameQuantity;
             self.allLenses += dataOne.lensQuantity;
+            self.allDiscountAmount += dataOne.discountAmount;
         });
 
         self.modifiedReports.reverse();

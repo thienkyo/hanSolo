@@ -38,7 +38,19 @@ form .progress {
 <link href="css/main2.css" rel="stylesheet">
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-		<h3>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ |{{ctrl.allOrders}}|{{ctrl.allFrames}}|{{ctrl.allLenses}}</h3>
+		<!--<h3>All Income: {{ctrl.allIncome | number:0}}đ | All Outcome: {{ctrl.allOutcome | number:0}}đ | Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ |{{ctrl.allOrders}}|{{ctrl.allFrames}}|{{ctrl.allLenses}}</h3>-->
+		<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: fit-content">
+			<div class="row" style="margin-right: 0px;margin-left: 0px;">
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 0px;">Income : {{ctrl.allIncome | number:0}}đ</div>
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 10px;">Outcome: {{ctrl.allOutcome | number:0}}đ</div>
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 10px;">Yield: {{ctrl.allIncome-ctrl.allOutcome | number:0}}đ</div>
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 10px;">Discount: {{ctrl.allDiscountAmount | number:0}}đ</div>
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 10px;">Rate: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
+				<div class="col-sm-auto border" style="font-size: 20px;padding: 0px 0px 0px 10px;">{{ctrl.allOrders}}| {{ctrl.allFrames}}| {{ctrl.allLenses}}</div>
+			</div>
+		</div>
+
+
 		<br>
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -56,8 +68,19 @@ form .progress {
 			<div id="tab{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}"
 				 ng-repeat="item in ctrl.modifiedReports2 track by $index" >
 				<br>
-				<!--<a ng-click="" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">reload</a>-->
-				<h4 style="padding-bottom: 20px;">Income: {{item.income | number:0}}đ | outcome: {{item.outcome | number:0}}đ | yield: {{item.income-item.outcome | number:0}}đ  | Rate: {{(item.income - item.outcome)/item.outcome*100 | number:0}}% |{{item.orders}}|{{item.frames}}|{{item.lenses}}</h4>
+				<!--<h4 style="padding-bottom: 20px;">Income: {{item.income | number:0}}đ | outcome: {{item.outcome | number:0}}đ | yield: {{item.income-item.outcome | number:0}}đ  | Rate: {{(item.income - item.outcome)/item.outcome*100 | number:0}}% |{{item.orders}}|{{item.frames}}|{{item.lenses}}</h4>-->
+
+				<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: fit-content">
+					<div class="row" style="margin-right: 0px;margin-left: 0px;">
+						<div class="col-sm-auto border" >Income : {{item.income | number:0}}đ</div>
+						<div class="col-sm-auto border" >Outcome: {{item.outcome | number:0}}đ</div>
+						<div class="col-sm-auto border" >Yield: {{item.income-item.outcome | number:0}}đ</div>
+						<div class="col-sm-auto border" >Discount: {{item.discountAmount | number:0}}đ</div>
+						<div class="col-sm-auto border" >Rate: {{(item.income)/item.outcome*100 | number:0}}%</div>
+						<div class="col-sm-auto border" >{{item.orders}}| {{item.frames}}| {{item.lenses}}</div>
+					</div>
+				</div>
+
 
 				<div class="table-responsive">
 					<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="true" style="width: auto;">
@@ -74,6 +97,9 @@ form .progress {
 							</td>
 							<td title="'yield'" style="text-align: right;">
 								{{one.income - one.outcome | number:0}}đ
+							</td>
+							<td title="'discount'" style="text-align: right;">
+								{{one.discountAmount | number:0}}đ
 							</td>
 							<td title="'rate'" style="text-align: right;">
 								{{one.income/one.outcome*100 | number:0}}%
@@ -92,10 +118,7 @@ form .progress {
 						</tr>
 					</table>
 				</div>
-
 			</div>
-
-
 		</div>
 
 		<br>
@@ -168,8 +191,6 @@ form .progress {
 				</div>
 			</div>
 		</div>
-
-
 
 	</div>
 </section>

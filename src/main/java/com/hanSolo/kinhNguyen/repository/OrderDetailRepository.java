@@ -10,6 +10,9 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     List<OrderDetail> findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
     List<OrderDetail> findByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
     List<OrderDetail> findFirst30ByNameContains(String name);
+
+    List<OrderDetail> findFirst30ByNameContainsIgnoreCase(String name);
+
     List<OrderDetail> findFirst30ByPhoneContains(String phone);
 
 }

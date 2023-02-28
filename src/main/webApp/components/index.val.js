@@ -107,6 +107,18 @@ function ModifiedReportDO(year){
 	this.orders = 0;
 	this.frames = 0;
 	this.lenses = 0;
+	this.discountAmount = 0;
+}
+
+function BizReportDO(){
+	this.id = 0;
+	this.month = '';
+	this.year = '';
+	this.income = 0;
+	this.outcome = 0;
+	this.discountAmount = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
 }
 
 function SmsUserInfoDO(){
@@ -357,16 +369,6 @@ function CustomerSourceDO(){
 	this.id = 0;
 	this.name = '';
 	this.count = 0;
-	this.gmtCreate = (new Date()).getTime();
-    this.gmtModify = (new Date()).getTime();
-}
-
-function BizReportDO(){
-	this.id = 0;
-	this.month = '';
-	this.year = '';
-	this.income = 0;
-	this.outcome = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

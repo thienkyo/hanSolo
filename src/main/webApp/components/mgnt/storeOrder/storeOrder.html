@@ -83,8 +83,6 @@
 							<p>Full Name<span>*</span></p>
 							<!--<input type="text"  ng-model="ctrl.theOrder.shippingName" style="width: 35%;float: left;"
 								   ng-change="ctrl.clearErrorMsg();ctrl.nameCopy();">-->
-
-
 							<md-autocomplete class="search_class3"  flex=""
 											 ng-disabled="false"
 											 md-no-cache="false"
@@ -120,8 +118,6 @@
 							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
 							<!--<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{2,17}$/"
 								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();" style="width: 35%;float: left;">-->
-
-
 							<md-autocomplete class="search_class3"  flex=""
 											 ng-disabled="false"
 											 md-no-cache="false"
@@ -131,8 +127,8 @@
 											 md-selected-item-change="ctrl.selectedOrderChange(ctrl.theOrder.shippingPhone)"
 											 md-items="one in ctrl.querySearchOrderByPhone(ctrl.theOrder.shippingPhone)"
 											 md-item-text="one.shippingPhone"
-											 md-min-length="3"
-											 md-delay="700"
+											 md-min-length="6"
+											 md-delay="900"
 											 md-clear-button="true"
 											 md-autoselect="false"
 							>
@@ -149,9 +145,6 @@
 									không có kết quả cho "{{ctrl.theOrder.shippingPhone}}".
 								</md-not-found>
 							</md-autocomplete>
-
-
-
 						</div>
 					</div>
 

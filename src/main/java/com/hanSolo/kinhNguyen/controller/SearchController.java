@@ -61,7 +61,7 @@ public class SearchController {
     @RequestMapping("orderMngt/{keySearch}")
     public List<Order> orderMngt(@PathVariable final String keySearch) {
         List<Order> orderList = orderRepo.findFirst40ByShippingNameContainsIgnoreCase(keySearch);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByNameContains(keySearch);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByNameContainsIgnoreCase(keySearch);
 
         return orderListBuilder(orderList, orderDetailList);
     }

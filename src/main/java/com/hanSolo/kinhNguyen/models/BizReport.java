@@ -40,6 +40,17 @@ public class BizReport {
     @Column(name = "frame_quantity")
     private Integer frameQuantity;
 
+    @Column(name = "discount_amount", columnDefinition = "integer default 0")
+    private Integer discountAmount;
+
+    public Integer getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(Integer discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
     public Integer getFrameQuantity() {
         return frameQuantity;
     }

@@ -312,13 +312,20 @@ public class ManagementController {
 
         List<Order> orderList = orderRepo.findByGmtCreateBetween(startDate,endDate);
         int incomeAmount = 0;
+        int discountAmount = 0;
         int lensQty = 0;
         int frameQty = 0;
         for(Order or : orderList){
             int amount = 0;
+            int disAmount = 0;
             for(OrderDetail orderDetail : or.getOrderDetails()){
                 int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
-                amount += orderDetail.getFramePriceAtThatTime() + lensPrice;
+                int otherPrice = orderDetail.getOtherPrice() != null ? orderDetail.getOtherPrice() : 0;
+
+                disAmount += orderDetail.getFramePriceAtThatTime()*orderDetail.getFrameDiscountAmount()/100
+                             + lensPrice*orderDetail.getLensDiscountAmount()/100;
+                amount += orderDetail.getFramePriceAtThatTime() + lensPrice + otherPrice - disAmount;
+
                 if(orderDetail.getFramePriceAtThatTime() > 1000){
                     frameQty += 1;
                 }
@@ -326,12 +333,14 @@ public class ManagementController {
                     lensQty += 1;
                 }
             }
-            incomeAmount += amount*(100-or.getCouponDiscount())/100;
+            discountAmount += disAmount + amount*or.getCouponDiscount()/100;
+            incomeAmount += amount - amount*or.getCouponDiscount()/100;
         }
         bizReport.setFrameQuantity(frameQty);
         bizReport.setLensQuantity(lensQty);
         bizReport.setIncome(incomeAmount);
         bizReport.setOrderQuantity(orderList.size());
+        bizReport.setDiscountAmount(discountAmount);
 
         return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
     }
