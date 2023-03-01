@@ -37,7 +37,7 @@ angular.module('orderListModule')
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-		console.log(self.orderList);
+		//console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -298,8 +298,6 @@ angular.module('orderListModule')
         if(order.status == 4){
             order.remain = subTotal - order.couponAmount - order.deposit;
         }
-
-
 
         switch(order.status) {
           case 0:

@@ -93,11 +93,17 @@ textarea:focus {
 	outline: none;
 }
 
-a:hover,
+/*a:hover,
 a:focus {
 	text-decoration: none;
 	outline: none;
 	color: #ffffff;
+}*/
+a:hover,
+a:focus {
+  color: brown;
+  background-color: transparent;
+  text-decoration: none;
 }
 
 ul,

@@ -93,7 +93,7 @@ public class Order {
     public boolean equals(Object obj) {
         Order o = (Order)obj;
         return this.getShippingPhone().equalsIgnoreCase(o.getShippingPhone())
-                && this.getShippingName().equalsIgnoreCase(o.getShippingName())
+            //    && this.getShippingName().equalsIgnoreCase(o.getShippingName())
                 && this.getId() == o.getId();
     }
 
