@@ -37,9 +37,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
 
     bizReportService.getAll().then(function (data) {
         self.bizReportList = data;
-        console.log(data);
         self.setModifiedReports(data);
-        console.log(self.modifiedReports);
         self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
     });
 

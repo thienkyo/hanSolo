@@ -66,7 +66,6 @@ form .progress {
 				 ng-repeat="item in ctrl.modifiedReports2 track by $index" >
 				<br>
 				<!--<h4 style="padding-bottom: 20px;">Income: {{item.income | number:0}}đ | outcome: {{item.outcome | number:0}}đ | yield: {{item.income-item.outcome | number:0}}đ  | Rate: {{(item.income - item.outcome)/item.outcome*100 | number:0}}% |{{item.orders}}|{{item.frames}}|{{item.lenses}}</h4>-->
-
 				<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: fit-content">
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-auto border" >Income : {{item.income | number:0}}đ</div>
@@ -77,8 +76,6 @@ form .progress {
 						<div class="col-sm-auto border" >{{item.orders}}| {{item.frames}}| {{item.lenses}}</div>
 					</div>
 				</div>
-
-
 				<div class="table-responsive">
 					<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="true" style="width: auto;">
 						<tr ng-repeat="one in item.details">
@@ -117,7 +114,6 @@ form .progress {
 				</div>
 			</div>
 		</div>
-
 		<br>
 
 		<!-- Nav tabs -->
