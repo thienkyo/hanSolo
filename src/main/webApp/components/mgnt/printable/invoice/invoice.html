@@ -40,7 +40,7 @@
 		.preth  td {
 		  border: 1px solid black;
 		  border-collapse: collapse;
-		  padding: 5px 10px 5px 15px;
+		  padding: 5px 8px 5px 12px;
 		}
 	</style>
 
@@ -68,10 +68,9 @@
 			</tbody>
 		</table>
 
-		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 1mm 85mm;">
-			Ngày {{ctrl.theOrder.gmtCreate | date:"dd"}}
-			Tháng {{ctrl.theOrder.gmtCreate | date:"MM"}}
-			Năm {{ctrl.theOrder.gmtCreate | date:"yyyy"}}
+		<!--<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0mm 0mm 1mm 85mm;">-->
+		<h4 style="font-size: 12px;font-style: italic;float: right;margin: 0px 0px 0px 0px;">
+			{{ctrl.theOrder.gmtCreate | date:"dd"}}-{{ctrl.theOrder.gmtCreate | date:"MM"}}-{{ctrl.theOrder.gmtCreate | date:"yyyy"}}
 		</h4>
 
 		<h1 style="text-align: center;margin-bottom: 0px;">HOÁ ĐƠN</h1>
@@ -97,7 +96,7 @@
 				<th>Sản Phẩm</th>
 				<th>SL</th>
 				<th>Đơn giá</th>
-				<th>Giảm</th>
+				<th>%</th>
 				<th>Thành tiền</th>
 			</tr>
 			</thead>
@@ -107,7 +106,7 @@
 				<td>{{item.description}}</td>
 				<td>{{item.quantity}}</td>
 				<td style="text-align: right;">{{item.price | number:0}}{{item.price ? 'đ' : ''}}</td>
-				<td style="text-align: right;">{{item.discount}}{{item.discount >= 0 ? '%' : ''}}</td>
+				<td style="text-align: right;padding: 5px 5px 5px 5px;">{{item.discount}}{{item.discount >= 0 ? '%' : ''}}</td>
 				<td style="text-align: right;">{{item.price*item.quantity*(100-item.discount)/100 | number:0}}{{item.price ? 'đ' : ''}}</td>
 			</tr>
 			</tbody>

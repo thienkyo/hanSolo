@@ -46,7 +46,7 @@ angular.module('invoiceModule')
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].otherPrice,1,self.theOrder.orderDetails[i].otherNote,0));
             }
         }
-        var temp = 12 - self.OrderDetailList.length;
+        var temp = 11 - self.OrderDetailList.length;
         for (var i = 0; i < temp; i++){
             self.OrderDetailList.push(new MiniOrderDetailDO());
         }
