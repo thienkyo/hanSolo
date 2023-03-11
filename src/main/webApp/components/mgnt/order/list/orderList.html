@@ -114,15 +114,16 @@
 							<div class="row" style="background-color: beige;font-weight: bolder;">
 								<div class="col-sm-1 border">id</div>
 								<div class="col-sm-2 border">Name</div>
-								<div class="col-sm-3 border">Lens</div>
+								<div class="col-sm-2 border">Lens</div>
 								<div class="col-sm-2 border">Detail</div>
 								<div class="col-sm-2 border">Frame</div>
 								<div class="col-sm-2 border">Note</div>
+								<div class="col-sm-1 border">Other</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
 								<div class="col-sm-1 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
 								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.name}}({{item.yob}})</div>
-								<div class="col-sm-3 border" >
+								<div class="col-sm-2 border" >
 									<div class="row" style="margin-left: 3px;margin-top: 5px">{{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}}</div>
 									<div class="row" style="margin-left: 3px;">{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}</div>
 									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">(discount:{{item.lensDiscountAmount}}%)</div>
@@ -132,6 +133,9 @@
 								<div class="col-sm-2 border">
 									{{item.orderDetailNoteForCus}}
 									{{item.orderDetailNote}}
+								</div>
+								<div class="col-sm-1 border">
+									{{item.otherNote}}
 								</div>
 							</div>
 						</div>

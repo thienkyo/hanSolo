@@ -350,6 +350,7 @@ angular.module('orderListModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
+        console.log(self.theSummaryModal);
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {
