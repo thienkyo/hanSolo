@@ -56,12 +56,14 @@ angular.module('invoiceModule')
         if(count < 3){
             totalLine = 12;
         }
+        if(count > 5){
+            totalLine = 9;
+        }
 
         var temp = totalLine - self.OrderDetailList.length;
         for (var i = 0; i < temp; i++){
             self.OrderDetailList.push(new MiniOrderDetailDO());
         }
-
 
         self.theOrder.subTotal = subTotal;
         self.theOrder.couponAmount = subTotal*self.theOrder.couponDiscount/100;
