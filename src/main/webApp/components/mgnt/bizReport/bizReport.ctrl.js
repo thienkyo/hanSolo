@@ -13,6 +13,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     self.allFrames = 0;
     self.allLenses = 0;
     self.allDiscountAmount = 0;
+    self.allProfit = 0;
     self.modifiedReports = [
         new ModifiedReportDO('2022'),
         new ModifiedReportDO('2023'),
@@ -54,14 +55,15 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                     reportOne.discountAmount += dataOne.discountAmount;
                 }
             });
-            self.allIncome += dataOne.income;
+            self.allIncome  += dataOne.income;
             self.allOutcome += dataOne.outcome;
+            self.allDiscountAmount += dataOne.discountAmount;
             self.allOrders += dataOne.orderQuantity;
             self.allFrames += dataOne.frameQuantity;
             self.allLenses += dataOne.lensQuantity;
-            self.allDiscountAmount += dataOne.discountAmount;
         });
 
+        self.allProfit = self.allIncome-self.allOutcome;
         self.modifiedReports.reverse();
         self.modifiedReports.forEach((reportOne, index, array) => {
             if(reportOne.details.length > 0){
