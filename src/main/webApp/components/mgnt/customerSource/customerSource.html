@@ -40,57 +40,149 @@ form .progress {
 	<div class="container" ng-cloak>
 		<h3 style="padding-bottom: 40px;">Customer Source </h3>
 
-		<div class="row" style="margin-bottom: 30px;">
-			<div class="col-md-1">
-				<input type="number"  ng-model="ctrl.theOne.id" disabled="disabled" placeholder="id" style="width:60px;"/>
-			</div>
-			<div class="col-md-2">
-				<input type="text"  ng-model="ctrl.theOne.name" placeholder="name" style="width: 100%;"/>
-			</div>
+		<!-- Config Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#month">Month</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#source">Source</a>
+			</li>
+		</ul>
 
-			<div class="col-md-2">
-				<a ng-click="ctrl.upsert(ctrl.theOne)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+		<!-- config Tab panes -->
+		<div class="tab-content">
+			<div id="month" class="container tab-pane">
+				<br>
+				<!-- insert Config -->
+				<div class="row" style="margin-bottom: 30px;">
+					<div class="col-md-1">
+						<input type="number"  ng-model="ctrl.theOneReport.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.year" placeholder="year" style="width: 100%;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.month" placeholder="month" style="width: 100%;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.count" placeholder="count" style="width: 100%;"/>
+					</div>
+
+					<div class="col-md-3">
+						<a ng-click="ctrl.upsertReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
+						<a ng-click="ctrl.calculateReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">cal</a>
+						<a ng-click="ctrl.clearTheOneReport()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-md-1">
+						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thành công
+						</div>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+					</div>
+				</div>
+
+				<!--data table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.reportParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheOneReport(one)">{{one.id}}</a>
+							</td>
+							<td title="'year'" filter="{ 'year': 'text'}" sortable="'year'"  style="width:180px;">
+								{{one.year}}
+							</td>
+							<td title="'month'" filter="{ 'month': 'number'}" sortable="'month'"  style="width:180px;">
+								{{one.month}}
+							</td>
+							<td title="'source'" filter="{ 'sourceName': 'text'}" sortable="'sourceName'"  style="width:180px;">
+								{{one.sourceName}}
+							</td>
+							<td title="'count'" filter="{ 'count': 'number'}" sortable="'count'"  style="width:180px;">
+								{{one.count}}
+							</td>
+							<td title="'Create'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" >
+								{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
+							</td>
+							<td title="'delete'" style="width:100px;" >
+								<!--<a ng-click="ctrl.deleteOne(one)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>-->
+							</td>
+						</tr>
+					</table>
+				</div>
+
 			</div>
-			<div class="col-md-1">
-				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 thành công
+			<div id="source" class="container tab-pane">
+				<br>
+				<div class="row" style="margin-bottom: 30px;">
+					<div class="col-md-1">
+						<input type="number"  ng-model="ctrl.theOne.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOne.name" placeholder="name" style="width: 100%;"/>
+					</div>
+
+					<div class="col-md-2">
+						<a ng-click="ctrl.upsert(ctrl.theOne)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
+						<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-md-1">
+						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thành công
+						</div>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+					</div>
 				</div>
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 thất bại
+
+				<!--data table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
+							</td>
+							<td title="'name'" filter="{ 'name': 'text'}" sortable="'name'"  style="width:180px;">
+								<a href="" ng-click="ctrl.setTheOne(one)">{{one.name}} </a>
+							</td>
+							<td title="'count'" filter="{ 'count': 'number'}" sortable="'count'"  style="width:130px;">
+								{{one.count}}
+							</td>
+							<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" >
+								{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
+							</td>
+
+							<td title="'delete'" style="width:100px;" >
+								<!--<a ng-click="ctrl.deleteOne(one)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>-->
+							</td>
+						</tr>
+					</table>
 				</div>
+
+
+
+
+
 			</div>
 		</div>
 
-		<!--data table-->
-        <div class="table-responsive">
-            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
-			    <tr ng-repeat="one in $data">
-			        <td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
-			        	<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
-			        </td>
-					<td title="'name'" filter="{ 'name': 'text'}" sortable="'name'"  style="width:180px;">
-						<a href="" ng-click="ctrl.setTheOne(one)">{{one.name}} </a>
-					</td>
-					<td title="'count'" filter="{ 'count': 'number'}" sortable="'count'"  style="width:130px;">
-						{{one.count}}
-					</td>
-			        <td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" >
-			        	{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
-			        </td>
 
-			      	<td title="'delete'" style="width:100px;" >
-			        	<!--<a ng-click="ctrl.deleteOne(one)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>-->
-			        </td>
-			    </tr>
-			</table>
-        </div>
+
 
 
 	</div>

@@ -20,6 +20,7 @@ angular.module('orderListModule')
     self.tempFrameNumber=0;
     self.tempLensNumber=0;
     self.OneDayReport={};
+    self.isSuperAdmin = memberService.isSuperAdmin();
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');

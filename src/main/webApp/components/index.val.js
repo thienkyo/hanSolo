@@ -73,6 +73,7 @@ angular
 		.value('PaginationItemDO',PaginationItemDO)
 		.value('BizExpenseStatusArray',BizExpenseStatusArray)
 		.value('CustomerSourceDO',CustomerSourceDO)
+		.value('CustomerSourceReportDO',CustomerSourceReportDO)
 		.value('BizReportDO',BizReportDO)
 		.value('ModifiedReportDO',ModifiedReportDO)
 		.value('FirstTimeLoadSize',FirstTimeLoadSize)
@@ -85,6 +86,17 @@ angular
 		.value('CouponTypeList',CouponTypeList)
 		.value('CouponCreatedByList',CouponCreatedByList)
 		.value('PaginationDO',PaginationDO);
+
+function CustomerSourceReportDO(){
+	this.id = 0;
+	this.name = '';
+	this.count = 0;
+	this.month = '';
+    this.year = '';
+    this.customerSourceId = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function KeyManagementDO(){
 	this.id = 0;

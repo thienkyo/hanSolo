@@ -49,10 +49,11 @@ form .progress {
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
 					All Profit: {{ctrl.allProfit | number:0}}đ
-					({{(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)
+					<!--({{(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)-->
+					({{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)
 				</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
-					Rate: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
+					In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Quantity: {{ctrl.allOrders}} | {{ctrl.allFrames}} | {{ctrl.allLenses}}</div>
 			</div>
 		</div>
@@ -72,17 +73,19 @@ form .progress {
 				<br>
 				<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: auto">
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Income:{{item.income | number:0}}đ</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Outcome:{{item.outcome | number:0}}đ</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Discount:{{item.discountAmount | number:0}}đ</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Income: {{item.income | number:0}}đ</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Outcome: {{item.outcome | number:0}}đ</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Discount: {{item.discountAmount | number:0}}đ</div>
 					</div>
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Profit: {{item.income-item.outcome | number:0}}đ
-							({{(item.income-item.outcome)/item.income*100 | number:0}}%)
+							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:0}}%)
 						</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Rate: {{(item.income)/item.outcome*100 | number:0}}%</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Quantity: {{item.orders}}| {{item.frames}}| {{item.lenses}}</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
+							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:0}}%
+						</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Quantity: {{item.orders}} | {{item.frames}} | {{item.lenses}}</div>
 					</div>
 				</div>
 				<div class="table-responsive">
@@ -101,10 +104,11 @@ form .progress {
 							<td title="'discount'" style="text-align: right;">
 								{{one.discountAmount | number:0}}đ
 							</td>
-							<td title="'profit'" style="text-align: right;">
-								{{one.income - one.outcome - one.discountAmount | number:0}}đ
+							<td title="'profit(pro/in)'" style="text-align: right;">
+								{{one.income - one.outcome | number:0}}đ
+								({{(one.income - one.outcome) <= 0  ? 0 :(one.income - one.outcome)/one.income*100 | number:0}}%)
 							</td>
-							<td title="'rate'" style="text-align: right;">
+							<td title="'In/Out'" style="text-align: right;">
 								{{one.income/one.outcome*100 | number:0}}%
 							</td>
 							<td title="'order qty'" style="text-align: center;">

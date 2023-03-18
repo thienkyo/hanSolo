@@ -4,7 +4,10 @@ angular.module('customerSourceModule')
 		var customerSourceService = {
 				getAll : getAll,
 				upsert : upsert,
-				deleteOne : deleteOne
+				deleteOne : deleteOne,
+				getReportAll : getReportAll,
+				calculateReport : calculateReport,
+				upsertReport : upsertReport
 			};
 	return customerSourceService;
 
@@ -16,12 +19,34 @@ angular.module('customerSourceModule')
 		});
 	}
 
+	function getReportAll(){
+        var url = "mgnt/getAllCustomerSourceReport";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
 	function upsert(one){
 		var url = "mgnt/upsertCustomerSource";
 		return ajaxService.post(url,one,{}).then(function(response){
 			return response.data;
 		});
 	}
+
+	function calculateReport(one){
+	    console.log("calculateReport srv");
+        var url = "mgnt/calCustomerSourceReport";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+	function upsertReport(one){
+        var url = "mgnt/upsertCustomerSourceReport";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function deleteOne(one){
 		var url = "mgnt/deleteCoupon";

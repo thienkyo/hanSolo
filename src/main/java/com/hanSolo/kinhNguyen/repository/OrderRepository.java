@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -16,9 +17,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     List<Order> findFirst100ByOrderByGmtCreateDesc();
     List<Order> findAllByOrderByGmtCreateDesc();
     List<Order> findFirst40ByShippingNameContainsIgnoreCase(String shippingName);
-
     List<Order> findFirst40ByShippingPhoneContains(String shippingPhone);
-
 
     @Transactional
     @Modifying
@@ -31,7 +30,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     int updateGmtModifyAndCusSourceById(@NonNull Date gmtModify, @NonNull Integer cusSource, @NonNull Integer id);
 
     List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
-
+    long countByGmtCreateBetweenAndCusSource(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd, @Nullable Integer cusSource);
 
 
 }

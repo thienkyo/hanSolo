@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -47,6 +48,7 @@ public class ManagementController {
     @Autowired private SmsJobRepository smsJobRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
     @Autowired private KeyManagementRepository keyManagementRepo;
+    @Autowired private CustomerSourceReportRepository customerSourceReportRepo;
 
     @Autowired private Environment env;
 
@@ -280,6 +282,54 @@ public class ManagementController {
         }
         customerSource.setGmtModify(Utility.getCurrentDate());
         return new CustomerSourceResponse(customerSourceRepo.save(customerSource),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "upsertCustomerSourceReport", method = RequestMethod.POST)
+    public GenericResponse upsertCustomerSourceReport(@RequestBody final CustomerSourceReport customerSourceReport, final HttpServletRequest request) throws ParseException {
+        List<CustomerSourceReport> csrList = new ArrayList<>();
+        if(customerSourceReport.getId() == 0){
+            List<CustomerSource> csList = customerSourceRepo.findAll();
+            for(CustomerSource cs : csList){
+                csrList.add(new CustomerSourceReport(Utility.getCurrentDate(),
+                        Utility.getCurrentDate(),
+                        customerSourceReport.getYear(),
+                        customerSourceReport.getMonth(),
+                        cs.getId(),
+                        0
+                ));
+            }
+            customerSourceReportRepo.saveAll(csrList);
+        }else{
+            customerSourceReportRepo.save(customerSourceReport);
+        }
+
+        return new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "getAllCustomerSourceReport", method = RequestMethod.GET)
+    public List<CustomerSourceReport> getAllCustomerSourceReport(final HttpServletRequest request) throws ServletException {
+        return customerSourceReportRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "calCustomerSourceReport", method = RequestMethod.POST)
+    public GenericResponse calCustomerSourceReport(@RequestBody final CustomerSourceReport customerSourceReport,final HttpServletRequest request) throws ServletException, ParseException {
+        Date startDate = Utility.getFirstDateOfMonth(customerSourceReport.getYear(),customerSourceReport.getMonth());
+        Date endDate = Utility.getLastDateOfMonth(customerSourceReport.getYear(),customerSourceReport.getMonth());
+        List<CustomerSource> csList = customerSourceRepo.findAll();
+        List<CustomerSourceReport> csrList = customerSourceReportRepo.findByYearAndMonth(customerSourceReport.getYear(),customerSourceReport.getMonth());
+
+        //Stream<CustomerSourceReport> csrStream = csrList.stream();
+        for(CustomerSource cs : csList){
+            long count = orderRepo.countByGmtCreateBetweenAndCusSource(startDate,endDate,cs.getId());
+            CustomerSourceReport csr = csrList.stream().filter(r -> r.getCustomerSourceId() == cs.getId())
+                    .findAny()
+                    .orElse(null);
+            if(csr != null){
+                csr.setCount((int) count);
+            }
+        }
+        customerSourceReportRepo.saveAll(csrList);
+        return new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// biz report section ///////////////////////////////
