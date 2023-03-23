@@ -83,12 +83,12 @@ public class SearchController {
             resultList.add(orderBuilder(or.getId(),or.getShippingName(),or.getShippingPhone(),or.getShippingAddress(),or.getGmtCreate()));
         }
         for (OrderDetail orderDetail : orderDetailList){
-            if(resultList.contains(orderBuilder(orderDetail.getOrderId(),orderDetail.getName(),orderDetail.getPhone(),orderDetail.getAddress(),orderDetail.getGmtCreate()))){
+            Order or = orderBuilder(orderDetail.getOrderId(),orderDetail.getName(),orderDetail.getPhone(),orderDetail.getAddress(),orderDetail.getGmtCreate());
+            if(resultList.contains(or)){
                 continue;
             }
-            resultList.add(orderBuilder(orderDetail.getOrderId(),orderDetail.getName(),orderDetail.getPhone(),orderDetail.getAddress(),orderDetail.getGmtCreate()));
+            resultList.add(or);
         }
-
         return resultList;
     }
 

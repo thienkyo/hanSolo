@@ -6,8 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface BizReportRepository extends PagingAndSortingRepository<BizReport, Integer> {
-    List<BizReport> findByOrderByGmtCreateDesc();
-
     List<BizReport> findByOrderByYearDescMonthDesc();
 
 }

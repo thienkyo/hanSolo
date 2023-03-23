@@ -308,7 +308,7 @@ public class ManagementController {
 
     @RequestMapping(value = "getAllCustomerSourceReport", method = RequestMethod.GET)
     public List<CustomerSourceReport> getAllCustomerSourceReport(final HttpServletRequest request) throws ServletException {
-        return customerSourceReportRepo.findAllByOrderByGmtCreateDesc();
+        return customerSourceReportRepo.findByOrderByYearDescMonthDescCustomerSourceIdAsc();
     }
 
     @RequestMapping(value = "calCustomerSourceReport", method = RequestMethod.POST)
@@ -318,7 +318,6 @@ public class ManagementController {
         List<CustomerSource> csList = customerSourceRepo.findAll();
         List<CustomerSourceReport> csrList = customerSourceReportRepo.findByYearAndMonth(customerSourceReport.getYear(),customerSourceReport.getMonth());
 
-        //Stream<CustomerSourceReport> csrStream = csrList.stream();
         for(CustomerSource cs : csList){
             long count = orderRepo.countByGmtCreateBetweenAndCusSource(startDate,endDate,cs.getId());
             CustomerSourceReport csr = csrList.stream().filter(r -> r.getCustomerSourceId() == cs.getId())
@@ -328,6 +327,14 @@ public class ManagementController {
                 csr.setCount((int) count);
             }
         }
+        long nullCount = orderRepo.countByGmtCreateBetweenAndCusSource(startDate,endDate,null);
+        long id0Count = orderRepo.countByGmtCreateBetweenAndCusSource(startDate,endDate,0);
+        // 8= unknown
+        CustomerSourceReport csr = csrList.stream().filter(r -> r.getCustomerSourceId() == 8).findAny().orElse(null);
+        if(csr != null){
+            csr.setCount((int) (csr.getCount() + nullCount + id0Count));
+        }
+
         customerSourceReportRepo.saveAll(csrList);
         return new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"Success");
     }
@@ -335,7 +342,7 @@ public class ManagementController {
     //////////////////////////// biz report section ///////////////////////////////
     @RequestMapping(value = "getAllBizReport", method = RequestMethod.GET)
     public List<BizReport> getAllBizReport(final HttpServletRequest request) throws ServletException {
-        return bizReportRepo.findByOrderByGmtCreateDesc();
+        return bizReportRepo.findByOrderByYearDescMonthDesc();
     }
 
     @RequestMapping(value = "upsertBizReport", method = RequestMethod.POST)
