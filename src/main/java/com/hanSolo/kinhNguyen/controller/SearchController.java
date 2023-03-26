@@ -74,26 +74,46 @@ public class SearchController {
         return orderListBuilder(orderList, orderDetailList);
     }
 
+
+    @RequestMapping("orderByNamePhoneMngt/{keySearch}")
+    public List<Order> orderByNamePhoneMngt(@PathVariable final String keySearch) {
+        String number = "\\d+";
+        if(keySearch.matches(number)){
+            return orderByPhoneMngt(keySearch);
+        }else{
+            return orderMngt(keySearch);
+        }
+    }
+
     private List<Order> orderListBuilder(List<Order> orderList, List<OrderDetail> orderDetailList){
         List<Order> resultList = new ArrayList<>();
         for(Order or : orderList){
             if(resultList.contains(or)){
                 continue;
             }
-            resultList.add(orderBuilder(or.getId(),or.getShippingName(),or.getShippingPhone(),or.getShippingAddress(),or.getGmtCreate()));
+            resultList.add(or);
         }
         for (OrderDetail orderDetail : orderDetailList){
             Order or = orderBuilder(orderDetail.getOrderId(),orderDetail.getName(),orderDetail.getPhone(),orderDetail.getAddress(),orderDetail.getGmtCreate());
             if(resultList.contains(or)){
                 continue;
             }
+
+            or = orderRepo.findById(orderDetail.getOrderId()).get();
+/*
+            for (OrderDetail od : or.getOrderDetails()){
+                if(or.getShippingName().equalsIgnoreCase(od.getName())){
+                    or.setShippingName(or.getShippingPhone()+","+od.getName());
+                }
+            }*/
+
             resultList.add(or);
         }
         return resultList;
     }
 
     private Order orderBuilder(Integer orderId, String name, String phone, String address, Date gmtCreate){
-        Order or = new Order(orderId,name,phone,address,gmtCreate);
+        Order or = new Order(orderId,name,phone,address,gmtCreate,"STORE");
         or.getOrderDetails().add(new OrderDetail(name,phone,address,gmtCreate));
         return or;
     }

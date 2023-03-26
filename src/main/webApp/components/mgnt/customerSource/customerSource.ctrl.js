@@ -20,18 +20,20 @@ angular.module('customerSourceModule')
 			self.customerSourceList = data;
 			console.log(data);
 			self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
+
+			customerSourceService.getReportAll().then(function (data) {
+                self.reportList = data;
+                console.log(data);
+                if(self.customerSourceList){
+                    self.reportList.forEach(fillInSourceName);
+                }
+                console.log(self.reportList);
+                self.reportParams = new NgTableParams({}, { dataset: self.reportList});
+            });
+
 		});
 
-		customerSourceService.getReportAll().then(function (data) {
-            self.reportList = data;
-            console.log(data);
-            if(self.customerSourceList){
-                self.reportList.forEach(fillInSourceName);
 
-            }
-            console.log(self.reportList);
-            self.reportParams = new NgTableParams({}, { dataset: self.reportList});
-        });
 		
 		self.setTheOne = function(one){
 			self.theOne = one;

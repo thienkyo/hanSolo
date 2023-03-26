@@ -253,5 +253,21 @@ angular.module('app')
 	}
 	
 }])
+.factory('searchService',['ajaxService', function(ajaxService) {
+	var searchService = {
+		    searchByNamePhone : searchByNamePhone
+		};
+	return searchService;
+
+    function searchByNamePhone(searchText){
+        if(searchText){
+            var url = "search/orderByNamePhoneMngt/"+searchText;
+            return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
+        }
+    }
+
+}])
 
 ;

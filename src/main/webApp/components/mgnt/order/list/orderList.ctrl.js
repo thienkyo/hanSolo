@@ -3,9 +3,11 @@ angular.module('orderListModule')
 	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize',
 										 'memberService','orderListService','customerSourceService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
+										 'searchService',
 	function($rootScope, $routeParams,$location,FirstTimeLoadSize,
 	        memberService,orderListService,customerSourceService,
-	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log) {
+	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
+	        searchService) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
@@ -58,6 +60,18 @@ angular.module('orderListModule')
             self.responseStr = data.replyStr;
             self.isUpdatingOrder = false;
         });
+    }
+
+    self.querySearchOrderByNamePhone = function(searchText){
+
+        if(searchText){
+            self.tableParams = new NgTableParams({}, { dataset: []});
+            searchService.searchByNamePhone(searchText).then(function(data){
+                self.orderList = data;
+                self.orderList.forEach(calculateOrderTotal);
+                self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+            });
+        }
     }
 
     self.clearAmount = function() {
@@ -323,6 +337,16 @@ angular.module('orderListModule')
         }
 
     }
+/*
+    function buildSearchResult(order){
+        let phoneStr = '';
+        let NameStr = '';
+        for (var i = 0; i < order.orderDetails.length; i++){
+            if(){
+
+            }
+        }
+    }*/
 
     function buildText(){
         self.copyText='';

@@ -2,10 +2,10 @@
 angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
-										 'ajaxService','genderArray','smsJobService','AreaCodeList',
+										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
-	            ajaxService,genderArray,smsJobService,AreaCodeList) {
+	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -106,7 +106,6 @@ angular.module('storeOrderModule')
     }
 
     self.querySearchOrder = function(searchText){
-        console.log("trigger querySearchOrder");
         if(searchText){
             var url = "search/orderMngt/"+searchText;
             return ajaxService.get(url,null,{}).then(function(response){
@@ -116,7 +115,6 @@ angular.module('storeOrderModule')
     }
 
     self.querySearchOrderByPhone = function(searchText){
-        console.log("trigger querySearchOrderByPhone");
         if(searchText){
             var url = "search/orderByPhoneMngt/"+searchText;
             return ajaxService.get(url,null,{}).then(function(response){

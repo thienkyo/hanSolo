@@ -17,6 +17,7 @@
 </style>
 <section>
 	<div class="container" ng-cloak>
+
 		<h3 style="margin-bottom: 20px;">Order management
 			<span ng-show="ctrl.tempAmount > 0" style="">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
@@ -35,8 +36,14 @@
 				Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
 			</span>
 
-		</h3>
 
+
+		</h3>
+		<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;">
+		<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone(ctrl.keySearch)"
+				style="margin-top: 0px;height: 32px;">
+			search
+		</button>
 
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

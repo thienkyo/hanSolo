@@ -11,7 +11,7 @@ public class SmsUserInfo {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "phone", nullable = false, unique = true, length = 40)
+    @Column(name = "phone", nullable = false, length = 40)
     private String phone;
 
     @Column(name = "gender")

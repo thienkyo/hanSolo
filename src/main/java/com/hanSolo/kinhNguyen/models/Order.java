@@ -94,17 +94,18 @@ public class Order {
         Order o = (Order)obj;
         return this.getShippingPhone().equalsIgnoreCase(o.getShippingPhone())
             //    && this.getShippingName().equalsIgnoreCase(o.getShippingName())
-                && this.getId() == o.getId();
+                && this.getId().intValue() == o.getId().intValue();
     }
 
     public Order() {}
 
-    public Order(Integer id, String shippingName, String shippingPhone,String shippingAddress, Date gmtCreate) {
+    public Order(Integer id, String shippingName, String shippingPhone,String shippingAddress, Date gmtCreate, String location) {
         this.id = id;
         this.shippingAddress = shippingAddress;
         this.shippingName = shippingName;
         this.shippingPhone = shippingPhone;
         this.gmtCreate = gmtCreate;
+        this.location = location;
     }
 
     public String getCurrentCouponCode() {
