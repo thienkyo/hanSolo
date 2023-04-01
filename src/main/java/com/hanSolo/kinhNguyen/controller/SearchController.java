@@ -76,9 +76,10 @@ public class SearchController {
 
 
     @RequestMapping("orderByNamePhoneMngt/{keySearch}")
-    public List<Order> orderByNamePhoneMngt(@PathVariable final String keySearch) {
-        String number = "\\d+";
-        if(keySearch.matches(number)){
+    public List<Order> orderByNamePhoneMngt(@PathVariable String keySearch) {
+        String regex = "[0-9 ]+";
+        if(keySearch.matches(regex)){
+            keySearch  = keySearch.replace(" ","");
             return orderByPhoneMngt(keySearch);
         }else{
             return orderMngt(keySearch);
@@ -98,15 +99,7 @@ public class SearchController {
             if(resultList.contains(or)){
                 continue;
             }
-
             or = orderRepo.findById(orderDetail.getOrderId()).get();
-/*
-            for (OrderDetail od : or.getOrderDetails()){
-                if(or.getShippingName().equalsIgnoreCase(od.getName())){
-                    or.setShippingName(or.getShippingPhone()+","+od.getName());
-                }
-            }*/
-
             resultList.add(or);
         }
         return resultList;

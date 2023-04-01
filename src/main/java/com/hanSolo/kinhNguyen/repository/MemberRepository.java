@@ -14,8 +14,9 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
     Optional<Member> findByPhone(String phone);
 
     List<Member> findFirst100ByOrderByGmtModifyDesc();
-
     List<Member> findByOrderByGmtModifyDesc();
 
+    List<Member> findFirst100ByOrderByGmtCreateDesc();
+    List<Member> findByOrderByGmtCreateDesc();
     boolean existsByPhoneAndPass(String phone, String pass);
 }

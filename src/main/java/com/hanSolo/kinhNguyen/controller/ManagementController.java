@@ -219,9 +219,9 @@ public class ManagementController {
     public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
         List<Member> memberList;
             if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
-                memberList =  memberRepo.findFirst100ByOrderByGmtModifyDesc();
+                memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
             }else{
-                memberList = memberRepo.findByOrderByGmtModifyDesc();
+                memberList = memberRepo.findByOrderByGmtCreateDesc();
             }
             memberList.forEach(item -> item.setPass(""));
         return memberList;
@@ -342,7 +342,7 @@ public class ManagementController {
     //////////////////////////// biz report section ///////////////////////////////
     @RequestMapping(value = "getAllBizReport", method = RequestMethod.GET)
     public List<BizReport> getAllBizReport(final HttpServletRequest request) throws ServletException {
-        return bizReportRepo.findByOrderByYearDescMonthDesc();
+        return bizReportRepo.findByOrderByGmtCreateDesc();
     }
 
     @RequestMapping(value = "upsertBizReport", method = RequestMethod.POST)
@@ -459,12 +459,12 @@ public class ManagementController {
     public Order getOrderById(@PathVariable final int orderId) throws ServletException {
         return	orderRepo.findById(orderId).get();
     }
-
+/*
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
     public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
         orderRepo.delete(order);
         return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
-    }
+    }*/
 
     @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
     public Order getOrderDetailById(@PathVariable final int orderDetailId) throws ServletException {
