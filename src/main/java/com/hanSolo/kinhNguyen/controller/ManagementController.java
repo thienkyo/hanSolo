@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/mgnt")
@@ -459,12 +458,12 @@ public class ManagementController {
     public Order getOrderById(@PathVariable final int orderId) throws ServletException {
         return	orderRepo.findById(orderId).get();
     }
-/*
+
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
     public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
         orderRepo.delete(order);
         return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
-    }*/
+    }
 
     @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
     public Order getOrderDetailById(@PathVariable final int orderDetailId) throws ServletException {

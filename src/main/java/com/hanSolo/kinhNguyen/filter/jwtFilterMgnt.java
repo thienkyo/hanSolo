@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class jwtFilterMgnt extends GenericFilterBean {
                          final ServletResponse res,
                          final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) req;
+        final HttpServletResponse response = (HttpServletResponse) res;
 
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("sheep ")) {
@@ -46,6 +48,7 @@ public class jwtFilterMgnt extends GenericFilterBean {
         catch (final SignatureException e) {
             throw new ServletException("Invalid token.");
         }
+        response.addHeader("Access-Control-Allow-Origin","http://localhost:8080");
 
         chain.doFilter(req, res);
     }

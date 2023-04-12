@@ -4,21 +4,30 @@ angular.module('app')
 	var currentMember = null;
 	var cartName = 'kinhNguyenCart'; //
 	var memberService = {
-		setCurrentMember : setCurrentMember,
-		getCurrentMember : getCurrentMember,
-		makeLoginStr : makeLoginStr,
-	//	makeSignupStr : makeSignupStr,
-		isLogin : isLogin,
-		isAdmin :isAdmin,
-		isSuperAdmin :isSuperAdmin,
-		isAccountant :isAccountant,
-		isSuperAccountant :isSuperAccountant,
-		isMod : isMod
+            setCurrentMember : setCurrentMember,
+            getCurrentMember : getCurrentMember,
+            makeLoginStr : makeLoginStr,
+        //	makeSignupStr : makeSignupStr,
+            isLogin : isLogin,
+            isAdmin :isAdmin,
+            isSuperAdmin :isSuperAdmin,
+            isAccountant :isAccountant,
+            isSuperAccountant :isSuperAccountant,
+            isMod : isMod,
+            setSiteMode : setSiteMode,
+            getSiteMode : getSiteMode
 		};
 	return memberService;
+
+	function setSiteMode(mode){
+        store.set('MKN_siteMode', mode);
+    }
+
+    function getSiteMode(){
+        currentMember = store.get('MKN_siteMode');
+    }
 	
 	function setCurrentMember(member){
-	//	var te = new BannerDO;
 		currentMember = member;
         store.set('member', member);
         return currentMember;

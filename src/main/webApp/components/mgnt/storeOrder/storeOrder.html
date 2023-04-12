@@ -250,6 +250,7 @@
 						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>
 					<a href="" ng-click="ctrl.saveOrder()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order'}}</a>
+					<!--<a href="" ng-click="ctrl.saveOrder2()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order2'}}</a>-->
 					<alert class="alert alert-danger" close="ctrl.closeAlert()" ng-if="ctrl.isErrorMsg"
 						   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

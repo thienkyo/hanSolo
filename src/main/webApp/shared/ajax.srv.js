@@ -21,9 +21,25 @@ angular.module('networkServices',[])
 				params:{}
 		};
 
+		var config2 = {
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json' ,
+                    'requestType':'angularJS',
+                    'Cache-Control': 'no-cach, no-store, must-revalidate',
+                    'Pragame':'no-catch',
+                    'X-Testing': sessionid,
+                    'Expries': 0,
+                    'Access-Control-Allow-Origin':'*',
+                    action: ''
+                },
+                params:{}
+        };
+
 		var ajaxService = {
 			get : get,
-			post: post
+			post: post,
+			post2: post2
 		};
 
 		return ajaxService;
@@ -43,4 +59,11 @@ angular.module('networkServices',[])
 			url = urlbase + url;
 			return $http.post(url,data,config);
 		}
+
+		function post2(url,data,action,params) {
+            close.params = params || {};
+            config2.params["timeStamp"] = (new Date()).getTime();
+            config2.headers.action = action || '';
+            return $http.post(url,data,config2);
+        }
 }]);

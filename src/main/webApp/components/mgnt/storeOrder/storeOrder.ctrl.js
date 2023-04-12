@@ -2,10 +2,10 @@
 angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
-										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService',
+										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
-	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService) {
+	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -295,6 +295,40 @@ angular.module('storeOrderModule')
 
                 console.log(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
+                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
+                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
+                    self.order_return_status = data; // return after saving order, order_return_status would be orderid
+                    self.newOrderId = data.replyStr;
+                    self.isSaveButtonPressed=false;
+                    self.isErrorMsg=false;
+                    $location.path('/mgnt/storeOrder/'+self.newOrderId);
+                });
+            }
+        }else{
+            self.isErrorMsg ='Cần nhập tên/số điện thoại(tối thiểu 3 số).';
+        }
+
+    }
+
+    self.saveOrder2 = function(){
+        self.order_return_status = null;
+        if(self.isPickDP){
+            self.theOrder.gmtModify = self.theOrder.gmtCreate;
+            for (var i = 0; i < self.theOrder.orderDetails.length; i++){
+                self.theOrder.orderDetails[i].gmtCreate = self.theOrder.gmtCreate;
+                self.theOrder.orderDetails[i].gmtModify = self.theOrder.gmtCreate;
+            }
+        }
+        self.theOrder.specificJobId = self.selectedJob.id;
+        self.theOrder.specificJobName = self.selectedJob.jobName;
+        console.log(self.theOrder);
+        if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
+            if(memberService.isAdmin()){
+                self.isSaveButtonPressed=true;
+
+                console.log(self.theOrder);
+                // use placeOrder in storeOrderService
+                storeOrderService.placeOrder(self.theOrder).then(function (data) {
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.order_return_status = data; // return after saving order, order_return_status would be orderid

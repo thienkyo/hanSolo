@@ -5,10 +5,18 @@ angular.module('storeOrderModule')
 			getOrdersForMgnt : getOrdersForMgnt,
 			getAllOrdersForMgnt : getAllOrdersForMgnt,
 			/*updateOrderStatus : updateOrderStatus,*/
+			placeOrder : placeOrder,
 			updateOrder : updateOrder,
 			deleteOrder : deleteOrder
 			};
 	return storeOrderService;
+
+	function placeOrder(order){
+       var url = "http://matkinhnguyen.com/authenticated/saveOrder";
+       return ajaxService.post2(url,order,{}).then(function(response){
+            return response.data;
+       });
+   }
 	
 	function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;

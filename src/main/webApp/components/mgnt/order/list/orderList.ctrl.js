@@ -362,7 +362,6 @@ angular.module('orderListModule')
                                             ']\n'
             ;
         });
-        //console.log(self.detailArray);
     }
 
 
