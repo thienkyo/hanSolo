@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -164,7 +165,7 @@ public class AuthenticationController {
     @CrossOrigin(origins = "http://localhost:8080")
     @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request) throws ServletException, ParseException {
+    public GenericResponse SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request,final HttpServletResponse res) throws ServletException, ParseException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
         if (memOpt.isEmpty() ) {
@@ -253,6 +254,7 @@ public class AuthenticationController {
             }
             usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
+        res.addHeader("Access-Control-Allow-Origin","http://localhost:8080");
 
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         return response;

@@ -48,7 +48,6 @@ public class jwtFilterMgnt extends GenericFilterBean {
         catch (final SignatureException e) {
             throw new ServletException("Invalid token.");
         }
-        response.addHeader("Access-Control-Allow-Origin","http://localhost:8080");
 
         chain.doFilter(req, res);
     }
