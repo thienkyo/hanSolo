@@ -12,7 +12,7 @@ angular.module('storeOrderModule')
 	return storeOrderService;
 
 	function placeOrder(order){
-       var url = "http://matkinhnguyen.com/authenticated/saveOrder";
+       var url = "http://matkinhnguyen.com/authenticated/syncOrderFromLocal";
        return ajaxService.post2(url,order,{}).then(function(response){
             return response.data;
        });
