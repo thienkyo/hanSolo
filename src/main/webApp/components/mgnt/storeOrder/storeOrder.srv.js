@@ -14,6 +14,7 @@ angular.module('storeOrderModule')
 	function placeOrder(order){
        var url = "http://matkinhnguyen.com/authenticated/syncOrderFromLocal";
        return ajaxService.post2(url,order,{}).then(function(response){
+            console.log(response);
             return response.data;
        });
    }

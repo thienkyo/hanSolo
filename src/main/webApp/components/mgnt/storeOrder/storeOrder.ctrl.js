@@ -360,6 +360,12 @@ angular.module('storeOrderModule')
     };
 
 ////// run when loading page/////
+
+    console.log($location);
+    console.log($location.host());
+    console.log($location.absUrl());
+    console.log($location.port());
+
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}

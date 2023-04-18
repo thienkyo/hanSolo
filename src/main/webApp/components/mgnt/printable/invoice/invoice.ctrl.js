@@ -10,9 +10,11 @@ angular.module('invoiceModule')
     	this.discount = discount;
     	this.description = description;
     }
-    var paramValue = $location.search();
+    self.paramValue = $location.search();
 
-    invoiceService.getOneOrder(paramValue.orderId)
+    console.log(self.paramValue);
+
+    invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data;
             self.calculateOrderTotal();

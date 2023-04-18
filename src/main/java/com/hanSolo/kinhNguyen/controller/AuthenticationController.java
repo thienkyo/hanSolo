@@ -8,7 +8,10 @@ import com.hanSolo.kinhNguyen.response.MemberResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -162,14 +165,16 @@ public class AuthenticationController {
         return new GenericResponse(m.getId()+"",Utility.SUCCESS_ERRORCODE,"save member success");
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request,final HttpServletResponse res) throws ServletException, ParseException {
+    public ResponseEntity<String> SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request, final HttpServletResponse res) throws ServletException, ParseException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+
+        HttpHeaders headers = new HttpHeaders();
         if (memOpt.isEmpty() ) {
-            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+           // return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+            return new ResponseEntity<>("member not exist or disable", headers, HttpStatus.OK);
         }
         order.setMember(memOpt.get());
         Order or = orderRepo.save(order);
@@ -254,10 +259,10 @@ public class AuthenticationController {
             }
             usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
-        res.addHeader("Access-Control-Allow-Origin","http://localhost:8080");
+       // res.addHeader("Access-Control-Allow-Origin","*");
 
-        GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
-        return response;
+       // GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
+        return new ResponseEntity<>("success", headers, HttpStatus.OK);
     }
 
     private void updateCouponQuantity(Order order,String currentCode, String newCode){

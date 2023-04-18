@@ -53,14 +53,15 @@
 			<tbody>
 			<tr>
 				<td>
-					<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 150px;"/>
+					<img src="/static/kinhnguyen_logo.jpeg" alt="" style="width: 150px;" ng-if="!ctrl.paramValue.noAddress"/>
+					<img src="/static/kinhNguyen_logo_noAddress.jpeg" alt="" style="width: 150px;" ng-if="ctrl.paramValue.noAddress == 'true'"/>
 				</td>
 				<td>
 					<p style="margin-bottom: 0px;margin-top: 0px;font-weight: bold;">CHUYÊN CÁC LOẠI KÍNH <span style="float: right;font-size: 14px;font-weight: 400;">Mã: {{ctrl.theOrder.id}}</span></p>
 					<p style="margin: 3px 0px 0px 15px;">- Kính Cận - Kính Viễn</p>
 					<p style="margin: 3px 0px 0px 15px;">- Kính Loạn - Kính Đa Tròng</p>
 					<p style="margin-bottom: 0px;margin-top: 15px;font-weight: bold;">KHÚC XẠ NHÃN KHOA KỸ THUẬT CAO</p>
-					<p style="font-size: 14px;margin-bottom: 0px;margin-top: 5px;">Địa chỉ: 358/5/3 CMT8, P. 10, Q. 3, TP. HCM</p>
+					<p style="font-size: 14px;margin-bottom: 0px;margin-top: 5px;" ng-if="!ctrl.paramValue.noAddress">Địa chỉ: 358/5/3 CMT8, P. 10, Q. 3, TP. HCM</p>
 					<p style="font-size: 14px;margin-top: 4px;">Hotline: 090 801 7383 - 079 990 5714</p>
 
 				</td>

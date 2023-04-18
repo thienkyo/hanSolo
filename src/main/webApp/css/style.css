@@ -102,7 +102,7 @@ a:focus {
 a:hover,
 a:focus {
   color: brown;
-  background-color: transparent;
+  /*background-color: transparent;*/
   text-decoration: none;
 }
 
