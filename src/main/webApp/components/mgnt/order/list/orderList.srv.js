@@ -5,9 +5,9 @@ angular.module('orderListModule')
 			getOrdersForMgnt : getOrdersForMgnt, // 100 order
 			// getAllOrdersForMgnt : getAllOrdersForMgnt,
 			updateOrderStatus : updateOrderStatus,
-			/*updateOrder : updateOrder,*/
 			getOrderById : getOrderById,
 			updateCusSource : updateCusSource,
+			doRecovery : doRecovery,
 			deleteOrder : deleteOrder
 			};
 	return orderListService;
@@ -25,13 +25,6 @@ angular.module('orderListModule')
 			return response.data;
 		});
 	}
-	
-	/*function getAllOrdersForMgnt(){
-		var url = "mgnt/getAllOrdersForMgnt/";
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}*/
 
 	function updateCusSource(order){
         var url = "mgnt/updateCusSource";
@@ -47,13 +40,12 @@ angular.module('orderListModule')
         });
     }
 
-/*
-	function updateOrder(order){
-    		var url = "mgnt/updateOrder";
-    		return ajaxService.post(url,order,{}).then(function(response){
+	function doRecovery(orders){
+    		var url = "authenticated/recoverOrder";
+    		return ajaxService.post(url,orders,{}).then(function(response){
     			return response.data;
     		});
-    	}*/
+    	}
 	
 	function deleteOrder(order){
 		var url = "mgnt/deleteOrder";

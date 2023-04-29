@@ -18,12 +18,80 @@
 <section>
 	<div class="container" ng-cloak>
 
-		<h3 style="margin-bottom: 20px;">Order Cache Management</h3>
+		<h3 style="margin-bottom: 20px;">Order Cache</h3>
 		<a ng-click="ctrl.getOrderFromOnline()" href="" class="btn btn-default check_out"
 		   style="margin: 0px 0px 20px 0px;height: 32px;" >get from db</a>
 		<a ng-click="ctrl.clearOrderCache()" href="" class="btn btn-default check_out"
 		   style="margin: 0px 0px 20px 0px;height: 32px;" >clear cache </a>
 		<span> in cache:{{ctrl.cacheCount}}</span>
+
+		<!--summary Modal -->
+		<div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="summaryModalLabel">Order [<a href="#/mgnt/storeOrder/{{ctrl.theSummaryModal.id}}" target="_blank" >{{ctrl.theSummaryModal.id}}</a>] status:{{ctrl.theSummaryModal.statusName}} </h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">Name: {{ctrl.theSummaryModal.shippingName}}</div>
+								<div class="col-sm-3">Phone: {{ctrl.theSummaryModal.shippingPhone | tel}}</div>
+								<div class="col-sm-6">Address: {{ctrl.theSummaryModal.shippingAddress}}</div>
+							</div>
+
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-2">Tổng: {{ctrl.theSummaryModal.subTotal | number:0}}đ</div>
+								<div class="col-sm-3">Giảm: ({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</div>
+								<div class="col-sm-3">Thành tiền: {{ctrl.theSummaryModal.total | number:0}}đ</div>
+								<div class="col-sm-2">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</div>
+								<div class="col-sm-2">Còn lại: {{ctrl.theSummaryModal.deposit > 1000 ?  ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit : '0' | number:0}}đ</div>
+							</div>
+
+						</div>
+
+						<div class="container" style="width:100%;font-size: 18px;">
+							<div class="row" style="background-color: beige;font-weight: bolder;">
+								<div class="col-sm-1 border">id</div>
+								<div class="col-sm-2 border">Name</div>
+								<div class="col-sm-2 border">Lens</div>
+								<div class="col-sm-2 border">Detail</div>
+								<div class="col-sm-2 border">Frame</div>
+								<div class="col-sm-2 border">Note</div>
+								<div class="col-sm-1 border">Other</div>
+							</div>
+							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
+								<div class="col-sm-1 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.name}}({{item.yob}})</div>
+								<div class="col-sm-2 border" >
+									<div class="row" style="margin-left: 3px;margin-top: 5px">{{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}}</div>
+									<div class="row" style="margin-left: 3px;">{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}</div>
+									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">(discount:{{item.lensDiscountAmount}}%)</div>
+								</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}</div>
+								<div class="col-sm-2 border">
+									{{item.orderDetailNoteForCus}}
+									{{item.orderDetailNote}}
+								</div>
+								<div class="col-sm-1 border">
+									{{item.otherNote}}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end summary Modal -->
+
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data track by $index">

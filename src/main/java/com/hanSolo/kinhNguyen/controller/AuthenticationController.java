@@ -187,6 +187,19 @@ public class AuthenticationController {
         return response;
     }
     ////
+    @RequestMapping(value = "recoverOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+        if (memOpt.isEmpty() ) {
+            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+        }
+        orderRepo.saveAll(orders);
+        GenericResponse response =  new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+    ////
     @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request, final HttpServletResponse res) throws ServletException, ParseException {

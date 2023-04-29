@@ -342,4 +342,20 @@ angular.module('app')
     }
 
 }])
+.factory('commonService',['$location', function($location) {
+	var currentOrderCache = [];
+	var cacheName = 'kinhNguyenOrderCache';
+	var commonService = {
+		isLocalWeb : isLocalWeb
+		}
+	return commonService;
+
+	function isLocalWeb(){
+        if ($location.host() == 'localhost') {
+            return true;
+        }
+        return false;
+    }
+
+}])
 ;

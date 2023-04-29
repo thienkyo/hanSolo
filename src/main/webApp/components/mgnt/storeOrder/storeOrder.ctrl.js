@@ -3,11 +3,11 @@ angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
-										 'orderCacheService',
+										 'orderCacheService','commonService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
 	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
-	            orderCacheService) {
+	            orderCacheService,commonService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -23,6 +23,7 @@ angular.module('storeOrderModule')
 	self.statusStyle = { "width": "120px" };
     var firstSmsJob = new SmsJobDO();
 	self.smsJobList = [firstSmsJob];
+	self.isLocalWeb = commonService.isLocalWeb();
 
 //////////////// function section ////////////
 
@@ -233,8 +234,6 @@ angular.module('storeOrderModule')
             cartService.getCoupon2(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.frameDiscountAmount = data.replyStr;
-                  //  console.log(orderDetail);
-                  //  console.log(self.theOrder);
                     self.calculateOrderTotal(self.theOrder);
                     self.isErrorMsg = false;
                  }else{
@@ -289,7 +288,6 @@ angular.module('storeOrderModule')
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
 
-                console.log(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
@@ -319,7 +317,7 @@ angular.module('storeOrderModule')
         }
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
-       // console.log(self.theOrder);
+
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
@@ -358,12 +356,6 @@ angular.module('storeOrderModule')
     };
 
 ////// run when loading page/////
-
- /*   console.log($location);
-    console.log($location.host());
-    console.log($location.absUrl());
-    console.log($location.port());*/
-
 	if(!memberService.isAdmin()){
 		$location.path('#/');
 	}

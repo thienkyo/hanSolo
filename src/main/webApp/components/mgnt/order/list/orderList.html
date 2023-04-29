@@ -18,7 +18,7 @@
 <section>
 	<div class="container" ng-cloak>
 
-		<h3 style="margin-bottom: 20px;">Order management
+		<h3 style="margin-bottom: 20px;">Order management {{ctrl.isLocalWeb ? '[LOCAL]' : ''}}
 			<span ng-show="ctrl.tempAmount > 0" style="">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
 				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
@@ -290,8 +290,45 @@
 			</table>
 			<h3 ng-show="ctrl.showLoadingText" style="text-align: center;">Loading...</h3>
         </div>
+
+
+		<!--local order recovery-->
+		<!-- Config Nav tabs -->
+
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder">recover order</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="recoverOrder" class="container tab-pane">
+				<br/>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					get order in text
+				</button>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.clearOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					clear
+				</button>
+
+				<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
+						ng-disabled="ctrl.isRecoveringOrder">
+					recover
+				</button>
+
+				<textarea rows="30"  placeholder="for recovery" class="checkout__input__add"
+						  ng-model="ctrl.orderListText" style="width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>
+
+			</div>
+		</div>
+
 	</div>
+
 </section>
+
 <section id="cart_items" ng-show="ctrl.theOrder">
 		<div class="container">
 			<div class="row" >

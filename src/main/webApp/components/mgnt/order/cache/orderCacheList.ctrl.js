@@ -33,7 +33,7 @@ angular.module('orderCacheListModule')
     self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 
 
-	 self.getOrderFromOnline = function() {
+	self.getOrderFromOnline = function() {
         orderCacheListService.get100OrdersForCache().then(function (data) {
             self.orderList = data;
             self.orderList.forEach(calculateOrderTotal);
@@ -57,29 +57,33 @@ angular.module('orderCacheListModule')
             self.isSyncingOrder=true;
 
             var clone = Object.assign({}, order);
-
-            console.log(clone);
             clone.id = 0;
 
             for (var i = 0; i < clone.orderDetails.length; i++){
                 clone.orderDetails[i].id = 0;
                 clone.orderDetails[i].orderId = null;
             }
-            //order.orderDetails.forEach((detail) => detail.orderId = 0);
-            //order.orderDetails.forEach((detail) => detail.id = 0, detail.orderId = 0);
 
-            console.log(clone);
-            cartService.placeOrder(clone).then(function (data) {
+            //console.log(clone);
+       /*     cartService.placeOrder(clone).then(function (data) {
                // self.theOrder.currentCouponCode = self.theOrder.couponCode;
                // self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
               //  self.order_return_status = data; // return after saving order, order_return_status would be orderid
               //  self.newOrderId = data.replyStr;
               self.isSyncingOrder = false;
               console.log(clone);
-              //  self.isSaveButtonPressed=false;
-              //  self.isErrorMsg=false;
+            });*/
 
+            orderCacheListService.syncOrder(clone).then(function (data) {
+               // self.theOrder.currentCouponCode = self.theOrder.couponCode;
+               // self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
+              //  self.order_return_status = data; // return after saving order, order_return_status would be orderid
+              //  self.newOrderId = data.replyStr;
+              self.isSyncingOrder = false;
+              console.log(clone);
             });
+
+
         }
 
     }
@@ -167,6 +171,11 @@ angular.module('orderCacheListModule')
 
     }
 
+/// modal
 
+    self.setSummaryModal = function(one) {
+        self.theSummaryModal = one;
+        console.log(self.theSummaryModal);
+    }
 
 }]);

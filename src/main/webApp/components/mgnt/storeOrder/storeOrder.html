@@ -67,7 +67,7 @@
 </style>
 <link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <!-- Shopping Cart Section Begin -->
-<h2 style="text-align: center;">{{ctrl.theOrder.id == 0 ? 'Create Order' :  'Order ' + ctrl.theOrder.id }}
+<h2 style="text-align: center;">{{ctrl.theOrder.id == 0 ? 'Create Order' :  'Order ' + ctrl.theOrder.id }}{{ctrl.isLocalWeb ? '[LOCAL]' : ''}}
 
 </h2>
 <h4 style="text-align: center;">

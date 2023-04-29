@@ -3,11 +3,11 @@ angular.module('orderListModule')
 	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize',
 										 'memberService','orderListService','customerSourceService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
-										 'searchService',
+										 'searchService','commonService',
 	function($rootScope, $routeParams,$location,FirstTimeLoadSize,
 	        memberService,orderListService,customerSourceService,
 	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
-	        searchService) {
+	        searchService,commonService) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
@@ -16,6 +16,7 @@ angular.module('orderListModule')
 	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
 	self.isUpdatingOrder = false; // disable/able the select for update order status
 	self.showLoadingText = true; // disable/able Loading..
+	self.isRecoveringOrder = false; // disable/able the select for recover button
 	self.tempArray=[];
 	self.detailArray=[];
     self.tempAmount=0;
@@ -23,6 +24,7 @@ angular.module('orderListModule')
     self.tempLensNumber=0;
     self.OneDayReport={};
     self.isSuperAdmin = memberService.isSuperAdmin();
+    self.isLocalWeb = commonService.isLocalWeb();
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -33,14 +35,12 @@ angular.module('orderListModule')
 
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
-       // console.log(self.cusSourceList);
       //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
     });
 
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
-		//console.log(self.orderList);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
@@ -166,8 +166,6 @@ angular.module('orderListModule')
                 self.OneDayReport.actualAmount += dataOne.total;
             }
         });
-
-        console.log(self.OneDayReport);
     }
 
     function sameDay(d1, d2) {
@@ -374,7 +372,7 @@ angular.module('orderListModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
-        console.log(self.theSummaryModal);
+
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {
@@ -386,6 +384,43 @@ angular.module('orderListModule')
       self.detailArray = [];
       self.copyText = '';
     })
+//////////// recovery//////////////
+    self.getOrderForRecovery = function() {
 
+        if(self.tempArray.length >0){
+            var cloneList  = self.tempArray.slice(0);
+            self.tempArray.forEach((oneOrder, index, array) => {
+                oneOrder.id = 0;
+                oneOrder.orderDetails.forEach((oneDetail, index, array) => {
+                    oneDetail.id = 0;
+                    oneDetail.orderId = null;
+                });
+            });
+
+            self.orderListText = JSON.stringify(self.tempArray);
+        }
+
+
+    }
+    self.clearOrderForRecovery = function() {
+        self.orderListText = '';
+    }
+
+    self.doRecovery = function() {
+        if(self.orderListText && self.orderListText != ''){
+           self.isRecoveringOrder = true;
+           var orderList = JSON.parse(self.orderListText);
+           orderListService.doRecovery(orderList).then(function(data){
+               self.responseStr = data.replyStr;
+               self.isRecoveringOrder = false;
+           });
+
+        }
+    }
+
+    console.log($location);
+    console.log($location.host());
+    console.log($location.absUrl());
+    console.log($location.port());
 
 }]);

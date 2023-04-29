@@ -3,19 +3,9 @@ angular.module('orderCacheListModule')
 .factory('orderCacheListService', ['ajaxService',function(ajaxService) {
 		var orderCacheListService = {
 			get100OrdersForCache : get100OrdersForCache, // 100 order
-			updateOrderStatus : updateOrderStatus,
-			getOrderById : getOrderById,
-			updateCusSource : updateCusSource,
-			deleteOrder : deleteOrder
+			syncOrder : syncOrder
 			};
 	return orderCacheListService;
-
-	function getOrderById(id){
-        var url = "mgnt/getOrderById/"+id;
-        return ajaxService.get(url,null,{}).then(function(response){
-            return response.data;
-        });
-    }
 	
 	function get100OrdersForCache(){
 		var url = "mgnt/getOrdersForMgnt/100";
@@ -23,20 +13,6 @@ angular.module('orderCacheListModule')
 			return response.data;
 		});
 	}
-
-	function updateCusSource(order){
-        var url = "mgnt/updateCusSource";
-        return ajaxService.post(url,order,{}).then(function(response){
-            return response.data;
-        });
-    }
-
-	function updateOrderStatus(order){
-        var url = "mgnt/updateOrderStatus";
-        return ajaxService.post(url,order,{}).then(function(response){
-            return response.data;
-        });
-    }
 
 /*
 	function updateOrder(order){
@@ -46,8 +22,8 @@ angular.module('orderCacheListModule')
     		});
     	}*/
 	
-	function deleteOrder(order){
-		var url = "mgnt/deleteOrder";
+	function syncOrder(order){
+		var url = "authenticated/syncOrder";
 		return ajaxService.post(url,order,{}).then(function(response){
 			return response.data;
 		});
