@@ -16,7 +16,7 @@ angular.module('app', [
 		'ngMaterial',
 		'blogModule',
 		'blogDetailModule',
-		'storeOrderModule',   //tool from here
+		'storeOrderModule',
 		'productListModule',  //mgnt from here
 		'productUpsertModule',
 		'memberListModule',
@@ -24,6 +24,7 @@ angular.module('app', [
 		'couponModule',
 		'supplierModule',
 		'orderListModule',
+		'orderCacheListModule',
 		'blogListModule',
 		'blogUpsertModule',
 		'bannerModule',

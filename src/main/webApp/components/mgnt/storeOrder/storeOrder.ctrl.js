@@ -3,9 +3,11 @@ angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
+										 'orderCacheService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
-	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService) {
+	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
+	            orderCacheService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -155,15 +157,12 @@ angular.module('storeOrderModule')
     }
 
     self.searchOrderTextChange =function(text) {
-        console.log('md-search-text-change ' + text);
        if(self.copyActive){
             self.nameCopy();
         }
     }
 
     self.selectedOrderChange = function(searchText) {
-        console.log("md-selected-item-change "+searchText);
-        console.log("theSelectedOrder:"+self.theSelectedOrder);
         if(self.theSelectedOrder){
             self.theOrder.shippingName = self.theSelectedOrder.shippingName;
             self.theOrder.shippingPhone = self.theSelectedOrder.shippingPhone;
@@ -178,7 +177,6 @@ angular.module('storeOrderModule')
 
 /////////// md-autoComplete for phone////////
     self.searchOrderByPhoneTextChange =function(text) {
-        console.log('md-search-text-change ' + text);
        if(self.copyActive){
             self.phoneCopy();
         }
@@ -235,8 +233,8 @@ angular.module('storeOrderModule')
             cartService.getCoupon2(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.frameDiscountAmount = data.replyStr;
-                    console.log(orderDetail);
-                    console.log(self.theOrder);
+                  //  console.log(orderDetail);
+                  //  console.log(self.theOrder);
                     self.calculateOrderTotal(self.theOrder);
                     self.isErrorMsg = false;
                  }else{
@@ -259,8 +257,6 @@ angular.module('storeOrderModule')
             cartService.getCoupon2(orderDetail.lensDiscountCode,'LENS').then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.lensDiscountAmount = data.replyStr;
-                    console.log(orderDetail);
-                    console.log(self.theOrder);
                     self.calculateOrderTotal(self.theOrder);
                     self.isErrorMsg = false;
                  }else{
@@ -288,7 +284,7 @@ angular.module('storeOrderModule')
         }
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
-        console.log(self.theOrder);
+
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
@@ -301,6 +297,8 @@ angular.module('storeOrderModule')
                     self.newOrderId = data.replyStr;
                     self.isSaveButtonPressed=false;
                     self.isErrorMsg=false;
+                    self.theOrder.id = self.newOrderId;
+                    orderCacheService.addOneOrder(self.theOrder);
                     $location.path('/mgnt/storeOrder/'+self.newOrderId);
                 });
             }
@@ -321,7 +319,7 @@ angular.module('storeOrderModule')
         }
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
-        console.log(self.theOrder);
+       // console.log(self.theOrder);
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
@@ -361,10 +359,10 @@ angular.module('storeOrderModule')
 
 ////// run when loading page/////
 
-    console.log($location);
+ /*   console.log($location);
     console.log($location.host());
     console.log($location.absUrl());
-    console.log($location.port());
+    console.log($location.port());*/
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');
@@ -381,7 +379,6 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal(self.theOrder);
                 }
-                console.log(self.theOrder);
 
                 // load jobid for sms send
                 if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){

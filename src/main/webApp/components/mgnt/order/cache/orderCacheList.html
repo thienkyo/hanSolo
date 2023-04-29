@@ -1,0 +1,61 @@
+<link href="css/main2.css" rel="stylesheet">
+<!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
+<style>
+.preth  th {
+	  border: 1px solid black;
+	  border-collapse: collapse;
+	  padding-top: 10px;
+	  padding-bottom: 10px;
+	  text-align: center;
+	}
+
+.preth  td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px 10px 5px 15px;
+}
+</style>
+<section>
+	<div class="container" ng-cloak>
+
+		<h3 style="margin-bottom: 20px;">Order Cache Management</h3>
+		<a ng-click="ctrl.getOrderFromOnline()" href="" class="btn btn-default check_out"
+		   style="margin: 0px 0px 20px 0px;height: 32px;" >get from db</a>
+		<a ng-click="ctrl.clearOrderCache()" href="" class="btn btn-default check_out"
+		   style="margin: 0px 0px 20px 0px;height: 32px;" >clear cache </a>
+		<span> in cache:{{ctrl.cacheCount}}</span>
+        <div class="table-responsive">
+            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+			    <tr ng-repeat="order in $data track by $index">
+			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:50px;text-align: center;">
+			        	<a href="" ng-click="ctrl.setModal(order)" data-toggle="modal" data-target="#exampleModal">{{order.id}}</a>
+			        </td>
+			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
+			        	<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}</a>
+			        </td>
+					<td title="''"  style="text-align: center;">
+						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
+					</td>
+			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">{{order.shippingPhone | tel}}</td>
+					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
+						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
+					</td>
+					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
+
+					<td title="'sync'" style="width:fit-content;" >
+
+						<button type="button" class="btn btn-primary" ng-disabled="ctrl.isSyncingOrder"
+								 style="margin-top: 0px;height: 32px;" ng-click="ctrl.sync(order)">
+							sync
+						</button>
+					</td>
+					<td title="'delete'" style="width:fit-content;" >
+						<a ng-click="ctrl.sync(order)" href="" class="btn btn-default check_out"
+						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isSuperAdmin">delete</a>
+					</td>
+			    </tr>
+			</table>
+        </div>
+	</div>
+</section>

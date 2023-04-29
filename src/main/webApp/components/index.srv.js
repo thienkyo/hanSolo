@@ -14,6 +14,7 @@ angular.module('app')
             isAccountant :isAccountant,
             isSuperAccountant :isSuperAccountant,
             isMod : isMod,
+        // local mode for no internet,digital ocean host is down
             setSiteMode : setSiteMode,
             getSiteMode : getSiteMode
 		};
@@ -278,5 +279,67 @@ angular.module('app')
     }
 
 }])
+.factory('orderCacheService',['store', function(store) {
+	var currentOrderCache = [];
+	var cacheName = 'kinhNguyenOrderCache';
+	var orderCacheService = {
+		setCurrentOrderCache : setCurrentOrderCache,
+		getCurrentOrderCache : getCurrentOrderCache,
+		addOneOrder : addOneOrder,
+		getQuantity : getQuantity,
+		clearCache : clearCache
+		}
+	return orderCacheService;
 
+	function addOneOrder(order){
+	    console.log(order);
+	    currentOrderCache = getCurrentOrderCache();
+
+	    var found = currentOrderCache.find(i => i.id == order.id);
+
+	    console.log(found);
+
+	    if(found){
+	        var index = currentOrderCache.indexOf(found);
+            currentOrderCache[index] = order;
+            console.log(index);
+	    }else{
+            currentOrderCache.unshift(order);
+            if(getQuantity() > 100){
+                currentOrderCache.pop();
+            }
+	    }
+
+	    console.log(currentOrderCache);
+	    setCurrentOrderCache(currentOrderCache);
+    }
+
+	function setCurrentOrderCache(orderList){
+        currentOrderCache = orderList;
+        store.set(cacheName, orderList);
+        return currentOrderCache;
+    }
+
+    function getCurrentOrderCache(){
+        if (store.get(cacheName)) {
+            currentOrderCache = store.get(cacheName);
+        }else{
+            store.set(cacheName, currentOrderCache);
+        }
+        return currentOrderCache;
+    }
+
+    function getQuantity(){
+        if(getCurrentOrderCache()){
+            return getCurrentOrderCache().length;
+        }
+        return 0;
+    }
+
+    function clearCache(){
+        currentOrderCache = [];
+        store.set(cacheName, currentOrderCache);
+    }
+
+}])
 ;

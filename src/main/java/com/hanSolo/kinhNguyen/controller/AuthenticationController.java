@@ -101,7 +101,7 @@ public class AuthenticationController {
         Optional<SpecificSmsUserInfo> specSmsDBOtp = specificSmsUserInfoRepo.findByPhone(order.getShippingPhone());
         if(order.getSpecificJobId() != 0 ){
             SpecificSmsUserInfo specSms;
-            if(specSmsDBOtp.isEmpty()){
+            if(specSmsDBOtp.isEmpty()){ // phone doesn't exist in SpecificSmsUserInfo
                 specSms = new SpecificSmsUserInfo();
                 specSms.setGender(order.getGender());
                 specSms.setLastSendSmsDate(order.getGmtCreate());
@@ -111,22 +111,28 @@ public class AuthenticationController {
                 specSms.setName(order.getShippingName());
                 specSms.setJobIdList("");
                 specSms.setLocation("STORE");
-            }else{
+            }else{ // phone existed in SpecificSmsUserInfo.
                 specSms = specSmsDBOtp.get();
-                if( 0 ==  order.getId()){
+              /*  if( 0 ==  order.getId()){ // meaning new order,update old specSms
                     specSms.setJobIdList("");
                     specSms.setOrderCreateDate(order.getGmtCreate());
+                }*/
+                int specSmsOrderId = specSms.getOrderId() == null ? 0 : specSms.getOrderId();
+                if(or.getId() > specSmsOrderId){ // patient come back, reset recheck config.
+                    specSms.setLastSendSmsDate(order.getGmtCreate());
+                    specSms.setOrderCreateDate(order.getGmtCreate());
+                    specSms.setJobIdList("");
+
                 }
             }
             specSms.setAddress(order.getShippingAddress());
             specSms.setGender(order.getGender());
             specSms.setJobIdToRun(order.getSpecificJobId().toString());
             specSms.setGmtModify(Utility.getCurrentDate());
+            specSms.setOrderId(or.getId());
             specificSmsUserInfoRepo.save(specSms);
         }else{
-            if(specSmsDBOtp.isPresent()){
-                specificSmsUserInfoRepo.delete(specSmsDBOtp.get());
-            }
+            specSmsDBOtp.ifPresent(x -> specificSmsUserInfoRepo.delete(x));
         }
 
         /// coupon
@@ -165,6 +171,22 @@ public class AuthenticationController {
         return new GenericResponse(m.getId()+"",Utility.SUCCESS_ERRORCODE,"save member success");
     }
 
+    ////
+    @RequestMapping(value = "syncOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse syncOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException, ParseException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+        if (memOpt.isEmpty() ) {
+            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+        }
+        order.setMember(memOpt.get());
+        Order or = orderRepo.save(order);
+
+        GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+    ////
     @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request, final HttpServletResponse res) throws ServletException, ParseException {

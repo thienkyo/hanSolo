@@ -54,6 +54,17 @@ public class SpecificSmsUserInfo {
     @Column(name = "job_id_to_run")
     private String jobIdToRun;
 
+    @Column(name = "order_id")
+    private Integer orderId;
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
     public String getJobIdToRun() {
         return jobIdToRun;
     }

@@ -80,6 +80,11 @@ angular.module('app')
             controller: 'orderListController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/orderCacheList',{
+            templateUrl: 'components/mgnt/order/cache/orderCacheList.html',
+            controller: 'orderCacheListController',
+            controllerAs:'ctrl'
+        })
         .when('/mgnt/blogList',{
             templateUrl: 'components/mgnt/blog/list/blogList.html',
             controller: 'blogListController',
