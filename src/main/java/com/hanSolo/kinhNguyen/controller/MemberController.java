@@ -2,33 +2,36 @@ package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
+import com.hanSolo.kinhNguyen.models.SmsJob;
+import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.MemberRoleRepository;
+import com.hanSolo.kinhNguyen.repository.SmsJobRepository;
+import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.request.LoginRequest;
 import com.hanSolo.kinhNguyen.request.SignupRequest;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
+import com.hanSolo.kinhNguyen.response.SmsJobResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-    @Autowired
-    private MemberRepository memberRepo;
-
+    @Autowired private MemberRepository memberRepo;
     @Autowired private MemberRoleRepository memberRoleRepo;
+    @Autowired private SmsJobRepository smsJobRepo;
+    @Autowired private SmsQueueRepository smsQueueRepo;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody final LoginRequest login) throws ServletException, UnsupportedEncodingException {
@@ -83,5 +86,22 @@ public class MemberController {
         member.setMemberRoles(roleList);
         Member returnMem = memberRepo.save(member);
         return new GenericResponse(returnMem.getPhone(),Utility.SUCCESS_ERRORCODE,"Register user successfully.");
+    }
+
+    //////////////////////////// fastSMS /////////////////////////////
+    @RequestMapping(value = "getFastSMSConfig", method = RequestMethod.GET)
+    public SmsJobResponse getFastSMSConfig() {
+        SmsJob job = smsJobRepo.findFirstByJobType(Utility.SMS_JOB_FASTSMS).isPresent() ?
+                smsJobRepo.findFirstByJobType(Utility.SMS_JOB_FASTSMS).get() : null;
+        return new SmsJobResponse(job,Utility.SUCCESS_ERRORCODE,"get sms config success");
+    }
+
+    @RequestMapping(value = "upsertSmsQueue", method = RequestMethod.POST)
+    public GenericResponse upsertSmsQueue(@RequestBody final SmsQueue one, final HttpServletRequest request) {
+        if(one.getPassCode().equalsIgnoreCase(Utility.SMS_JOB_FASTSMS_PASSCODE)){
+            smsQueueRepo.save(one);
+            return new GenericResponse("insert SmsQueue success",Utility.SUCCESS_ERRORCODE,"Success");
+        }
+        return new GenericResponse("insert SmsQueue fail",Utility.FAIL_ERRORCODE,"FAIL");
     }
 }

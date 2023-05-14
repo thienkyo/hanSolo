@@ -73,11 +73,29 @@ form .progress {
 					<div class="col-sm-1">
 						<input type="number"  ng-model="ctrl.theSmsJob.id" disabled="disabled" placeholder="id" style="width:50px;"/>
 					</div>
-
 					<div class="col-sm-2">
 						<input type="text"  ng-model="ctrl.theSmsJob.jobName" placeholder="jobName" style="width: 100%;"/>
 					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsJob.weight" placeholder="weight" style="width: 100%;"/>
+					</div>
 
+					<div class="col-sm-2">
+							<div class='input-group date'>
+								<input ng-model="ctrl.theSmsJob.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height:30px;"
+									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="start date"/>
+								<span class="input-group-addon" ng-click="ctrl.openDP()">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+					</div>
+					<div class="col-sm-2">
+						{{ctrl.theSmsJob.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+					</div>
+
+				</div>
+				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-1" style="margin-top: 5px;">
 						Active:
 						<input type="checkbox"  ng-model="ctrl.theSmsJob.status" />
@@ -98,25 +116,15 @@ form .progress {
 					<div class="col-sm-1">
 						<input type="text"  ng-model="ctrl.theSmsJob.intervalTime" placeholder="intervalTime" style="width: 80px;"/>
 					</div>
-					<div class="col-sm-2">
-							<div class='input-group date'>
-								<input ng-model="ctrl.theSmsJob.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
-									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height:30px;"
-									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="start date"/>
-								<span class="input-group-addon" ng-click="ctrl.openDP()">
-									<span class="glyphicon glyphicon-calendar"></span>
-								</span>
-							</div>
+					<div class="col-sm-4">
+						Last api call: {{ctrl.lastHeartBeatTime | date:"dd-MM-yyyy HH:mm:ss"}}
 					</div>
-					<div class="col-sm-2">
-						{{ctrl.theSmsJob.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
-					</div>
+
 
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-5">
-						Last api call: {{ctrl.lastHeartBeatTime | date:"dd-MM-yyyy HH:mm:ss"}}
-						<textarea name="content" placeholder="specificPhones" rows="4"  style="white-space: pre-line;"
+						<textarea name="content" placeholder="specificPhones" rows="5"  style="white-space: pre-line;"
 								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
 					</div>
 					<div class="col-sm-7">
@@ -225,10 +233,14 @@ form .progress {
 					<div class="col-sm-1">
 						<input type="text"  ng-model="ctrl.theSmsQueue.status" placeholder="status" style="width: 100%;"/>
 					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsQueue.weight"  placeholder="weight" style="width: 100%;"/>
+					</div>
 					<div class="col-sm-4">
 						<input type="text"  ng-model="ctrl.theSmsQueue.receiverPhone" placeholder="phone" style="width: 160px;"/>
 						{{ctrl.theSmsQueue.receiverPhone | tel}}
 					</div>
+
 
 				</div>
 				<div class="row" style="margin-top: 20px;">
@@ -300,6 +312,9 @@ form .progress {
 							</td>
 							<td title="'content'" filter="{ 'content' : 'text'}" sortable="'content'" style="text-align: left;">
 								{{one.content}}
+							</td>
+							<td title="'weight'"  style="text-align: center;">
+								{{one.weight}}
 							</td>
 							<td title="'jobId'" filter="{ 'jobId' : 'text'}" sortable="'jobId'" style="text-align: center;width:90px;">
 								{{one.jobId}}

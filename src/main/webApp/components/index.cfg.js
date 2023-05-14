@@ -39,6 +39,11 @@ angular.module('app')
 			controller: 'loginController',
 			controllerAs:'ctrl'
 		})
+		.when('/fastSMS', {
+            templateUrl: 'components/content/fastSMS/fastSMS.html',
+            controller: 'fastSMSController',
+            controllerAs:'ctrl'
+        })
 		.when('/account', {
 			templateUrl: 'components/content/account/account.html',
 			controller: 'accountController',

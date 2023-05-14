@@ -47,6 +47,17 @@ public class SmsJob {
     @Column(name = "start_date")
     private Date startDate;
 
+    @Column(name = "weight", length = 2, columnDefinition = "varchar(2) default '1'")
+    private String weight;
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     public Date getStartDate() {
         return startDate;
     }

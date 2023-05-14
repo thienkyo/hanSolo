@@ -5,10 +5,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SmsJobRepository extends PagingAndSortingRepository<SmsJob, Integer> {
     List<SmsJob> findAllByOrderByGmtCreateDesc();
-
     List<SmsJob> findByStatus(@NonNull Boolean status);
+    Optional<SmsJob> findFirstByJobType(String jobType);
+
 
 }

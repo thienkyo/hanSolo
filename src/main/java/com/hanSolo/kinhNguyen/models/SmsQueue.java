@@ -37,6 +37,28 @@ public class SmsQueue {
     @Column(name = "job_id")
     private Integer jobId;
 
+    @Transient
+    private String passCode;
+
+    @Column(name = "weight", length = 2, columnDefinition = "varchar(2) default '1'")
+    private String weight;
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getPassCode() {
+        return passCode;
+    }
+
+    public void setPassCode(String passCode) {
+        this.passCode = passCode;
+    }
+
     public Integer getJobId() {
         return jobId;
     }

@@ -1,0 +1,36 @@
+<link href="css/login.css" rel="stylesheet">
+<section id="form" style="margin-top:10px;margin-bottom: 100px"><!--form-->
+		<div class="container" >
+			<div class="row">
+				<div class="col-sm-4 ">
+					<div class="login-form"><!--login form-->
+						<h2 style="margin-bottom: 10px;">Fast SMS</h2>
+						<form ng-submit="ctrl.addQueue(ctrl.theSmsQueue)">
+							<a ng-click="ctrl.addQueue(ctrl.theSmsQueue)" href=""
+							   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+							   style="margin: 0px 0px 10px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'send'}}</a>
+							<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 10px 0px;">clear</a>
+
+							<input type="text" placeholder="phone number" ng-model="ctrl.theSmsQueue.receiverPhone"/>
+							<input type="password" placeholder="passCode" ng-model="ctrl.theSmsQueue.passCode"/>
+							<textarea rows="4"  placeholder="nội dung."
+									  ng-model="ctrl.theSmsQueue.content" style="height: 100px;width: 100%;padding-left: 6px;" ></textarea>
+						</form>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="2000" style="margin: 10px 0px 0px 0px;" >
+							thành công
+						</alert>
+					</div><!--/login form-->
+				</div>
+
+
+			</div>
+		</div>
+</section><!--/form-->

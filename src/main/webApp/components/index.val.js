@@ -34,7 +34,8 @@ var AmountList=[
 var JobTypeList=[
 	{name : 'COMMON', value:'COMMON' },
     {name : 'SPECIFIC', value:'SPECIFIC' },
-    {name : 'PARTICULAR', value:'PARTICULAR' }
+    {name : 'PARTICULAR', value:'PARTICULAR' },
+    {name : 'FASTSMS', value:'FASTSMS' }
 ];
 
 var AreaCodeList=[
@@ -155,6 +156,7 @@ function SmsQueueDO(){
     this.gender = false;
     this.content = '';
     this.status = 'INIT';
+    this.weight = '1';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }
@@ -167,6 +169,7 @@ function SmsJobDO(){
     this.status = false;
     this.specificPhones = '';
     this.noSmsDays = 1;
+    this.weight = '1';
     this.isTest = true;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();

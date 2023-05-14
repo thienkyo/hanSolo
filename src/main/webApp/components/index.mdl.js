@@ -17,6 +17,7 @@ angular.module('app', [
 		'blogModule',
 		'blogDetailModule',
 		'storeOrderModule',
+		'fastSMSModule',
 		'productListModule',  //mgnt from here
 		'productUpsertModule',
 		'memberListModule',

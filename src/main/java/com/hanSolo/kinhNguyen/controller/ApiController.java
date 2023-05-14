@@ -100,7 +100,7 @@ public class ApiController {
         }
         smsQueueRepo.saveAll(smsQueueList);
 
-        Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_INIT);
+        Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
             smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
@@ -134,6 +134,7 @@ public class ApiController {
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
         smsQueue.setReceiverPhone(smsUserInfo.getPhone());
+        smsQueue.setWeight(job.getWeight());
 
         return smsQueue;
     }
@@ -148,6 +149,7 @@ public class ApiController {
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
         smsQueue.setReceiverPhone(smsUserInfo.getPhone());
+        smsQueue.setWeight(job.getWeight());
 
     return smsQueue;
     }
@@ -160,6 +162,7 @@ public class ApiController {
         smsQueue.setContent(job.getMsgContentTemplate());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverPhone(phone);
+        smsQueue.setWeight(job.getWeight());
 
         return smsQueue;
     }
