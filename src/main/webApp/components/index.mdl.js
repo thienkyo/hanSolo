@@ -35,5 +35,6 @@ angular.module('app', [
 		'bizReportModule',
 		'smsUserInfoModule',
 		'keyManagementModule',
+		'contractModule',
 		'ui.tinymce'
 ]);

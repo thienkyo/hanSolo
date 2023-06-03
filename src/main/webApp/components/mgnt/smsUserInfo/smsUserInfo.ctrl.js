@@ -184,7 +184,9 @@ angular.module('smsUserInfoModule')
 
     smsJobService.getLastHeartBeatTime().then(function (data) {
         self.lastHeartBeatTime = data;
-        console.log(data);
+    });
+    smsJobService.getLastPrepareDataTime().then(function (data) {
+        self.lastPrepareDataTime = data;
     });
 
     smsJobService.getDataForMgnt(0).then(function (data) {

@@ -160,6 +160,11 @@ angular.module('app')
             controller: 'storeOrderController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/contract',{
+            templateUrl: 'components/mgnt/contract/contract.html',
+            controller: 'contractController',
+            controllerAs:'ctrl'
+        })
         .otherwise(
             { redirectTo: '/'}
         )

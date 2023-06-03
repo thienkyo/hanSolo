@@ -86,7 +86,38 @@ angular
 		.value('AreaCodeList',AreaCodeList)
 		.value('CouponTypeList',CouponTypeList)
 		.value('CouponCreatedByList',CouponCreatedByList)
-		.value('PaginationDO',PaginationDO);
+		.value('PaginationDO',PaginationDO)
+		.value('ContractDO',ContractDO)
+		.value('SalaryDO',SalaryDO)
+		;
+
+function ContractDO(){
+	this.id = 0;
+	this.employeeName = '';
+	this.phone = '';
+	this.birthDay = '';
+    this.salary = '';
+    this.address = '';
+    this.note = '';
+    this.endDay = '';
+    this.beginDay = '';
+    this.memberId = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function SalaryDO(){
+	this.id = 0;
+	this.employeeName = '';
+	this.amount = 0;
+	this.month = '';
+    this.year = '';
+    this.bonus = 0;
+    this.note = '';
+    this.contractId = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function CustomerSourceReportDO(){
 	this.id = 0;

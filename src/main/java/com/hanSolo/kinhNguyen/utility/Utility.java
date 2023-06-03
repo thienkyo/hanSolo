@@ -71,10 +71,12 @@ public class Utility {
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
     public static Date LAST_SMS_HEARTBEAT_TIME;
+    public static Date LAST_PREPARE_DATA_HEARTBEAT_TIME;
 
     static {
         try {
             LAST_SMS_HEARTBEAT_TIME = getCurrentDate();
+            LAST_PREPARE_DATA_HEARTBEAT_TIME = getCurrentDate();
         } catch (ParseException e) {
             e.printStackTrace();
         }

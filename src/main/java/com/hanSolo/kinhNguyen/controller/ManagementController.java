@@ -48,6 +48,8 @@ public class ManagementController {
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
     @Autowired private KeyManagementRepository keyManagementRepo;
     @Autowired private CustomerSourceReportRepository customerSourceReportRepo;
+    @Autowired private ContractRepository contractRepo;
+    @Autowired private SalaryRepository salaryRepo;
 
     @Autowired private Environment env;
 
@@ -599,8 +601,13 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "getLastHeartBeatTime", method = RequestMethod.POST)
-    public Date checkCount()  {
+    public Date getSMSLastTrigger()  {
         return Utility.LAST_SMS_HEARTBEAT_TIME;
+    }
+
+    @RequestMapping(value = "getLastPrepareDataTime", method = RequestMethod.POST)
+    public Date getPrepareDataLastTrigger()  {
+        return Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME;
     }
 
     //////////////////////////// specific smsUserInfo section /////////////////////////////
@@ -667,6 +674,54 @@ public class ManagementController {
         one.setToken(token);one.setSecretKey(secretKey);
         one.setGmtModify(Utility.getCurrentDate());
         return new KeyManagementResponse(keyManagementRepo.save(one),Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// contract Management section /////////////////////////////
+    @RequestMapping(value = "getAllContract", method = RequestMethod.GET)
+    public List<Contract> getAllContract() {
+        return contractRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "upsertContract", method = RequestMethod.POST)
+    public GeneralResponse<Contract> upsertSalary(@RequestBody final Contract one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(contractRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+    //////////////////////////// salary section /////////////////////////////
+    @RequestMapping(value = "getAllSalaryOnePerson", method = RequestMethod.GET)
+    public List<Salary> getAllSalaryOnePerson() {
+        return salaryRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+
+    @RequestMapping(value = "getAllSalaryOnePerson/{contractId}", method = RequestMethod.GET)
+    public List<Salary> getAllSalaryOnePerson(@PathVariable final int contractId, final HttpServletRequest request) {
+
+        List<Salary> salaryList = new ArrayList<>();
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(((List<String>) claims.get("roles")).contains(Utility.SUPER_ACCOUNTANT_ROLE)){
+           return salaryRepo.findByContractIdOrderByYearDescMonthDesc(String.valueOf(contractId));
+        }
+
+        return salaryList;
+    }
+
+    @RequestMapping(value = "upsertSalary", method = RequestMethod.POST)
+    public GeneralResponse<Salary> upsertContract(@RequestBody final Salary one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(salaryRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+
+    @RequestMapping(value = "deleteSalary", method = RequestMethod.POST)
+    public GenericResponse deleteSalary(@RequestBody final Salary one)  {
+        salaryRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// upload ///////////////////////////////

@@ -30,75 +30,6 @@ public class ApiController {
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() throws ParseException {
         Utility.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
-        List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
-        List<SmsQueue> smsQueueList = new ArrayList<>();
-        for (SmsJob job : smsJobList) {
-            Calendar calendarCreateOrder = Calendar.getInstance();
-            Calendar calendarNoSmsDay = Calendar.getInstance();
-            if(job.getIntervalTime() >= 1){
-                calendarCreateOrder.add(Calendar.DAY_OF_MONTH, -job.getIntervalTime());
-            }
-            calendarNoSmsDay.add(Calendar.DAY_OF_MONTH, -job.getNoSmsDays());
-
-            if(Utility.SMS_JOB_COMMON.equals(job.getJobType())){
-                List<SmsUserInfo> smsUserInfos;
-                if(null != job.getStartDate()){
-                    smsUserInfos = job.getIsTest() ?
-                            smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUserAndOrderCreateDateAfterOrderByOrderCreateDateAsc(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),true,job.getStartDate())
-                            : smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndOrderCreateDateAfterOrderByOrderCreateDateAsc(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime(), job.getStartDate());
-                }else{
-                    smsUserInfos = job.getIsTest() ?
-                            smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUser(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),true)
-                            : smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBefore(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime());
-                }
-
-                for (SmsUserInfo smsUserInfo : smsUserInfos) {
-                    smsUserInfo.setJobIdList(smsUserInfo.getJobIdList() + "," + job.getId() + "|");
-                    smsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-
-                    SmsQueue smsQueue = generateSmsQueue(job,smsUserInfo);
-                    smsQueueList.add(smsQueue);
-                }
-               // smsQueueRepo.saveAll(smsQueueList);
-                smsUserInfoRepo.saveAll(smsUserInfos);
-            }else if(Utility.SMS_JOB_SPECIFIC.equals(job.getJobType())){
-                List<SpecificSmsUserInfo> specSmsUserInfos = job.getIsTest() ?
-                        specificSmsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndJobIdToRunAndIsTestUser(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),job.getId().toString(),true)
-                        : specificSmsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndJobIdToRun(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime(),job.getId().toString());
-
-                for (SpecificSmsUserInfo specificSmsUserInfo : specSmsUserInfos) {
-                    specificSmsUserInfo.setJobIdList(specificSmsUserInfo.getJobIdList() + "," + job.getId() + "|");
-                    specificSmsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-
-                    SmsQueue smsQueue = generateSmsQueue2(job,specificSmsUserInfo);
-                    smsQueueList.add(smsQueue);
-                }
-
-                if(!job.getSpecificPhones().isEmpty()){
-                    List<String> phones = Arrays.asList(job.getSpecificPhones().split("\\s*,\\s*"));
-                    for(String phone : phones){
-                        SmsQueue smsQueue = generateSmsQueue3(job,phone);
-                        smsQueueList.add(smsQueue);
-                    }
-                    job.setSpecificPhones("");
-                    smsJobRepo.save(job);
-                }
-                specificSmsUserInfoRepo.saveAll(specSmsUserInfos);
-            }
-
-            if(Utility.SMS_JOB_PARTICULAR.equals(job.getJobType())){
-                if(!job.getSpecificPhones().isEmpty()){
-                    List<String> phones = Arrays.asList(job.getSpecificPhones().split("\\s*,\\s*"));
-                    for(String phone : phones){
-                        SmsQueue smsQueue = generateSmsQueue3(job,phone);
-                        smsQueueList.add(smsQueue);
-                    }
-                    job.setSpecificPhones("");
-                    smsJobRepo.save(job);
-                }
-            }
-        }
-        smsQueueRepo.saveAll(smsQueueList);
 
         Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
         if(smsQueueOpt.isPresent()){
@@ -122,6 +53,80 @@ public class ApiController {
             return "SUCCESS";
         }
         return "FAIL";
+    }
+
+    @RequestMapping("prepareSmsData")
+    public QueueSmsResponse prepareSmsData() throws ParseException {
+        Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
+        List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
+        List<SmsQueue> smsQueueList = new ArrayList<>();
+        for (SmsJob job : smsJobList) {
+            Calendar calendarCreateOrder = Calendar.getInstance();
+            Calendar calendarNoSmsDay = Calendar.getInstance();
+            if(job.getIntervalTime() >= 1){
+                calendarCreateOrder.add(Calendar.DAY_OF_MONTH, -job.getIntervalTime());
+            }
+            calendarNoSmsDay.add(Calendar.DAY_OF_MONTH, -job.getNoSmsDays());
+
+            if(Utility.SMS_JOB_COMMON.equals(job.getJobType())){// for common case: apply to all user
+                List<SmsUserInfo> smsUserInfos;
+                if(null != job.getStartDate()){
+                    smsUserInfos = job.getIsTest() ?
+                            smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUserAndOrderCreateDateAfterOrderByOrderCreateDateAsc(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),true,job.getStartDate())
+                            : smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndOrderCreateDateAfterOrderByOrderCreateDateAsc(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime(), job.getStartDate());
+                }else{
+                    smsUserInfos = job.getIsTest() ?
+                            smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUser(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),true)
+                            : smsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBefore(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime());
+                }
+
+                for (SmsUserInfo smsUserInfo : smsUserInfos) {
+                    smsUserInfo.setJobIdList(smsUserInfo.getJobIdList() + "," + job.getId() + "|");
+                    smsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
+
+                    SmsQueue smsQueue = generateSmsQueue(job,smsUserInfo);
+                    smsQueueList.add(smsQueue);
+                }
+                // smsQueueRepo.saveAll(smsQueueList);
+                smsUserInfoRepo.saveAll(smsUserInfos);
+            }else if(Utility.SMS_JOB_SPECIFIC.equals(job.getJobType())){ // for recheck case
+                List<SpecificSmsUserInfo> specSmsUserInfos = job.getIsTest() ?
+                        specificSmsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndJobIdToRunAndIsTestUser(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%",calendarNoSmsDay.getTime(),job.getId().toString(),true)
+                        : specificSmsUserInfoRepo.findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndJobIdToRun(calendarCreateOrder.getTime(),"%,"+job.getId().toString() +"|%", calendarNoSmsDay.getTime(),job.getId().toString());
+
+                for (SpecificSmsUserInfo specificSmsUserInfo : specSmsUserInfos) {
+                    specificSmsUserInfo.setJobIdList(specificSmsUserInfo.getJobIdList() + "," + job.getId() + "|");
+                    specificSmsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
+
+                    SmsQueue smsQueue = generateSmsQueue2(job,specificSmsUserInfo);
+                    smsQueueList.add(smsQueue);
+                }
+                specificSmsUserInfoRepo.saveAll(specSmsUserInfos);
+                /*if(!job.getSpecificPhones().isEmpty()){ // for
+                    List<String> phones = Arrays.asList(job.getSpecificPhones().split("\\s*,\\s*"));
+                    for(String phone : phones){
+                        SmsQueue smsQueue = generateSmsQueue3(job,phone);
+                        smsQueueList.add(smsQueue);
+                    }
+                    job.setSpecificPhones("");
+                    smsJobRepo.save(job);
+                }*/
+            }
+
+            if(Utility.SMS_JOB_PARTICULAR.equals(job.getJobType())){ // for Specific Phones field
+                if(!job.getSpecificPhones().isEmpty()){
+                    List<String> phones = Arrays.asList(job.getSpecificPhones().split("\\s*,\\s*"));
+                    for(String phone : phones){
+                        SmsQueue smsQueue = generateSmsQueue3(job,phone);
+                        smsQueueList.add(smsQueue);
+                    }
+                    job.setSpecificPhones("");
+                    smsJobRepo.save(job);
+                }
+            }
+        }
+        smsQueueRepo.saveAll(smsQueueList);
+        return null;
     }
 
     private SmsQueue generateSmsQueue(SmsJob job, SmsUserInfo smsUserInfo) throws ParseException {
