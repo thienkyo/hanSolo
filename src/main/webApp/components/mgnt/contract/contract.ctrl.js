@@ -18,9 +18,20 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     contractService.getAll().then(function (data) {
         self.contractList = data;
+
+        self.contractList.forEach(enrichContractList);
+
         console.log(data);
         self.tableParams = new NgTableParams({}, { dataset: self.contractList});
     });
+
+    function enrichContractList(contract){
+        if(contract.endDay){
+            contract.active = false;
+        }else{
+            contract.active = true;
+        }
+    }
 
     self.addContract = function(){
         self.theOne = new ContractDO();
@@ -141,6 +152,10 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
             }
         });
     }
+
+    self.closeAlert = function() {
+        self.responseStr = false;
+    };
 
 }]);
 

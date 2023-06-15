@@ -42,30 +42,38 @@ form .progress {
 
 		<div class="row" style="margin-bottom: 30px;">
 			<div class="col-md-1">
+				id:
 				<input type="number"  ng-model="ctrl.theCoupon.id" disabled="disabled" placeholder="id" style="width:60px;"/>
 			</div>
 			<div class="col-md-2">
+				Code:
 				<input type="text"  ng-model="ctrl.theCoupon.code" placeholder="code" style="width: 100%;"/>
 			</div>
 			<div class="col-md-1">
+				% gía trị:
 				<input type="text"  ng-model="ctrl.theCoupon.value" placeholder="value" style="width: 100%;"/>
 			</div>
 			<div class="col-md-3">
+				Miêu tả:
 				<input type="text"  ng-model="ctrl.theCoupon.name" placeholder="name" style="width: 100%;"/>
 			</div>
 			<div class="col-md-1">
+				Số lượng:
 				<input type="text"  ng-model="ctrl.theCoupon.quantity" placeholder="quantity" style="width: 100%;"/>
 			</div>
 			<div class="col-md-1">
+				Expire:
 				<input type="text"  ng-model="ctrl.theCoupon.lifespan" placeholder="lifespan" style="width: 100%;"/>
 			</div>
 			<div class="col-md-1">
+				Loại:
 				<select  ng-model="ctrl.theCoupon.couponType"
 						 ng-options="opt.value as opt.name for opt in ctrl.CouponTypeList"
 						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
 				</select>
 			</div>
 			<div class="col-md-1">
+				function:
 				<select  ng-model="ctrl.theCoupon.createdBy"
 						 ng-options="opt.value as opt.name for opt in ctrl.CouponCreatedByList"
 						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
@@ -90,7 +98,7 @@ form .progress {
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only"></span>
-					có sản phẩm
+					error: duplication, server error...
 				</div>
 			</div>
 		</div>

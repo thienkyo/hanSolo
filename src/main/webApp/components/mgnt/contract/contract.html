@@ -28,7 +28,17 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" id="summaryModalLabel">Contract [{{ctrl.theOne.employeeName}}] status:active </h4>
+						<h4 class="modal-title" id="summaryModalLabel">Contract [{{ctrl.theOne.employeeName}}] status:active  &nbsp;</h4>
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -87,8 +97,12 @@
 								<div class="col-sm-3">nationality:<input type="text"  ng-model="ctrl.theOne.nationalId" placeholder="nation" style="width: 100%;"/></div>
 								<div class="col-sm-9">note<input type="text"  ng-model="ctrl.theOne.note" placeholder="note" style="width: 100%;"/></div>
 							</div>
-							<div>
-								<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.upsert(ctrl.theOne)">save contract</button>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-2">
+									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.upsert(ctrl.theOne)">save contract</button>
+								</div>
+								<div class="col-sm-9"></div>
+
 							</div>
 
 						</div>
@@ -161,30 +175,33 @@
 			</div>
 		</div>
 		<!--data table-->
-		<div class="table-responsive">
+		<div class="">
 			<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 				<tr ng-repeat="one in $data">
-					<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+					<td title="'id'"  style="width:20px;text-align: center;">
 						<a href="" ng-click="ctrl.setTheOne(one)" data-toggle="modal" data-target="#summaryModal" >{{one.id}}</a>
 					</td>
-					<td title="'name'" filter="{ 'employeeName': 'text'}" sortable="'employeeName'"  style="width:100px;">
-						{{one.employeeName}}
+					<td title="'name'" filter="{ 'employeeName': 'text'}" sortable="'employeeName'"  style="">
+						<a href="" ng-click="ctrl.setTheOne(one)" data-toggle="modal" data-target="#summaryModal" >{{one.employeeName}}</a>
 					</td>
-					<td title="'phone'" filter="{ 'phone': 'text'}" sortable="'phone'"  style="width:100px;">
+					<td title="'phone'" filter="{ 'phone': 'text'}" sortable="'phone'"  style="width:130px;">
 						{{one.phone | tel}}
 					</td>
-					<td title="'birthDay'" filter="{ 'birthDay': 'text'}"  style="width:100px;">
+					<td title="'birthDay'" filter="{ 'birthDay': 'text'}"  style="width:130px;">
 						{{one.birthDay | date:"yyyy-MM-dd"}}
 					</td>
-					<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
-						{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
+					<td title="'beginDay'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
+						{{one.beginDay | date:"yyyy-MM-dd"}}
 					</td>
-					<td title="'address'" filter="{ 'address': 'text'}" sortable="'address'"  style="width:90px;">
+					<td title="'active'"  style="width:80px;text-align: center;">
+						{{one.active}}
+					</td>
+					<td title="'address'" filter="{ 'address': 'text'}" sortable="'address'"  style="">
 						{{one.address}}
 					</td>
-					<td title="'delete'" style="width:90px;" >
+					<td title="'del'" style="width: 20px;text-align: center;" >
 
-						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 						<p ng-show="ctrl.deletingId == one.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteOne(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>

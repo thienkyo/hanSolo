@@ -29,8 +29,6 @@ public class ApiController {
 
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() throws ParseException {
-        Utility.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
-
         Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
@@ -39,6 +37,7 @@ public class ApiController {
             smsQueueRepo.save(smsQueue);
             return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
         }
+        Utility.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
         return null;
     }
 
@@ -57,7 +56,6 @@ public class ApiController {
 
     @RequestMapping("prepareSmsData")
     public QueueSmsResponse prepareSmsData() throws ParseException {
-        Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
         List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
         List<SmsQueue> smsQueueList = new ArrayList<>();
         for (SmsJob job : smsJobList) {
@@ -126,6 +124,7 @@ public class ApiController {
             }
         }
         smsQueueRepo.saveAll(smsQueueList);
+        Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
         return null;
     }
 
