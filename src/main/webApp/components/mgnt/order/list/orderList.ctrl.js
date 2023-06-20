@@ -418,9 +418,4 @@ angular.module('orderListModule')
         }
     }
 
-    console.log($location);
-    console.log($location.host());
-    console.log($location.absUrl());
-    console.log($location.port());
-
 }]);

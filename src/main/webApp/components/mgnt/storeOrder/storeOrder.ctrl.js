@@ -3,11 +3,11 @@ angular.module('storeOrderModule')
 	.controller('storeOrderController',['$routeParams','$location','memberService','orderListService','SmsUserInfoDO',
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
-										 'orderCacheService','commonService',
+										 'orderCacheService','commonService','$route',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
 	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
-	            orderCacheService,commonService) {
+	            orderCacheService,commonService,$route) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -24,6 +24,9 @@ angular.module('storeOrderModule')
     var firstSmsJob = new SmsJobDO();
 	self.smsJobList = [firstSmsJob];
 	self.isLocalWeb = commonService.isLocalWeb();
+
+	self.splitOrderDetailList = [];
+	self.theSplitOrder = new OrderDO();
 
 //////////////// function section ////////////
 
@@ -50,6 +53,7 @@ angular.module('storeOrderModule')
     self.add1Tab = function(){
         var newOrderDetail = new OrderDetailDO();
         newOrderDetail.address = self.theOrder.orderDetails[0].address;
+        newOrderDetail.orderId = self.theOrder.id;
         self.theOrder.orderDetails.push(newOrderDetail);
     }
 
@@ -60,10 +64,10 @@ angular.module('storeOrderModule')
     }
 
     self.remove1Tab = function(index){
-             if(self.theOrder.orderDetails.length > 1){
-                self.theOrder.orderDetails.splice(index,1);
-            }
+         if(self.theOrder.orderDetails.length > 1){
+            self.theOrder.orderDetails.splice(index,1);
         }
+    }
 
     self.nameCopy = function(){
         self.theOrder.orderDetails[0].name = self.theOrder.shippingName;
@@ -273,6 +277,7 @@ angular.module('storeOrderModule')
     }
 
     self.saveOrder = function(){
+        console.log(self.theOrder);
         self.order_return_status = null;
         if(self.isPickDP){
             self.theOrder.gmtModify = self.theOrder.gmtCreate;
@@ -290,48 +295,20 @@ angular.module('storeOrderModule')
 
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
-                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
-                    self.order_return_status = data; // return after saving order, order_return_status would be orderid
-                    self.newOrderId = data.replyStr;
+
+                    self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
                     self.isSaveButtonPressed=false;
                     self.isErrorMsg=false;
-                    self.theOrder.id = self.newOrderId;
+                    self.theOrder = data.obj;
+                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
+                    self.calculateOrderTotal();
                     orderCacheService.addOneOrder(self.theOrder);
-                    $location.path('/mgnt/storeOrder/'+self.newOrderId);
-                });
-            }
-        }else{
-            self.isErrorMsg ='Cần nhập tên/số điện thoại(tối thiểu 3 số).';
-        }
-
-    }
-
-    self.saveOrder2 = function(){
-        self.order_return_status = null;
-        if(self.isPickDP){
-            self.theOrder.gmtModify = self.theOrder.gmtCreate;
-            for (var i = 0; i < self.theOrder.orderDetails.length; i++){
-                self.theOrder.orderDetails[i].gmtCreate = self.theOrder.gmtCreate;
-                self.theOrder.orderDetails[i].gmtModify = self.theOrder.gmtCreate;
-            }
-        }
-        self.theOrder.specificJobId = self.selectedJob.id;
-        self.theOrder.specificJobName = self.selectedJob.jobName;
-
-        if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
-            if(memberService.isAdmin()){
-                self.isSaveButtonPressed=true;
-
-                console.log(self.theOrder);
-                // use placeOrder in storeOrderService
-                storeOrderService.placeOrder(self.theOrder).then(function (data) {
-                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
-                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
-                    self.order_return_status = data; // return after saving order, order_return_status would be orderid
-                    self.newOrderId = data.replyStr;
-                    self.isSaveButtonPressed=false;
-                    self.isErrorMsg=false;
-                    $location.path('/mgnt/storeOrder/'+self.newOrderId);
+                    console.log(self.theOrder);
+                    $location.path('/mgnt/storeOrder/'+data.obj.id);
+                   /* if(self.theOrder.id != 0){
+                        $route.reload();
+                    }*/
+                    console.log(self.theOrder);
                 });
             }
         }else{
@@ -353,6 +330,76 @@ angular.module('storeOrderModule')
 
     self.tempF = function() {
        // console.log(self.selectedJob);
+    };
+
+    self.controlSplitButton = function(detail) {
+        for (var i = 0; i < self.theOrder.orderDetails.length; i++){
+            if(self.theOrder.orderDetails[i].isSplit){
+                self.wannaSplit = true;
+                break;
+            }
+            self.wannaSplit = false;
+        }
+        //self.theSplitOrder.orderDetails
+        self.theSplitOrder.orderDetails.push(detail);
+        self.theSplitOrder.orderDetails = self.theSplitOrder.orderDetails.filter(item => item.isSplit == true);
+
+        var subTotal = 0;
+        var temp = 0;
+        self.theSplitOrder.subTotal = 0;
+        for (var i = 0; i < self.theSplitOrder.orderDetails.length; i++){
+            if(self.theSplitOrder.orderDetails[i].product){
+                self.theSplitOrder.orderDetails[i].framePriceAtThatTime = self.theSplitOrder.orderDetails[i].product.sellPrice;
+                self.theSplitOrder.orderDetails[i].frameDiscountAtThatTime = self.theSplitOrder.orderDetails[i].product.discount;
+            }else{
+                self.theSplitOrder.orderDetails[i].framePriceAtThatTime = self.theSplitOrder.orderDetails[i].framePriceAfterSale;
+                self.theSplitOrder.orderDetails[i].frameDiscountAtThatTime = 0;
+            }
+            temp = self.theSplitOrder.orderDetails[i].framePriceAtThatTime;
+            if(self.theSplitOrder.orderDetails[i].frameDiscountAmount && self.theSplitOrder.orderDetails[i].frameDiscountAmount > 0){
+                temp = self.theSplitOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theSplitOrder.orderDetails[i].frameDiscountAmount)/100
+            }
+            subTotal += temp*(100 - self.theSplitOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theSplitOrder.orderDetails[i].quantity + self.theSplitOrder.orderDetails[i].lensPrice*(100 - self.theSplitOrder.orderDetails[i].lensDiscountAmount)/100 + self.theSplitOrder.orderDetails[i].otherPrice;
+        }
+
+        self.theSplitOrder.subTotal = subTotal;
+
+    };
+
+    self.splitOrder = function() {
+        self.isSaveButtonPressed=true;
+        var theSplitOrder = Object.assign({}, self.theOrder);
+
+        theSplitOrder.id = 0;
+        theSplitOrder.gmtCreate = (new Date()).getTime();
+        theSplitOrder.orderDetails = theSplitOrder.orderDetails.filter(item => item.isSplit == true);
+        self.theOrder.orderDetails =  self.theOrder.orderDetails.filter(item => item.isSplit === undefined);
+
+        theSplitOrder.extInfo = theSplitOrder.extInfo + " tách từ order " + self.theOrder.id;
+        theSplitOrder.deposit = 0;
+        self.theOrder.deposit = 0;
+        console.log(theSplitOrder);
+        console.log(self.theOrder);
+
+        var orderList = [];
+        orderList.push(self.theOrder,theSplitOrder);
+
+
+        storeOrderService.splitOrder(orderList).then(function(data){
+            self.calculateOrderTotal(self.theOrder);
+            self.order_return_status = data.errorMessage; // return after saving order,
+            self.isSaveButtonPressed=false;
+            self.isErrorMsg=false;
+            self.wannaSplit = false;
+       });
+
+    };
+
+    self.deselectOrder = function() {
+       for (var i = 0; i < self.theOrder.orderDetails.length; i++){
+           self.theOrder.orderDetails[i].isSplit = false;
+       }
+       self.wannaSplit = false;
     };
 
 ////// run when loading page/////
@@ -387,6 +434,7 @@ angular.module('storeOrderModule')
                 }else{
                     self.selectedJob = firstSmsJob;
                 }
+                console.log(self.theOrder);
         });
     }else{
         self.theOrder = new OrderDO;

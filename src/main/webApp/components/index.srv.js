@@ -292,25 +292,18 @@ angular.module('app')
 	return orderCacheService;
 
 	function addOneOrder(order){
-	    console.log(order);
 	    currentOrderCache = getCurrentOrderCache();
-
 	    var found = currentOrderCache.find(i => i.id == order.id);
-
-	    console.log(found);
 
 	    if(found){
 	        var index = currentOrderCache.indexOf(found);
             currentOrderCache[index] = order;
-            console.log(index);
 	    }else{
             currentOrderCache.unshift(order);
             if(getQuantity() > 100){
                 currentOrderCache.pop();
             }
 	    }
-
-	    console.log(currentOrderCache);
 	    setCurrentOrderCache(currentOrderCache);
     }
 

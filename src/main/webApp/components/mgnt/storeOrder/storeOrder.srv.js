@@ -4,11 +4,11 @@ angular.module('storeOrderModule')
 		var storeOrderService = {
 			getOrdersForMgnt : getOrdersForMgnt,
 			getAllOrdersForMgnt : getAllOrdersForMgnt,
-			/*updateOrderStatus : updateOrderStatus,*/
+			splitOrder : splitOrder,
 			placeOrder : placeOrder,
 			updateOrder : updateOrder,
 			deleteOrder : deleteOrder
-			};
+		};
 	return storeOrderService;
 
 	function placeOrder(order){
@@ -32,6 +32,14 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}
+
+	function splitOrder(orders){
+        var url = "mgnt/saveMultipleOrders";
+        return ajaxService.post(url,orders,{}).then(function(response){
+            return response.data;
+        });
+    }
+
 	/*
 	function updateOrderStatus(orderId,status){
 		var url = "mgnt/updateOrderStatus/"+orderId+"/"+status;

@@ -2,6 +2,7 @@ package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
+import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.response.MemberResponse;
@@ -48,11 +49,11 @@ public class AuthenticationController {
 
     @RequestMapping(value = "saveOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse saveOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException, ParseException {
+    public GeneralResponse<Order> saveOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException, ParseException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
         if (memOpt.isEmpty() ) {
-            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+            return new GeneralResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
         }
         order.setMember(memOpt.get());
         Order or = orderRepo.save(order);
@@ -144,7 +145,8 @@ public class AuthenticationController {
             usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
 
-        GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
+        //GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
+        GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }
 

@@ -511,6 +511,14 @@ public class ManagementController {
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "saveMultipleOrders", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse saveMultipleOrders(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
+        orderRepo.saveAll(orders);
+        GenericResponse response =  new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+
     //////////////////////////// smsUserInfo section /////////////////////////////
     @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {

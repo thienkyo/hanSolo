@@ -41,11 +41,11 @@ angular.module('orderListModule')
     }
 
 	function doRecovery(orders){
-    		var url = "authenticated/recoverOrder";
-    		return ajaxService.post(url,orders,{}).then(function(response){
-    			return response.data;
-    		});
-    	}
+        var url = "authenticated/recoverOrder";
+        return ajaxService.post(url,orders,{}).then(function(response){
+            return response.data;
+        });
+    }
 	
 	function deleteOrder(order){
 		var url = "mgnt/deleteOrder";
