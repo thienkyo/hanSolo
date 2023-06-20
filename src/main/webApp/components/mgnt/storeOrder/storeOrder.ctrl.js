@@ -364,6 +364,10 @@ angular.module('storeOrderModule')
 
         self.theSplitOrder.subTotal = subTotal;
 
+        if(self.theOrder.orderDetails.filter(item => item.isSplit === undefined || item.isSplit == false ).length == 0){
+            self.wannaSplit = false;
+        }
+
     };
 
     self.splitOrder = function() {
@@ -373,7 +377,7 @@ angular.module('storeOrderModule')
         theSplitOrder.id = 0;
         theSplitOrder.gmtCreate = (new Date()).getTime();
         theSplitOrder.orderDetails = theSplitOrder.orderDetails.filter(item => item.isSplit == true);
-        self.theOrder.orderDetails =  self.theOrder.orderDetails.filter(item => item.isSplit === undefined);
+        self.theOrder.orderDetails =  self.theOrder.orderDetails.filter(item => item.isSplit === undefined || item.isSplit == false);
 
         theSplitOrder.extInfo = theSplitOrder.extInfo + " tách từ order " + self.theOrder.id;
         theSplitOrder.deposit = 0;
