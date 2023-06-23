@@ -362,9 +362,14 @@ public class ManagementController {
         Date startDate = Utility.getFirstDateOfMonth(bizReport.getYear(),bizReport.getMonth());
         Date endDate = Utility.getLastDateOfMonth(bizReport.getYear(),bizReport.getMonth());
         List<BizExpense> expenses = bizExpenseRepo.findByGmtCreateBetween(startDate,endDate);
+
         int expAmount = 0;
         for(BizExpense exp : expenses){
             expAmount += exp.getAmount() != null ? exp.getAmount() : 0;
+        }
+        List<Salary>  salaries = salaryRepo.findByYearAndMonth(bizReport.getYear(),bizReport.getMonth());
+        for(Salary sal : salaries){
+            expAmount += (sal.getAmount() != null ? sal.getAmount() : 0 ) + (sal.getBonus() != null ? sal.getBonus() : 0);
         }
         bizReport.setOutcome(expAmount);
 
@@ -437,7 +442,7 @@ public class ManagementController {
         return	articleRepo.findById(articleId).get();
     }
 
-    /////////////////////////Orders section///////////////////////
+    /////////////////////////Orders section ///////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
@@ -516,6 +521,26 @@ public class ManagementController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GenericResponse saveMultipleOrders(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
         orderRepo.saveAll(orders);
+        GenericResponse response =  new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+
+    @RequestMapping(value = "recoverOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GenericResponse recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+        if (memOpt.isEmpty() ) {
+            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
+        }
+        orderRepo.saveAll(orders);
+/*
+        for(Order or : orders){
+
+        }*/
+
+
+
         GenericResponse response =  new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }

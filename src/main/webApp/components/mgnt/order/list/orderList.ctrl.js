@@ -277,7 +277,9 @@ angular.module('orderListModule')
             if(order.orderDetails[i].frameDiscountAmount && order.orderDetails[i].frameDiscountAmount > 0){
                 temp = order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAmount)/100
             }
-            subTotal += temp*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity + order.orderDetails[i].lensPrice*(100 - order.orderDetails[i].lensDiscountAmount)/100 + order.orderDetails[i].otherPrice;
+            subTotal += temp*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100*order.orderDetails[i].quantity +
+                        order.orderDetails[i].lensPrice*(100 - order.orderDetails[i].lensDiscountAmount)/100*order.orderDetails[i].lensQuantity +
+                        order.orderDetails[i].otherPrice;
             if(order.orderDetails[i].framePriceAtThatTime > 1000){
                 order.frameNumber +=1;
             }

@@ -111,6 +111,13 @@ angular.module('smsUserInfoModule')
 
 ////////  sms queue//////
 
+    self.prepareData = function(){
+        smsQueueService.prepareData(self.smsQueueAmount).then(function (data) {
+            self.smsQueueList = data;
+            self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
+        });
+    }
+
     self.loadSmsQueue = function(){
         smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
             self.smsQueueList = data;

@@ -41,7 +41,7 @@ angular.module('orderListModule')
     }
 
 	function doRecovery(orders){
-        var url = "authenticated/recoverOrder";
+        var url = "mgnt/recoverOrder";
         return ajaxService.post(url,orders,{}).then(function(response){
             return response.data;
         });

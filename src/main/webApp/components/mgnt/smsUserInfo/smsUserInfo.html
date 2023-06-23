@@ -287,14 +287,14 @@ form .progress {
 						</select>
 						size:{{ctrl.smsQueueList.length}}
 					</div>
-					<div class="col-sm-5">
+					<div class="col-sm-7">
+						<a ng-click="ctrl.prepareData()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >prepare</a>
 						<a ng-click="ctrl.promptDelete100()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete 100</a>
 						<span ng-show="ctrl.isDelete100">
 							Are you sure?
 							<a ng-click="ctrl.delete100SmsQueue()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 							<a ng-click="ctrl.resetDelete100()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
 						</span>
-
 
 					</div>
 				</div>

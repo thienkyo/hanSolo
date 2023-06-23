@@ -34,6 +34,7 @@ angular.module('smsUserInfoModule')
 	var smsQueueService = {
 			getDataForMgnt : getDataForMgnt,
 			upsert : upsert,
+			prepareData : prepareData,
 			delete100 : delete100,
 			deleteOne : deleteOne
 			};
@@ -45,6 +46,13 @@ angular.module('smsUserInfoModule')
 			return response.data;
 		});
 	}
+
+	function prepareData(){
+        var url = "api/prepareSmsData/";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function upsert(one){
 		var url = "mgnt/upsertSmsQueue";

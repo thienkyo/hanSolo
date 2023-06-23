@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface SalaryRepository extends PagingAndSortingRepository<Salary, Integer> {
     List<Salary> findAllByOrderByGmtCreateDesc();
-
     List<Salary> findByContractIdOrderByYearDescMonthDesc(String contractId);
+
+    List<Salary> findByYearAndMonth(String year, String month);
 
 }
