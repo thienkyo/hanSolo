@@ -56,10 +56,14 @@ public class AuthenticationController {
             return new GeneralResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
         }
         order.setMember(memOpt.get());
+
+        if(order.getId() == 0){
+            order.setGmtCreate(Utility.getCurrentDate());
+        }
+        order.setGmtModify(Utility.getCurrentDate());
+
         Order or = orderRepo.save(order);
-
         updateCouponQuantity(order,order.getCurrentCouponCode(),order.getCouponCode());
-
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
                 order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),
@@ -296,9 +300,7 @@ public class AuthenticationController {
             }
             usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
-       // res.addHeader("Access-Control-Allow-Origin","*");
 
-       // GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         return new ResponseEntity<>("success", headers, HttpStatus.OK);
     }
 

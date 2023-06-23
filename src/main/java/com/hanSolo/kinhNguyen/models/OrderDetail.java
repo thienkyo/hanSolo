@@ -152,11 +152,16 @@ public class OrderDetail {
     @Column(name = "lens_discount_amount", columnDefinition = "integer default 0")
     private Integer lensDiscountAmount;
 
+
     @Transient
     private String currentLensDiscountCode;
 
     @Transient
     private String currentFrameDiscountCode;
+
+    @Column(name = "lens_quantity", columnDefinition = "integer default 1")
+    private Integer lensQuantity;
+
 
     public OrderDetail( ) {}
 
@@ -165,6 +170,15 @@ public class OrderDetail {
         this.phone = phone;
         this.gmtCreate = gmtCreate;
         this.address = address;
+    }
+
+
+    public Integer getLensQuantity() {
+        return lensQuantity;
+    }
+
+    public void setLensQuantity(Integer lensQuantity) {
+        this.lensQuantity = lensQuantity;
     }
 
     public String getCurrentFrameDiscountCode() {

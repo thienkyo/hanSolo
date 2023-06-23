@@ -142,8 +142,8 @@ angular.module('storeOrderModule')
         if(one){
           orderDetail.product = one;
           orderDetail.frameNote = one.name;
-         // orderDetail.framePriceAtThatTime = one.name;
-          orderDetail.framePriceAfterSale = orderDetail.product.sellPrice*(100 - orderDetail.product.discount)/100 * orderDetail.quantity;
+         // orderDetail.framePriceAfterSale = orderDetail.product.sellPrice*(100 - orderDetail.product.discount)/100 * orderDetail.quantity;
+          orderDetail.framePriceAfterSale = orderDetail.product.sellPrice*(100 - orderDetail.product.discount)/100;
         }
         self.calculateOrderTotal();
     }
@@ -203,7 +203,7 @@ angular.module('storeOrderModule')
             if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
                 temp = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
             }
-            subTotal += temp*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity + self.theOrder.orderDetails[i].lensPrice*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
+            subTotal += temp*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity + self.theOrder.orderDetails[i].lensPrice*self.theOrder.orderDetails[i].lensQuantity*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
         }
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
@@ -293,21 +293,20 @@ angular.module('storeOrderModule')
             if(memberService.isAdmin()){
                 self.isSaveButtonPressed=true;
 
-                cartService.placeOrder(self.theOrder).then(function (data) {
-                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
+                self.currentMember = memberService.getCurrentMember();
+                self.theOrder.lastModifiedBy = self.currentMember.name+self.currentMember.phone;;
 
+                cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
                     self.isSaveButtonPressed=false;
                     self.isErrorMsg=false;
                     self.theOrder = data.obj;
+                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal();
                     orderCacheService.addOneOrder(self.theOrder);
-                    console.log(self.theOrder);
+                    self.newOrderId = self.theOrder.id;
                     $location.path('/mgnt/storeOrder/'+data.obj.id);
-                   /* if(self.theOrder.id != 0){
-                        $route.reload();
-                    }*/
                     console.log(self.theOrder);
                 });
             }
@@ -318,9 +317,10 @@ angular.module('storeOrderModule')
     }
 
     self.calculateFramePriceAfterSale = function(orderDetail){
-        orderDetail.framePriceAfterSale = orderDetail.framePriceAtThatTime*(100 - orderDetail.frameDiscountAtThatTime)/100 * orderDetail.quantity;
+        orderDetail.framePriceAfterSale = orderDetail.framePriceAtThatTime*(100 - orderDetail.frameDiscountAtThatTime)/100;
         orderDetail.currentLensDiscountCode = orderDetail.lensDiscountCode;
         orderDetail.currentFrameDiscountCode = orderDetail.frameDiscountCode;
+
     }
 
     self.closeAlert = function(index) {
@@ -403,6 +403,7 @@ angular.module('storeOrderModule')
        for (var i = 0; i < self.theOrder.orderDetails.length; i++){
            self.theOrder.orderDetails[i].isSplit = false;
        }
+       self.theSplitOrder.orderDetails = [];
        self.wannaSplit = false;
     };
 
@@ -417,6 +418,8 @@ angular.module('storeOrderModule')
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
+
+                console.log(self.theOrder);
                 self.theOrder.currentCouponCode = self.theOrder.couponCode;
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);

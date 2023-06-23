@@ -69,7 +69,8 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
             order.newOrderDetails=[];
             for (var i = 0; i < order.orderDetails.length; i++){
                 order.orderDetails[i].framePriceAfterSale = order.orderDetails[i].framePriceAtThatTime*(100 - order.orderDetails[i].frameDiscountAtThatTime)/100 * order.orderDetails[i].quantity;
-                subTotal += order.orderDetails[i].framePriceAfterSale + order.orderDetails[i].lensPrice;
+                subTotal += order.orderDetails[i].framePriceAfterSale*order.orderDetails[i].quantity +
+                            order.orderDetails[i].lensPrice*order.orderDetails[i].lensQuantity;
 
                 var name = '';
                 var thumbnail = '';
@@ -82,11 +83,19 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
                     }else{
                         name = order.orderDetails[i].frameNote
                     }
-                    order.newOrderDetails.push(new MiniOrderDetailDO (order.orderDetails[i].framePriceAtThatTime,order.orderDetails[i].quantity,name,thumbnail,order.orderDetails[i].frameDiscountAtThatTime,frameId,'FRAME'));
+                    order.newOrderDetails.push(new MiniOrderDetailDO (order.orderDetails[i].framePriceAtThatTime,
+                                                                      order.orderDetails[i].quantity,
+                                                                      name,
+                                                                      thumbnail,order.orderDetails[i].frameDiscountAtThatTime,
+                                                                      frameId,
+                                                                      'FRAME'));
                 }
 
                 if(order.orderDetails[i].lensPrice > 0 ){
-                    order.newOrderDetails.push(new MiniOrderDetailDO (order.orderDetails[i].lensPrice,order.orderDetails[i].quantity,order.orderDetails[i].lensNote,'thumbnail',0,frameId,'LENS'));
+                    order.newOrderDetails.push(new MiniOrderDetailDO (order.orderDetails[i].lensPrice,
+                                                                      order.orderDetails[i].lensQuantity,
+                                                                      order.orderDetails[i].lensNote,
+                                                                      'thumbnail',0,frameId,'LENS'));
                 }
             }
             order.statusText = OrderStatusArray.find(i => i.value == order.status).name;

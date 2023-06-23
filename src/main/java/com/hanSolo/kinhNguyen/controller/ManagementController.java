@@ -458,6 +458,7 @@ public class ManagementController {
 
     @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
     public Order getOrderById(@PathVariable final int orderId) throws ServletException {
+        Order or = orderRepo.findById(orderId).get();
         return	orderRepo.findById(orderId).get();
     }
 

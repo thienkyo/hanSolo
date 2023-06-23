@@ -12,11 +12,10 @@ angular.module('invoiceModule')
     }
     self.paramValue = $location.search();
 
-    console.log(self.paramValue);
-
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data;
+            console.log(self.theOrder);
             self.calculateOrderTotal();
     });
 
@@ -26,25 +25,38 @@ angular.module('invoiceModule')
         var temp = 0;
         var count = 0;
         for (var i = 0; i < self.theOrder.orderDetails.length; i++){
-            self.theOrder.orderDetails[i].framePriceAfterSale = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100 * self.theOrder.orderDetails[i].quantity;
+            self.theOrder.orderDetails[i].framePriceAfterSale = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100;
 
             temp = self.theOrder.orderDetails[i].framePriceAfterSale;
             // apply discount
             if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
-                temp = self.theOrder.orderDetails[i].framePriceAfterSale*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
+                temp = self.theOrder.orderDetails[i].framePriceAfterSale*self.theOrder.orderDetails[i].quantity*
+                       (100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
             }
-            subTotal += temp + self.theOrder.orderDetails[i].lensPrice*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
-
-            if(self.theOrder.orderDetails[i].framePriceAfterSale > 0){
-                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,1,self.theOrder.orderDetails[i].frameNote,self.theOrder.orderDetails[i].frameDiscountAmount));
-            }
+            subTotal += temp +
+                        self.theOrder.orderDetails[i].lensPrice*self.theOrder.orderDetails[i].lensQuantity*
+                        (100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100
+                        + self.theOrder.orderDetails[i].otherPrice;
 
             if(self.theOrder.orderDetails[i].lensPrice > 0 ){
-                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,1,self.theOrder.orderDetails[i].lensNote,self.theOrder.orderDetails[i].lensDiscountAmount));
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,
+                                                                 self.theOrder.orderDetails[i].lensQuantity,
+                                                                 self.theOrder.orderDetails[i].lensNote,
+                                                                 self.theOrder.orderDetails[i].lensDiscountAmount));
+            }
+
+            if(self.theOrder.orderDetails[i].framePriceAfterSale > 0){
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,
+                                                                 self.theOrder.orderDetails[i].quantity,
+                                                                 self.theOrder.orderDetails[i].frameNote,
+                                                                 self.theOrder.orderDetails[i].frameDiscountAmount));
             }
 
             if(self.theOrder.orderDetails[i].lensPrice && self.theOrder.orderDetails[i].otherPrice > 0 ){
-                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].otherPrice,1,self.theOrder.orderDetails[i].otherNote,0));
+                self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].otherPrice,
+                                                                 1,
+                                                                 self.theOrder.orderDetails[i].otherNote,
+                                                                 0));
             }
             if(self.theOrder.orderDetails[i].frameNote.length >= 24){count++;}
             if(self.theOrder.orderDetails[i].lensNote.length  >= 24){count++;}
@@ -58,6 +70,8 @@ angular.module('invoiceModule')
         if(count > 5){
             totalLine = 9;
         }
+
+        console.log(self.OrderDetailList);
 
         var temp = totalLine - self.OrderDetailList.length;
         for (var i = 0; i < temp; i++){

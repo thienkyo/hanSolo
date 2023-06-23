@@ -89,6 +89,9 @@ public class Order {
     @Transient
     private String currentCouponCode;
 
+    @Column(name = "last_modified_by", length = 110)
+    private String lastModifiedBy;
+
     @Override
     public boolean equals(Object obj) {
         Order o = (Order)obj;
@@ -106,6 +109,14 @@ public class Order {
         this.shippingPhone = shippingPhone;
         this.gmtCreate = gmtCreate;
         this.location = location;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public String getCurrentCouponCode() {

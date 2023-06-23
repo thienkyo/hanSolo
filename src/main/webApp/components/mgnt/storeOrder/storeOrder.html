@@ -17,10 +17,11 @@
     outline: medium none;
     padding-left: 0px;
     padding-top: 5px;
+    min-width: 10%;
     width: 100px;
     background-image: url(../static/home/searchicon.png);
     background-repeat: no-repeat;
-    background-position: 160px;
+    background-position: 75px;
 }
 
 .search_class3{
@@ -290,10 +291,6 @@
 			<div>count: | amount:</div>
 		</h2>-->
 
-
-
-
-
 		<div style="text-align: center;">
 			<span style="font-size: 35px;font-weight: 500;">Glass Prescription</span>
 			<a ng-click="ctrl.splitOrder()" href=""
@@ -333,7 +330,7 @@
 				   ng-show="ctrl.theOrder.orderDetails.length > 1"
 				   style="margin: 4px 4px 4px 4px;float: right;">select</a>
 
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 + item.lensPrice*(100 - item.lensDiscountAmount)/100 + item.otherPrice | number:0}}đ</h3>
+				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 + item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ</h3>
 
 				<!-- Order detail ho va ten -->
 				<div class="row">
@@ -601,41 +598,39 @@
 						</div><!--end of don kinh-->
 					</div>
 				</div>
-				<!--start lens-->
+				<!--start trong-->
 				<div class="row" style="border-top: 2px solid #e1e1e1; margin-top: 30px;padding-top: 20px;">
 					<div class="col-lg-1">
 						<h4>Tròng</h4>
 					</div>
-					<div class="col-lg-2">
-						<div class="search_box pull-left">
-							<md-autocomplete class="search_class"  flex=""
-											 ng-disabled="ctrl.isDisable"
-											 md-no-cache="ctrl.noCache"
-											 md-selected-item="item.productLens"
-											 md-search-text-change="ctrl.searchLensTextChange(item.searchLensText)"
-											 md-search-text="item.searchLensText"
-											 md-selected-item-change="ctrl.selectedLensChange(one,item)"
-											 md-items="one in ctrl.querySearchLens(item.searchLensText)"
-											 md-item-text="one.name"
-											 md-min-length="3"
-											 md-delay="600"
-											 placeholder="search">
-								<md-item-template>
-									<div class="row" >
-										<div class="col-md-1" >{{one.id}}</div>
-										<div class="col-md-3" >
-											<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
-										</div>
-										<div class="col-md-5" style="">{{one.name}}</div>
-										<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
-
+					<div class="col-lg-1">
+						<md-autocomplete class="search_class"  flex=""
+										 ng-disabled="ctrl.isDisable"
+										 md-no-cache="ctrl.noCache"
+										 md-selected-item="item.productLens"
+										 md-search-text-change="ctrl.searchLensTextChange(item.searchLensText)"
+										 md-search-text="item.searchLensText"
+										 md-selected-item-change="ctrl.selectedLensChange(one,item)"
+										 md-items="one in ctrl.querySearchLens(item.searchLensText)"
+										 md-item-text="one.name"
+										 md-min-length="3"
+										 md-delay="600"
+										 placeholder="search">
+							<md-item-template>
+								<div class="row" >
+									<div class="col-md-1" >{{one.id}}</div>
+									<div class="col-md-3" >
+										<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
 									</div>
-								</md-item-template>
-								<md-not-found>
-									không có kết quả cho "{{item.searchLensText}}".
-								</md-not-found>
-							</md-autocomplete>
-						</div>
+									<div class="col-md-5" style="">{{one.name}}</div>
+									<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
+
+								</div>
+							</md-item-template>
+							<md-not-found>
+								không có kết quả cho "{{item.searchLensText}}".
+							</md-not-found>
+						</md-autocomplete>
 					</div>
 
 					<div class="col-lg-3">
@@ -649,6 +644,14 @@
 								   ng-change="ctrl.calculateOrderTotal()" ng-blur="item.lensPrice = item.lensPrice == null ? 0 : item.lensPrice">
 						</div>
 					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input">
+							<input type="number" ng-model="item.lensQuantity" ng-change="ctrl.calculateOrderTotal()"
+								   ng-blur="item.lensQuantity = item.lensQuantity == null ? 1 : item.lensQuantity">
+						</div>
+					</div>
+
 					<div class="col-lg-1">
 						<div class="checkout__input" >
 							<input type="text" placeholder="code" style="padding-left: 4px;"
@@ -659,14 +662,19 @@
 					</div>
 					<div class="col-lg-auto">
 						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
-							{{item.lensDiscountAmount > 0 ? item.lensPrice*(100 - item.lensDiscountAmount)/100 : item.lensPrice | number:0}}đ
+							<!--{{item.lensDiscountAmount > 0 ? item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity : item.lensPrice*item.lensQuantity | number:0}}đ-->
+							{{item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity | number:0}}đ
 						</p>
 					</div>
 
-					<div class="col-lg-1" >
-						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;" ng-if="item.lensDiscountAmount > 0">
-							({{item.lensDiscountAmount}}%){{item.lensPrice*item.lensDiscountAmount/100 | number:0}}đ
+					<div class="col-lg-1" ng-if="item.lensDiscountAmount > 0">
+						<p style="font-size: 13px;font-weight: 600;margin-bottom: 0px;text-align: left;" >
+							<!--{{item.lensDiscountAmount > 0 ? item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity : item.lensPrice*item.lensQuantity | number:0}}đ-->
+							{{item.lensPrice*item.lensQuantity | number:0}}đ
 						</p>
+						<span style="font-size: 13px;font-weight: 600;padding-top: 10px;" >
+							{{item.lensDiscountAmount}}%{{item.lensPrice*item.lensQuantity*item.lensDiscountAmount/100 | number:0}}đ
+						</span>
 					</div>
 
 
@@ -676,36 +684,35 @@
 					<div class="col-lg-1">
 						<h4>Gọng</h4>
 					</div>
-					<div class="col-lg-2">
-						<div class="search_box pull-left">
-							<md-autocomplete class="search_class"  flex=""
-											 ng-disabled="ctrl.isDisable"
-											 md-no-cache="ctrl.noCache"
-											 md-selected-item="item.product"
-											 md-search-text-change="ctrl.searchTextChange(item.searchText)"
-											 md-search-text="item.searchText"
-											 md-selected-item-change="ctrl.selectedItemChange(one,item)"
-											 md-items="one in ctrl.querySearch(item.searchText)"
-											 md-item-text="one.name"
-											 md-min-length="3"
-											 md-delay="600"
-											 placeholder="search">
-								<md-item-template>
-									<div class="row" >
-										<div class="col-md-1" >{{one.id}}</div>
-										<div class="col-md-3" >
-											<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
-										</div>
-										<div class="col-md-5" style="">{{one.name}}</div>
-										<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
-
+					<div class="col-lg-1">
+						<md-autocomplete class="search_class"  flex=""
+										 ng-disabled="ctrl.isDisable"
+										 md-no-cache="ctrl.noCache"
+										 md-selected-item="item.product"
+										 md-search-text-change="ctrl.searchTextChange(item.searchText)"
+										 md-search-text="item.searchText"
+										 md-selected-item-change="ctrl.selectedItemChange(one,item)"
+										 md-items="one in ctrl.querySearch(item.searchText)"
+										 md-item-text="one.name"
+										 md-min-length="3"
+										 md-delay="600"
+										 placeholder="search">
+							<md-item-template>
+								<div class="row" >
+									<div class="col-md-1" >{{one.id}}</div>
+									<div class="col-md-3" >
+										<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
 									</div>
-								</md-item-template>
-								<md-not-found>
-									không có kết quả cho "{{ctrl.searchText}}".
-								</md-not-found>
-							</md-autocomplete>
-						</div>
+									<div class="col-md-5" style="">{{one.name}}</div>
+									<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
+
+								</div>
+							</md-item-template>
+							<md-not-found>
+								không có kết quả cho "{{ctrl.searchText}}".
+							</md-not-found>
+						</md-autocomplete>
+
 					</div>
 					<div class="col-lg-3" style="padding-left: 40px;">
 						<div class="checkout__input" >
@@ -718,6 +725,14 @@
 								   ng-change="ctrl.calculateOrderTotal()" ng-blur="item.framePriceAfterSale = item.framePriceAfterSale == null ? 0 : item.framePriceAfterSale">
 						</div>
 					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input">
+							<input type="number" ng-model="item.quantity" ng-change="ctrl.calculateOrderTotal()"
+								   ng-blur="item.quantity = item.quantity == null ? 1 : item.quantity">
+						</div>
+					</div>
+
 					<div class="col-lg-1">
 						<div class="checkout__input" >
 							<input type="text" placeholder="code" style="padding-left: 4px;"
@@ -728,18 +743,25 @@
 					</div>
 					<div class="col-lg-auto">
 						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
-							{{item.frameDiscountAmount > 0 ? item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 : item.framePriceAfterSale | number:0}}đ
+							<!--{{item.frameDiscountAmount > 0 ? item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 : item.framePriceAfterSale | number:0}}đ-->
+							{{ item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 | number:0}}đ
 						</p>
 					</div>
-					<div class="col-lg-1" >
-						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;" ng-if="item.frameDiscountAmount > 0">
-							({{item.frameDiscountAmount}}%){{item.framePriceAfterSale*item.frameDiscountAmount/100 | number:0}}đ
+					<div class="col-lg-1" ng-if="item.frameDiscountAmount > 0">
+						<p style="font-size: 13px;font-weight: 600;margin-bottom: 0px;text-align: left;" ng-if="item.frameDiscountAmount > 0">
+							<!--{{item.frameDiscountAmount > 0 ? item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 : item.framePriceAfterSale | number:0}}đ-->
+							{{ item.framePriceAfterSale*item.quantity | number:0}}đ
 						</p>
+						<span style="font-size: 13px;font-weight: 600;padding-top: 10px;" ng-if="item.frameDiscountAmount > 0">
+							{{item.frameDiscountAmount}}%{{item.framePriceAfterSale*item.quantity*item.frameDiscountAmount/100 | number:0}}đ
+						</span>
 					</div>
+
+
 
 				</div>
 				<!--start one product-->
-				<div class="row" ng-show="item.product">
+				<div class="row" ng-if="item.product">
 					<div class="col-md-9">
 						<div class="shopping__cart__table">
 							<table>
@@ -769,7 +791,7 @@
 											</div>
 										</div>
 									</td>
-									<td class="cart__price">{{(item.product.sellPrice*(100 - item.product.discount)/100) * item.quantity | number:0}}đ</td>
+									<td class="cart__price">{{(item.product.sellPrice*item.quantity*(100 - item.product.discount)/100) | number:0}}đ</td>
 									<td class="cart__close"><i class="fa fa-close" ng-click="ctrl.removeSearchResult(item)"></i></td>
 								</tr>
 
@@ -778,13 +800,12 @@
 						</div>
 					</div>
 				</div>
-				<!--end one product-->
-				<!--start one Khac-->
+				<!--start Khac-->
 				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
 					<div class="col-lg-1">
 						<h4>Khác</h4>
 					</div>
-					<div class="col-lg-5">
+					<div class="col-lg-4">
 						<div class="checkout__input" >
 							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.otherNote" >
 						</div>

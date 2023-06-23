@@ -221,6 +221,7 @@ function OrderDO () {
 	this.deposit = 0;
 	this.shippingId = '';
 	this.member = null;
+	this.lastModifiedBy = '';
 	this.shippingName = '';
 	this.shippingPhone ='';
 	this.orderDetails = [];
@@ -280,6 +281,7 @@ function OrderDetailDO () {
 	this.searchText = ''; // for each md-autocomplete in orderDetail array
 
 	this.quantity = 1;
+	this.lensQuantity = 1;
 	this.weight = 1;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
