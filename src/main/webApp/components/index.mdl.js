@@ -36,5 +36,6 @@ angular.module('app', [
 		'smsUserInfoModule',
 		'keyManagementModule',
 		'contractModule',
+		'lensProductModule',
 		'ui.tinymce'
 ]);

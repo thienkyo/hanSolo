@@ -63,6 +63,9 @@ form .progress {
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#specificInfo" ng-click="ctrl.loadSpecificSmsUserInfo()">Specific Sms user info</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#strategy">Strategy</a>
+			</li>
 		</ul>
 
 		<!-- Tab panes -->
@@ -583,6 +586,151 @@ form .progress {
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
 									<a ng-click="ctrl.deleteSpecificSmsUserInfo(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+								</p>
+							</td>
+
+						</tr>
+					</table>
+				</div>
+
+			</div>
+			<!-- strategy tab pane-->
+			<div id="strategy" class="container tab-pane active"><br>
+				<div class="row" >
+					<div class="col-sm-1">
+						<input type="number"  ng-model="ctrl.theSmsJob.id" disabled="disabled" placeholder="id" style="width:50px;"/>
+					</div>
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.theSmsJob.jobName" placeholder="jobName" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsJob.weight" placeholder="weight" style="width: 100%;"/>
+					</div>
+
+					<div class="col-sm-2">
+						<div class='input-group date'>
+							<input ng-model="ctrl.theSmsJob.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+								   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height:30px;"
+								   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="start date"/>
+							<span class="input-group-addon" ng-click="ctrl.openDP()">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						{{ctrl.theSmsJob.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+					</div>
+
+				</div>
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-1" style="margin-top: 5px;">
+						Active:
+						<input type="checkbox"  ng-model="ctrl.theSmsJob.status" />
+					</div>
+					<div class="col-sm-1" style="margin-top: 5px;">
+						isTest:
+						<input type="checkbox"  ng-model="ctrl.theSmsJob.isTest" />
+					</div>
+					<div class="col-sm-1">
+						<select  ng-model="ctrl.theSmsJob.jobType"
+								 ng-options="opt.value as opt.name for opt in ctrl.jobTypeList"
+								 style="width: 100%;height: 30px;">
+						</select>
+					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsJob.noSmsDays" placeholder="noSmsDays" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-1">
+						<input type="text"  ng-model="ctrl.theSmsJob.intervalTime" placeholder="intervalTime" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-6">
+						sms: {{ctrl.lastHeartBeatTime | date:"yyyy-MM-dd HH:mm:ss"}}
+						| data: {{ctrl.lastPrepareDataTime | date:"yyyy-MM-dd HH:mm:ss"}}
+					</div>
+
+
+				</div>
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-5">
+						<textarea name="content" placeholder="specificPhones" rows="5"  style="white-space: pre-line;"
+								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
+					</div>
+					<div class="col-sm-7">
+						<textarea name="content" placeholder="content" rows="5"  style="white-space: pre-line;"
+								  ng-model="ctrl.theSmsJob.msgContentTemplate" maxlength="160" ng-cloak ></textarea>
+
+					</div>
+				</div>
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-5"></div>
+
+					<div class="col-sm-2">
+						<a ng-click="ctrl.upsertSmsJob(ctrl.theSmsJob)" href=""
+						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
+
+						<a ng-click="ctrl.clearSmsJob()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-sm-1">
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+					</div>
+				</div>
+
+				<!-- sms job list-->
+				<h3 style="margin-top: 20px;">Sms job </h3>
+				<!-- sms job table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}"  style="width:70px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheSmsJob(one)">{{one.id}}</a>
+							</td>
+
+							<td title="'name'" filter="{ 'jobName' : 'text'}" sortable="'jobName'" style="text-align: right;">
+								{{one.jobName}}
+							</td>
+							<td title="'message'" filter="{ 'msgContentTemplate' : 'text'}" sortable="'msgContentTemplate'" style="text-align: left;">
+								{{one.msgContentTemplate}}
+							</td>
+							<td title="'noDay'"  style="text-align: left;width:80px;">
+								{{one.noSmsDays}}
+							</td>
+							<td title="'interval'"  style="text-align: left;width:80px;">
+								{{one.intervalTime}}
+							</td>
+							<td title="'active'"  style="text-align: center;">
+								<select  ng-model="one.status"  ng-change="ctrl.upsertSmsJob(one)"
+										 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+										 ng-disabled="ctrl.isSaveButtonPressed"
+										 ng-style="ctrl.setStyle(one.status)">
+								</select>
+							</td>
+							<td title="'isTest'"  style="width:80px;text-align: center;" ng-style="ctrl.setStyle(one.isTest)">
+								{{one.isTest}}
+							</td>
+							<td title="'type'" filter="{ 'jobType' : 'text'}" style="width:100px;text-align: center;">
+								{{one.jobType}}
+							</td>
+							<td title="'start'"  style="text-align: left;width: 110px;">
+								{{one.startDate | date:"yyyy-MM-dd"}}
+							</td>
+
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+								<p ng-show="ctrl.deletingId == one.id">
+									Are you sure?
+									<a ng-click="ctrl.deleteSmsJob(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
 								</p>
 							</td>

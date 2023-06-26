@@ -39,7 +39,7 @@ angular.module('storeOrderModule')
 
     self.copy1Tab = function(tab){
         var newTab = Object.assign({}, tab);
-        newTab.id = null;
+        newTab.id = 0;
         newTab.product = null;
         newTab.framePriceAfterSale = 0;
         newTab.framePriceAtThatTime = 0;
@@ -102,7 +102,9 @@ angular.module('storeOrderModule')
             return {id:0,name:'no result',type:1,image:''};
         }
     }
-    self.querySearchLens = function(searchText){
+
+   /*
+   self.querySearchLens = function(searchText){
         if(searchText){
             var url = "search/productMngt/"+searchText;
             return ajaxService.get(url,null,{}).then(function(response){
@@ -110,6 +112,11 @@ angular.module('storeOrderModule')
             });
 
         }
+    }
+    */
+
+    self.querySearchLens = function(searchText){
+        return searchService.searchLensProduct(searchText);
     }
 
     self.querySearchOrder = function(searchText){
@@ -150,7 +157,7 @@ angular.module('storeOrderModule')
 
     self.selectedLensChange = function(one,orderDetail) {
         if(one){
-          orderDetail.lensNote = one.name;
+          orderDetail.lensNote = one.lensNote;
           orderDetail.lensPrice = one.sellPrice;
         }
         self.calculateOrderTotal();
@@ -172,10 +179,13 @@ angular.module('storeOrderModule')
             self.theOrder.shippingName = self.theSelectedOrder.shippingName;
             self.theOrder.shippingPhone = self.theSelectedOrder.shippingPhone;
             self.theOrder.shippingAddress = self.theSelectedOrder.shippingAddress;
+            self.theOrder.areaCode = self.theSelectedOrder.areaCode;
+            self.theOrder.gender = self.theSelectedOrder.gender;
 
             self.theOrder.orderDetails[0].name = self.theSelectedOrder.shippingName;
             self.theOrder.orderDetails[0].phone = self.theSelectedOrder.shippingPhone;
             self.theOrder.orderDetails[0].address = self.theSelectedOrder.shippingAddress;
+            self.theOrder.orderDetails[0].gender = self.theSelectedOrder.gender;
         }
         self.copyActive = false; // disable nameCopy.
     }

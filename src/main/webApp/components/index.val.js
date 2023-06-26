@@ -89,7 +89,19 @@ angular
 		.value('PaginationDO',PaginationDO)
 		.value('ContractDO',ContractDO)
 		.value('SalaryDO',SalaryDO)
+		.value('LensProductDO',LensProductDO)
 		;
+
+function LensProductDO(){
+	this.id = 0;
+	this.lensNote = '';
+	this.lensDetail = '';
+	this.buyPrice = null;
+    this.sellPrice = null;
+    this.extInfo = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function ContractDO(){
 	this.id = 0;

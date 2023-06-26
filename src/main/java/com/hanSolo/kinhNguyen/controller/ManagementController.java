@@ -50,6 +50,7 @@ public class ManagementController {
     @Autowired private CustomerSourceReportRepository customerSourceReportRepo;
     @Autowired private ContractRepository contractRepo;
     @Autowired private SalaryRepository salaryRepo;
+    @Autowired private LensProductRepository lensProductRepo;
 
     @Autowired private Environment env;
 
@@ -758,7 +759,73 @@ public class ManagementController {
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    //////////////////////////// upload ///////////////////////////////
+    //////////////////////////// search section///////////////////////////////
+    @RequestMapping("searchLensProduct/{keySearch}")
+    public List<LensProduct> searchLensProduct(@PathVariable final String keySearch) {
+        return  lensProductRepo.findFirst50ByLensNoteContainsOrderByGmtCreateDesc(keySearch);
+    }
+
+    //////////////////////////// lens product section///////////////////////////////
+    @RequestMapping(value = "getlensProductForMgnt/{amount}", method = RequestMethod.GET)
+    public List<LensProduct> getlensProductForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+        List<LensProduct> lensProductList ;
+        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+            lensProductList =  lensProductRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            lensProductList = lensProductRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return lensProductList;
+    }
+
+    @RequestMapping(value = "deleteLensProduct", method = RequestMethod.POST)
+    public GenericResponse deleteLensProduct(@RequestBody final LensProduct one)  {
+        lensProductRepo.delete(one);
+        return new GenericResponse("deleteLensProduct",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "deleteManyLensProduct", method = RequestMethod.POST)
+    public GenericResponse deleteManyLensProduct(@RequestBody final List<LensProduct> lensProducts)  {
+        lensProductRepo.deleteAll(lensProducts);
+        return new GenericResponse("deleteManyLensProduct",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    @RequestMapping(value = "upsertLensProduct", method = RequestMethod.POST)
+    public GeneralResponse<LensProduct> upsertLensProduct(@RequestBody final LensProduct one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(lensProductRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+
+    @RequestMapping(value = "prepareLensProductData", method = RequestMethod.GET)
+    public GenericResponse prepareLensProductData() {
+        List<OrderDetail> orderDetailList = orderDetailRepo.getDataForLensProduct();
+        List<LensProduct> lensProductList = new ArrayList<>();
+        String lensDeatil = "";
+        String reading = "";
+        String extInfo = "";
+        for(OrderDetail detail : orderDetailList){
+            reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
+            lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+")" +
+                         "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+")" +
+                          reading;
+            extInfo = detail.getOrderId() + "-" + detail.getId();
+            lensProductList.add(new LensProduct(detail.getGmtCreate(),
+                                                detail.getGmtModify(),
+                                                detail.getLensNote(),
+                                                lensDeatil,
+                                                extInfo,
+                                                detail.getLensPrice()
+                                                ));
+        }
+        lensProductRepo.saveAll(lensProductList);
+
+        return new GenericResponse("prepare lensProduct success",Utility.SUCCESS_ERRORCODE, "Success");
+    }
+
+
+    //////////////////////////// upload section///////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     @ResponseBody

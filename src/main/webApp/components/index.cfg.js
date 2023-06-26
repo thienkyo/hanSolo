@@ -165,6 +165,11 @@ angular.module('app')
             controller: 'contractController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/lensProduct',{
+            templateUrl: 'components/mgnt/lensProduct/lensProduct.html',
+            controller: 'lensProductController',
+            controllerAs:'ctrl'
+        })
         .otherwise(
             { redirectTo: '/'}
         )

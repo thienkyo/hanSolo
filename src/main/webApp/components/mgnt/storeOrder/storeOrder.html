@@ -46,11 +46,11 @@
 }
 
 .md-virtual-repeat-container.md-autocomplete-suggestions-container {
-    width:700px !important;
+    width:800px !important;
 }
 
 .autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
-	width: 700px !important;
+	width: 800px !important;
 }
 
 .inactive {
@@ -86,11 +86,9 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Full Name<span>*</span></p>
-							<!--<input type="text"  ng-model="ctrl.theOrder.shippingName" style="width: 35%;float: left;"
-								   ng-change="ctrl.clearErrorMsg();ctrl.nameCopy();">-->
 							<md-autocomplete class="search_class3"  flex=""
 											 ng-disabled="false"
-											 md-no-cache="false"
+											 md-no-cache="true"
 											 md-selected-item="ctrl.theSelectedOrder"
 											 md-search-text-change="ctrl.searchOrderTextChange(ctrl.theOrder.shippingName)"
 											 md-search-text="ctrl.theOrder.shippingName"
@@ -121,11 +119,9 @@
 					<div class="col-lg-6">
 						<div class="checkout__input">
 							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
-							<!--<input type="text" ng-model="ctrl.theOrder.shippingPhone" ng-pattern="/^[0-9]{2,17}$/"
-								   ng-change="ctrl.clearErrorMsg();ctrl.phoneCopy();" style="width: 35%;float: left;">-->
 							<md-autocomplete class="search_class3"  flex=""
 											 ng-disabled="false"
-											 md-no-cache="false"
+											 md-no-cache="true"
 											 md-selected-item="ctrl.theSelectedOrder"
 											 md-search-text-change="ctrl.searchOrderByPhoneTextChange(ctrl.theOrder.shippingPhone)"
 											 md-search-text="ctrl.theOrder.shippingPhone"
@@ -172,7 +168,7 @@
 				</div>
 
 				<div class="row">
-					<div class="col-lg-10">
+					<div class="col-lg-9">
 						<div class="checkout__input" >
 							<p>Shipping Address</p>
 							<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng."
@@ -180,7 +176,7 @@
 								   ng-model="ctrl.theOrder.shippingAddress" ng-change="ctrl.clearErrorMsg();ctrl.addressCopy();">
 						</div>
 					</div>
-					<div class="col-lg-2">
+					<div class="col-lg-3">
 						<div class="checkout__input" >
 							<p>Area</p>
 							<select  ng-model="ctrl.theOrder.areaCode"
@@ -281,16 +277,7 @@
 	</div>
 
 	<div class="container">
-	<!--	<h2 style="text-align: center;">Glass Prescription
-		<a ng-click="ctrl.splitOrder()" href=""
-		   ng-show="ctrl.wannaSplit" ng-class="ctrl.isSaveButtonPressed ? 'btn btn-default check_out inactive' : 'btn btn-default check_out'"
-		   style="margin: 4px 4px 4px 4px;text-align:center;">split</a>
-		<a ng-click="ctrl.deselectOrder()" href="" class="btn btn-default check_out"
-		   ng-show="ctrl.wannaSplit"
-		   style="margin: 4px 4px 4px 4px;text-align:center;">deselect</a>
-			<div>count: | amount:</div>
-		</h2>-->
-
+		<!-- Glass Prescription -->
 		<div style="text-align: center;">
 			<span style="font-size: 35px;font-weight: 500;">Glass Prescription</span>
 			<a ng-click="ctrl.splitOrder()" href=""
@@ -302,7 +289,6 @@
 			<span ng-show="ctrl.wannaSplit">count: {{ctrl.theSplitOrder.orderDetails.length}}| amount:{{ctrl.theSplitOrder.subTotal | number}}đ</span>
 		</div>
 
-
 		<br>
 		<!-- Nav tabs for order detail -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -310,8 +296,14 @@
 				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.add1Tab()"> + </a>
 			</li>
 			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
-				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				<!--<a class="nav-link {{$index == 0 ? 'active' : ''}}"
 				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1 + ' ('+item.orderId+'-'+item.id+')'}}
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
+				</a>-->
+				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >
+					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}
+					{{ ' ('+item.orderId+'-'+item.id+')'}}
 					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
 				</a>
 			</li>
@@ -324,16 +316,15 @@
 				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">copy</a>
 				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
 				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
-
 				<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
 				   ng-class="item.isSplit ? 'btn btn-primary' : 'btn btn-default'"
 				   ng-show="ctrl.theOrder.orderDetails.length > 1"
 				   style="margin: 4px 4px 4px 4px;float: right;">select</a>
-
 				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 + item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ</h3>
 
 				<!-- Order detail ho va ten -->
 				<div class="row">
+					<!-- ho va ten -->
 					<div class="col-lg-5">
 						<div class="row">
 							<div class="col-lg-6">
@@ -436,7 +427,7 @@
 							</div>
 						</div>
 					</div>
-
+					<!-- chi tiet -->
 					<div class="col-lg-7">
 						<div style="margin-bottom: 12px;">Chi tiết </div>
 						<div class="container" style="width:100%;font-size: 18px;"> <!--begin of don kinh-->
@@ -549,7 +540,7 @@
 											<div class="col-md-7" style="padding-top: 10px;">
 												Khoảng cách đồng tử(PD):
 											</div>
-											<div class="col-md-4">
+											<div class="col-md-4" style="padding-left: 0px;">
 												<input type="text"  ng-model="item.pd" placeholder="pd"
 													   class="prescriptionInput">
 											</div>
@@ -559,7 +550,7 @@
 											<div class="col-md-7" style="padding-top: 10px;">
 												Khoảng cách làm việc(WD)
 											</div>
-											<div class="col-md-4">
+											<div class="col-md-4" style="padding-left: 0px;">
 												<input type="text"  ng-model="item.wd" placeholder="wd"
 													   class="prescriptionInput">
 											</div>
@@ -603,7 +594,7 @@
 					<div class="col-lg-1">
 						<h4>Tròng</h4>
 					</div>
-					<div class="col-lg-1">
+					<!--<div class="col-lg-1">
 						<md-autocomplete class="search_class"  flex=""
 										 ng-disabled="ctrl.isDisable"
 										 md-no-cache="ctrl.noCache"
@@ -631,11 +622,39 @@
 								không có kết quả cho "{{item.searchLensText}}".
 							</md-not-found>
 						</md-autocomplete>
-					</div>
+					</div>-->
 
-					<div class="col-lg-3">
-						<div class="checkout__input" style="padding-left: 25px;">
-							<input type="text" placeholder="Note: chemi, asx, UV" ng-model="item.lensNote" >
+					<div class="col-lg-4">
+						<div class="checkout__input" >
+							<!--<input type="text" placeholder="Note: chemi, asx, UV" ng-model="item.lensNote" >-->
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="true"
+											 md-selected-item="item.productLens"
+											 md-search-text-change="ctrl.searchLensTextChange(item.lensNote)"
+											 md-search-text="item.lensNote"
+											 md-selected-item-change="ctrl.selectedLensChange(one,item)"
+											 md-items="one in ctrl.querySearchLens(item.lensNote)"
+											 md-item-text="one.lensNote"
+											 md-min-length="3"
+											 md-delay="600"
+											 md-clear-button="true"
+											 md-autoselect="false"
+											 placeholder="Ex: chemi, asx, UV">
+							>
+								<md-item-template>
+									<div class="row" >
+										<div class="col-md-1" style="text-align: left;">{{one.extInfo}}</div>
+										<div class="col-md-4" >{{one.lensNote}}</div>
+										<div class="col-md-3" style="">{{one.lensDetail}}</div>
+										<div class="col-md-2" style="text-align: right;">{{one.sellPrice | number:0}}đ</div>
+										<div class="col-md-2" style="">{{one.gmtCreate | date:"yyyy-MM-dd"}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{item.lensNote}}".
+								</md-not-found>
+							</md-autocomplete>
 						</div>
 					</div>
 					<div class="col-lg-2">
@@ -684,7 +703,7 @@
 					<div class="col-lg-1">
 						<h4>Gọng</h4>
 					</div>
-					<div class="col-lg-1">
+					<!--<div class="col-lg-1">
 						<md-autocomplete class="search_class"  flex=""
 										 ng-disabled="ctrl.isDisable"
 										 md-no-cache="ctrl.noCache"
@@ -713,8 +732,8 @@
 							</md-not-found>
 						</md-autocomplete>
 
-					</div>
-					<div class="col-lg-3" style="padding-left: 40px;">
+					</div>-->
+					<div class="col-lg-4" >
 						<div class="checkout__input" >
 							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.frameNote" >
 						</div>
@@ -822,7 +841,6 @@
 						</p>
 					</div>
 				</div>
-
 				<!--start 2nd save button-->
 				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
 					<div class="col-lg-3" >
@@ -844,7 +862,6 @@
 
 
 				</div>
-				<!--end 2nd save button-->
 
 			</div>
 		</div>

@@ -265,7 +265,8 @@ angular.module('app')
 }])
 .factory('searchService',['ajaxService', function(ajaxService) {
 	var searchService = {
-		    searchByNamePhone : searchByNamePhone
+		    searchByNamePhone : searchByNamePhone,
+		    searchLensProduct : searchLensProduct
 		};
 	return searchService;
 
@@ -276,6 +277,15 @@ angular.module('app')
                 return response.data;
             });
         }
+    }
+
+    function searchLensProduct(searchText){
+        if(searchText){
+            var url = "mgnt/searchLensProduct/"+searchText;
+            return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
+        }else {return '';}
     }
 
 }])

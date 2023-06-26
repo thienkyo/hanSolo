@@ -15,4 +15,10 @@ public interface SmsUserInfoRepository extends PagingAndSortingRepository<SmsUse
     List<SmsUserInfo> findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUser(Date orderCreateDate, String jobIdList, Date lastSendSmsDate, Boolean isTestUser);
     List<SmsUserInfo> findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndOrderCreateDateAfterOrderByOrderCreateDateAsc(Date orderCreateDate, String jobIdList, Date lastSendSmsDate, Date orderCreateDate1);
     List<SmsUserInfo> findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBeforeAndIsTestUserAndOrderCreateDateAfterOrderByOrderCreateDateAsc(Date orderCreateDate, String jobIdList, Date lastSendSmsDate, Boolean isTestUser, Date orderCreateDate1);
+
+    List<SmsUserInfo> findByGenderOrderByOrderCreateDateDesc(Boolean gender);
+    List<SmsUserInfo> findByGenderAndAreaCodeOrderByOrderCreateDateDesc(Boolean gender, String areaCode);
+
+    List<SmsUserInfo> findByOrderCreateDateBeforeAndGenderOrderByOrderCreateDateDesc(Date orderCreateDate, Boolean gender);
+    List<SmsUserInfo> findByOrderCreateDateBeforeAndGenderAndAreaCodeOrderByOrderCreateDateDesc(Date orderCreateDate, Boolean gender, String areaCode);
 }

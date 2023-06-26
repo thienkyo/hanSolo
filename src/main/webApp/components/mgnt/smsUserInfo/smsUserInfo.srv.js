@@ -121,7 +121,7 @@ angular.module('smsUserInfoModule')
         });
     }
  }])
- .factory('specificSmsUserInfoService', ['ajaxService',function(ajaxService) {
+.factory('specificSmsUserInfoService', ['ajaxService',function(ajaxService) {
  	var specificSmsUserInfoService = {
  			getDataForMgnt : getDataForMgnt,
  			upsert : upsert,

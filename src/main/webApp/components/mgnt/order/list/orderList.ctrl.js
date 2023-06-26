@@ -63,7 +63,6 @@ angular.module('orderListModule')
     }
 
     self.querySearchOrderByNamePhone = function(searchText){
-
         if(searchText){
             self.tableParams = new NgTableParams({}, { dataset: []});
             searchService.searchByNamePhone(searchText).then(function(data){

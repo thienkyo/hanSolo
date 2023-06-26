@@ -35,6 +35,7 @@ public class AuthenticationController {
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
     @Autowired private UsedCouponsRepository usedCouponsRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
+    @Autowired private LensProductRepository lensProductRepo;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public MemberResponse getMe(final HttpServletRequest request) throws ServletException {
@@ -62,8 +63,12 @@ public class AuthenticationController {
         }
         order.setGmtModify(Utility.getCurrentDate());
 
+        // 1. save order
         Order or = orderRepo.save(order);
+        // 2. update coupon
         updateCouponQuantity(order,order.getCurrentCouponCode(),order.getCouponCode());
+
+        // 3. save SmsUserInfo
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
                 order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),
@@ -140,7 +145,7 @@ public class AuthenticationController {
             specSmsDBOtp.ifPresent(x -> specificSmsUserInfoRepo.delete(x));
         }
 
-        /// coupon
+        /// 4. coupon
         if(StringUtils.hasText(or.getCouponCode())){
             int orderAmount = 0;
             for( OrderDetail orderDetail : or.getOrderDetails()){
@@ -149,9 +154,40 @@ public class AuthenticationController {
             usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
         }
 
+        // 5. manage lens product
+        manageLensProduct(or);
+
         //GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
+    }
+
+    private void manageLensProduct(Order order) {
+        if(!order.getOrderDetails().isEmpty()){
+            String lensDeatil = "";
+            String reading = "";
+            String extInfo = "";
+            for( OrderDetail detail : order.getOrderDetails()){
+                if(!detail.getLensNote().isBlank() && detail.getLensPrice() > 0){
+                    List<LensProduct> lensProductList = lensProductRepo.findByLensNoteAndSellPrice(
+                            detail.getLensNote(), detail.getLensPrice());
+                    if(lensProductList.isEmpty()){
+                        reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
+                        lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+")" +
+                                     "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+")" + reading;
+                        extInfo = detail.getOrderId() + "-" + detail.getId();
+
+                        lensProductRepo.save(new LensProduct(detail.getGmtCreate(),
+                                detail.getGmtModify(),
+                                detail.getLensNote(),
+                                lensDeatil,
+                                extInfo,
+                                detail.getLensPrice()
+                        ));
+                    }
+                }
+            }
+        }
     }
 
     @RequestMapping(value = "updateMe", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -327,9 +363,11 @@ public class AuthenticationController {
                 couponRepo.save(coupon);
                 if(StringUtils.hasText(currentCode)){
                     Optional<Coupon>  currentCouponOpt = couponRepo.findByCode(currentCode);
-                    Coupon currentCoupon = currentCouponOpt.get();
-                    currentCoupon.setQuantity(currentCoupon.getQuantity()+1);
-                    couponRepo.save(currentCoupon);
+                    if(currentCouponOpt.isPresent()){
+                        Coupon currentCoupon = currentCouponOpt.get();
+                        currentCoupon.setQuantity(currentCoupon.getQuantity()+1);
+                        couponRepo.save(currentCoupon);
+                    }
                 }
             }
         }
