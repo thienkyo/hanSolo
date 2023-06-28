@@ -60,16 +60,16 @@ public class SearchController {
 
     @RequestMapping("orderMngt/{keySearch}")
     public List<Order> orderMngt(@PathVariable final String keySearch) {
-        List<Order> orderList = orderRepo.findFirst40ByShippingNameContainsIgnoreCase(keySearch);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByNameContainsIgnoreCase(keySearch);
+        List<Order> orderList = orderRepo.findFirst40ByShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
 
         return orderListBuilder(orderList, orderDetailList);
     }
 
     @RequestMapping("orderByPhoneMngt/{keySearch}")
     public List<Order> orderByPhoneMngt(@PathVariable final String keySearch) {
-        List<Order> orderList = orderRepo.findFirst40ByShippingPhoneContains(keySearch);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByPhoneContains(keySearch);
+        List<Order> orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(keySearch);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByPhoneContainsOrderByGmtCreateDesc(keySearch);
 
         return orderListBuilder(orderList, orderDetailList);
     }

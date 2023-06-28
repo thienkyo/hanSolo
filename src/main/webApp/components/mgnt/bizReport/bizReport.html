@@ -36,10 +36,16 @@ form .progress {
 }
 </style>
 <link href="css/main2.css" rel="stylesheet">
+
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-		<h3 style="text-align: center;padding-bottom: 30px;">REPORT</h3>
+		<h2 style="text-align: center;padding-bottom: 30px;">REPORT</h2>
 		<!-- All Data -->
+
+	<!--	<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
+		   ng-class="item.isSplit ? 'btn btn-primary' : 'btn btn-default'"
+		   style="margin: 4px 4px 4px 4px;">more</a>-->
+
 		<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;">
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">All Income : {{ctrl.allIncome | number:0}}đ</div>
@@ -52,9 +58,24 @@ form .progress {
 					<!--({{(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)-->
 					({{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)
 				</div>
-				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
-					In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Quantity: {{ctrl.allOrders}} | {{ctrl.allFrames}} | {{ctrl.allLenses}}</div>
+			</div>
+			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Most Income {{ctrl.maxAllIncomeMonth.year+ctrl.maxAllIncomeMonth.month}}: {{ctrl.maxAllIncomeMonth.income | number:0}}đ</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Most Outcome {{ctrl.maxAllOutcomeMonth.year+ctrl.maxAllOutcomeMonth.month}}: {{ctrl.maxAllOutcomeMonth.outcome | number:0}}đ</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Most profit {{ctrl.maxAllProfitMonth.year+ctrl.maxAllProfitMonth.month}}: {{ctrl.maxAllProfitMonth.profit | number:0}}đ</div>
+			</div>
+			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Least Income {{ctrl.minAllIncomeMonth.year+ctrl.minAllIncomeMonth.month}}: {{ctrl.minAllIncomeMonth.income | number:0}}đ</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Least Outcome {{ctrl.minAllOutcomeMonth.year+ctrl.minAllOutcomeMonth.month}}: {{ctrl.minAllOutcomeMonth.outcome | number:0}}đ</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
+					Least profit {{ctrl.minAllProfitMonth.year+ctrl.minAllProfitMonth.month}}: {{ctrl.minAllProfitMonth.profit | number:0}}đ</div>
 			</div>
 		</div>
 		<br>

@@ -383,18 +383,18 @@ public class ManagementController {
             int amount = 0;
             int disAmount = 0;
             for(OrderDetail orderDetail : or.getOrderDetails()){
-                int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
+                int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice()*orderDetail.getLensQuantity() : 0;
                 int otherPrice = orderDetail.getOtherPrice() != null ? orderDetail.getOtherPrice() : 0;
 
-                disAmount += orderDetail.getFramePriceAtThatTime()*orderDetail.getFrameDiscountAmount()/100
-                             + lensPrice*orderDetail.getLensDiscountAmount()/100;
-                amount += orderDetail.getFramePriceAtThatTime() + lensPrice + otherPrice - disAmount;
+                disAmount += orderDetail.getFramePriceAtThatTime()*orderDetail.getFrameDiscountAmount()*orderDetail.getQuantity()/100
+                             + lensPrice*orderDetail.getLensDiscountAmount()*orderDetail.getLensQuantity()/100;
+                amount += orderDetail.getFramePriceAtThatTime()*orderDetail.getQuantity() + lensPrice + otherPrice - disAmount;
 
                 if(orderDetail.getFramePriceAtThatTime() > 1000){
-                    frameQty += 1;
+                    frameQty += orderDetail.getQuantity();
                 }
                 if(orderDetail.getLensPrice() != null && orderDetail.getLensPrice() > 1000){
-                    lensQty += 1;
+                    lensQty += orderDetail.getLensQuantity();
                 }
             }
             discountAmount += disAmount + amount*or.getCouponDiscount()/100;

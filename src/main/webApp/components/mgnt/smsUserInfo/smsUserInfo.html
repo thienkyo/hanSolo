@@ -596,7 +596,7 @@ form .progress {
 
 			</div>
 			<!-- strategy tab pane-->
-			<div id="strategy" class="container tab-pane active"><br>
+			<div id="strategy" class="container tab-pane"><br>
 				<div class="row" >
 					<div class="col-sm-1">
 						<input type="number"  ng-model="ctrl.theSmsJob.id" disabled="disabled" placeholder="id" style="width:50px;"/>
@@ -607,7 +607,6 @@ form .progress {
 					<div class="col-sm-1">
 						<input type="text"  ng-model="ctrl.theSmsJob.weight" placeholder="weight" style="width: 100%;"/>
 					</div>
-
 					<div class="col-sm-2">
 						<div class='input-group date'>
 							<input ng-model="ctrl.theSmsJob.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
@@ -621,7 +620,6 @@ form .progress {
 					<div class="col-sm-2">
 						{{ctrl.theSmsJob.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 					</div>
-
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-1" style="margin-top: 5px;">

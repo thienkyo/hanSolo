@@ -150,6 +150,19 @@
 							</div>
 						</div>
 					</div>
+
+					<!-- metadata-->
+					<ul class="nav nav-tabs" role="tablist" ng-show="ctrl.isSuperAdmin">
+						<li class="nav-item {{ctrl.isClickMetadata ? 'active' : ''}}" ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;">
+							<a class="nav-link" data-toggle="tab" href="" data-target="#metadata">metadata</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div id="metadata" class="container tab-pane {{ctrl.isClickMetadata ? 'active' : ''}}">
+							<br/>
+							<pre>{{ctrl.theSummaryModal.plainText}}</pre>
+						</div>
+					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
 					</div>
@@ -293,13 +306,11 @@
 
 		<!--local order recovery-->
 		<!-- Config Nav tabs -->
-
 		<ul class="nav nav-tabs" role="tablist">
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder">recover order</a>
 			</li>
 		</ul>
-
 		<div class="tab-content">
 			<div id="recoverOrder" class="container tab-pane">
 				<br/>

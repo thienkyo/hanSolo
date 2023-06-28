@@ -26,6 +26,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         new ModifiedReportDO('2030'),
         new ModifiedReportDO('2031')
     ];
+    self.excludedMonth = ['202207','202208','202209'];
     self.modifiedReports2 = [];// array of ModifiedReportDO
 
 
@@ -37,8 +38,25 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     }
 
     bizReportService.getAll().then(function (data) {
+
         self.bizReportList = data;
         self.setModifiedReports(data);
+
+        var data2 = [...data];
+
+        self.excludedMonth.forEach((one, index, array) => {
+            data2 = data2.filter(i => i.year+i.month != one);
+        });
+
+        self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
+        self.minAllIncomeMonth = data2.find(item => item.income == Math.min(...data2.map(o => o.income)));
+
+        self.maxAllOutcomeMonth = data2.find(item => item.outcome == Math.max(...data2.map(o => o.outcome)));
+        self.minAllOutcomeMonth = data2.find(item => item.outcome == Math.min(...data2.map(o => o.outcome)));
+
+        self.maxAllProfitMonth = data2.find(item => item.profit == Math.max(...data2.map(o => o.profit)));
+        self.minAllProfitMonth = data2.find(item => item.profit == Math.min(...data2.map(o => o.profit)));
+
         self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
     });
 
@@ -46,7 +64,8 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         data.forEach((dataOne, index, array) => {
             self.modifiedReports.forEach((reportOne, index, array) => {
                 if(dataOne.year == reportOne.year){
-                    reportOne.details.push(dataOne);
+                    dataOne.profit = dataOne.income - dataOne.outcome;
+                    reportOne.details.push(dataOne);// input months detail
                     reportOne.income += dataOne.income;
                     reportOne.outcome += dataOne.outcome;
                     reportOne.orders += dataOne.orderQuantity;
@@ -70,6 +89,8 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                 self.modifiedReports2.push(reportOne);
             }
         });
+
+        console.log(self.modifiedReports2);
     }
 
     self.setTheOne = function(one){

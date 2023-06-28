@@ -373,7 +373,7 @@ angular.module('orderListModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
-
+        self.theSummaryModal.plainText = JSON.stringify(one, undefined, 2);
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {

@@ -157,7 +157,6 @@ public class AuthenticationController {
         // 5. manage lens product
         manageLensProduct(or);
 
-        //GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
         GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }

@@ -104,7 +104,7 @@ angular.module('storeOrderModule')
     }
 
    /*
-   self.querySearchLens = function(searchText){
+    self.querySearchLens = function(searchText){
         if(searchText){
             var url = "search/productMngt/"+searchText;
             return ajaxService.get(url,null,{}).then(function(response){
@@ -192,11 +192,10 @@ angular.module('storeOrderModule')
 
 /////////// md-autoComplete for phone////////
     self.searchOrderByPhoneTextChange =function(text) {
-       if(self.copyActive){
+        if(self.copyActive){
             self.phoneCopy();
         }
     }
-
 
     self.calculateOrderTotal = function(){
         var subTotal = 0;
@@ -213,7 +212,9 @@ angular.module('storeOrderModule')
             if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
                 temp = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
             }
-            subTotal += temp*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity + self.theOrder.orderDetails[i].lensPrice*self.theOrder.orderDetails[i].lensQuantity*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 + self.theOrder.orderDetails[i].otherPrice;
+            subTotal += temp*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100*self.theOrder.orderDetails[i].quantity +
+                        self.theOrder.orderDetails[i].lensPrice*self.theOrder.orderDetails[i].lensQuantity*(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100 +
+                        self.theOrder.orderDetails[i].otherPrice;
         }
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
@@ -304,7 +305,7 @@ angular.module('storeOrderModule')
                 self.isSaveButtonPressed=true;
 
                 self.currentMember = memberService.getCurrentMember();
-                self.theOrder.lastModifiedBy = self.currentMember.name+self.currentMember.phone;;
+                self.theOrder.lastModifiedBy = self.currentMember.name+self.currentMember.phone;
 
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid

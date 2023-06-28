@@ -10,9 +10,13 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     List<OrderDetail> findAllByOrderByGmtCreateDesc();
     List<OrderDetail> findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
     List<OrderDetail> findByNameNotAndPhoneNotOrderByGmtCreateDesc(String name, String phone);
-    List<OrderDetail> findFirst30ByNameContains(String name);
-    List<OrderDetail> findFirst30ByNameContainsIgnoreCase(String name);
-    List<OrderDetail> findFirst30ByPhoneContains(String phone);
+
+    //List<OrderDetail> findFirst30ByNameContainsIgnoreCase(String name);
+    List<OrderDetail> findFirst30ByNameContainsIgnoreCaseOrderByGmtCreateDesc(String name);
+
+
+    //List<OrderDetail> findFirst30ByPhoneContains(String phone);
+    List<OrderDetail> findFirst30ByPhoneContainsOrderByGmtCreateDesc(String phone);
 
     @Query("select distinct o from OrderDetail o where o.lensPrice <> 0 or o.otherNote is not null")
     List<OrderDetail> getDataForLensProduct();
