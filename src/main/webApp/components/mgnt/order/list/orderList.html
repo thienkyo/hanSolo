@@ -103,13 +103,11 @@
 					</div>
 					<div class="modal-body">
 						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
-
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-3">Name: {{ctrl.theSummaryModal.shippingName}}</div>
 								<div class="col-sm-3">Phone: {{ctrl.theSummaryModal.shippingPhone | tel}}</div>
 								<div class="col-sm-6">Address: {{ctrl.theSummaryModal.shippingAddress}}</div>
 							</div>
-
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-2">Tổng: {{ctrl.theSummaryModal.subTotal | number:0}}đ</div>
 								<div class="col-sm-3">Giảm: ({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</div>
@@ -117,7 +115,6 @@
 								<div class="col-sm-2">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</div>
 								<div class="col-sm-2">Còn lại: {{ctrl.theSummaryModal.deposit > 1000 ?  ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit : '0' | number:0}}đ</div>
 							</div>
-
 						</div>
 
 						<div class="container" style="width:100%;font-size: 18px;">
@@ -305,14 +302,14 @@
         </div>
 
 		<!--local order recovery-->
-		<!-- Config Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist">
+		<!--  -->
+		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}" ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;" role="tablist">
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder">recover order</a>
 			</li>
 		</ul>
 		<div class="tab-content">
-			<div id="recoverOrder" class="container tab-pane">
+			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickMetadata ? 'active' : ''}}">
 				<br/>
 				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
