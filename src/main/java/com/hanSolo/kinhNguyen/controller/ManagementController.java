@@ -380,15 +380,19 @@ public class ManagementController {
         int lensQty = 0;
         int frameQty = 0;
         for(Order or : orderList){
-            int amount = 0;
-            int disAmount = 0;
+            int amount = 0;// one order amount
+            int disAmount = 0;//
+            int tempDisAmount = 0;//
             for(OrderDetail orderDetail : or.getOrderDetails()){
-                int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice()*orderDetail.getLensQuantity() : 0;
+                int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
                 int otherPrice = orderDetail.getOtherPrice() != null ? orderDetail.getOtherPrice() : 0;
 
-                disAmount += orderDetail.getFramePriceAtThatTime()*orderDetail.getFrameDiscountAmount()*orderDetail.getQuantity()/100
+                //calculate each orderDetail discount value
+                tempDisAmount = orderDetail.getFramePriceAtThatTime()*orderDetail.getFrameDiscountAmount()*orderDetail.getQuantity()/100
                              + lensPrice*orderDetail.getLensDiscountAmount()*orderDetail.getLensQuantity()/100;
-                amount += orderDetail.getFramePriceAtThatTime()*orderDetail.getQuantity() + lensPrice + otherPrice - disAmount;
+                disAmount += tempDisAmount;
+                //calculate each orderDetail amount
+                amount += orderDetail.getFramePriceAtThatTime()*orderDetail.getQuantity() + lensPrice*orderDetail.getLensQuantity() + otherPrice - tempDisAmount;
 
                 if(orderDetail.getFramePriceAtThatTime() > 1000){
                     frameQty += orderDetail.getQuantity();
@@ -464,8 +468,11 @@ public class ManagementController {
 
     @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
     public Order getOrderById(@PathVariable final int orderId) throws ServletException {
-        Order or = orderRepo.findById(orderId).get();
-        return	orderRepo.findById(orderId).get();
+        Order or = new Order();
+        if(orderRepo.findById(orderId).isPresent()){
+            or = orderRepo.findById(orderId).get();
+        }
+        return	or;
     }
 
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
