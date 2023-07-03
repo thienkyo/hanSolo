@@ -27,6 +27,9 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         new ModifiedReportDO('2031')
     ];
     self.excludedMonth = ['202207','202208','202209'];
+    self.beginMonthNumber = 3;
+    self.endMonthNumber = 1;
+
     self.modifiedReports2 = [];// array of ModifiedReportDO
 
 
@@ -38,15 +41,14 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     }
 
     bizReportService.getAll().then(function (data) {
-
         self.bizReportList = data;
         self.setModifiedReports(data);
 
         var data2 = [...data];
-
-        self.excludedMonth.forEach((one, index, array) => {
-            data2 = data2.filter(i => i.year+i.month != one);
-        });
+        for(var i = 0; i < self.beginMonthNumber; i++){
+            data2.pop()
+        }
+        data2.shift();
 
         self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
         self.minAllIncomeMonth = data2.find(item => item.income == Math.min(...data2.map(o => o.income)));
@@ -89,8 +91,6 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                 self.modifiedReports2.push(reportOne);
             }
         });
-
-        console.log(self.modifiedReports2);
     }
 
     self.setTheOne = function(one){

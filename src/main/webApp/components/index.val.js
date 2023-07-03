@@ -184,7 +184,7 @@ function SmsUserInfoDO(){
     this.lastSendSmsDate = (new Date()).getTime();
     this.orderCreateDate = (new Date()).getTime();
     this.name = '';
-    this.jobIdList = 'a';
+    this.jobIdList = '';
     this.location = 'MANUAL';
     this.address = '';
     this.isTestUser = false;

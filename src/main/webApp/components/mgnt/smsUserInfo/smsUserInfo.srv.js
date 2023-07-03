@@ -150,5 +150,33 @@ angular.module('smsUserInfoModule')
          });
     }
  }])
+.factory('strategyService', ['ajaxService',function(ajaxService) {
+ 	var strategyService = {
+ 			getDataForMgnt : getDataForMgnt,
+ 			upsert : upsert,
+ 			deleteOne : deleteOne
+ 			};
+ 	return strategyService;
 
+ 	function getDataForMgnt(amount){
+ 		var url = "mgnt/getStrategyForMgnt/"+amount;
+ 		return ajaxService.get(url,null,{}).then(function(response){
+ 			return response.data;
+ 		});
+ 	}
+
+ 	function upsert(one){
+ 		var url = "mgnt/upsertSpecificSmsUserInfo";
+ 		return ajaxService.post(url,one,{}).then(function(response){
+ 			return response.data;
+ 		});
+ 	}
+
+ 	function deleteOne(one){
+         var url = "mgnt/deleteSpecificSmsUserInfo";
+         return ajaxService.post(url,one,{}).then(function(response){
+             return response.data;
+         });
+    }
+ }])
 ;

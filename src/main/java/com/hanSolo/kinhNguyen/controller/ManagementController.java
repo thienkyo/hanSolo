@@ -51,6 +51,7 @@ public class ManagementController {
     @Autowired private ContractRepository contractRepo;
     @Autowired private SalaryRepository salaryRepo;
     @Autowired private LensProductRepository lensProductRepo;
+    @Autowired private StrategyRepository strategyRepo;
 
     @Autowired private Environment env;
 
@@ -379,6 +380,7 @@ public class ManagementController {
         int discountAmount = 0;
         int lensQty = 0;
         int frameQty = 0;
+        int orderQty = 0;
         for(Order or : orderList){
             int amount = 0;// one order amount
             int disAmount = 0;//
@@ -403,11 +405,15 @@ public class ManagementController {
             }
             discountAmount += disAmount + amount*or.getCouponDiscount()/100;
             incomeAmount += amount - amount*or.getCouponDiscount()/100;
+
+            if(amount > 10000){
+                orderQty += 1;
+            }
         }
         bizReport.setFrameQuantity(frameQty);
         bizReport.setLensQuantity(lensQty);
         bizReport.setIncome(incomeAmount);
-        bizReport.setOrderQuantity(orderList.size());
+        bizReport.setOrderQuantity(orderQty);
         bizReport.setDiscountAmount(discountAmount);
 
         return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
@@ -679,6 +685,18 @@ public class ManagementController {
     public GenericResponse deleteSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one)  {
         specificSmsUserInfoRepo.delete(one);
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+    //////////////////////////// strategy section /////////////////////////////
+    @RequestMapping(value = "getStrategyForMgnt/{amount}", method = RequestMethod.GET)
+    public List<Strategy> getStrategyForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
+        List<Strategy> list ;
+        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+            list =  strategyRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            list = strategyRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return list;
     }
 
     //////////////////////////// key Management section /////////////////////////////

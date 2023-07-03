@@ -4,10 +4,12 @@ angular.module('smsUserInfoModule')
 									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
+									'strategyService',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
-	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray) {
+	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
+	        strategyService) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
@@ -292,5 +294,19 @@ angular.module('smsUserInfoModule')
         self.responseStr = false;
         self.TheSpecificSmsUserInfo = new SmsUserInfoDO();
     }
+
+///////////  strategy //////
+    self.setTheStrategy = function(one){
+        self.theStrategy = one;
+        self.responseStr = false;
+    }
+    self.getStrategyByTerm = function(){
+        strategyService.getDataForMgnt(0).then(function (data) {
+            self.strategyList = data;
+            console.log(data);
+            self.strategyTableParams = new NgTableParams({}, { dataset: self.strategyList});
+        });
+    }
+
 
 }]);

@@ -174,7 +174,7 @@ public class AuthenticationController {
                         reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
                         lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+")" +
                                      "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+")" + reading;
-                        extInfo = detail.getOrderId() + "-" + detail.getId();
+                        extInfo = order.getId() + "-" + detail.getId();
 
                         lensProductRepo.save(new LensProduct(detail.getGmtCreate(),
                                 detail.getGmtModify(),
