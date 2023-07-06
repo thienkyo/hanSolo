@@ -594,35 +594,6 @@
 					<div class="col-lg-1">
 						<h4>Tròng</h4>
 					</div>
-					<!--<div class="col-lg-1">
-						<md-autocomplete class="search_class"  flex=""
-										 ng-disabled="ctrl.isDisable"
-										 md-no-cache="ctrl.noCache"
-										 md-selected-item="item.productLens"
-										 md-search-text-change="ctrl.searchLensTextChange(item.searchLensText)"
-										 md-search-text="item.searchLensText"
-										 md-selected-item-change="ctrl.selectedLensChange(one,item)"
-										 md-items="one in ctrl.querySearchLens(item.searchLensText)"
-										 md-item-text="one.name"
-										 md-min-length="3"
-										 md-delay="600"
-										 placeholder="search">
-							<md-item-template>
-								<div class="row" >
-									<div class="col-md-1" >{{one.id}}</div>
-									<div class="col-md-3" >
-										<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
-									</div>
-									<div class="col-md-5" style="">{{one.name}}</div>
-									<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
-
-								</div>
-							</md-item-template>
-							<md-not-found>
-								không có kết quả cho "{{item.searchLensText}}".
-							</md-not-found>
-						</md-autocomplete>
-					</div>-->
 
 					<div class="col-lg-4">
 						<div class="checkout__input" >
@@ -644,11 +615,11 @@
 							>
 								<md-item-template>
 									<div class="row" >
-										<div class="col-md-1" style="text-align: left;">{{one.extInfo}}</div>
+										<!--<div class="col-md-1" style="text-align: left;">{{one.extInfo}}</div>-->
 										<div class="col-md-4" >{{one.lensNote}}</div>
 										<div class="col-md-3" style="">{{one.lensDetail}}</div>
 										<div class="col-md-2" style="text-align: right;">{{one.sellPrice | number:0}}đ</div>
-										<div class="col-md-2" style="">{{one.gmtCreate | date:"yyyy-MM-dd"}}</div>
+										<div class="col-md-2" style="">{{one.gmtCreate | date:"yyyy-MM-dd"}} | {{one.extInfo}}</div>
 									</div>
 								</md-item-template>
 								<md-not-found>

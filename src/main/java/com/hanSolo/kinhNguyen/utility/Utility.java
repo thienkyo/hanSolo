@@ -70,8 +70,19 @@ public class Utility {
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
+    ///// config /////
     public static Date LAST_SMS_HEARTBEAT_TIME;
     public static Date LAST_PREPARE_DATA_HEARTBEAT_TIME;
+
+    /**
+     * control api prepareSmsData: to prepare data sms sending true = allow
+     */
+    public static boolean SMS_DATA_PREPARE_CONTROL = true;
+
+    /**
+     * control api getQueueSms: get data for sms sending true = allow
+     */
+    public static boolean SMS_SEND_CONTROL = true;
 
     static {
         try {

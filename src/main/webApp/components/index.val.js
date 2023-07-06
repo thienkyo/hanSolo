@@ -90,7 +90,22 @@ angular
 		.value('ContractDO',ContractDO)
 		.value('SalaryDO',SalaryDO)
 		.value('LensProductDO',LensProductDO)
+		.value('StrategyDO',StrategyDO)
 		;
+
+
+function StrategyDO(){
+    this.id = 0;
+    this.name = '';
+    this.templateContent = '';
+    this.isCouponCreated = true;
+    this.isSmsCreated = true;
+    this.discountValue = null;
+    this.gender = 'ALL';
+    this.location = 'ALL';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function LensProductDO(){
 	this.id = 0;

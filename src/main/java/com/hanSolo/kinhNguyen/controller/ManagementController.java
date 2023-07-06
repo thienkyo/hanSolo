@@ -628,6 +628,30 @@ public class ManagementController {
     }
 
     //////////////////////////// sms Job section /////////////////////////////
+
+    @RequestMapping(value = "togglePrepareSmsData", method = RequestMethod.POST)
+    public boolean togglePrepareSmsData()  {
+        Utility.SMS_DATA_PREPARE_CONTROL = Utility.SMS_DATA_PREPARE_CONTROL ? false : true;
+        return Utility.SMS_DATA_PREPARE_CONTROL;
+    }
+
+    @RequestMapping(value = "getSmsDataPrepareStatus", method = RequestMethod.POST)
+    public boolean getSmsDataPrepareStatus()  {
+        return Utility.SMS_DATA_PREPARE_CONTROL;
+    }
+
+    @RequestMapping(value = "toggleSmsSend", method = RequestMethod.POST)
+    public boolean toggleSmsSend()  {
+        Utility.SMS_SEND_CONTROL = Utility.SMS_SEND_CONTROL ? false : true;
+        return Utility.SMS_SEND_CONTROL;
+    }
+
+    @RequestMapping(value = "getSmsSendStatus", method = RequestMethod.POST)
+    public boolean getSmsSendStatus()  {
+        return Utility.SMS_SEND_CONTROL;
+    }
+
+
     @RequestMapping(value = "getSmsJobForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsJob> getSmsJobForMgnt(@PathVariable final int amount) {
         return smsJobRepo.findAllByOrderByGmtCreateDesc();
@@ -697,6 +721,21 @@ public class ManagementController {
             list = strategyRepo.findAllByOrderByGmtCreateDesc();
         }
         return list;
+    }
+
+    @RequestMapping(value = "upsertStrategy", method = RequestMethod.POST)
+    public GeneralResponse<Strategy> upsertStrategy(@RequestBody final Strategy one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(strategyRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save strategy success");
+    }
+
+    @RequestMapping(value = "deleteStrategy", method = RequestMethod.POST)
+    public GenericResponse deleteStrategy(@RequestBody final Strategy one)  {
+        strategyRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// key Management section /////////////////////////////

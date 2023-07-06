@@ -4,16 +4,17 @@ angular.module('smsUserInfoModule')
 									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
-									'strategyService',
+									'strategyService','StrategyDO',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
 	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
-	        strategyService) {
+	        strategyService,StrategyDO) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
 	self.theSmsJob = new SmsJobDO();
+	self.theStrategy = new StrategyDO();
 	self.theSpecificSmsUserInfo = new SmsUserInfoDO();
 	self.jobTypeList = JobTypeList; // sms job
 	self.statusList = CommonStatusArray;
@@ -197,6 +198,33 @@ angular.module('smsUserInfoModule')
         self.lastPrepareDataTime = data;
     });
 
+    /// for sms send api
+    smsJobService.getSmsSendStatus().then(function (data) {
+        self.isRunSmsSend = data;
+    });
+
+    self.toggleSmsSend = function(){
+        self.isSaveButtonPressed=true;
+        smsJobService.toggleSmsSend().then(function (data) {
+            self.isSaveButtonPressed=false;
+            self.isRunSmsSend = data;
+        });
+    }
+
+    /// for sms data prepare api
+    smsJobService.getSmsDataPrepareStatus().then(function (data) {
+        self.isRunSmsDataPrepare = data;
+    });
+
+    self.toggleSmsDataPrepare = function(){
+        self.isSaveButtonPressed=true;
+        smsJobService.toggleSmsDataPrepare().then(function (data) {
+            self.isSaveButtonPressed=false;
+            self.isRunSmsDataPrepare = data;
+        });
+    }
+
+
     smsJobService.getDataForMgnt(0).then(function (data) {
         self.smsJobList = data;
         self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
@@ -296,6 +324,22 @@ angular.module('smsUserInfoModule')
     }
 
 ///////////  strategy //////
+    self.genderArrayStrategy=[
+    	{name : 'All', value:"ALL" },
+    	{name : 'Male', value:"MALE" },
+    	{name : 'Female', value:"FEMALE" }
+    ];
+    self.locationArrayStrategy=[
+        {name : 'All', value:"ALL" },
+        {name : 'NEARHCM', value:"NEARHCM" },
+        {name : 'OTHERS', value:"OTHERS" }
+    ];
+    // open datePicker
+    self.openDPStrategy = function() {
+        self.DPisOpenStrategy = true;
+        self.isPickDPStrategy = true;
+    };
+
     self.setTheStrategy = function(one){
         self.theStrategy = one;
         self.responseStr = false;
@@ -305,6 +349,31 @@ angular.module('smsUserInfoModule')
             self.strategyList = data;
             console.log(data);
             self.strategyTableParams = new NgTableParams({}, { dataset: self.strategyList});
+        });
+    }
+
+    self.upsertStrategy = function(one){
+        self.isSaveButtonPressed=true;
+        self.responseStr = false;
+        strategyService.upsert(one).then(function (data) {
+            self.responseStr = data;
+            self.isSaveButtonPressed=false;
+            if(one.id == 0){
+                self.strategyList.unshift(data.obj);
+                self.strategyTableParams = new NgTableParams({}, { dataset: self.strategyList});
+            }
+        });
+    }
+
+    self.deleteStrategy = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        strategyService.deleteOne(one).then(function (data) {
+            self.responseStr = data;
+            var index = self.smsJobList.indexOf(one);
+            self.smsJobList.splice(index,1);
+            self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+
         });
     }
 

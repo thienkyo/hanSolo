@@ -87,7 +87,7 @@ form .progress {
 							<div class='input-group date'>
 								<input ng-model="ctrl.theSmsJob.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
 									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height:30px;"
-									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="start date"/>
+									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="order from date"/>
 								<span class="input-group-addon" ng-click="ctrl.openDP()">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</span>
@@ -142,7 +142,6 @@ form .progress {
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-5"></div>
-
 					<div class="col-sm-2">
 						<a ng-click="ctrl.upsertSmsJob(ctrl.theSmsJob)" href=""
 						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
@@ -166,7 +165,15 @@ form .progress {
 				</div>
 
 				<!-- sms job list-->
-				<h3 style="margin-top: 20px;">Sms job </h3>
+				<!--<h3 style="margin-top: 20px;">Sms job </h3>-->
+				<a ng-click="ctrl.toggleSmsSend()" href=""
+				   ng-class="ctrl.isRunSmsSend ? 'btn btn-success' : 'btn btn-danger'"
+				   ng-disabled="ctrl.isSaveButtonPressed"
+				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsSend ? '[ON]' : '[OFF]'}} send sms api</a>
+				<a ng-click="ctrl.toggleSmsDataPrepare()" href=""
+				   ng-class="ctrl.isRunSmsDataPrepare ? 'btn btn-success' : 'btn btn-danger'"
+				   ng-disabled="ctrl.isSaveButtonPressed"
+				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsDataPrepare ? '[ON]' : '[OFF]'}} prepare data api</a>
 				<!-- sms job table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
@@ -605,78 +612,57 @@ form .progress {
 						<input type="text"  ng-model="ctrl.theStrategy.name" placeholder="name" style="width: 100%;"/>
 					</div>
 					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.theStrategy.discountValue" placeholder="discount Value" style="width: 100%;"/>
+					</div>
+					<div class="col-sm-2">
 						<select  ng-model="ctrl.theStrategy.gender"
-								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-								 ng-disabled="ctrl.isSaveButtonPressed"
-								 ng-style="ctrl.setStyle(one.status)">
+								 ng-options="opt.value as opt.name for opt in ctrl.genderArrayStrategy">
 						</select>
 					</div>
 					<div class="col-sm-2">
 						<select  ng-model="ctrl.theStrategy.location"
-								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-								 ng-disabled="ctrl.isSaveButtonPressed"
-								 ng-style="ctrl.setStyle(one.status)">
+								 ng-options="opt.value as opt.name for opt in ctrl.locationArrayStrategy">
 						</select>
 					</div>
 
 					<div class="col-sm-2">
 						<div class='input-group date'>
 							<input ng-model="ctrl.theStrategy.startDate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
-								   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height:30px;"
-								   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" placeholder="start date"/>
+								   show-weeks="false" is-open="ctrl.DPisOpenStrategy" ng-focus="ctrl.DPisOpenStrategy=true" style="height:30px;"
+								   ng-click="ctrl.openDPStrategy()" min-date="ctrl.MinDate" placeholder="start date"/>
 							<span class="input-group-addon" ng-click="ctrl.openDP()">
 									<span class="glyphicon glyphicon-calendar"></span>
 								</span>
 						</div>
 					</div>
-					<div class="col-sm-2">
-						{{ctrl.theStrategy.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
-					</div>
+
 				</div>
 				<div class="row" style="margin-top: 20px;">
-					<div class="col-sm-1" style="margin-top: 5px;">
-						Active:
-						<input type="checkbox"  ng-model="ctrl.theSmsJob.status" />
+					<div class="col-sm-1" style="margin-top: 5px;padding-right: 0px;">
+						Coupon:
+						<input type="checkbox"  ng-model="ctrl.theStrategy.isCouponCreated" />
 					</div>
 					<div class="col-sm-1" style="margin-top: 5px;">
-						isTest:
-						<input type="checkbox"  ng-model="ctrl.theSmsJob.isTest" />
-					</div>
-					<div class="col-sm-1">
-						<select  ng-model="ctrl.theSmsJob.jobType"
-								 ng-options="opt.value as opt.name for opt in ctrl.jobTypeList"
-								 style="width: 100%;height: 30px;">
-						</select>
-					</div>
-					<div class="col-sm-1">
-						<input type="text"  ng-model="ctrl.theSmsJob.noSmsDays" placeholder="noSmsDays" style="width: 100%;"/>
-					</div>
-					<div class="col-sm-1">
-						<input type="text"  ng-model="ctrl.theSmsJob.intervalTime" placeholder="intervalTime" style="width: 100%;"/>
+						SMS:
+						<input type="checkbox"  ng-model="ctrl.theStrategy.isSmsCreated" />
 					</div>
 					<div class="col-sm-6">
-						sms: {{ctrl.lastHeartBeatTime | date:"yyyy-MM-dd HH:mm:ss"}}
-						| data: {{ctrl.lastPrepareDataTime | date:"yyyy-MM-dd HH:mm:ss"}}
+						create: {{ctrl.theStrategy.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+						| modify: {{ctrl.theStrategy.gmtModify | date:"yyyy-MM-dd HH:mm:ss"}}
 					</div>
-
 
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-5">
-						<textarea name="content" placeholder="specificPhones" rows="5"  style="white-space: pre-line;"
-								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
-					</div>
-					<div class="col-sm-7">
 						<textarea name="content" placeholder="content" rows="5"  style="white-space: pre-line;"
-								  ng-model="ctrl.theSmsJob.msgContentTemplate" maxlength="160" ng-cloak ></textarea>
-
+								  ng-model="ctrl.theStrategy.templateContent" maxlength="160" ng-cloak ></textarea>
+						<div id="the-count3">
+							<span>{{ctrl.theStrategy.templateContent.length}}</span>
+							<span>/160</span>
+						</div>
 					</div>
-				</div>
-				<div class="row" style="margin-top: 20px;">
-					<div class="col-sm-5"></div>
-
 					<div class="col-sm-2">
-						<a ng-click="ctrl.upsertSmsJob(ctrl.theSmsJob)" href=""
+						<a ng-click="ctrl.upsertStrategy(ctrl.theStrategy)" href=""
 						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
 						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
 
@@ -698,14 +684,14 @@ form .progress {
 				</div>
 
 				<h3 style="margin-top: 20px;">Strategy </h3>
-				<!-- sms job table-->
+				<!-- strategy table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.strategyTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
-							<td title="'id'" filter="{ 'id': 'number'}"  style="width:70px;text-align: center;">
+							<td title="'id'" filter="{ 'id': 'number'}"  style="text-align: center;">
 								<a href="" ng-click="ctrl.setTheStrategy(one)">{{one.id}}</a>
 							</td>
-							<td title="'name'" filter="{ 'jobName' : 'text'}" sortable="'jobName'" style="text-align: right;">
+							<td title="'name'" filter="{ 'jobName' : 'text'}" sortable="'jobName'" style="text-align: right;width:90px;">
 								{{one.name}}
 							</td>
 							<td title="'message'" filter="{ 'msgContentTemplate' : 'text'}" sortable="'msgContentTemplate'" style="text-align: left;">
@@ -717,24 +703,17 @@ form .progress {
 							<td title="'gender'"  style="text-align: left;width:80px;">
 								{{one.gender}}
 							</td>
-							<!--<td title="'active'"  style="text-align: center;">
-								<select  ng-model="one.status"  ng-change="ctrl.upsertSmsJob(one)"
-										 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-										 ng-disabled="ctrl.isSaveButtonPressed"
-										 ng-style="ctrl.setStyle(one.status)">
-								</select>
-							</td>-->
-							<td title="'couponCreated'"  style="width:80px;text-align: center;" ng-style="ctrl.setStyle(one.isCouponCreated)">
+							<td title="'coupon'"  style="width:60px;text-align: center;" ng-style="ctrl.setStyle(one.isCouponCreated)">
 								{{one.isCouponCreated}}
 							</td>
-							<td title="'smsCreated'"  style="width:80px;text-align: center;" ng-style="ctrl.setStyle(one.isSmsCreated)">
+							<td title="'sms'"  style="width:60px;text-align: center;" ng-style="ctrl.setStyle(one.isSmsCreated)">
 								{{one.isSmsCreated}}
-							</td>location
-							<td title="'location'"  style="text-align: left;width:80px;">
+							</td>
+							<td title="'location'"  style="text-align: left;width:70px;">
 								{{one.location}}
 							</td>
 
-							<td title="'start'"  style="text-align: left;width: 110px;">
+							<td title="'start'"  style="text-align: left;width: 6px;">
 								{{one.startDate | date:"yyyy-MM-dd"}}
 							</td>
 
@@ -742,7 +721,7 @@ form .progress {
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
-									<a ng-click="ctrl.deleteSmsJob(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.deleteStrategy(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
 								</p>
 							</td>

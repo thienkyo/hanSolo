@@ -82,6 +82,10 @@ angular.module('smsUserInfoModule')
 			upsert : upsert,
 			getLastHeartBeatTime : getLastHeartBeatTime,
 			getLastPrepareDataTime : getLastPrepareDataTime,
+			toggleSmsDataPrepare : toggleSmsDataPrepare,
+			getSmsDataPrepareStatus : getSmsDataPrepareStatus,
+			toggleSmsSend : toggleSmsSend,
+			getSmsSendStatus : getSmsSendStatus,
 			deleteOne : deleteOne
 			};
 	return smsJobService;
@@ -99,6 +103,34 @@ angular.module('smsUserInfoModule')
 			return response.data;
 		});
 	}
+
+	function toggleSmsDataPrepare(){
+        var url = "mgnt/togglePrepareSmsData";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getSmsDataPrepareStatus(){
+        var url = "mgnt/getSmsDataPrepareStatus";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function toggleSmsSend(){
+        var url = "mgnt/toggleSmsSend";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getSmsSendStatus(){
+        var url = "mgnt/getSmsSendStatus";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function getLastHeartBeatTime(){
         var url = "mgnt/getLastHeartBeatTime";
@@ -166,14 +198,14 @@ angular.module('smsUserInfoModule')
  	}
 
  	function upsert(one){
- 		var url = "mgnt/upsertSpecificSmsUserInfo";
+ 		var url = "mgnt/upsertStrategy";
  		return ajaxService.post(url,one,{}).then(function(response){
  			return response.data;
  		});
  	}
 
  	function deleteOne(one){
-         var url = "mgnt/deleteSpecificSmsUserInfo";
+         var url = "mgnt/deleteStrategy";
          return ajaxService.post(url,one,{}).then(function(response){
              return response.data;
          });

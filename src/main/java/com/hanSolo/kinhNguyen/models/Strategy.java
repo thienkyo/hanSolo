@@ -14,11 +14,11 @@ public class Strategy extends BaseModel {
     @Column(name = "template_content")
     private String templateContent;
 
-    @Column(name = "location", length = 50)
+    @Column(name = "location", length = 20,columnDefinition = "varchar(20) default 'ALL'")
     private String location;
 
-    @Column(name = "gender")
-    private Boolean gender;
+    @Column(name = "gender", columnDefinition = "varchar(20) default 'ALL'")
+    private String gender;
 
     @Column(name = "start_date")
     private Date startDate;
@@ -64,11 +64,11 @@ public class Strategy extends BaseModel {
         this.startDate = startDate;
     }
 
-    public Boolean getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
