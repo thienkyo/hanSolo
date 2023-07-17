@@ -37,5 +37,6 @@ angular.module('app', [
 		'keyManagementModule',
 		'contractModule',
 		'lensProductModule',
+		'shopConfigModule',
 		'ui.tinymce'
 ]);

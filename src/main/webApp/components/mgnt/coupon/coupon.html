@@ -35,10 +35,10 @@ form .progress {
   padding: 7px 17px;
 }
 </style>
-<link href="css/main2.css" rel="stylesheet">
-<section style="margin-top: 30px;">
+<!--<link href="css/main2.css" rel="stylesheet">-->
+<section>
 	<div class="container" ng-cloak>
-		<h3 style="padding-bottom: 40px;">Coupon management </h3>
+		<h3 style="padding-bottom: 40px;text-align: center;">Coupon management </h3>
 
 		<div class="row" style="margin-bottom: 30px;">
 			<div class="col-md-1">
@@ -113,13 +113,13 @@ form .progress {
 					<td title="'code'" filter="{ 'code': 'text'}" sortable="'code'"  style="width:130px;">
 						<a href="" ng-click="ctrl.updateCoupon(coupon)">{{coupon.code}} </a>
 					</td>
-					<td title="'value'" filter="{ 'value': 'text'}" sortable="'value'"  style="width:130px;">
+					<td title="'value'" filter="{ 'value': 'text'}"  style="width:80px;">
 						{{coupon.value}}
 					</td>
 			        <td title="'name'" filter="{ 'name' : 'text'}" sortable="'name'" style="width:200px;">
 			        	{{coupon.name}}
 			        </td>
-					<td title="'quantity'" filter="{ 'quantity' : 'text'}" sortable="'quantity'" style="text-align: right;width:120px;">
+					<td title="'qty'" filter="{ 'quantity' : 'text'}" sortable="'quantity'" style="text-align: right;width:80px;">
 						{{coupon.quantity}}
 					</td>
 					<td title="'lifespan'" filter="{ 'lifespan' : 'text'}" sortable="'lifespan'" style="text-align: right;width:120px;">
@@ -147,9 +147,10 @@ form .progress {
 			    </tr>
 			</table>
         </div>
+<!--
 
 		<h3 style="padding-bottom: 40px;">History: discount order: {{ctrl.usedCouponList.length}} |  tolal: {{ctrl.totalDiscountAmount | number:0}}đ</h3>
-		<!--data table-->
+		&lt;!&ndash;data table&ndash;&gt;
 		<div class="table-responsive" style="width: fit-content;">
 			<table ng-table="ctrl.usedCouponTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 				<tr ng-repeat="usedCoupon in $data">
@@ -175,13 +176,13 @@ form .progress {
 						{{usedCoupon.orderDate | date:"yyyy-MM-dd hh:mm:ss"}}
 					</td>
 
-					<!--<td title="'delete'" style="width:100px;" >
+					&lt;!&ndash;<td title="'delete'" style="width:100px;" >
 						<a ng-click="ctrl.deleteCoupon(coupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">delete</a>
-					</td>-->
+					</td>&ndash;&gt;
 				</tr>
 			</table>
 		</div>
-
+-->
 
 	</div>
 </section>

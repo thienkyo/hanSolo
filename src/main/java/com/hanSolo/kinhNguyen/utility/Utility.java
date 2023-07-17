@@ -19,7 +19,7 @@ import java.util.*;
 
 public class Utility {
 
-    final public static int AUTHENTICATION_TIMEOUT = 24*60*60*1000; //hour or min in dev
+    final public static int AUTHENTICATION_TIMEOUT = 3 * 24 * 60 * 60 * 1000; //
 
     final public static Boolean ACTIVE_STATUS = true;
     final public static Boolean INACTIVE_STATUS = false;
@@ -45,7 +45,9 @@ public class Utility {
     final public static String GROUP_TAGS = "TAG";
 
     final public static String SUCCESS_ERRORCODE = "SUCCESS";
+    final public static String SUCCESS_MSG = "executed successfully";
     final public static String FAIL_ERRORCODE = "FAIL";
+    final public static String FAIL_MSG = "fail";
 
     final public static int ORDER_STATUS_ORDERED = 0;
     final public static int ORDER_STATUS_PAID = 1;
@@ -102,25 +104,25 @@ public class Utility {
 
     final public static Date getFirstDateOfMonth(String year, String month) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        month = month.length() > 1 ? month : "0"+month;
-        return df.parse(year+month+"01_000000");
+        month = month.length() > 1 ? month : "0" + month;
+        return df.parse(year + month + "01_000000");
     }
 
     final public static Date getLastDateOfMonth(String year, String month) throws ParseException {
-        Date firstDate = getFirstDateOfMonth(year,month);
+        Date firstDate = getFirstDateOfMonth(year, month);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(firstDate);
         int res = calendar.getActualMaximum(Calendar.DATE);
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        month = month.length() > 1 ? month : "0"+month;
-        return df.parse(year+month+res+"_235959");
+        month = month.length() > 1 ? month : "0" + month;
+        return df.parse(year + month + res + "_235959");
     }
 
-    final public static ResponseEntity<String> savefile(String dir, MultipartFile uploadfile, String oldName){
+    final public static ResponseEntity<String> savefile(String dir, MultipartFile uploadfile, String oldName) {
         HttpHeaders headers = new HttpHeaders();
         String oldFilepath = "";
-        String filename="empty";
+        String filename = "empty";
         String filepath = "";
         try {
             DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -128,16 +130,16 @@ public class Utility {
 
             String currentTime = df.format(new java.util.Date());
             // Get the filename and build the local file path
-            filename = currentTime+"-"+uploadfile.getOriginalFilename();
-            if(!oldName.isEmpty()){
+            filename = currentTime + "-" + uploadfile.getOriginalFilename();
+            if (!oldName.isEmpty()) {
                 oldFilepath = Paths.get(dir, oldName).toString();
-                try{
+                try {
                     //Delete if tempFile exists
                     File fileTemp = new File(oldFilepath);
-                    if (fileTemp.exists()){
+                    if (fileTemp.exists()) {
                         fileTemp.delete();
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     // if any error occurs
                     e.printStackTrace();
                 }
@@ -155,13 +157,12 @@ public class Utility {
             headers.add("newName", filename);
             headers.add("imageDir", filepath);
             headers.setContentType(MediaType.TEXT_PLAIN);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new  ResponseEntity<>(filename,headers,HttpStatus.OK);
+        return new ResponseEntity<>(filename, headers, HttpStatus.OK);
     }
 
 
@@ -179,13 +180,13 @@ public class Utility {
                 try {
                     bytes = file.getBytes();
                     String currentTime = df.format(new java.util.Date());
-                    String filename = currentTime+"_"+file.getOriginalFilename();
+                    String filename = currentTime + "_" + file.getOriginalFilename();
                     String filepath = Paths.get(dir, filename).toString();
                     Files.write(Paths.get(filepath), bytes);
-                    if(fileNameStr.toString().isEmpty()){
+                    if (fileNameStr.toString().isEmpty()) {
                         fileNameStr.append(filename);
-                    }else{
-                        fileNameStr.append(","+filename);
+                    } else {
+                        fileNameStr.append("," + filename);
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -195,7 +196,7 @@ public class Utility {
             if (!oldNames.isEmpty()) {
                 // String[] parts = oldNames.split("|");
                 List<String> oldNameList = Arrays.asList(oldNames.split(","));
-                for (String oldName: oldNameList ) {
+                for (String oldName : oldNameList) {
                     oldFilepath = Paths.get(dir, oldName).toString();
                     try {
                         //Delete if tempFile exists

@@ -1,25 +1,45 @@
 angular.module('app')
-.controller('headerController', ['$rootScope','$location','ajaxService','memberService','cartStoreService','categoryService',
-	function($rootScope,$location,ajaxService,memberService,cartStoreService,categoryService) {
+.controller('headerController', ['$rootScope','$location','ajaxService','shopConfigService',
+                                 'memberService','cartStoreService','categoryService',
+                                 'shopInfoService',
+	function($rootScope,$location,ajaxService,shopConfigService,
+	         memberService,cartStoreService,categoryService,
+	         shopInfoService) {
 	var self=this;
 	self.cart=[];
-	self.currentMember = memberService.getCurrentMember();
 
+	self.shopInfoCacheName = 'shopInfoCache';
+
+	self.currentMember = memberService.getCurrentMember();
 	self.currentCart = cartStoreService.getCurrentCart();
 	self.orderQuantity = cartStoreService.getQuantity();
+	self.isGodLike = memberService.isGodLike();
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
-	self.isSuperAccountant = memberService.isSuperAccountant();
-	self.isMod = memberService.isMod();
+
+	console.log(self.isGodLike);
+
+	self.shopInfo =  shopInfoService.getCurrentCache(self.shopInfoCacheName);
+	if(!self.shopInfo.shopName){
+	    shopConfigService.getDataForMgnt().then(function (data) {
+            self.shopInfo = data.obj;
+            shopInfoService.setCurrentCache(data.obj,self.shopInfoCacheName);
+        });
+	}
+
+/*
 
 	categoryService.getActiveCategories().then(function(data){
 		self.cateList = data;
 	});
+*/
+
 
 	self.logout = function() {
 		self.currentMember = memberService.setCurrentMember(null);
 		self.isAdmin = false;
 		self.isMod = false;
+		self.isGodLike = false;
 		$location.path('/');
     }
 
@@ -53,8 +73,10 @@ angular.module('app')
 ///////////////////////////Receiver/////////////////////////////////////////////
 	$rootScope.$on('authorized', function() {
 		self.currentMember = memberService.getCurrentMember();
-		self.isAdmin = self.currentMember.roles.indexOf("ADMIN") != -1;
-		self.isMod = self.currentMember.roles.indexOf("MOD") != -1;
+		self.isAdmin = memberService.isAdmin();
+		self.isMod = memberService.isMod();
+		self.isGodLike = memberService.isGodLike();
+		self.isSuperAdmin = memberService.isSuperAdmin();
     });
 	
     $rootScope.$on('unauthorized', function() {

@@ -4,10 +4,15 @@
 			<div class="col-lg-3 col-md-6 col-sm-6">
 				<div class="footer__about">
 					<div class="footer__logo">
-						<a href="#"><img src="img/black_logo.jpeg" alt=""></a>
+					<!--	<a href="#"><img src="img/black_logo.jpeg" alt=""></a>-->
+						<span style="font-size: 27px;color: white;
+								border-top: 3px solid white;
+								border-bottom: 3px solid white;
+								font-family: ui-sans-serif;
+    							font-weight: 600;">{{ctrl.shopInfo.shopName}}</span>
 					</div>
-					<p>358/5/3 CMT8, P10, Q3, HCM. -- Phone: 0908.01.7383</p>
-					<!--<a href="#"><img src="img/payment.png" alt=""></a>-->
+					<p>{{ctrl.shopInfo.address}} -- Phone: {{ctrl.shopInfo.shopPhone | tel}}</p>
+
 				</div>
 			</div>
 			<div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">

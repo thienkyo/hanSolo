@@ -25,7 +25,8 @@ angular.module('smsUserInfoModule')
 	self.tempArray=[];
 	self.tempAmount=0;
 	self.OneDayExpense={};
-	self.isAccountant = memberService.isAccountant();
+	self.isAdmin = memberService.isAdmin();
+	self.isSuperAdmin = memberService.isSuperAdmin();
 
 	if(!memberService.isAdmin()){
 		$location.path('#/');

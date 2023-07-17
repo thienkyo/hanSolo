@@ -44,10 +44,17 @@ form .progress {
 	background-color: darkgray;
 
 }
+.btn-default {
+	color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
 </style>
 <link href="css/main2.css" rel="stylesheet">
 <section>
 	<div class="container" ng-cloak>
+
+		<h3 style="margin-bottom: 40px;text-align: center;">SMS management</h3>
 
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
@@ -211,7 +218,7 @@ form .progress {
 								{{one.startDate | date:"yyyy-MM-dd"}}
 							</td>
 
-							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
@@ -261,8 +268,8 @@ form .progress {
 						<div id="the-count">
 							<span>{{ctrl.theSmsQueue.content.length}}</span>
 							<span>/ 160</span>
-							|{{ctrl.theSmsQueue.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
-							|{{ctrl.theSmsQueue.gmtModify| date:"yyyy-MM-dd HH:mm:ss"}}
+							|create:{{ctrl.theSmsQueue.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+							|modify:{{ctrl.theSmsQueue.gmtModify| date:"yyyy-MM-dd HH:mm:ss"}}
 						</div>
 					</div>
 
@@ -320,7 +327,7 @@ form .progress {
 							<td title="'phone'" filter="{ 'receiverPhone' : 'text'}" sortable="'receiverPhone'" style="text-align: left;width:160px;">
 								{{one.receiverPhone | tel}}
 							</td>
-							<td title="'name'" filter="{ 'receiverName' : 'text'}" sortable="'receiverName'" style="text-align: right;width:150px;">
+							<td title="'name|weight'" filter="{ 'receiverName' : 'text'}" sortable="'receiverName'" style="text-align: right;width:150px;">
 								{{one.receiverName}}|{{one.weight}}
 							</td>
 							<td title="'content'" filter="{ 'content' : 'text'}" sortable="'content'" style="text-align: left;">
@@ -337,7 +344,7 @@ form .progress {
 								{{one.status}}
 							</td>
 
-							<td title="'X'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+							<td title="'X'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
@@ -468,7 +475,7 @@ form .progress {
 								{{one.lastSendSmsDate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
@@ -588,7 +595,7 @@ form .progress {
 								{{one.lastSendSmsDate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
@@ -717,7 +724,7 @@ form .progress {
 								{{one.startDate | date:"yyyy-MM-dd"}}
 							</td>
 
-							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
+							<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?

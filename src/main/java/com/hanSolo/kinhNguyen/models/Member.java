@@ -63,8 +63,8 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<Recommendation> recommendations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+   /* @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();*/
 
     @Column(name = "old_pass", length = 20)
     private String oldPass;
@@ -88,13 +88,13 @@ public class Member {
         this.oldPass = oldPass;
     }
 
-    public List<Order> getOrders() {
+   /* public List<Order> getOrders() {
         return orders;
     }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
-    }
+    }*/
 
     public List<Recommendation> getRecommendations() {
         return recommendations;

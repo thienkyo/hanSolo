@@ -8,6 +8,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +55,8 @@ public class ManagementController {
     @Autowired private SalaryRepository salaryRepo;
     @Autowired private LensProductRepository lensProductRepo;
     @Autowired private StrategyRepository strategyRepo;
+    @Autowired private ShopConfigRepository shopConfigRepo;
+    @Autowired private MemberRoleRepository memberRoleRepo;
 
     @Autowired private Environment env;
 
@@ -220,19 +225,50 @@ public class ManagementController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
     public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+        if (memOpt.isEmpty() ) {
+            return null;
+        }
+
         List<Member> memberList;
-            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
-                memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
-            }else{
-                memberList = memberRepo.findByOrderByGmtCreateDesc();
-            }
-            memberList.forEach(item -> item.setPass(""));
+        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+            memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            memberList = memberRepo.findByOrderByGmtCreateDesc();
+        }
+
+        List<Member> godLike = memberRepo.findByMemberRoles_Role("GODLIKE");
+        memberList.removeAll(godLike);
+        memberList.forEach(item -> item.setPass(""));
+
+     /*   for(Member item : memberList){
+            item.setPass("");
+           // item.setOrders(Collections.emptyList());
+        }*/
+
         return memberList;
     }
 
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse updateMe(@RequestBody final Member member,final HttpServletRequest request) throws ServletException, ParseException {
+    public GeneralResponse<String> updateMe(@RequestBody final Member member,final HttpServletRequest request)
+            throws ServletException, ParseException {
+/*
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(!((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE)){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE, Utility.FAIL_MSG);
+        }
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+        if (memOpt.isEmpty() ) {
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }*/
+
+        if(!isAuthorized(request,Utility.SUPERADMIN_ROLE)){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
+
+
         Optional<Member>  memberOpt = memberRepo.findById(member.getId());
         if(memberOpt.isPresent()){
             member.setPass(memberOpt.get().getPass());
@@ -240,8 +276,35 @@ public class ManagementController {
         }
         memberRepo.save(member);
 
-        return new GenericResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
+
+    @RequestMapping(value = "updateMemberStatus", method = RequestMethod.POST)
+    public GeneralResponse<String> updateMemberStatus(@RequestBody final Member mem) throws ParseException {
+        memberRepo.updateStatusAndGmtModifyById(mem.getStatus(),Utility.getCurrentDate(),mem.getId());
+        return new GeneralResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,Utility.FAIL_MSG);
+    }
+
+    //////////////////////////////Member Role section/////////////////////////////
+    /*@RequestMapping(value = "upsertMemberRole", method = RequestMethod.POST)
+    public GeneralResponse<MemberRole> upsertMemberRole(@RequestBody final MemberRole role, final HttpServletRequest request)
+            throws ServletException, ParseException {
+        if(role.getId() == 0){
+            role.setGmtCreate(Utility.getCurrentDate());
+        }
+        role.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(memberRoleRepo.save(role),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
+    }*/
+
+    @RequestMapping(value = "deleteMemberRole", method = RequestMethod.POST)
+    public GeneralResponse<String> deleteMemberRole(@RequestBody final MemberRole role, final HttpServletRequest request) throws ServletException {
+        if(!isAuthorized(request,Utility.SUPERADMIN_ROLE)){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
+        memberRoleRepo.delete(role);
+        return new GeneralResponse("delete_memberRole_success",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
 
     //////////////////////////// Coupon section ///////////////////////////////
     @SuppressWarnings("unchecked")
@@ -789,6 +852,13 @@ public class ManagementController {
         one.setGmtModify(Utility.getCurrentDate());
         return new GeneralResponse(contractRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
     }
+
+    @RequestMapping(value = "deleteContract", method = RequestMethod.POST)
+    public GenericResponse deleteContract(@RequestBody final Contract one)  {
+        contractRepo.delete(one);
+        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
     //////////////////////////// salary section /////////////////////////////
     @RequestMapping(value = "getAllSalaryOnePerson", method = RequestMethod.GET)
     public List<Salary> getAllSalaryOnePerson() {
@@ -801,7 +871,7 @@ public class ManagementController {
 
         List<Salary> salaryList = new ArrayList<>();
         final Claims claims = (Claims) request.getAttribute("claims");
-        if(((List<String>) claims.get("roles")).contains(Utility.SUPER_ACCOUNTANT_ROLE)){
+        if(((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE)){
            return salaryRepo.findByContractIdOrderByYearDescMonthDesc(String.valueOf(contractId));
         }
 
@@ -822,6 +892,29 @@ public class ManagementController {
         salaryRepo.delete(one);
         return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
+
+    //////////////////////////// shop config section /////////////////////////////
+    @RequestMapping(value = "getShopConfig", method = RequestMethod.GET)
+    @Cacheable("shopInfo")
+    public GeneralResponse<ShopConfig> getShopConfig() {
+        return new GeneralResponse(shopConfigRepo.findFirstByOrderByIdAsc(),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+
+    @RequestMapping(value = "refreshShopConfig", method = RequestMethod.GET)
+    @CacheEvict(value = "shopInfo",allEntries = true)
+    public GeneralResponse<ShopConfig> refreshShopConfig() {
+        return new GeneralResponse("refresh success",Utility.SUCCESS_ERRORCODE,"success");
+    }
+
+    @RequestMapping(value = "upsertShopConfig", method = RequestMethod.POST)
+    public GeneralResponse<ShopConfig> upsertShopConfig(@RequestBody final ShopConfig one) throws ParseException {
+        if(one.getId() == 0){
+            one.setGmtCreate(Utility.getCurrentDate());
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+        return new GeneralResponse(shopConfigRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save key success");
+    }
+
 
     //////////////////////////// search section///////////////////////////////
     @RequestMapping("searchLensProduct/{keySearch}")
@@ -893,7 +986,8 @@ public class ManagementController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile uploadfile, @RequestParam("oldName") String oldName, @RequestParam("type") String type, final HttpServletRequest request) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile uploadfile, @RequestParam("oldName") String oldName,
+                                             @RequestParam("type") String type, final HttpServletRequest request) {
 
         String dir;
         switch (type) {
@@ -928,5 +1022,19 @@ public class ManagementController {
 
         String directory = env.getProperty("hanSolo.uploadedFiles.product");
         return Utility.saveMultipleFile(directory,uploadFiles, oldNames);
+    }
+
+    private boolean isAuthorized(final HttpServletRequest request, String role){
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(!((List<String>) claims.get("roles")).contains(role)){
+            return false;
+        }
+        return isMemberActive(request);
+    }
+
+    private boolean isMemberActive(final HttpServletRequest request){
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
+       return memOpt.isPresent();
     }
 }

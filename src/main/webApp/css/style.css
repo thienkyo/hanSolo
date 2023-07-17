@@ -486,10 +486,10 @@ ol {
 }
 
 .header__menu ul li a {
-	font-size: 18px;
+	font-size: 22px;
 	color: #111111;
 	display: block;
-	font-weight: 600;
+	font-weight: 500;
 	position: relative;
 	padding: 3px 0;
 }
@@ -2559,7 +2559,7 @@ ol {
 
 .checkout__input p {
 	color: #111111;
-	margin-bottom: 12px;
+	margin-bottom: 6px;
 }
 
 .checkout__input p span {
@@ -2573,7 +2573,7 @@ ol {
 	font-size: 14px;
 	/*color: #b7b7b7;*/
 	padding-left: 10px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .checkout__input input::-webkit-input-placeholder {

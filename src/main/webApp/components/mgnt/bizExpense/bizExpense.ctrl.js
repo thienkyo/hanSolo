@@ -22,8 +22,9 @@ angular.module('bizExpenseModule')
 	self.currentMember = memberService.getCurrentMember();
 	self.theBizExpense.owner = self.currentMember.name;
 	self.theBizExpense.ownerPhone = self.currentMember.phone;
-	self.isAccountant = memberService.isAccountant();
-	self.isSuperAccountant = memberService.isSuperAccountant();
+
+	self.isAdmin = memberService.isAdmin();
+    self.isSuperAdmin = memberService.isSuperAdmin();
 
 	self.amountList=AmountList;
     self.amount = FirstTimeLoadSize;

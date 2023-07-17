@@ -64,7 +64,12 @@
 	letter-spacing: 2px;
 	background-color: darkgray;
 
- }
+}
+select, textarea {
+  background: #FFFFFF;
+}
+
+
 </style>
 <link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <!-- Shopping Cart Section Begin -->
@@ -166,7 +171,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="row">
 					<div class="col-lg-9">
 						<div class="checkout__input" >
@@ -186,7 +190,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="row" style="margin-bottom: 50px;">
 					<div class="col-lg-2">
 						<div class="checkout__input">
@@ -221,8 +224,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-lg-5">
-						<p>Recheck:
+					<div class="col-lg-3">
+						<p style="margin-bottom: 6px;">Recheck:
 						<div class="checkout__input">
 
 							<select  ng-model="ctrl.selectedJob" ng-change="ctrl.tempF()"
@@ -237,7 +240,7 @@
 			<!-- Discount codes and order total -->
 			<div class="col-lg-4">
 				<div class="cart__discount" style="margin-bottom: 15px;">
-					<h6>Discount codes</h6>
+					<h6 style="margin-bottom: 25px;">Discount codes</h6>
 					<form>
 						<input type="text" placeholder="Coupon code" ng-model="ctrl.couponCode">
 						<button type="button" ng-click="ctrl.getCoupon(ctrl.couponCode)">Apply</button>
@@ -279,7 +282,7 @@
 	<div class="container">
 		<!-- Glass Prescription -->
 		<div style="text-align: center;">
-			<span style="font-size: 35px;font-weight: 500;">Glass Prescription</span>
+			<span style="font-size: 35px;font-weight: 500;">Prescription</span>
 			<a ng-click="ctrl.splitOrder()" href=""
 			   ng-show="ctrl.wannaSplit" ng-class="ctrl.isSaveButtonPressed ? 'btn btn-default inactive' : 'btn btn-default'"
 			   style="margin: 0px 0px 10px 10px;">split</a>
@@ -312,17 +315,23 @@
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
-				<a ng-click="ctrl.remove1Tab($index)" href="" ng-show="$index > 0" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">remove</a>
-				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">copy</a>
+				<a ng-click="ctrl.remove1Tab($index)" href="" ng-show="$index > 0" class="btn btn-default check_out"
+				   style="margin: 4px 4px 4px 4px;float: right;">remove</a>
+				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out"
+				   style="margin: 4px 4px 4px 4px;float: right;">copy</a>
 				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
 				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
 				<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
-				   ng-class="item.isSplit ? 'btn btn-primary' : 'btn btn-default'"
+				   ng-class="item.isSplit ? 'btn btn-success' : 'btn btn-default'"
 				   ng-show="ctrl.theOrder.orderDetails.length > 1"
 				   style="margin: 4px 4px 4px 4px;float: right;">select</a>
-				<h3 style="padding-bottom: 20px;">Đơn kính {{$index + 1}}: {{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 + item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ</h3>
+				<h4 style="padding-bottom: 20px;margin-top: 0px;">
+					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}:
+					{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
+					item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ
+				</h4>
 
-				<!-- Order detail ho va ten -->
+				<!-- Prescription detail ho va ten -->
 				<div class="row">
 					<!-- ho va ten -->
 					<div class="col-lg-5">
@@ -589,6 +598,7 @@
 						</div><!--end of don kinh-->
 					</div>
 				</div>
+
 				<!--start trong-->
 				<div class="row" style="border-top: 2px solid #e1e1e1; margin-top: 30px;padding-top: 20px;">
 					<div class="col-lg-1">
@@ -830,6 +840,18 @@
 							{{ctrl.isErrorMsg}}
 						</div>
 					</div>
+
+					<div class="col-lg-4" ></div>
+
+					<div class="col-lg-2" >
+						<span style="font-size: 13px;">
+							{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}} :
+							{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
+							item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ
+						</span>
+
+					</div>
+
 
 
 				</div>

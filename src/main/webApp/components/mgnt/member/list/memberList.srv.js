@@ -1,11 +1,14 @@
 'use strict';
 angular.module('memberListModule')
 .factory('memberListService', ['ajaxService',function(ajaxService) {
-		var productListService = {
+		var service = {
 			getMembersForMgnt : getMembersForMgnt,
-			upsert : upsert
+			upsert : upsert,
+			updateMemberStatus : updateMemberStatus,
+			deleteRole : deleteRole,
+			upsertRole : upsertRole
 			};
-	return productListService;
+	return service;
 	
 	function getMembersForMgnt(amount){
 		var url = "mgnt/getMemberForMgnt/"+amount;
@@ -20,5 +23,26 @@ angular.module('memberListModule')
 			return response.data;
 		});
 	}
+
+	function updateMemberStatus(mem){
+        var url = "mgnt/updateMemberStatus";
+        return ajaxService.post(url,mem,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+	function upsertRole(role){
+        var url = "mgnt/upsertMemberRole";
+        return ajaxService.post(url,role,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function deleteRole(role){
+        var url = "mgnt/deleteMemberRole";
+        return ajaxService.post(url,role,{}).then(function(response){
+            return response.data;
+        });
+    }
       
  }]);

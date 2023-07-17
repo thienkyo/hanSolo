@@ -14,6 +14,7 @@ angular.module('app')
             isAccountant :isAccountant,
             isSuperAccountant :isSuperAccountant,
             isMod : isMod,
+            isGodLike : isGodLike,
         // local mode for no internet,digital ocean host is down
             setSiteMode : setSiteMode,
             getSiteMode : getSiteMode
@@ -71,6 +72,13 @@ angular.module('app')
 		}
 		return false;
 	}
+
+	function isGodLike(){
+        if(isLogin() && currentMember.roles.indexOf("GODLIKE") != -1){
+            return true;
+        }
+        return false;
+    }
 
 	function isAccountant(){
         if(isLogin() && currentMember.roles.indexOf("ACCOUNTANT") != -1){
@@ -358,6 +366,38 @@ angular.module('app')
             return true;
         }
         return false;
+    }
+
+}])
+.factory('shopInfoService',['store', function(store) {
+	var currentCache = {};
+	// var globalCacheName = '';
+	var shopInfoService = {
+		setCurrentCache : setCurrentCache,
+		getCurrentCache : getCurrentCache,
+		clearCache : clearCache
+		}
+	return shopInfoService;
+
+
+	function setCurrentCache(cacheData,cacheName){
+        currentCache = cacheData;
+        store.set(cacheName, cacheData);
+        return currentCache;
+    }
+
+    function getCurrentCache(cacheName){
+        if (store.get(cacheName)) {
+            currentCache = store.get(cacheName);
+        }else{
+            store.set(cacheName, currentCache);
+        }
+        return currentCache;
+    }
+
+    function clearCache(cacheName){
+        currentCache = {};
+        store.set(cacheName, currentCache);
     }
 
 }])

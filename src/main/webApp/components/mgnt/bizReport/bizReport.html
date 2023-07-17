@@ -39,7 +39,7 @@ form .progress {
 
 <section style="margin-top: 30px;">
 	<div class="container" ng-cloak>
-		<h2 style="text-align: center;padding-bottom: 30px;">REPORT</h2>
+		<h3 style="text-align: center;padding-bottom: 30px;">REPORT</h3>
 		<!-- All Data -->
 
 	<!--	<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
@@ -56,9 +56,9 @@ form .progress {
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">
 					All Profit: {{ctrl.allProfit | number:0}}đ
 					<!--({{(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)-->
-					({{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)
+					({{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:2}}%)
 				</div>
-				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:0}}%</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:2}}%</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Quantity: {{ctrl.allOrders}} | {{ctrl.allFrames}} | {{ctrl.allLenses}}</div>
 			</div>
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
@@ -101,10 +101,10 @@ form .progress {
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Profit: {{item.income-item.outcome | number:0}}đ
-							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:0}}%)
+							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:2}}%)
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
-							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:0}}%
+							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:2}}%
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Quantity: {{item.orders}} | {{item.frames}} | {{item.lenses}}</div>
 					</div>
@@ -151,9 +151,10 @@ form .progress {
 		<br>
 
 		<!-- Config Nav tabs -->
-		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}" ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;" role="tablist">
+		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}"  role="tablist">
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#home">Config</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#home"
+				   ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;">Config</a>
 			</li>
 		</ul>
 

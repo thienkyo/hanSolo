@@ -77,7 +77,6 @@
 				</div>
 				<div class="col-sm-7">
 					<div class="total_area" style="padding-left:0px;margin-bottom: 0px;">
-						
 						<ul style="margin: 0px 0px 0px 40px;">
 							<li class="row" style="padding: 10px 0px 10px 0px;margin-top: 0px;background: #F0F0E9; margin-right: 0px;">
 								<div class="col-md-3">Ngày</div>
@@ -87,7 +86,8 @@
 							</li>
 							<li class="row" ng-repeat="item in ctrl.orderListPage.content" style="padding: 10px 0px 10px 0px;margin-right: 0px;">
 								<div class="col-md-3"> {{item.gmtCreate | date:"dd-MM-yyyy"}}</div>
-								<div class="col-md-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.id).slice(-4)}}</a></div>
+								<!--<div class="col-md-3"><a href="" ng-click="ctrl.showOrderDetail(item)"> A{{("000"+item.id).slice(-4)}}</a></div>-->
+								<div class="col-md-3"> A{{("000"+item.id).slice(-4)}}</div>
 								<div class="col-md-3" > {{item.total | number}} đ</div>
 								<div class="col-md-3"> {{item.statusText}}</div>
 							</li>

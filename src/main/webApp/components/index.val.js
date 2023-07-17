@@ -54,6 +54,11 @@ var CouponCreatedByList=[
     {name : 'TOOL', value:'TOOL' }
 ];
 
+var RoleList=[
+	{name : 'ADMIN', value:'ADMIN' },
+    {name : 'SUPER_ADMIN', value:'SUPER_ADMIN' }
+];
+
 angular
 		.module('app') 
 		.value('MemberDO', MemberDO)
@@ -91,8 +96,39 @@ angular
 		.value('SalaryDO',SalaryDO)
 		.value('LensProductDO',LensProductDO)
 		.value('StrategyDO',StrategyDO)
+		.value('ShopConfigDO',ShopConfigDO)
+		.value('RoleList',RoleList)
+		.value('MemberRoleDO',MemberRoleDO)
 		;
 
+function MemberRoleDO(){
+    this.id = 0;
+    this.name = '';
+    this.phone = '';
+    this.role = '';
+    this.level = '0';
+    this.memberId = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function ShopConfigDO(){
+    this.id = 0;
+    this.shopName = '';
+    this.shopOwner = '';
+    this.shopPhone = '';
+    this.shopOwnerPhone = '';
+    this.address = '';
+    this.logo1 = '';
+    this.logo2 = '';
+    this.isUnlockSmsFeature = false;
+    this.startDate = '';
+    this.description = '';
+    this.price = 0;
+    this.otherPrice = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function StrategyDO(){
     this.id = 0;

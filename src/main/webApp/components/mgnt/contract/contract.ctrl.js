@@ -18,10 +18,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     contractService.getAll().then(function (data) {
         self.contractList = data;
-
         self.contractList.forEach(enrichContractList);
-
-        console.log(data);
         self.tableParams = new NgTableParams({}, { dataset: self.contractList});
     });
 
@@ -47,13 +44,11 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
         salaryService.getAll(self.theOne.id).then(function (data) {
             self.salaryList = data;
-            console.log(data);
             self.salaryTableParams = new NgTableParams({}, { dataset: self.salaryList});
         });
     }
 
     self.upsert = function(one){
-        console.log(one);
         self.responseStr = false;
         self.responseStrFail = false;
         contractService.upsert(one).then(function (data) {

@@ -24,7 +24,7 @@ angular.module('contractModule')
 	}
 
 	function deleteOne(one){
-		var url = "mgnt/deleteKeyManagement";
+		var url = "mgnt/deleteContract";
 		return ajaxService.post(url,one,{}).then(function(response){
 			return response.data;
 		});

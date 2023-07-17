@@ -17,13 +17,13 @@ angular.module('accountModule').controller('accountController', ['$scope','$loca
 
 		accountService.getMe().then(function(data){
 			self.me = data.member;
-			for(var i = 0; i < data.member.orders.length; i++){
+		//	for(var i = 0; i < data.member.orders.length; i++){
 				// var total = 0;
-				self.calculateOrderTotal(data.member.orders[i]);
-			}
-			self.orderList = data.member.orders.reverse();
-			self.orderListPage = buildPageable(1);
-			self.pagination = paginationService.builder(self.orderListPage);
+		//		self.calculateOrderTotal(data.member.orders[i]);
+		//	}
+		//	self.orderList = data.member.orders.reverse();
+		//	self.orderListPage = buildPageable(1);
+		//	self.pagination = paginationService.builder(self.orderListPage);
 
 		},function(error){
 			$location.path("#/");

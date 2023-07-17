@@ -1,10 +1,12 @@
 <link href="css/main2.css" rel="stylesheet">
 <section>
 	<div class="container" ng-cloak>
-		<h3 style="margin-bottom: 30px; margin-top: 30px;">New/Update Member </h3>
+		<h3 style="text-align: center;">Member </h3>
 		<div class="row" >
+			<!--
 			<div class="col-sm-2">
-				<input type="text"  ng-model="ctrl.theMember.email" disabled="disabled" placeholder="email" style="width:150px;"/>
+				<input type="text"  ng-model="ctrl.theMember.email" disabled="disabled" placeholder="email"
+					   style="border: 1px solid rgb(118 118 118);border-radius: 2px;height: 30px;"/>
 			</div>
 			<div class="col-sm-2">
 				<input type="text"  ng-model="ctrl.theMember.fullName" placeholder="name" style="width: 100%;"/>
@@ -12,7 +14,10 @@
 			<div class="col-sm-2">
 				<select  ng-model="ctrl.theMember.status" 
 					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-					 style="width: 100%;height: 30px;">
+					 style="width: 100%;height: 30px;
+					 		border: 1px solid rgb(118 118 118);
+					 		border-radius: 2px;
+							background: #FFFFFF;">
 		    	</select> 
 			</div>
 			<div class="col-sm-1">
@@ -39,38 +44,47 @@
 						 fail
 				</div>
 			</div>
+			-->
 		</div>
-		
-		<h3 style="margin-bottom: 20px; margin-top: 20px;">Member management </h3>
-		
-		<div class="row" style="margin-bottom: 15px;">
-			
-			<div class="col-sm-2">
-				<select  ng-model="ctrl.amount"  ng-change="ctrl.getMemberByTerm()"
-					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
-					 style="width: 100%;height: 40px;">
-		    	</select> 
-			</div>
-			
+		<div class="row" style="margin-bottom: 10px;margin-top: 35px;">
 			<div class="col-sm-7"></div>
 		</div>
 		
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="mem in $data">
-			        <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+			      <!--  <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
 			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.id}}</a>
-			        </td>
+			        </td>-->
 			        <td title="'email'" filter="{ email : 'text'}" sortable="'email'" style="width:90px;">
 			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.email}}</a>
 			        </td>
 			        <td title="'name'" filter="{ fullName: 'text'}" sortable="'fullName'" style="width:100px;">
-			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.fullName}}</a>
+			        	{{mem.fullName}}
 			        </td>
-			        <td title="'phone'" filter="{ phone : 'text'}" sortable="'phone'" style="text-align: right;width:100px;">{{mem.phone}}</td>
-			        <td title="'address'" filter="{ address : 'text'}" sortable="'address'" style="width:250px;">{{mem.address}}</td>
-					<td title="'roles'"   style="text-align: right;width:100px;"><span ng-repeat="role in mem.memberRoles"> {{role.role}}</span> </td>
-			        <td title="'status'" filter="{ status : 'number'}" sortable="'status'" ng-style="ctrl.setStyle(mem.status)">{{mem.status == 0 ? 'inactive' : 'active' }}</td>
+			        <td title="'phone'" filter="{ phone : 'text'}" sortable="'phone'" style="text-align: right;width:100px;">
+						{{mem.phone}}</td>
+			        <td title="'address'" filter="{ address : 'text'}" sortable="'address'" >
+						{{mem.address}}</td>
+					<td title="'roles'"   style="text-align: right;width:100px;">
+						<span ng-repeat="role in mem.memberRoles"> {{role.role}},</span> </td>
+					<td title="'action'" style="width:100px;" ng-if="ctrl.isSuperAdmin">
+						<select  ng-model="mem.roleToBe"  ng-change="ctrl.updateRole(mem)"
+								 ng-options="opt.value as opt.name for opt in ctrl.roleList"
+								 style="background: #F0F0E9;" ng-disabled="ctrl.isUpdating">
+						</select>
+					</td>
+			        <td title="'status'" filter="{ status : 'number'}"  style="width:60px;">
+						<p ng-style="ctrl.setStyle(mem.status)" ng-if="!ctrl.isSuperAdmin">
+							{{mem.status == 0 ? 'inactive' : 'active' }}</p>
+
+						<select  ng-model="mem.status"  ng-change="ctrl.updateStatus(mem)"
+								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
+								 style="background: #F0F0E9;" ng-style="ctrl.setStyle(mem.status)"
+								 ng-if="ctrl.isSuperAdmin" ng-disabled="ctrl.isUpdating">
+						</select>
+
+					</td>
 			    </tr>
 			</table>
         </div>

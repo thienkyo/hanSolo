@@ -205,6 +205,8 @@ angular.module('orderListModule')
 			self.statusStyle.color = "blue";
 		}else if(status==4){
             self.statusStyle.color = "brown";
+        }else if(status==2){
+            self.statusStyle.color = "darkorchid";
         }
 		else{
 			self.statusStyle = { "width": "80px" }

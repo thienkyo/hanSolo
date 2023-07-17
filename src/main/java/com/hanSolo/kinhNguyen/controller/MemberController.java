@@ -54,6 +54,7 @@ public class MemberController {
                 .setSubject(parts[3])
                 .claim("roles", roleList)
                 .claim("name", memOpt.get().getFullName())
+                .claim("status", memOpt.get().getStatus())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))

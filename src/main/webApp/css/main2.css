@@ -1098,7 +1098,7 @@ h2.title {
  /* display: inline-block;*/
   margin-bottom: 25px;
   margin-top: 0;
-  padding-left: 15px;
+/*  padding-left: 15px;*/
 }
 
 .pagination  li:first-child  a, .pagination  li:first-child  span {
@@ -1123,10 +1123,10 @@ h2.title {
 .pagination  li  a, .pagination  li  span {
   background-color: #f0f0e9;
   border: 0;
-  float: left;
+  /*float: left;*/
   line-height: 1.42857;
   margin-left: -1px;
-  padding: 6px 12px;
+  padding: 6px 6px;
   position: relative;
   text-decoration: none;
   margin-right: 5px;
@@ -1760,7 +1760,7 @@ h2.title {
   color: #696763;
   padding: 5px;
   width: 100%;
-  border-radius: 0;
+  border-radius: .25rem;
   resize: none
 }
 

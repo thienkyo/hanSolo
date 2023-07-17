@@ -170,6 +170,11 @@ angular.module('app')
             controller: 'lensProductController',
             controllerAs:'ctrl'
         })
+        .when('/mgnt/shopConfig',{
+            templateUrl: 'components/mgnt/shopConfig/shopConfig.html',
+            controller: 'shopConfigController',
+            controllerAs:'ctrl'
+        })
         .otherwise(
             { redirectTo: '/'}
         )

@@ -1,4 +1,4 @@
-<link href="css/main2.css" rel="stylesheet">
+
 <!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
 <style>
 .preth  th {
@@ -17,37 +17,7 @@
 </style>
 <section>
 	<div class="container" ng-cloak>
-
-		<h3 style="margin-bottom: 20px;">Order management {{ctrl.isLocalWeb ? '[LOCAL]' : ''}}
-			<span ng-show="ctrl.tempAmount > 0" style="">
-				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
-				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
-				<!-- Button trigger modal -->
-				<button type="button" class="btn btn-primary" data-toggle="modal"
-						data-target="#exampleModal" style="margin-top: 0px;height: 32px;">
-					brief
-				</button>
-				<!-- Button trigger modal : one day report -->
-				<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ctrl.getOneDayReport()"
-						data-target="#oneDayModal" style="margin-top: 0px;height: 32px;">
-					one day
-				</button>
-				Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
-			</span>
-
-
-		</h3>
-		<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;">
-		<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone(ctrl.keySearch)"
-				style="margin-top: 0px;height: 32px;">
-			search
-		</button>
-		<button type="button" class="btn btn-primary" ng-click="ctrl.keySearch='';ctrl.getOrderByTerm();"
-				style="margin-top: 0px;height: 32px;">
-			reset
-		</button>
-
+		<h3 style="margin-bottom: 40px;text-align: center;">Order management {{ctrl.isLocalWeb ? '[LOCAL]' : ''}}</h3>
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -227,30 +197,63 @@
 		</div>
 		<!-- end one day Modal -->
 
-		<!-- order type counting -->
-		<div class="row" style="margin-bottom: 15px;">
-			<div class="col-sm-2">
+		<!-- first 100 record -->
+		<div class="row">
+			<div class="col-sm-1">
 				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderByTerm()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
-					 style="width: 100%;height: 40px;">
+					 style="width: 100%;height: 30px;background: #F0F0E9;">
 		    	</select>
 			</div>
-			<!--<div class="col-sm-1"></div>-->
-			<div class="col-sm-2" style="font-size: large;color:limegreen;">
+
+			<div class="col-sm-4">
+				<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;">
+				<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone(ctrl.keySearch)"
+						style="margin-top: 0px;height: 32px;">
+					search
+				</button>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.keySearch='';ctrl.getOrderByTerm();"
+						style="margin-top: 0px;height: 32px;">
+					reset
+				</button>
+			</div>
+
+			<div class="col-sm-1" style="font-size: large;color:limegreen;" ng-if="ctrl.tempAmount <= 0">
 				order:	{{ctrl.statusNumber.ordered}}
 			</div>
-			<div class="col-sm-2" style="font-size: large;color:blue;">
+			<div class="col-sm-1" style="font-size: large;color:blue;" ng-if="ctrl.tempAmount <= 0">
 				paid :	{{ctrl.statusNumber.paid}}
 			</div>
-			<div class="col-sm-2" style="font-size: large">
+			<div class="col-sm-1" style="font-size: large;color:darkorchid;" ng-if="ctrl.tempAmount <= 0">
 				ship:	{{ctrl.statusNumber.shipped}}
 			</div>
-			<div class="col-sm-2" style="font-size: large;color:brown;">
+			<div class="col-lg-auto" style="font-size: large;color:brown;" ng-if="ctrl.tempAmount <= 0">
 				deposit: {{ctrl.statusNumber.deposit}}
 			</div>
-			<div class="col-sm-2" style="font-size: large">
+			<div class="col-lg-auto" style="font-size: large" ng-if="ctrl.tempAmount <= 0">
 				done: {{ctrl.statusNumber.done}}
 			</div>
+
+
+			<div class="col-sm-6" ng-if="ctrl.tempAmount > 0">
+
+					<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
+					   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
+						<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModal" style="margin-top: 0px;height: 32px;">
+						brief
+					</button>
+						<!-- Button trigger modal : one day report -->
+					<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ctrl.getOneDayReport()"
+							data-target="#oneDayModal" style="margin-top: 0px;height: 32px;">
+						one day
+					</button>
+					<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out"
+					   style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
+					Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
+			</div>
+
 		</div>
 		
         <div class="table-responsive">
@@ -275,14 +278,15 @@
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
 								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList"
-								 ng-disabled="ctrl.isUpdatingOrder" ng-show="order.location == 'STORE'">
+								 ng-disabled="ctrl.isUpdatingOrder" ng-show="order.location == 'STORE'"
+								 style="background: #F0F0E9;">
 						</select>
 					</td>
 
 			        <td title="'status'"  sortable="'status'" style="width:80px;">
 						<select  ng-model="order.status"  ng-change="ctrl.updateOrderStatus(order)"
 								 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
-								 ng-disabled="ctrl.isUpdatingOrder"
+								 ng-disabled="ctrl.isUpdatingOrder" style="background: #F0F0E9;"
 								 ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>
@@ -302,9 +306,10 @@
         </div>
 
 		<!--local order recovery-->
-		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}" ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;" role="tablist">
+		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}"  role="tablist">
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder">recover order</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder"
+				   ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;">recover order</a>
 			</li>
 		</ul>
 		<div class="tab-content">

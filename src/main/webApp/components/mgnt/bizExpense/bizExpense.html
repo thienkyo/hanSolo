@@ -1,5 +1,4 @@
 <style>
-
 .thumb {
     width: 100px;
     height: 100px;
@@ -45,13 +44,12 @@ form .progress {
 
 }
 </style>
+<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <link href="css/main2.css" rel="stylesheet">
-<!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
 <section>
 	<div class="container" ng-cloak>
-		<h3>New/Update Biz Expense </h3>
-		<div class="row" style="margin-bottom: 20px;">
-
+		<h3 style="margin-bottom: 40px;text-align: center;margin-top: 0px;">Biz Expense </h3>
+		<div class="row" style="margin-bottom: 20px;" ng-show="ctrl.showUpload">
 	 		<div class="col-sm-4">
 	 			<img ng-src="img/bizExpense/{{ctrl.theBizExpense.image}}" alt="" style="width: 100%;"/>
 	 		</div>
@@ -84,21 +82,19 @@ form .progress {
 	 		</div>
 
 	 	</div>
-	
 		<div class="row" >
 			<div class="col-sm-1">
-				<input type="number"  ng-model="ctrl.theBizExpense.id" disabled="disabled" placeholder="id" style="width:50px;"/>
+				<input type="number"  ng-model="ctrl.theBizExpense.id" disabled="disabled" placeholder="id"
+					   style="width:50px;border: 1px solid rgb(118 118 118);border-radius: 2px;height: 30px"/>
 			</div>
-			<div class="col-sm-3">
-				<input type="text"  ng-model="ctrl.theBizExpense.amount" placeholder="amount" style="width: 100px;"/>
-				{{ctrl.theBizExpense.amount | number:0}}đ
-			</div>
+
 			<div class="col-sm-2">
 				<div class="checkout__input">
 					<div class='input-group date'>
 						<!--Order Date: -->
-						<input ng-model="ctrl.theBizExpense.gmtCreate" class="form-control" onkeydown="return false" datepicker-popup="MM/dd/yyyy"
-							   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true" style="height: 30px;"
+						<input ng-model="ctrl.theBizExpense.gmtCreate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+							   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true"
+							   style="height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;"
 							   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" required/>
 					</div>
 				</div>
@@ -106,30 +102,33 @@ form .progress {
 			<div class="col-sm-2">
 				<select  ng-model="ctrl.theBizExpense.status"
 						 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-						 ng-disabled="!ctrl.isAccountant"
-						 style="width: 100%;height: 30px;">
+						 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
 				</select>
 			</div>
 			<div class="col-sm-2">
-				<input type="text"  ng-model="ctrl.theBizExpense.owner" placeholder="owner" style="width: 100%;"/>
+				<input type="text"  ng-model="ctrl.theBizExpense.owner" placeholder="owner" style="width: 100%;height: 30px;"/>
+			</div>
+			<div class="col-sm-3">
+				<input type="text"  ng-model="ctrl.theBizExpense.amount" placeholder="amount" style="width: 100px;height: 30px;"/>
+				{{ctrl.theBizExpense.amount | number:0}}đ
 			</div>
 
 		</div>
-
-		<div class="row" style="margin-top: 20px;">
+		<div class="row" style="margin-top: 10px;">
 	    	<div class="col-sm-7">
-	    		<textarea name="description" placeholder="description" rows="5"  style="white-space: pre-line;"
-						  ng-model="ctrl.theBizExpense.description" ng-cloak ></textarea>
+	    		<textarea name="description" placeholder="description" rows="3"  style="white-space: pre-line;"
+						  ng-model="ctrl.theBizExpense.description" ></textarea>
 	    	</div>
-
-			<div class="col-sm-2">
+			<div class="col-sm-2" >
 				<a ng-click="ctrl.upsert(ctrl.theBizExpense)" href=""
-				   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+				   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn check_out'"
 				   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
-
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+				<a ng-click="ctrl.clear()" href="" class="btn check_out" style="margin: 0px 0px 0px 10px;">clear</a>
+				<a href="" class="btn check_out" style="margin: 10px 0px 0px 0px;"
+				   ng-click="ctrl.showUpload = ctrl.showUpload ? false : true;"
+				>upload</a>
 			</div>
-			<div class="col-sm-1">
+			<div class="col-sm-2">
 				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -138,16 +137,12 @@ form .progress {
 				</div>
 
 				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
-					   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+					   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;" >
 					thành công
 				</alert>
 
 			</div>
 	    </div>
-
-
-		<!-- biz expense table-->
-		<h3 style="margin-top: 20px;">Biz Expense List </h3>
 		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
 			<div class="col-sm-2">
 				<select  ng-model="ctrl.amount"
@@ -191,23 +186,23 @@ form .progress {
 			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:110px;">
 			        	{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 			        </td>
-			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="ctrl.isSuperAccountant">
+			        <td title="'status'" sortable="'status'"   ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="ctrl.isSuperAdmin">
 						<select  ng-model="one.status"  ng-change="ctrl.updateBizExpenseStatus(one)"
 								 ng-options="opt.value as opt.name for opt in ctrl.statusList"
 								 ng-disabled="ctrl.isUpdatingBizExpenseStatus"
 								 style="height: 40px;" ng-style="ctrl.setStyle(one.status)">
 						</select>
 			        </td>
-					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="!ctrl.isSuperAccountant">
+					<td title="'status'"  sortable="'status'"  ng-style="ctrl.setStyle(one.status)" style="width:90px;" ng-if="!ctrl.isSuperAdmin">
 						{{one.status == 0 ? 'đã tạo' : 'xong' }}
 					</td>
 
-					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAccountant">
-						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAdmin">
+						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 						<p ng-show="ctrl.deletingId == one.id">
 							Are you sure?
-							<a ng-click="ctrl.deleteBizExpense(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
-							<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+							<a ng-click="ctrl.deleteBizExpense(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete()" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">no</a>
 						</p>
 
 

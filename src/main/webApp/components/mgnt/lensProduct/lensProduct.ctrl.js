@@ -10,10 +10,8 @@ angular.module('lensProductModule')
 	        lensProductService
 	        ){
 	var self = this;
-	self.isSyncingOrder = false;
-	self.orderList = [];
-	self.cusSourceList = [];
-	self.OrderStatusArray=OrderStatusArray;
+
+
 	self.theLensProduct = new LensProductDO();
 
 	self.amountList=AmountList;
@@ -26,21 +24,18 @@ angular.module('lensProductModule')
 
     lensProductService.getDataForMgnt(self.amount).then(function (data) {
         self.lensProductList = data;
-        console.log(self.lensProductList);
         self.tableParams = new NgTableParams({}, { dataset: self.lensProductList});
     });
 
     self.getLensProductByAmount = function(){
         lensProductService.getDataForMgnt(self.amount).then(function (data) {
             self.lensProductList = data;
-            console.log(self.lensProductList);
             self.tableParams = new NgTableParams({}, { dataset: self.lensProductList});
         });
     }
 
     self.prepareData = function(){
         lensProductService.prepareData().then(function (data) {
-            console.log(data);
         });
     }
 
