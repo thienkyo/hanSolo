@@ -44,7 +44,27 @@ public class ShopConfig extends BaseModel {
     @Column(name = "other_price", columnDefinition = "integer default 0")
     private Integer otherPrice;
 
+    @Column(name = "biz_report_begin_month_number", columnDefinition = "integer default 1")
+    private Integer bizReportBeginMonthNumber;
 
+    @Column(name = "biz_report_end_month_number", columnDefinition = "integer default 3")
+    private Integer bizReportEndMonthNumber;
+
+    public Integer getBizReportEndMonthNumber() {
+        return bizReportEndMonthNumber;
+    }
+
+    public void setBizReportEndMonthNumber(Integer bizReportEndMonthNumber) {
+        this.bizReportEndMonthNumber = bizReportEndMonthNumber;
+    }
+
+    public Integer getBizReportBeginMonthNumber() {
+        return bizReportBeginMonthNumber;
+    }
+
+    public void setBizReportBeginMonthNumber(Integer bizReportBeginMonthNumber) {
+        this.bizReportBeginMonthNumber = bizReportBeginMonthNumber;
+    }
 
     public Integer getOtherPrice() {
         return otherPrice;

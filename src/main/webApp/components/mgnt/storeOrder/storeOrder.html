@@ -627,7 +627,7 @@ select, textarea {
 									<div class="row" >
 										<!--<div class="col-md-1" style="text-align: left;">{{one.extInfo}}</div>-->
 										<div class="col-md-4" >{{one.lensNote}}</div>
-										<div class="col-md-3" style="">{{one.lensDetail}}</div>
+										<div class="col-md-3" style="text-align: right;">{{one.lensDetail}}</div>
 										<div class="col-md-2" style="text-align: right;">{{one.sellPrice | number:0}}đ</div>
 										<div class="col-md-2" style="">{{one.gmtCreate | date:"yyyy-MM-dd"}} | {{one.extInfo}}</div>
 									</div>
@@ -845,9 +845,9 @@ select, textarea {
 
 					<div class="col-lg-2" >
 						<span style="font-size: 13px;">
-							{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}} :
+							[{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}} :
 							{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
-							item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ
+							item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ]
 						</span>
 
 					</div>

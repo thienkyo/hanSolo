@@ -32,11 +32,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
 
     self.modifiedReports2 = [];// array of ModifiedReportDO
 
-
-    if(!memberService.isAdmin()){
-        $location.path('#/');
-    }
-    if(!memberService.isSuperAccountant()){
+    if(!memberService.isSuperAdmin()){
         $location.path('#/');
     }
 
