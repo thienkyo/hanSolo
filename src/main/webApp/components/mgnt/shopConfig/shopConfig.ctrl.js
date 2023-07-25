@@ -15,15 +15,19 @@ angular.module('shopConfigModule')
     }
 
     self.shopInfoCacheName = 'shopInfoCache';
-	self.theShopConfig = new ShopConfigDO();
+	self.theOne = new ShopConfigDO();
+
     self.isSuperAdmin = memberService.isSuperAdmin();
 
     shopConfigService.getDataForMgnt().then(function (data) {
-        self.theOne = data.obj;
+        if(data.obj){
+            self.theOne = data.obj;
+        }
     });
 
 
     self.upsert = function(one){
+        console.log(one);
         self.isSaveButtonPressed=true;
         self.responseStr = false;
         shopConfigService.upsert(one).then(function (data) {

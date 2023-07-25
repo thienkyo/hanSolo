@@ -2,7 +2,7 @@ angular.module('networkServices',[])
 	.factory('ajaxService',['$http','$cookies',function($http,$cookies){
 		
 		var urlbase = "http://localhost/"; // dev
-		//var urlbase = "http://128.199.156.9/";
+		//var urlbase = "http://128.199.156.9/"; // demo
 		//var urlbase = "http://matkinhnguyen.com/";
 		var sessionid = $cookies.get('JSESSIONID');
 		
