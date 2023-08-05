@@ -1,8 +1,8 @@
 'use strict';
 angular.module('customerSourceModule')
-.controller('customerSourceController', ['$scope','customerSourceService','NgTableParams','memberService','CommonStatusArray',
+.controller('customerSourceController', ['$scope','$location','customerSourceService','NgTableParams','memberService','CommonStatusArray',
                                         'CustomerSourceDO','Upload','$timeout','uploadService','CustomerSourceReportDO',
-	function($scope,customerSourceService,NgTableParams,memberService,CommonStatusArray,
+	function($scope,$location,customerSourceService,NgTableParams,memberService,CommonStatusArray,
 	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO) {
 		var self = this;
 		self.statusList = CommonStatusArray;
@@ -23,11 +23,9 @@ angular.module('customerSourceModule')
 
 			customerSourceService.getReportAll().then(function (data) {
                 self.reportList = data;
-                console.log(data);
                 if(self.customerSourceList){
                     self.reportList.forEach(fillInSourceName);
                 }
-                console.log(self.reportList);
                 self.reportParams = new NgTableParams({}, { dataset: self.reportList});
             });
 
@@ -86,12 +84,10 @@ angular.module('customerSourceModule')
         }
 
 		self.calculateReport = function(report){
-		    console.log("calculateReport");
             self.responseStr = false;
             self.responseStrFail = false;
             customerSourceService.calculateReport(report).then(function (data) {
                 self.responseStr = data.errorMessage;
-                console.log(data);
             });
         }
 

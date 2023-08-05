@@ -16,9 +16,8 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     List<Order> findFirst50ByOrderByGmtCreateDesc();
     List<Order> findFirst100ByOrderByGmtCreateDesc();
     List<Order> findAllByOrderByGmtCreateDesc();
-    //List<Order> findFirst40ByShippingNameContainsIgnoreCase(String shippingName);
+
     List<Order> findFirst40ByShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(String shippingName);
-    //List<Order> findFirst40ByShippingPhoneContains(String shippingPhone);
     List<Order> findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(String shippingPhone);
 
     @Transactional

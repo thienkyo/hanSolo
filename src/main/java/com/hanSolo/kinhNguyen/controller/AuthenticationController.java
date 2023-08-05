@@ -4,7 +4,6 @@ import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
-import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.response.MemberResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;

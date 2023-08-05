@@ -9,10 +9,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.theOne = new ContractDO();
     self.theSalary = new SalaryDO();
 
-    if(!memberService.isAdmin()){
-        $location.path('#/');
-    }
-    if(!memberService.isSuperAccountant()){
+    if(!memberService.isSuperAdmin()){
         $location.path('#/');
     }
 

@@ -58,11 +58,12 @@ angular.module('invoiceModule')
                                                                  self.theOrder.orderDetails[i].otherNote,
                                                                  0));
             }
-            if(self.theOrder.orderDetails[i].frameNote.length >= 24){count++;}
+            if(self.theOrder.orderDetails[i].frameNote.length >= 23){count++;}
             if(self.theOrder.orderDetails[i].lensNote.length  >= 24){count++;}
             if(self.theOrder.orderDetails[i].otherNote.length >= 24){count++;}
         }
 
+        console.log(count);
         var totalLine = 10;
         if(count < 3){
             totalLine = 12;

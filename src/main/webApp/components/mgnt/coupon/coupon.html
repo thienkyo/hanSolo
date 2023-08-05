@@ -136,7 +136,7 @@ form .progress {
 						{{coupon.status == 0 ? 'invalid' : 'valid'  }}
 					</td>
 
-			      	<td title="'delete'" style="width:100px;" >
+			      	<td title="'delete'" style="width:100px;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(coupon.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
 						<p ng-show="ctrl.deletingId == coupon.id">
 							Are you sure?

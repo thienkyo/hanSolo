@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.*;
@@ -179,19 +180,19 @@ public class ManagementController {
 
         List<BizExpense> bizExpenseList;
         final Claims claims = (Claims) request.getAttribute("claims");
-        if(((List<String>) claims.get("roles")).contains(Utility.ACCOUNTANT_ROLE)){
+        /*if(((List<String>) claims.get("roles")).contains(Utility.ACCOUNTANT_ROLE)){*/
             if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
                 bizExpenseList =  bizExpenseRepo.findFirst100ByOrderByGmtCreateDesc();
             }else{
                 bizExpenseList = bizExpenseRepo.findByOrderByGmtCreateDesc();
             }
-        }else{
+       /* }else{
             if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
                 bizExpenseList =  bizExpenseRepo.findFirst100ByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
             }else{
                 bizExpenseList = bizExpenseRepo.findByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
             }
-        }
+        }*/
 
         return bizExpenseList;
     }
@@ -252,19 +253,10 @@ public class ManagementController {
 
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GeneralResponse<String> updateMe(@RequestBody final Member member,final HttpServletRequest request)
+    public GeneralResponse<String> upsertMember(@RequestBody final Member member,final HttpServletRequest request)
             throws ServletException, ParseException {
-/*
-        final Claims claims = (Claims) request.getAttribute("claims");
-        if(!((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE)){
-            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE, Utility.FAIL_MSG);
-        }
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
-            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
-        }*/
 
-        if(!isAuthorized(request,Utility.SUPERADMIN_ROLE)){
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
             return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
 
@@ -282,6 +274,11 @@ public class ManagementController {
     @RequestMapping(value = "updateMemberStatus", method = RequestMethod.POST)
     public GeneralResponse<String> updateMemberStatus(@RequestBody final Member mem) throws ParseException {
         memberRepo.updateStatusAndGmtModifyById(mem.getStatus(),Utility.getCurrentDate(),mem.getId());
+
+        if(CommonCache.LOGIN_MEMBER_LIST.containsKey(mem.getPhone())){
+            CommonCache.LOGIN_MEMBER_LIST.remove(mem.getPhone());
+        }
+
         return new GeneralResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,Utility.FAIL_MSG);
     }
 
@@ -298,7 +295,7 @@ public class ManagementController {
 
     @RequestMapping(value = "deleteMemberRole", method = RequestMethod.POST)
     public GeneralResponse<String> deleteMemberRole(@RequestBody final MemberRole role, final HttpServletRequest request) throws ServletException {
-        if(!isAuthorized(request,Utility.SUPERADMIN_ROLE)){
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
             return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
         memberRoleRepo.delete(role);
@@ -545,9 +542,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
-    public GenericResponse deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
+    public GeneralResponse<String> deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         orderRepo.delete(order);
-        return new GenericResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
@@ -622,6 +622,36 @@ public class ManagementController {
         return response;
     }
 
+    @RequestMapping(value = "getOrderHistory/{phone}", method = RequestMethod.GET)
+    public List<OrderDetail> getOrderHistory(@PathVariable final String phone) throws ServletException {
+        List<Order> orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(phone);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByPhoneContainsOrderByGmtCreateDesc(phone);
+
+        List<OrderDetail> result = new ArrayList<>();
+
+        if(!orderList.isEmpty()){
+            for(Order or : orderList){
+                result.addAll(or.getOrderDetails());
+            }
+        }
+
+        if(!orderDetailList.isEmpty()){
+            for(OrderDetail od : orderDetailList){
+                boolean flag = true;
+                for(OrderDetail r : result){
+                    if(od.getPhone().equals(r.getPhone())){
+                        flag = false;
+                    }
+                }
+                if(flag){
+                    result.add(od);
+                }
+            }
+        }
+
+        return	result;
+    }
+
     //////////////////////////// smsUserInfo section /////////////////////////////
     @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
@@ -694,24 +724,24 @@ public class ManagementController {
 
     @RequestMapping(value = "togglePrepareSmsData", method = RequestMethod.POST)
     public boolean togglePrepareSmsData()  {
-        Utility.SMS_DATA_PREPARE_CONTROL = Utility.SMS_DATA_PREPARE_CONTROL ? false : true;
-        return Utility.SMS_DATA_PREPARE_CONTROL;
+        CommonCache.SMS_DATA_PREPARE_CONTROL = CommonCache.SMS_DATA_PREPARE_CONTROL ? false : true;
+        return CommonCache.SMS_DATA_PREPARE_CONTROL;
     }
 
     @RequestMapping(value = "getSmsDataPrepareStatus", method = RequestMethod.POST)
     public boolean getSmsDataPrepareStatus()  {
-        return Utility.SMS_DATA_PREPARE_CONTROL;
+        return CommonCache.SMS_DATA_PREPARE_CONTROL;
     }
 
     @RequestMapping(value = "toggleSmsSend", method = RequestMethod.POST)
     public boolean toggleSmsSend()  {
-        Utility.SMS_SEND_CONTROL = Utility.SMS_SEND_CONTROL ? false : true;
-        return Utility.SMS_SEND_CONTROL;
+        CommonCache.SMS_SEND_CONTROL = CommonCache.SMS_SEND_CONTROL ? false : true;
+        return CommonCache.SMS_SEND_CONTROL;
     }
 
     @RequestMapping(value = "getSmsSendStatus", method = RequestMethod.POST)
     public boolean getSmsSendStatus()  {
-        return Utility.SMS_SEND_CONTROL;
+        return CommonCache.SMS_SEND_CONTROL;
     }
 
 
@@ -737,12 +767,12 @@ public class ManagementController {
 
     @RequestMapping(value = "getLastHeartBeatTime", method = RequestMethod.POST)
     public Date getSMSLastTrigger()  {
-        return Utility.LAST_SMS_HEARTBEAT_TIME;
+        return CommonCache.LAST_SMS_HEARTBEAT_TIME;
     }
 
     @RequestMapping(value = "getLastPrepareDataTime", method = RequestMethod.POST)
     public Date getPrepareDataLastTrigger()  {
-        return Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME;
+        return CommonCache.LAST_PREPARE_DATA_HEARTBEAT_TIME;
     }
 
     //////////////////////////// specific smsUserInfo section /////////////////////////////
@@ -1024,17 +1054,18 @@ public class ManagementController {
         return Utility.saveMultipleFile(directory,uploadFiles, oldNames);
     }
 
-    private boolean isAuthorized(final HttpServletRequest request, String role){
+    /**
+     * ex: onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)
+     * if true: allow continuing.
+     * @param request
+     * @param role
+     * @return
+     */
+    private boolean onlyAllowThisRole(final HttpServletRequest request, String role){
         final Claims claims = (Claims) request.getAttribute("claims");
-        if(!((List<String>) claims.get("roles")).contains(role)){
-            return false;
+        if(((List<String>) claims.get("roles")).contains(role)){
+            return true;
         }
-        return isMemberActive(request);
-    }
-
-    private boolean isMemberActive(final HttpServletRequest request){
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-       return memOpt.isPresent();
+        return false;
     }
 }

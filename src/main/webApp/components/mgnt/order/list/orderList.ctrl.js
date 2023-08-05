@@ -24,9 +24,10 @@ angular.module('orderListModule')
     self.tempLensNumber=0;
     self.OneDayReport={};
     self.isSuperAdmin = memberService.isSuperAdmin();
+    self.isAdmin = memberService.isAdmin();
     self.isLocalWeb = commonService.isLocalWeb();
 
-	if(!memberService.isAdmin()){
+	if(!memberService.isMod()){
 		$location.path('#/');
 	}
 	
@@ -376,6 +377,14 @@ angular.module('orderListModule')
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
         self.theSummaryModal.plainText = JSON.stringify(one, undefined, 2);
+    }
+
+    self.getHistoryModal = function(phone) {
+        orderListService.getOrderHistory(phone).then(function(data){
+            console.log(data);
+            self.theHistoryModal = data;
+            self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
+       });
     }
 
     $('#exampleModal').on('hidden.bs.modal', function (e) {

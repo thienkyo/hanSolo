@@ -8,6 +8,7 @@ angular.module('orderListModule')
 			getOrderById : getOrderById,
 			updateCusSource : updateCusSource,
 			doRecovery : doRecovery,
+			getOrderHistory : getOrderHistory,
 			deleteOrder : deleteOrder
 			};
 	return orderListService;
@@ -46,6 +47,14 @@ angular.module('orderListModule')
             return response.data;
         });
     }
+
+    function getOrderHistory(phone){
+        var url = "mgnt/getOrderHistory/"+phone;
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
 	
 	function deleteOrder(order){
 		var url = "mgnt/deleteOrder";

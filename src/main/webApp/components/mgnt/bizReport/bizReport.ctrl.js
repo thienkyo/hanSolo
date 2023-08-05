@@ -1,9 +1,9 @@
 'use strict';
 angular.module('bizReportModule')
 .controller('bizReportController', ['$scope','$location','bizReportService','NgTableParams','memberService','ModifiedReportDO',
-                                    'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService',
+                                    'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService','shopInfoCacheService',
 function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedReportDO,
-            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService) {
+            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,shopInfoCacheService) {
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new BizReportDO;
@@ -26,9 +26,10 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         new ModifiedReportDO('2030'),
         new ModifiedReportDO('2031')
     ];
-    self.excludedMonth = ['202207','202208','202209'];
-    self.beginMonthNumber = 3;
-    self.endMonthNumber = 1;
+
+    // exclude some month.
+    self.beginMonthNumber = shopInfoCacheService.getCurrentCache().bizReportBeginMonthNumber;
+    self.endMonthNumber = shopInfoCacheService.getCurrentCache().bizReportEndMonthNumber;
 
     self.modifiedReports2 = [];// array of ModifiedReportDO
 
@@ -42,9 +43,12 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
 
         var data2 = [...data];
         for(var i = 0; i < self.beginMonthNumber; i++){
-            data2.pop()
+            data2.pop();
         }
-        data2.shift();
+
+        for(var i = 0; i < self.endMonthNumber; i++){
+            data2.shift();
+        }
 
         self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
         self.minAllIncomeMonth = data2.find(item => item.income == Math.min(...data2.map(o => o.income)));

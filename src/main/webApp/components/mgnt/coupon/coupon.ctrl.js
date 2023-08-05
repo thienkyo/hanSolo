@@ -1,8 +1,8 @@
 'use strict';
 angular.module('couponModule')
-.controller('couponController', ['$scope','couponService','NgTableParams','memberService','CommonStatusArray','CouponDO',
+.controller('couponController', ['$scope','$location','couponService','NgTableParams','memberService','CommonStatusArray','CouponDO',
             'Upload','$timeout','uploadService','CouponTypeList','CouponCreatedByList',
-	function($scope,couponService,NgTableParams,memberService,CommonStatusArray,CouponDO,
+	function($scope,$location,couponService,NgTableParams,memberService,CommonStatusArray,CouponDO,
 	         Upload,$timeout,uploadService,CouponTypeList,CouponCreatedByList) {
 		var self = this;
 		self.statusList = CommonStatusArray;
@@ -12,24 +12,26 @@ angular.module('couponModule')
 		self.statusStyle = {};
 		self.discountOrderNumber = 0;
 		self.totalDiscountAmount = 0;
+		self.isAdmin = memberService.isAdmin();
 
-		if(!memberService.isAdmin()){
+
+		if(!memberService.isMod()){
 			$location.path('#/');
 		}
-		//self.currentMember = memberService.getCurrentMember();
 		
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);
 			self.couponList = data;
+			console.log(data);
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
-
+/*
 		couponService.loadUsedCouponHistory().then(function (data) {
 		    //console.log(data);
 		    data.forEach(calculateUserCoupon);
             self.usedCouponList = data;
             self.usedCouponTableParams = new NgTableParams({}, { dataset: self.usedCouponList});
-        });
+        });*/
 		
 		self.updateCoupon = function(coupon){
 			self.theCoupon = coupon;
@@ -38,6 +40,12 @@ angular.module('couponModule')
 		}
 		
 		self.upsert = function(coupon){
+
+            self.currentMember = memberService.getCurrentMember();
+            if(coupon.id == 0){
+                coupon.owner = self.currentMember.name+self.currentMember.phone;
+            }
+            coupon.lastModifiedBy = self.currentMember.name+self.currentMember.phone;
 
 			self.responseStr = false;
 			self.responseStrFail = false;

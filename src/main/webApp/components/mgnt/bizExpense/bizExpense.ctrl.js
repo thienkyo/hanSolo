@@ -15,7 +15,7 @@ angular.module('bizExpenseModule')
 	self.tempAmount=0;
 	self.OneDayExpense={};
 
-	if(!memberService.isAdmin()){
+	if(!memberService.isMod()){
 		$location.path('#/');
 	}
 

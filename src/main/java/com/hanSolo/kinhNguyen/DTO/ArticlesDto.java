@@ -1,4 +1,4 @@
-package com.hanSolo.kinhNguyen.services;
+package com.hanSolo.kinhNguyen.DTO;
 
 import java.io.Serializable;
 import java.util.Date;

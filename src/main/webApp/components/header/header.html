@@ -155,38 +155,37 @@
 
 						<!--new menu-->
 						<li class="active"><a href="#/">Home</a></li>
-						<li ng-show="ctrl.isAdmin">
+						<li ng-if="ctrl.isMod">
 							<a href="" >order</a>
 							<ul class="dropdown" >
 								<li><a href="#/mgnt/storeOrder/0">create order</a></li>
 								<li><a href="#/mgnt/orderList">order list</a></li>
 								<li><a href="#/mgnt/coupon">coupons</a></li>
-								<li ng-show="ctrl.isAdmin"><a href="#/mgnt/orderCacheList/">order cache</a></li>
+								<li><a href="#/mgnt/orderCacheList/">order cache</a></li>
 							</ul>
 						</li>
-						<li>
-							<a href="" ng-show="ctrl.isAdmin">member</a>
+						<li  ng-if="ctrl.isAdmin">
+							<a href="" ng-if="ctrl.isAdmin">member</a>
 							<ul class="dropdown" ng-show="ctrl.isAdmin">
 								<li><a href="#/mgnt/member">members</a></li>
-								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/contract/">contracts</a></li>
+								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/contract/">contracts</a></li>
 							</ul>
 						</li>
-						<li ng-show="ctrl.isAdmin"><a href="" >expense</a>
+						<li ng-if="ctrl.isMod"><a href="" >expense</a>
 							<ul class="dropdown">
 								<li><a href="#/mgnt/bizExpense">biz expense</a></li>
-								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/bizReport/">report</a></li>
-								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/contract/">contracts</a></li>
-								<li><a href="#/mgnt/customerSource/">Customer Source</a></li>
+								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/bizReport/">report</a></li>
+								<li ng-if="ctrl.isAdmin"><a href="#/mgnt/customerSource/">Customer Source</a></li>
 							</ul>
 						</li>
-						<li ng-show="ctrl.isAdmin && ctrl.shopInfo.isUnlockSmsFeature">
+						<li ng-if="ctrl.isAdmin && ctrl.shopInfo.isUnlockSmsFeature">
 							<a href="" >sms</a>
 							<ul class="dropdown">
 								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/SmsUserInfo/">sms</a></li>
 								<li><a href="#/fastSMS/">fast SMS</a></li>
 							</ul>
 						</li>
-						<li ng-show="ctrl.isGodLike">
+						<li ng-if="ctrl.isGodLike">
 							<a href="" >config</a>
 							<ul class="dropdown" >
 								<li><a href="#/mgnt/banner">banners</a></li>

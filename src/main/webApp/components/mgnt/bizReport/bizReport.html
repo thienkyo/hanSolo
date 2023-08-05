@@ -113,32 +113,32 @@ form .progress {
 					<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="true" style="width: auto;">
 						<tr ng-repeat="one in item.details">
 
-							<td title="'month'"  style="width:10px;text-align: center;">
+							<td data-title="'month'"  style="width:10px;text-align: center;">
 								{{one.month}}
 							</td>
-							<td title="'income'"  style="width:130px;text-align: right;">
+							<td data-title="'income'"  style="width:130px;text-align: right;">
 								{{one.income | number:0}}đ
 							</td>
-							<td title="'outcome'" style="text-align: right;">
+							<td data-title="'outcome'" style="text-align: right;">
 								{{one.outcome | number:0}}đ
 							</td>
-							<td title="'discount'" style="text-align: right;">
+							<td data-title="'discount'" style="text-align: right;">
 								{{one.discountAmount | number:0}}đ
 							</td>
-							<td title="'profit(pro/in)'" style="text-align: right;">
+							<td data-title="'profit(pro/in)'" style="text-align: right;">
 								{{one.income - one.outcome | number:0}}đ
 								({{(one.income - one.outcome) <= 0  ? 0 :(one.income - one.outcome)/one.income*100 | number:0}}%)
 							</td>
-							<td title="'In/Out'" style="text-align: right;">
+							<td data-title="'In/Out'" style="text-align: right;">
 								{{one.income/one.outcome*100 | number:0}}%
 							</td>
-							<td title="'order qty'" style="text-align: center;">
+							<td data-title="'order qty'" style="text-align: center;">
 								{{one.orderQuantity}}
 							</td>
-							<td title="'frame qty'" style="text-align: center;">
+							<td data-title="'frame qty'" style="text-align: center;">
 								{{one.frameQuantity}}
 							</td>
-							<td title="'lens qty'" style="text-align: center;">
+							<td data-title="'lens qty'" style="text-align: center;">
 								{{one.lensQuantity}}
 							</td>
 

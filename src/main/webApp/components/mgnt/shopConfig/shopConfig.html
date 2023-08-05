@@ -45,13 +45,20 @@
 							</div>
 
 						</div>
+
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-2">begin mon excluded<input type="text"  ng-model="ctrl.theOne.bizReportBeginMonthNumber" placeholder="name" style="width: 100%;"/></div>
+							<div class="col-sm-2">end mon excluded:<input type="text"  ng-model="ctrl.theOne.bizReportEndMonthNumber" placeholder="name" style="width: 100%;"/></div>
+						</div>
+
 						<div class="row" style="margin-bottom: 15px;font-size: 16px;font-weight: bolder;">
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<a ng-click="ctrl.upsert(ctrl.theOne)" href=""
 								   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn check_out'"
 								   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
 
 								<a ng-click="ctrl.refreshShopConfig()" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;">refresh cache</a>
+								<a ng-click="ctrl.clearShopConfig()" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;">clear cache</a>
 							</div>
 							<div class="col-sm-2">
 								<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"

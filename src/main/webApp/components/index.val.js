@@ -55,12 +55,17 @@ var CouponCreatedByList=[
 ];
 
 var RoleList=[
+	{name : 'MOD', value:'MOD' },
 	{name : 'ADMIN', value:'ADMIN' },
     {name : 'SUPER_ADMIN', value:'SUPER_ADMIN' }
 ];
 
-angular
-		.module('app') 
+var cacheName = {
+    shopInfoCacheName : 'shopInfoCache',
+    cusSourceCacheName : 'cusSourceCache'
+};
+
+angular.module('app')
 		.value('MemberDO', MemberDO)
 		.value('OrderDO',OrderDO)
 		.value('OrderDetailDO',OrderDetailDO)
@@ -99,6 +104,7 @@ angular
 		.value('ShopConfigDO',ShopConfigDO)
 		.value('RoleList',RoleList)
 		.value('MemberRoleDO',MemberRoleDO)
+		.value('cacheName',cacheName)
 		;
 
 function MemberRoleDO(){
@@ -280,7 +286,7 @@ function OrderDO () {
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 	this.relationship = '';
-	this.location = 'WEB';
+	this.location = 'STORE';
 	this.deposit = 0;
 	this.shippingId = '';
 	this.member = null;

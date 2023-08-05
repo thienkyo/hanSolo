@@ -18,7 +18,7 @@
 <section>
 	<div class="container" ng-cloak>
 		<h3 style="margin-bottom: 40px;text-align: center;">Order management {{ctrl.isLocalWeb ? '[LOCAL]' : ''}}</h3>
-		<!-- Modal -->
+		<!-- exampleModal from col 'id' -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -59,9 +59,8 @@
 				</div>
 			</div>
 		</div>
-		<!-- end Modal -->
 
-		<!--summary Modal -->
+		<!--summary Modal from col 'name'-->
 		<div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
@@ -136,7 +135,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- end summary Modal -->
 
 		<!-- one day Modal -->
 		<div class="modal fade" id="oneDayModal" tabindex="-1" role="dialog" aria-labelledby="oneDayModalLabel" aria-hidden="true">
@@ -195,7 +193,60 @@
 				</div>
 			</div>
 		</div>
-		<!-- end one day Modal -->
+
+		<!--history Modal from col 'phone'-->
+		<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="historyModalLabel">Phone [{{ctrl.theHistoryModal[0].phone | tel}}] </h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="table-responsive" style="padding-left: 15px;padding-right: 15px;">
+							<table ng-table="ctrl.theHistoryParams" class="table table-bordered table-hover table-striped" show-filter="true">
+
+								<tr ng-repeat="item in $data">
+									<td title="'order'"  style="width:50px;text-align: center;">
+										<a href="#/mgnt/storeOrder/{{item.orderId}}" target="_blank" >{{item.orderId}}</a>
+									</td>
+									<td title="'date'"  style="width:110px;">
+										{{item.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}
+									</td>
+									<td title="'name'"  style="text-align: left;width:180px;">
+										{{item.name}} ({{item.yob}})
+									</td>
+									<td title="'detail'" style="text-align: right;width:250px;">
+										<div class="row" style="margin-left: 3px;">
+											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
+											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
+										</div>
+										<!--<div class="row" style="margin-left: 3px;">
+											{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}
+										</div>-->
+									</td>
+									<td title="'hardware'"  style="width:250px;">
+										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+									</td>
+									<td title="'note'" >
+										{{item.orderDetailNoteForCus}}
+										{{item.orderDetailNote}}
+									</td>
+								</tr>
+
+							</table>
+						</div>
+					</div>
+
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- first 100 record -->
 		<div class="row">
@@ -257,7 +308,7 @@
 		</div>
 		
         <div class="table-responsive">
-            <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+            <table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
 			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:50px;text-align: center;">
 			        	<a href="" ng-click="ctrl.setModal(order)" data-toggle="modal" data-target="#exampleModal">{{order.id}}</a>
@@ -269,7 +320,9 @@
 						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
 					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
-			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">{{order.shippingPhone | tel}}</td>
+			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">
+						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)" data-toggle="modal" data-target="#historyModal">{{order.shippingPhone | tel}}</a>
+					</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
 						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
 					</td>
@@ -290,9 +343,9 @@
 								 ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>
-					<td title="'delete'" style="width:fit-content;" >
+					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out"
-						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isSuperAdmin">delete</a>
+						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin">delete</a>
 						<p ng-show="ctrl.deletingOrderId == order.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteOrder(order)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>

@@ -1,9 +1,8 @@
 angular.module('app')
-.controller('footerController',['$scope','$rootScope','shopConfigService','shopInfoService',
-function ( $scope,$rootScope,shopConfigService,shopInfoService ){
+.controller('footerController',['$scope','$rootScope','shopConfigService','commonCacheService','cacheName',
+function ( $scope,$rootScope,shopConfigService,commonCacheService,cacheName ){
 
 var self=this;
-self.shopInfoCacheName = 'shopInfoCache';
-self.shopInfo =  shopInfoService.getCurrentCache(self.shopInfoCacheName);
+self.shopInfo =  commonCacheService.getCurrentCache(cacheName.shopInfoCacheName);
 
 }]);

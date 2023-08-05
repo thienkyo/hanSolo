@@ -16,7 +16,7 @@ angular.module('orderCacheListModule')
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "80px" };
     self.isSuperAdmin = memberService.isSuperAdmin();
-	if(!memberService.isAdmin()){
+	if(!memberService.isMod()){
 		$location.path('#/');
 	}
 
@@ -53,7 +53,7 @@ angular.module('orderCacheListModule')
 
     self.sync = function(order){
 
-        if(memberService.isAdmin()){
+        if(memberService.isMod()){
             self.isSyncingOrder=true;
 
             var clone = Object.assign({}, order);
@@ -64,26 +64,10 @@ angular.module('orderCacheListModule')
                 clone.orderDetails[i].orderId = null;
             }
 
-            //console.log(clone);
-       /*     cartService.placeOrder(clone).then(function (data) {
-               // self.theOrder.currentCouponCode = self.theOrder.couponCode;
-               // self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
-              //  self.order_return_status = data; // return after saving order, order_return_status would be orderid
-              //  self.newOrderId = data.replyStr;
-              self.isSyncingOrder = false;
-              console.log(clone);
-            });*/
-
             orderCacheListService.syncOrder(clone).then(function (data) {
-               // self.theOrder.currentCouponCode = self.theOrder.couponCode;
-               // self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
-              //  self.order_return_status = data; // return after saving order, order_return_status would be orderid
-              //  self.newOrderId = data.replyStr;
               self.isSyncingOrder = false;
               console.log(clone);
             });
-
-
         }
 
     }

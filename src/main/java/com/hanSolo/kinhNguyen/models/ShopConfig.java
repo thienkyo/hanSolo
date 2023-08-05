@@ -44,10 +44,16 @@ public class ShopConfig extends BaseModel {
     @Column(name = "other_price", columnDefinition = "integer default 0")
     private Integer otherPrice;
 
-    @Column(name = "biz_report_begin_month_number", columnDefinition = "integer default 1")
+    /**
+     * the amount of month excluded in the beginning
+     */
+    @Column(name = "biz_report_begin_month_number", columnDefinition = "integer default 3")
     private Integer bizReportBeginMonthNumber;
 
-    @Column(name = "biz_report_end_month_number", columnDefinition = "integer default 3")
+    /**
+     * the amount of month excluded in the end.
+     */
+    @Column(name = "biz_report_end_month_number", columnDefinition = "integer default 1")
     private Integer bizReportEndMonthNumber;
 
     public Integer getBizReportEndMonthNumber() {

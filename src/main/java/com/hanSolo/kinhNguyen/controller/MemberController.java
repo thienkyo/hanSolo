@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.models.SmsJob;
@@ -18,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -49,6 +51,12 @@ public class MemberController {
         for(MemberRole r : memOpt.get().getMemberRoles() ){
             roleList.add(r.getRole());
         }
+
+        if(CommonCache.LOGIN_MEMBER_LIST.size() == 8){
+            CommonCache.LOGIN_MEMBER_LIST.clear();
+        }
+
+        CommonCache.LOGIN_MEMBER_LIST.put(memOpt.get().getPhone(),memOpt.get());
 
         return new LoginResponse(Jwts.builder()
                 .setSubject(parts[3])

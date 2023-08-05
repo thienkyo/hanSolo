@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.models.SmsUserInfo;
@@ -29,11 +30,11 @@ public class ApiController {
 
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() throws ParseException {
-        if(!Utility.SMS_SEND_CONTROL){
+        if(!CommonCache.SMS_SEND_CONTROL){
             return null;
         }
         Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
-        Utility.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
+        CommonCache.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
             smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
@@ -81,7 +82,7 @@ public class ApiController {
 
     @RequestMapping("prepareSmsData")
     public QueueSmsResponse prepareSmsData() throws ParseException {
-        if(!Utility.SMS_DATA_PREPARE_CONTROL){
+        if(!CommonCache.SMS_DATA_PREPARE_CONTROL){
             return null;
         }
 
@@ -146,7 +147,7 @@ public class ApiController {
         List<SmsQueue> smsQueueSending = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENDING);
         smsQueueList.addAll(smsQueueSending);
         smsQueueRepo.saveAll(smsQueueList);
-        Utility.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
+        CommonCache.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
         return null;
     }
 

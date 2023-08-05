@@ -7,6 +7,7 @@ angular.module('app')
             setCurrentMember : setCurrentMember,
             getCurrentMember : getCurrentMember,
             makeLoginStr : makeLoginStr,
+            logout : logout,
         //	makeSignupStr : makeSignupStr,
             isLogin : isLogin,
             isAdmin :isAdmin,
@@ -20,6 +21,10 @@ angular.module('app')
             getSiteMode : getSiteMode
 		};
 	return memberService;
+
+	function logout(){
+        setCurrentMember(null);
+    }
 
 	function setSiteMode(mode){
         store.set('MKN_siteMode', mode);
@@ -369,21 +374,20 @@ angular.module('app')
     }
 
 }])
-.factory('shopInfoService',['store', function(store) {
+.factory('commonCacheService',['store', function(store) {
 	var currentCache = {};
 	// var globalCacheName = '';
-	var shopInfoService = {
+	var commonCacheService = {
 		setCurrentCache : setCurrentCache,
 		getCurrentCache : getCurrentCache,
 		clearCache : clearCache
 		}
-	return shopInfoService;
+	return commonCacheService;
 
 
 	function setCurrentCache(cacheData,cacheName){
         currentCache = cacheData;
         store.set(cacheName, cacheData);
-        return currentCache;
     }
 
     function getCurrentCache(cacheName){
@@ -398,6 +402,35 @@ angular.module('app')
     function clearCache(cacheName){
         currentCache = {};
         store.set(cacheName, currentCache);
+    }
+
+}])
+.factory('shopInfoCacheService',['shopConfigService','cacheName','commonCacheService',
+function(shopConfigService,cacheName,commonCacheService) {
+	var shopInfoCacheService = {
+		setCurrentCache : setCurrentCache,
+		getCurrentCache : getCurrentCache,
+		clearCache : clearCache
+		}
+	return shopInfoCacheService;
+
+	function setCurrentCache(cacheData){
+	    commonCacheService.setCurrentCache(cacheName.shopInfoCacheName, cacheData);
+	}
+
+    function getCurrentCache(){
+        var shopInfo =  commonCacheService.getCurrentCache(cacheName.shopInfoCacheName);
+        if(!shopInfo.shopName){
+            shopConfigService.getDataForMgnt().then(function (data) {
+                shopInfo = data.obj
+                commonCacheService.setCurrentCache(data.obj,cacheName.shopInfoCacheName);
+            });
+        }
+        return shopInfo;
+    }
+
+    function clearCache(){
+        commonCacheService.clearCache(cacheName.shopInfoCacheName);
     }
 
 }])

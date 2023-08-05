@@ -3,20 +3,20 @@ angular.module('shopConfigModule')
 	.controller('shopConfigController',['$rootScope','$routeParams','$location',
 										 'memberService','LensProductDO','ShopConfigDO',
 										 'NgTableParams','OrderStatusArray','AmountList',
-										 'lensProductService','shopConfigService','shopInfoService',
+										 'lensProductService','shopConfigService','shopInfoCacheService',
+										 'cacheName','commonCacheService',
 	function($rootScope, $routeParams,$location,
 	        memberService,LensProductDO,ShopConfigDO,
 	        NgTableParams,OrderStatusArray,AmountList,
-	        lensProductService,shopConfigService,shopInfoService
+	        lensProductService,shopConfigService,shopInfoCacheService,
+	        cacheName,commonCacheService
 	        ){
 	var self = this;
 	if(!memberService.isAdmin()){
         $location.path('#/');
     }
 
-    self.shopInfoCacheName = 'shopInfoCache';
 	self.theOne = new ShopConfigDO();
-
     self.isSuperAdmin = memberService.isSuperAdmin();
 
     shopConfigService.getDataForMgnt().then(function (data) {
@@ -27,14 +27,13 @@ angular.module('shopConfigModule')
 
 
     self.upsert = function(one){
-        console.log(one);
         self.isSaveButtonPressed=true;
         self.responseStr = false;
         shopConfigService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
             self.theShopConfig = data.obj;
-            shopInfoService.setCurrentCache(data.obj,self.shopInfoCacheName);
+            commonCacheService.setCurrentCache(data.obj,cacheName.shopInfoCacheName);
         });
         shopConfigService.refreshShopConfig().then(function (data) {
             self.isSaveButtonPressed=false;
@@ -53,6 +52,11 @@ angular.module('shopConfigModule')
     self.closeAlert = function(index) {
         self.responseStr = false;
     };
+
+
+    self.clearShopConfig = function(){
+        shopInfoCacheService.clearCache();
+    }
 
 //////////////
 

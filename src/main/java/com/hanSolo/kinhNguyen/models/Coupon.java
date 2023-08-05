@@ -43,6 +43,28 @@ public class Coupon {
     @Column(name = "created_by", length = 20, columnDefinition = "varchar(20) default 'MANUAL'")
     private String createdBy;
 
+    @Column(name = "owner", length = 110)
+    private String owner;
+
+    @Column(name = "modify_by", length = 110)
+    private String lastModifiedBy;
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }

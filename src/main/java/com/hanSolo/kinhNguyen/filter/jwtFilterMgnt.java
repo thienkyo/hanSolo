@@ -1,9 +1,14 @@
 package com.hanSolo.kinhNguyen.filter;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
+import com.hanSolo.kinhNguyen.models.Member;
+import com.hanSolo.kinhNguyen.repository.MemberRepository;
+import com.hanSolo.kinhNguyen.response.MemberResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,13 +22,16 @@ import java.util.List;
 
 public class jwtFilterMgnt extends GenericFilterBean {
 
+    @Autowired
+    private MemberRepository memberRepo;
+
     @SuppressWarnings("unchecked")
     @Override
     public void doFilter(final ServletRequest req,
                          final ServletResponse res,
                          final FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) req;
-        final HttpServletResponse response = (HttpServletResponse) res;
+        //final HttpServletResponse response = (HttpServletResponse) res;
 
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("sheep ")) {
@@ -37,15 +45,25 @@ public class jwtFilterMgnt extends GenericFilterBean {
                     .setSigningKey(Utility.SECRET_KEY.getBytes("UTF-8"))
                     .parseClaimsJws(token).getBody();
 
-            if(!((List<String>) claims.get("roles")).contains(Utility.ADMIN_ROLE) &&
-                    !((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE)
-            ){
+            if (!((List<String>) claims.get("roles")).contains(Utility.ADMIN_ROLE) &&
+                    !((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE) &&
+                    !((List<String>) claims.get("roles")).contains(Utility.MOD_ROLE)
+            ) {
                 throw new ServletException("Unauthorized action");
             }
 
+            if(CommonCache.LOGIN_MEMBER_LIST.containsKey(claims.get("sub"))){
+                Member currMem = CommonCache.LOGIN_MEMBER_LIST.getOrDefault(claims.get("sub"),null);
+                if(!currMem.getStatus()){
+                    throw new ServletException("USER_INACTIVE");
+                }
+
+            }else{
+                throw new ServletException("USER_INACTIVE");
+            }
+
             request.setAttribute("claims", claims);
-        }
-        catch (final SignatureException e) {
+        } catch (final SignatureException e) {
             throw new ServletException("Invalid token.");
         }
 

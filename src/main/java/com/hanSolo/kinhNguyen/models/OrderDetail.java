@@ -23,55 +23,55 @@ public class OrderDetail {
     @Column(name = "frame_note", length = 700)
     private String frameNote;
 
-    @Column(name = "os_vasc", length = 10)
+    @Column(name = "os_vasc", length = 50)
     private String osVasc;
 
-    @Column(name = "os_vacc", length = 10)
+    @Column(name = "os_vacc", length = 50)
     private String osVacc;
 
-    @Column(name = "os_sphere", length = 10)
+    @Column(name = "os_sphere", length = 50)
     private String osSphere;
 
-    @Column(name = "os_cylinder", length = 10)
+    @Column(name = "os_cylinder", length = 50)
     private String osCylinder;
 
-    @Column(name = "os_axis", length = 10)
+    @Column(name = "os_axis", length = 50)
     private String osAxis;
 
-    @Column(name = "os_prism", length = 10)
+    @Column(name = "os_prism", length = 50)
     private String osPrism;
 
-    @Column(name = "od_vasc", length = 10)
+    @Column(name = "od_vasc", length = 50)
     private String odVasc;
 
-    @Column(name = "od_vacc", length = 10)
+    @Column(name = "od_vacc", length = 50)
     private String odVacc;
 
-    @Column(name = "od_sphere", length = 10)
+    @Column(name = "od_sphere", length = 50)
     private String odSphere;
 
-    @Column(name = "od_cylinder", length = 10)
+    @Column(name = "od_cylinder", length = 50)
     private String odCylinder;
 
-    @Column(name = "od_axis", length = 10)
+    @Column(name = "od_axis", length = 20)
     private String odAxis;
 
-    @Column(name = "od_prism", length = 10)
+    @Column(name = "od_prism", length = 20)
     private String odPrism;
 
-    @Column(name = "os_add", length = 10)
+    @Column(name = "os_add", length = 20)
     private String osAdd;
 
-    @Column(name = "od_add", length = 10)
+    @Column(name = "od_add", length = 20)
     private String odAdd;
 
-    @Column(name = "pd", length = 10)
+    @Column(name = "pd", length = 20)
     private String pd;
 
-    @Column(name = "wd", length = 10)
+    @Column(name = "wd", length = 20)
     private String wd;
 
-    @Column(name = "va_near", length = 10)
+    @Column(name = "va_near", length = 20)
     private String vaNear;
 
     @Column(name = "name", length = 200)

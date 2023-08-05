@@ -17,9 +17,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 public class Utility {
 
-    final public static int AUTHENTICATION_TIMEOUT = 3 * 24 * 60 * 60 * 1000; //
+    final public static int AUTHENTICATION_TIMEOUT = 3 * 24 * 60 * 60 * 1000; // user stay logged in for 3days.
 
     final public static Boolean ACTIVE_STATUS = true;
     final public static Boolean INACTIVE_STATUS = false;
@@ -28,7 +29,7 @@ public class Utility {
     final public static String HOME_COLLECTION = "HOMECOLLECTION";
 
     final public static String LOGIN_DILIMITER = "d3m";
-    final public static String DEFAULT_PW = "a2luaG5ndXllbg==";//kinhnguyen
+    final public static String DEFAULT_PW = "MTIzNDU2bHR0";//123456ltt
     final public static String SECRET_KEY = "kinhNguyenSecretKey";
     final public static String SECRET_KEY_API_SMS = "kinhNguyenAPI";
 
@@ -72,28 +73,6 @@ public class Utility {
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
-    ///// config /////
-    public static Date LAST_SMS_HEARTBEAT_TIME;
-    public static Date LAST_PREPARE_DATA_HEARTBEAT_TIME;
-
-    /**
-     * control api prepareSmsData: to prepare data sms sending true = allow
-     */
-    public static boolean SMS_DATA_PREPARE_CONTROL = true;
-
-    /**
-     * control api getQueueSms: get data for sms sending true = allow
-     */
-    public static boolean SMS_SEND_CONTROL = true;
-
-    static {
-        try {
-            LAST_SMS_HEARTBEAT_TIME = getCurrentDate();
-            LAST_PREPARE_DATA_HEARTBEAT_TIME = getCurrentDate();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

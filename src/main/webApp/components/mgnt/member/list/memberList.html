@@ -53,9 +53,9 @@
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="mem in $data">
-			      <!--  <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
-			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.id}}</a>
-			        </td>-->
+			        <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+			        	{{mem.id - 1}}
+			        </td>
 			        <td title="'email'" filter="{ email : 'text'}" sortable="'email'" style="width:90px;">
 			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.email}}</a>
 			        </td>

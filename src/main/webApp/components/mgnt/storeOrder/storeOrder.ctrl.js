@@ -137,6 +137,58 @@ angular.module('storeOrderModule')
         }
     }
 
+    self.dummyData =function() {
+
+        var dummyData = new OrderDO;
+        dummyData.shippingAddress = '22/1 đường xx, phường 21, quận 3, Tp hcm';
+        dummyData.shippingName = 'Lý Thị Minh Trang';
+        dummyData.shippingPhone ='09123456789';
+        dummyData.gender = true;
+
+        var dummyOrderDetail = new OrderDetailDO();
+
+        dummyOrderDetail.framePriceAfterSale = 3200000;
+        dummyOrderDetail.frameNote = 'velo 30-4500';
+
+        dummyOrderDetail.lensNote = 'essilor ASX 1.71';
+        dummyOrderDetail.lensPrice = 1450000;
+
+
+        dummyOrderDetail.osVasc = '4/10';
+        dummyOrderDetail.osVacc = '10/10';
+        dummyOrderDetail.osSphere = '-625';
+        dummyOrderDetail.osCylinder = '-375';
+        dummyOrderDetail.osAxis = '165';
+        dummyOrderDetail.osPrism = '';
+
+        dummyOrderDetail.odVasc = '5/10';
+        dummyOrderDetail.odVacc = '10/10';
+        dummyOrderDetail.odSphere = '-825';
+        dummyOrderDetail.odCylinder = '-500';
+        dummyOrderDetail.odAxis = '20';
+        dummyOrderDetail.odPrism = '';
+
+        dummyOrderDetail.osAdd = '';
+        dummyOrderDetail.odAdd = '';
+        dummyOrderDetail.pd = '67';
+        dummyOrderDetail.wd = '';
+        dummyOrderDetail.vaNear = '';
+
+        dummyOrderDetail.name = 'Lý Thị Minh Mai Ca';
+        dummyOrderDetail.yob ='1983';
+        dummyOrderDetail.phone = '';
+        dummyOrderDetail.address = '';
+        dummyOrderDetail.relationship = '';
+        dummyOrderDetail.recommendedSpectacles = '';
+        dummyOrderDetail.orderDetailNote = '';
+
+        dummyData.orderDetails.push(dummyOrderDetail);
+
+        self.theOrder = dummyData;
+
+        console.log(self.theOrder);
+    }
+
     self.searchTextChange =function(text) {
         //console.log('Text changed to ' + text);
     }
@@ -301,7 +353,7 @@ angular.module('storeOrderModule')
         self.theOrder.specificJobName = self.selectedJob.jobName;
 
         if(self.theOrder.shippingName && self.theOrder.shippingPhone ){
-            if(memberService.isAdmin()){
+            if(memberService.isMod()){
                 self.isSaveButtonPressed=true;
 
                 self.currentMember = memberService.getCurrentMember();
@@ -419,7 +471,7 @@ angular.module('storeOrderModule')
     };
 
 ////// run when loading page/////
-	if(!memberService.isAdmin()){
+	if(!memberService.isMod()){
 		$location.path('#/');
 	}
 
@@ -462,6 +514,7 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].gender=true;
         self.selectedJob = firstSmsJob;
         self.copyActive = true;
+        console.log(self.theOrder);
     }
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.

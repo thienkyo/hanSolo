@@ -34,7 +34,6 @@ angular.module('customerSourceModule')
 	}
 
 	function calculateReport(one){
-	    console.log("calculateReport srv");
         var url = "mgnt/calCustomerSourceReport";
         return ajaxService.post(url,one,{}).then(function(response){
             return response.data;

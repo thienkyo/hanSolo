@@ -1,46 +1,34 @@
 angular.module('app')
 .controller('headerController', ['$rootScope','$location','ajaxService','shopConfigService',
                                  'memberService','cartStoreService','categoryService',
-                                 'shopInfoService',
+                                 'cacheName','commonCacheService','shopInfoCacheService',
 	function($rootScope,$location,ajaxService,shopConfigService,
 	         memberService,cartStoreService,categoryService,
-	         shopInfoService) {
+	         cacheName,commonCacheService,shopInfoCacheService) {
 	var self=this;
 	self.cart=[];
-
-	self.shopInfoCacheName = 'shopInfoCache';
-
 	self.currentMember = memberService.getCurrentMember();
 	self.currentCart = cartStoreService.getCurrentCart();
 	self.orderQuantity = cartStoreService.getQuantity();
 	self.isGodLike = memberService.isGodLike();
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
-
-	console.log(self.isGodLike);
-
-	self.shopInfo =  shopInfoService.getCurrentCache(self.shopInfoCacheName);
-	if(!self.shopInfo.shopName){
-	    shopConfigService.getDataForMgnt().then(function (data) {
-            self.shopInfo = data.obj;
-            shopInfoService.setCurrentCache(data.obj,self.shopInfoCacheName);
-        });
-	}
+	self.isMod = memberService.isMod();
+	self.shopInfo =  shopInfoCacheService.getCurrentCache();
 
 /*
-
 	categoryService.getActiveCategories().then(function(data){
 		self.cateList = data;
 	});
 */
-
-
+    console.log('this is header');
 	self.logout = function() {
-		self.currentMember = memberService.setCurrentMember(null);
 		self.isAdmin = false;
 		self.isMod = false;
 		self.isGodLike = false;
-		$location.path('/');
+		self.currentMember = null;
+		memberService.logout();
+		$location.path('#/');
     }
 
 	self.querySearch = function(searchText){
@@ -100,6 +88,9 @@ angular.module('app')
     $rootScope.$on('ExpiredJwt', function() {
     	self.currentMember = memberService.setCurrentMember(null);
 		self.isAdmin = false;
+		self.isGodLike = false;
+        self.isSuperAdmin = false;
+        self.isMod = false;
 	//	$location.path('#/');
     });
 

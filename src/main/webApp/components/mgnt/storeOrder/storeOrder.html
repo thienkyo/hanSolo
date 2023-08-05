@@ -79,6 +79,7 @@ select, textarea {
 <h4 style="text-align: center;">
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}" target="_blank" ng-show="ctrl.theOrder.id > 0">[print]</a>
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}&noAddress=true" target="_blank" ng-show="ctrl.theOrder.id > 0">[print2]</a>
+	<a href="" ng-show="ctrl.isLocalWeb" ng-click="ctrl.dummyData()">[dummyData]</a>
 </h4>
 
 <section class="shopping-cart spad" style="padding-top: 50px;">
@@ -385,26 +386,28 @@ select, textarea {
 							<div class="col-md-3">
 								<div class="checkout__input">
 									<p>Mắt phải</p>
-									<input type="text"  ng-model="item.odVasc" >
+									<input type="text"  ng-model="item.odVasc" placeholder="odVasc">
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="checkout__input">
 									<p>Mắt trái</p>
-									<input type="text"  ng-model="item.osVasc">
+									<input type="text"  ng-model="item.osVasc" placeholder="osVasc">
 								</div>
 							</div>
 
 							<div class="col-md-3" style="padding-right: 2px;">
 								<div class="checkout__input">
 									<p>Mắt phải</p>
-									<input type="text"  ng-model="item.odPreviousPrescript" style="padding-left: 0px;">
+									<input type="text"  ng-model="item.odPreviousPrescript"
+										   style="padding-left: 0px;" >
 								</div>
 							</div>
 							<div class="col-md-3" style="padding-left: 2px;">
 								<div class="checkout__input">
 									<p>Mắt trái</p>
-									<input type="text"  ng-model="item.osPreviousPrescript" style="padding-left: 0px;">
+									<input type="text"  ng-model="item.osPreviousPrescript"
+										   style="padding-left: 0px;" >
 								</div>
 							</div>
 						</div>
