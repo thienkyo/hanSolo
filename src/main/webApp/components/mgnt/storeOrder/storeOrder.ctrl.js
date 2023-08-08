@@ -28,6 +28,9 @@ angular.module('storeOrderModule')
 	self.splitOrderDetailList = [];
 	self.theSplitOrder = new OrderDO();
 
+	self.year = (new Date()).getFullYear();
+	console.log(self.year);
+
 //////////////// function section ////////////
 
     self.updatePrice = function(){

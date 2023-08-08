@@ -148,6 +148,9 @@ form .progress {
 							thất bại
 						</div>
 					</div>
+					<div class="col-md-6" style="text-align: end;">
+						total:{{ctrl.totalCount}}
+					</div>
 				</div>
 
 				<!--data table-->
@@ -160,8 +163,11 @@ form .progress {
 							<td title="'name'" filter="{ 'name': 'text'}" sortable="'name'"  style="width:180px;">
 								<a href="" ng-click="ctrl.setTheOne(one)">{{one.name}} </a>
 							</td>
-							<td title="'count'" filter="{ 'count': 'number'}" sortable="'count'"  style="width:130px;">
+							<td title="'count'" filter="{ 'count': 'number'}" sortable="'count'"  style="width:100px;">
 								{{one.count}}
+							</td>
+							<td title="'%'" filter="{ 'percent': 'number'}" sortable="'percent'"  style="width:100px;text-align:end;">
+								{{one.percent |  number:2}}%
 							</td>
 							<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" >
 								{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}

@@ -208,18 +208,22 @@ public class ManagementController {
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "deleteBizExpense", method = RequestMethod.POST)
-    public GenericResponse deleteBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request)  {
+    public GeneralResponse deleteBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         bizExpenseRepo.delete(bizExpense);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "updateBizExpenseStatus", method = RequestMethod.POST)
-    public GenericResponse updateBizExpenseStatus(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
-        final Claims claims = (Claims) request.getAttribute("claims");
-        if(((List<String>) claims.get("roles")).contains(Utility.SUPER_ACCOUNTANT_ROLE)){
-            bizExpenseRepo.updateStatusAndGmtModifyById(bizExpense.getStatus(),Utility.getCurrentDate(),bizExpense.getId());
+    public GeneralResponse updateBizExpenseStatus(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
-        return new GenericResponse("upsert_bizExpense_success",Utility.SUCCESS_ERRORCODE,"Success");
+        bizExpenseRepo.updateStatusAndGmtModifyById(bizExpense.getStatus(),Utility.getCurrentDate(),bizExpense.getId());
+
+        return new GeneralResponse("upsert_bizExpense_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////////Member section/////////////////////////////
@@ -321,9 +325,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteCoupon", method = RequestMethod.POST)
-    public GenericResponse deleteCoupon(@RequestBody final Coupon coupon, final HttpServletRequest request) throws ServletException {
+    public GeneralResponse deleteCoupon(@RequestBody final Coupon coupon, final HttpServletRequest request) throws ServletException {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         couponRepo.delete(coupon);
-        return new GenericResponse("delete_coupon_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("delete_coupon_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "loadUsedCouponHistory", method = RequestMethod.POST)
@@ -480,9 +487,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteBizReport", method = RequestMethod.POST)
-    public GenericResponse deleteBizReport(@RequestBody final BizReport bizReport) {
+    public GeneralResponse deleteBizReport(@RequestBody final BizReport bizReport,final HttpServletRequest request) {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         bizReportRepo.delete(bizReport);
-        return new GenericResponse("delete_bizReport_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("delete_bizReport_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// blog/article section ///////////////////////////////
@@ -676,9 +686,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteSmsUserInfo", method = RequestMethod.POST)
-    public GenericResponse deleteSmsUserInfo(@RequestBody final SmsUserInfo one)  {
+    public GeneralResponse deleteSmsUserInfo(@RequestBody final SmsUserInfo one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         smsUserInfoRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// sms queue section /////////////////////////////
@@ -705,19 +718,25 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteSmsQueue", method = RequestMethod.POST)
-    public GenericResponse deleteSmsQueue(@RequestBody final SmsQueue one)  {
+    public GeneralResponse deleteSmsQueue(@RequestBody final SmsQueue one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         smsQueueRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "delete100SmsQueue", method = RequestMethod.POST)
-    public GenericResponse delete100SmsQueue()  {
-        List<SmsQueue> smsQueueList = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENT);
+    public GeneralResponse delete100SmsQueue(final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
 
+        List<SmsQueue> smsQueueList = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENT);
         if(!smsQueueList.isEmpty()){
             smsQueueRepo.deleteAll(smsQueueList);
         }
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// sms Job section /////////////////////////////
@@ -760,9 +779,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteSmsJob", method = RequestMethod.POST)
-    public GenericResponse deleteSmsJob(@RequestBody final SmsJob one)  {
+    public GeneralResponse deleteSmsJob(@RequestBody final SmsJob one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         smsJobRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("delete_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "getLastHeartBeatTime", method = RequestMethod.POST)
@@ -799,9 +821,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteSpecificSmsUserInfo", method = RequestMethod.POST)
-    public GenericResponse deleteSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one)  {
+    public GeneralResponse deleteSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         specificSmsUserInfoRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// strategy section /////////////////////////////
@@ -884,9 +909,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteContract", method = RequestMethod.POST)
-    public GenericResponse deleteContract(@RequestBody final Contract one)  {
+    public GeneralResponse deleteContract(@RequestBody final Contract one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         contractRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// salary section /////////////////////////////
@@ -918,9 +946,12 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "deleteSalary", method = RequestMethod.POST)
-    public GenericResponse deleteSalary(@RequestBody final Salary one)  {
+    public GeneralResponse deleteSalary(@RequestBody final Salary one, final HttpServletRequest request)  {
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         salaryRepo.delete(one);
-        return new GenericResponse("",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     //////////////////////////// shop config section /////////////////////////////

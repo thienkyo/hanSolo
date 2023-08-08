@@ -174,7 +174,7 @@ form .progress {
 			        <td title="'description'" filter="{ 'description' : 'text'}" sortable="'description'" style="text-align: left;white-space: pre-line;">
 			        	{{one.description}}
 			        </td>
-					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:80px;">
+					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:100px;">
 						{{one.amount | number:0}}đ
 					</td>
 					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:120px;">
@@ -199,7 +199,7 @@ form .progress {
 
 					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
-						<p ng-show="ctrl.deletingId == one.id">
+						<p ng-if="ctrl.deletingId == one.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteBizExpense(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 							<a ng-click="ctrl.resetDelete()" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">no</a>

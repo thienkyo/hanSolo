@@ -345,7 +345,7 @@ select, textarea {
 							</div>
 							<div class="col-lg-3">
 								<div class="checkout__input">
-									<p>Năm sinh</p>
+									<p>Năm sinh:{{item.yob.length == 4 ? ctrl.year-item.yob + 't': ''}}</p>
 									<input type="text" ng-model="item.yob" ng-change="ctrl.clearErrorMsg()">
 								</div>
 							</div>

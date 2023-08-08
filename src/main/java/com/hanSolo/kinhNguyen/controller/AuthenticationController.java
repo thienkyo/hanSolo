@@ -171,8 +171,9 @@ public class AuthenticationController {
                             detail.getLensNote(), detail.getLensPrice());
                     if(lensProductList.isEmpty()){
                         reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
-                        lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+")" +
-                                     "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+")" + reading;
+                        lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+" "+detail.getOdPrism()+")" +
+                                     "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+" "+detail.getOsPrism()+")" +
+                                    reading;
                         extInfo = order.getId() + "-" + detail.getId();
 
                         lensProductRepo.save(new LensProduct(detail.getGmtCreate(),

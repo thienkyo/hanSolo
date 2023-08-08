@@ -11,6 +11,7 @@ angular.module('customerSourceModule')
 		self.statusStyle = {};
 		self.discountOrderNumber = 0;
 		self.totalDiscountAmount = 0;
+		self.totalCount = 0;
 
 		if(!memberService.isAdmin()){
 			$location.path('#/');
@@ -18,7 +19,19 @@ angular.module('customerSourceModule')
 		
 		customerSourceService.getAll().then(function (data) {
 			self.customerSourceList = data;
-			console.log(data);
+/*
+			for (var i = 0; i < self.customerSourceList.length; i++){
+                 self.totalCount += ;
+            }
+*/
+
+            self.customerSourceList.forEach((dataOne, index, array) => {
+                self.totalCount += dataOne.count;
+            });
+            self.customerSourceList.forEach((dataOne, index, array) => {
+                dataOne.percent = dataOne.count/self.totalCount*100;
+            });
+
 			self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
 
 			customerSourceService.getReportAll().then(function (data) {
@@ -26,6 +39,7 @@ angular.module('customerSourceModule')
                 if(self.customerSourceList){
                     self.reportList.forEach(fillInSourceName);
                 }
+                console.log(self.reportList);
                 self.reportParams = new NgTableParams({}, { dataset: self.reportList});
             });
 

@@ -136,7 +136,7 @@ angular.module('bizExpenseModule')
     self.updateBizExpenseStatus = function(bizExpense){
         self.isUpdatingBizExpenseStatus = true;
         bizExpenseService.updateBizExpenseStatus(bizExpense).then(function(data){
-            self.responseStr = data.replyStr;
+            self.responseStr = data.obj;
             self.isUpdatingBizExpenseStatus = false;
         });
     }

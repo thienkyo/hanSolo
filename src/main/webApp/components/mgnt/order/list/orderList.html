@@ -383,6 +383,11 @@
 					recover
 				</button>
 
+				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"
+					   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
+					thành công
+				</alert>
+
 				<textarea rows="30"  placeholder="for recovery" class="checkout__input__add"
 						  ng-model="ctrl.orderListText" style="width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>
 
