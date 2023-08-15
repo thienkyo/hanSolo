@@ -144,17 +144,22 @@ angular.module('storeOrderModule')
 
         var dummyData = new OrderDO;
         dummyData.shippingAddress = '22/1 đường xx, phường 21, quận 3, Tp hcm';
-        dummyData.shippingName = 'Lý Thị Minh Trang';
+        dummyData.shippingName = 'Dương Trùng Dương';
         dummyData.shippingPhone ='09123456789';
+        dummyData.clientId ='0';
+        dummyData.shopId ='0';
         dummyData.gender = true;
 
         var dummyOrderDetail = new OrderDetailDO();
 
-        dummyOrderDetail.framePriceAfterSale = 3200000;
+        dummyOrderDetail.clientId ='0';
+        dummyOrderDetail.shopId ='0';
+
+        dummyOrderDetail.framePriceAfterSale = Math.floor(Math.random() * 10000)*1000;
         dummyOrderDetail.frameNote = 'velo 30-4500';
 
         dummyOrderDetail.lensNote = 'essilor ASX 1.71';
-        dummyOrderDetail.lensPrice = 1450000;
+        dummyOrderDetail.lensPrice = Math.floor(Math.random() * 10000)*1000;
 
 
         dummyOrderDetail.osVasc = '4/10';
@@ -177,7 +182,7 @@ angular.module('storeOrderModule')
         dummyOrderDetail.wd = '';
         dummyOrderDetail.vaNear = '';
 
-        dummyOrderDetail.name = 'Lý Thị Minh Mai Ca';
+        dummyOrderDetail.name = 'Lê Nguyễn THiện Thoại';
         dummyOrderDetail.yob ='1983';
         dummyOrderDetail.phone = '';
         dummyOrderDetail.address = '';
@@ -484,8 +489,6 @@ angular.module('storeOrderModule')
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
                 self.theOrder = data;
-
-                console.log(self.theOrder);
                 self.theOrder.currentCouponCode = self.theOrder.couponCode;
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
@@ -507,7 +510,6 @@ angular.module('storeOrderModule')
                 }else{
                     self.selectedJob = firstSmsJob;
                 }
-                console.log(self.theOrder);
         });
     }else{
         self.theOrder = new OrderDO;

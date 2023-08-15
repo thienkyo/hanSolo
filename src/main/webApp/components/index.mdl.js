@@ -38,5 +38,6 @@ angular.module('app', [
 		'contractModule',
 		'lensProductModule',
 		'shopConfigModule',
+		'clientShopModule',
 		'ui.tinymce'
 ]);

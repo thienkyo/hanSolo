@@ -1,0 +1,254 @@
+<style>
+
+.thumb {
+    width: 100px;
+    height: 100px;
+    float: none;
+    position: relative;
+    top: 7px;
+    margin-bottom: 20px;
+}
+
+.bt {
+  background: #FE980F;
+  border: medium none;
+  border-radius: 0;
+  margin-left: -5px;
+  margin-top: -3px;
+  padding: 7px 17px;
+}
+.btn-default {
+	color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+</style>
+<!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
+<!--<link rel="stylesheet" href="css/main2.css">-->
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="margin-bottom: 20px;text-align: center;">Client</h3>
+		<br>
+		<!--modal-->
+		<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="summaryModalLabel">[{{ctrl.theClient.id}}][{{ctrl.theClient.name}}] status:active  &nbsp;</h4>
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							{{ctrl.responseStrFail}}
+						</div>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<!--Client input-->
+						<div style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">name:<input type="text"  ng-model="ctrl.theClient.name" placeholder="name" style="width: 100%;"/></div>
+								<div class="col-sm-3">phone:{{ctrl.theClient.phone | tel}}<input type="text"  ng-model="ctrl.theClient.phone" placeholder="phone" style="width: 100%;"/></div>
+								<div class="col-sm-6">address:<input type="text"  ng-model="ctrl.theClient.address" placeholder="address" style="width: 100%;"/></div>
+							</div>
+
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">brandName:
+									<input type="text"  ng-model="ctrl.theClient.brandName" placeholder="brandName" style="width: 100%;"/>
+								</div>
+								<div class="col-sm-3">price:{{ctrl.theClient.price | number:0}}đ<input type="text"  ng-model="ctrl.theClient.price" placeholder="salary" style="width: 100%;"/></div>
+								<div class="col-sm-3">begin day: dd/mm/yyyy
+									<!--<input type="text"  ng-model="ctrl.theClient.beginDay" placeholder="beginDay" style="width: 100%;"/>-->
+									<div class='input-group date'>
+										<input ng-model="ctrl.theClient.startDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+											   show-weeks="false" is-open="ctrl.DPisOpen2" ng-focus="ctrl.DPisOpen2=true"
+											   ng-click="ctrl.openDP2()" min-date="ctrl.MinDate" required
+											   style="width: inherit;"/>
+										<span class="input-group-addon" ng-click="ctrl.openDP2()">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="col-sm-3">end day: dd/mm/yyyy
+									<input ng-model="ctrl.theClient.endDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+										   show-weeks="false" is-open="ctrl.DPisOpen3" ng-focus="ctrl.DPisOpen3=true"
+										   ng-click="ctrl.openDP3()" min-date="ctrl.MinDate" required
+										   style="width: inherit;"/>
+									<span class="input-group-addon" ng-click="ctrl.openDP3()">
+											<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+
+							</div>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">sms:<p><input type="checkbox"  ng-model="ctrl.theClient.isUnlockSmsFeature" /></p></div>
+								<div class="col-sm-9">note<input type="text"  ng-model="ctrl.theClient.description" placeholder="note" style="width: 100%;"/></div>
+							</div>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-2">
+									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.clientUpsert(ctrl.theClient)">save client</button>
+								</div>
+								<div class="col-sm-9"></div>
+
+							</div>
+
+						</div>
+
+						<!--shop input-->
+						<div style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">shop name:<input type="text"  ng-model="ctrl.theShop.shopName" placeholder="name" style="width: 100%;"/></div>
+								<div class="col-sm-3">shop phone:{{ctrl.theShop.shopPhone | tel}}<input type="text"  ng-model="ctrl.theShop.shopPhone" placeholder="phone" style="width: 100%;"/></div>
+								<div class="col-sm-6">shop address:<input type="text"  ng-model="ctrl.theShop.shopAddress" placeholder="address" style="width: 100%;"/></div>
+							</div>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">shop owner:<input type="text"  ng-model="ctrl.theShop.shopOwnerName" placeholder="name" style="width: 100%;"/></div>
+								<div class="col-sm-3">owner phone:{{ctrl.theShop.shopOwnerPhone | tel}}<input type="text"  ng-model="ctrl.theShop.shopOwnerPhone" placeholder="phone" style="width: 100%;"/></div>
+								<div class="col-sm-3">begin day: dd/mm/yyyy
+									<!--<input type="text"  ng-model="ctrl.theClient.beginDay" placeholder="beginDay" style="width: 100%;"/>-->
+									<div class='input-group date'>
+										<input ng-model="ctrl.theShop.startDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+											   show-weeks="false" is-open="ctrl.DPisOpen4" ng-focus="ctrl.DPisOpen4=true"
+											   ng-click="ctrl.openDP4()" min-date="ctrl.MinDate" required
+											   style="width: inherit;"/>
+										<span class="input-group-addon" ng-click="ctrl.openDP4()">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+									</div>
+								</div>
+								<div class="col-sm-3">end day: dd/mm/yyyy
+									<input ng-model="ctrl.theShop.endDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+										   show-weeks="false" is-open="ctrl.DPisOpen5" ng-focus="ctrl.DPisOpen5=true"
+										   ng-click="ctrl.openDP5()" min-date="ctrl.MinDate" required
+										   style="width: inherit;"/>
+									<span class="input-group-addon" ng-click="ctrl.openDP5()">
+											<span class="glyphicon glyphicon-calendar"></span>
+									</span>
+								</div>
+							</div>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+								<div class="col-sm-3">price:{{ctrl.theShop.price | number:0}}đ<input type="text"  ng-model="ctrl.theShop.price" placeholder="price" style="width: 100%;"/></div>
+								<div class="col-sm-9">note:<input type="text"  ng-model="ctrl.theShop.description" placeholder="note" style="width: 100%;"/></div>
+							</div>
+							<div class="row" style="margin-bottom: 20px;font-size: 16px;">
+								<div class="col-sm-3">
+									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
+											ng-disabled="ctrl.theClient.id == 0"
+											ng-click="ctrl.upsertTheShop(ctrl.theShop)">save shop</button>
+									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
+											ng-click="ctrl.clearTheShop()">clear</button>
+								</div>
+								<div class="col-sm-4">
+									<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+										   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+										thành công
+									</alert>
+									<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+										   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+										{{ctrl.responseStrFail}}
+									</alert>
+								</div>
+							</div>
+
+						</div>
+
+						<!--shop table-->
+						<div class="table-responsive">
+							<table ng-table="ctrl.shopTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+								<tr ng-repeat="one in $data">
+									<td title="'id'" style="width:50px;text-align: center;">
+										<a href="" ng-click="ctrl.setTheShop(one)">{{one.id}}</a>
+									</td>
+									<td title="'shop name'" filter="{ 'shopName': 'text'}" sortable="'shopName'"  style="width:150px;">
+										<a href="" ng-click="ctrl.setTheShop(one)">{{one.shopName}}</a>
+									</td>
+									<td title="'address'" filter="{ 'shopAddress': 'text'}" sortable="'shopAddress'"  style="width:200px;">
+										{{one.shopAddress}}
+									</td>
+									<td title="'price'"   style="width:150px;text-align: right;">
+										{{one.price | number}}đ
+									</td>
+									<td title="'note'" filter="{ 'description': 'text'}" sortable="'description'"  style="">
+										{{one.description}}
+									</td>
+									<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
+										{{one.gmtCreate | date:"yyyy-MM-dd"}}
+									</td>
+									<td title="'del'" style="width:30px;" >
+										<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
+										<p ng-show="ctrl.deletingId == one.id">
+											Are you sure?
+											<a ng-click="ctrl.deleteShop(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+											<a ng-click="ctrl.resetDelete()" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">no</a>
+										</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--add button-->
+		<div class="row" style="margin-bottom: 15px;">
+			<div class="col-sm-1">
+				<a href="" class="btn check_out" style="margin: 5px 0px 0px 0px;"
+				   data-toggle="modal" data-target="#detailModal" ng-click="ctrl.addClient()">add</a>
+			</div>
+		</div>
+		<!--data table-->
+		<div style="margin-bottom: 60px;">
+			<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+				<tr ng-repeat="one in $data">
+					<td title="'id'"  style="width:60px;text-align: center;">
+						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.id}}</a>
+					</td>
+					<td title="'name'" filter="{ 'name': 'text'}" sortable="'Name'"  style="">
+						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.name}}</a>
+					</td>
+					<td title="'phone'" filter="{ 'phone': 'text'}" sortable="'phone'"  style="width:130px;">
+						{{one.phone | tel}}
+					</td>
+					<td title="'brand Name'" filter="{ 'brandName': 'text'}"  style="">
+						{{one.brandName}}
+					</td>
+					<td title="'startDate'" filter="{ 'startDate' : 'text'}" sortable="'startDate'" style="width:130px;">
+						{{one.startDate | date:"yyyy-MM-dd"}}
+					</td>
+					<td title="'sms'"  style="width:80px;text-align: center;">
+						{{one.isUnlockSmsFeature}}
+					</td>
+					<td title="'address'" filter="{ 'address': 'text'}" sortable="'address'"  style="">
+						{{one.address}}
+					</td>
+					<td title="'active'"  style="width:80px;text-align: center;">
+						{{one.active}}
+					</td>
+					<td title="'del'" style="width: 20px;text-align: center;" >
+
+						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
+						<p ng-show="ctrl.deletingId == one.id">
+							Are you sure?
+							<a ng-click="ctrl.deleteClient(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete()" href="" class="btn  check_out" style="margin: 4px 4px 4px 4px;">no</a>
+						</p>
+
+					</td>
+				</tr>
+			</table>
+		</div>
+
+
+	</div>
+</section>

@@ -175,6 +175,11 @@ angular.module('app')
             controller: 'shopConfigController',
             controllerAs:'ctrl'
         })
+        .when('/Hmgnt/clientShop',{
+            templateUrl: 'components/opticShopMgnt/clientShop/clientShop.html',
+            controller: 'clientShopController',
+            controllerAs:'ctrl'
+        })
         .otherwise(
             { redirectTo: '/'}
         )

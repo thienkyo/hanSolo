@@ -2,6 +2,7 @@ package com.hanSolo.kinhNguyen;
 
 import com.hanSolo.kinhNguyen.filter.JwtFilter;
 import com.hanSolo.kinhNguyen.filter.jwtFilterMgnt;
+import com.hanSolo.kinhNguyen.filter.jwtFilterOpticShopMgnt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +29,15 @@ public class KinhNguyenApplication {
 		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		registrationBean.setFilter(new jwtFilterMgnt());
 		registrationBean.addUrlPatterns("/mgnt/*");
+
+		return registrationBean;
+	}
+
+	@Bean
+	public FilterRegistrationBean jwtFilterOpticShopMgnt() {
+		final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(new jwtFilterOpticShopMgnt());
+		registrationBean.addUrlPatterns("/Hmgnt/*");
 
 		return registrationBean;
 	}

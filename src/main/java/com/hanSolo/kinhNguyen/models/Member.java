@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "members")
-public class Member {
+public class Member extends ParentCodeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -36,7 +36,7 @@ public class Member {
     @Column(name = "status")
     private Boolean status;
 
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, unique = true, length = 20)
     private String phone;
 
     @Column(name = "email", length = 50)

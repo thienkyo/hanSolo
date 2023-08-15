@@ -12,7 +12,9 @@ import com.hanSolo.kinhNguyen.repository.SpecificSmsUserInfoRepository;
 import com.hanSolo.kinhNguyen.response.QueueSmsResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,24 @@ public class ApiController {
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
     @Autowired private SmsJobRepository smsJobRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
+
+    @RequestMapping(value = "getQueueSms2/{clientCode}/", method = RequestMethod.GET)
+    public QueueSmsResponse getQueueSms2(@PathVariable final String clientCode) throws ParseException {
+        if(!CommonCache.SMS_SEND_CONTROL){
+            return null;
+        }
+        Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
+        CommonCache.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
+        if(smsQueueOpt.isPresent()){
+            SmsQueue smsQueue = smsQueueOpt.get();
+            smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
+            smsQueue.setGmtModify(Utility.getCurrentDate());
+            smsQueueRepo.save(smsQueue);
+            return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
+        }
+
+        return null;
+    }
 
     @RequestMapping("getQueueSms")
     public QueueSmsResponse getQueueSms() throws ParseException {

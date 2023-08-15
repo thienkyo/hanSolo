@@ -3,7 +3,9 @@ package com.hanSolo.kinhNguyen.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @Table(name = "shop_config")
@@ -33,6 +35,7 @@ public class ShopConfig extends BaseModel {
     private Boolean isUnlockSmsFeature;
 
     @Column(name = "start_date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
     @Column(name = "description", length = 1000)

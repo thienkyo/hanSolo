@@ -40,6 +40,8 @@ public class Utility {
     final public static String ACCOUNTANT_ROLE = "ACCOUNTANT";
     final public static String SUPER_ACCOUNTANT_ROLE = "SUPER_ACCOUNTANT";
 
+    final public static String GODLIKE_ROLE = "GODLIKE";
+
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";
     final public static String GROUP_BRANDING = "BRANDING";
@@ -58,6 +60,7 @@ public class Utility {
     final public static int ORDER_SHOP_DELETE = 5;
     final public static int ORDER_NOT_BOOK = 6;
 
+    // home page
     final public static int PRODUCT_PAGE_SIZE = 9;
     final public static int COLLECTION_PAGE_SIZE = 4;
     final public static int BLOG_PAGE_SIZE = 9;

@@ -105,7 +105,46 @@ angular.module('app')
 		.value('RoleList',RoleList)
 		.value('MemberRoleDO',MemberRoleDO)
 		.value('cacheName',cacheName)
+		.value('ClientDO',ClientDO)
+		.value('ShopDO',ShopDO)
 		;
+
+function ShopDO(){
+    this.id = 0;
+    this.shopName = '';
+    this.shopOwnerName = '';
+    this.shopPhone = '';
+    this.shopOwnerPhone = '';
+    this.shopAddress = '';
+    this.shopCode = '';
+    this.images = '';
+    this.description = '';
+    this.startDate = '';
+    this.endDate = '';
+    this.startDate = '';
+    this.description = '';
+    this.price = 0;
+    this.clientId = 0;
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
+
+function ClientDO(){
+	this.id = 0;
+	this.name = '';
+	this.phone = '';
+    this.address = '';
+    this.clientCode = '';
+    this.isUnlockSmsFeature = false;
+    this.startDate = '';
+    this.endDate = '';
+    this.description = '';
+    this.price = 0;
+    this.brandName = '';
+    this.images = '';
+	this.gmtCreate = (new Date()).getTime();
+    this.gmtModify = (new Date()).getTime();
+}
 
 function MemberRoleDO(){
     this.id = 0;
