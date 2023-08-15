@@ -56,10 +56,10 @@ public class AuthenticationController {
             return new GeneralResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
         }
         order.setMember(memOpt.get());
-
+/*
         if(order.getId() == 0){
             order.setGmtCreate(Utility.getCurrentDate());
-        }
+        }*/
         order.setGmtModify(Utility.getCurrentDate());
 
         // 1. save order
