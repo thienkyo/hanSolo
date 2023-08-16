@@ -15,7 +15,7 @@ angular.module('app')
              $rootScope.$broadcast('unauthorized');
          }
          console.log(response);
-    	 if (response.status === 500 && response.data.path.includes('mgnt')) {
+    	 if (response.status === 500 && (response.data.path.includes('mgnt') || response.data.path.includes('Hmgnt'))) {
     	    $rootScope.$broadcast('ExpiredJwt');
          }
          return $q.reject(response);;

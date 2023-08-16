@@ -119,9 +119,8 @@ function ShopDO(){
     this.shopCode = '';
     this.images = '';
     this.description = '';
-    this.startDate = '';
+    this.startDate = (new Date()).getTime();
     this.endDate = '';
-    this.startDate = '';
     this.description = '';
     this.price = 0;
     this.clientId = 0;
@@ -136,7 +135,7 @@ function ClientDO(){
     this.address = '';
     this.clientCode = '';
     this.isUnlockSmsFeature = false;
-    this.startDate = '';
+    this.startDate = (new Date()).getTime();
     this.endDate = '';
     this.description = '';
     this.price = 0;

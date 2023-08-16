@@ -33,7 +33,9 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.addClient = function(){
         self.theClient = new ClientDO();
         self.theShop = new ShopDO();
+        self.shopList = [];
         console.log(self.theClient);
+        console.log(self.theShop);
     }
 
     self.setTheClient = function(one){
