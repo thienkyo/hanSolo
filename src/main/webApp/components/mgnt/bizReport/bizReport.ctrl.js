@@ -43,11 +43,11 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
 
         var data2 = [...data];
         for(var i = 0; i < self.beginMonthNumber; i++){
-            data2.shift();
+            data2.pop();
         }
 
         for(var i = 0; i < self.endMonthNumber; i++){
-            data2.pop();
+            data2.shift();
         }
 
         self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
