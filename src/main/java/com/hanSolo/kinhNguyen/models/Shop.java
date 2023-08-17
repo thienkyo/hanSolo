@@ -45,8 +45,19 @@ public class Shop extends BaseModel {
     @Column(name = "end_date")
     private Date endDate;
 
-    @Column(name = "client_id")
+    @Column(name = "client_id", nullable = false)
     private Integer clientId;
+
+    @Column(name = "client_code", nullable = false, length = 20)
+    private String clientCode;
+
+    public String getClientCode() {
+        return clientCode;
+    }
+
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
+    }
 
     public Integer getClientId() {
         return clientId;

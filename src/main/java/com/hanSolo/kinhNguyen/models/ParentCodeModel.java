@@ -5,25 +5,25 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class ParentCodeModel {
-    @Column(name = "client_id", nullable = false)
-    private Integer clientId;
+    @Column(name = "client_code", nullable = false)
+    private String clientCode;
 
-    @Column(name = "shop_id", nullable = false, length = 20)
-    private Integer shopId;
+    @Column(name = "shop_code", nullable = false, length = 20)
+    private String shopCode;
 
-    public Integer getShopId() {
-        return shopId;
+    public String getShopCode() {
+        return shopCode;
     }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
     }
 
-    public Integer getClientId() {
-        return clientId;
+    public String getClientCode() {
+        return clientCode;
     }
 
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
     }
 }

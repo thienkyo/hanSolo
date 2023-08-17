@@ -53,18 +53,17 @@
 						<!--Client input-->
 						<div style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
-								<div class="col-sm-3">name:<input type="text"  ng-model="ctrl.theClient.name" placeholder="name" style="width: 100%;"/></div>
-								<div class="col-sm-3">phone:{{ctrl.theClient.phone | tel}}<input type="text"  ng-model="ctrl.theClient.phone" placeholder="phone" style="width: 100%;"/></div>
+								<div class="col-sm-3">name*:<input type="text"  ng-model="ctrl.theClient.name" placeholder="name" style="width: 100%;"/></div>
+								<div class="col-sm-3">phone*:{{ctrl.theClient.phone | tel}}<input type="text"  ng-model="ctrl.theClient.phone" placeholder="phone" style="width: 100%;"/></div>
 								<div class="col-sm-6">address:<input type="text"  ng-model="ctrl.theClient.address" placeholder="address" style="width: 100%;"/></div>
 							</div>
 
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
-								<div class="col-sm-3">brandName:
+								<div class="col-sm-3">brandName*:
 									<input type="text"  ng-model="ctrl.theClient.brandName" placeholder="brandName" style="width: 100%;"/>
 								</div>
 								<div class="col-sm-3">price:{{ctrl.theClient.price | number:0}}đ<input type="text"  ng-model="ctrl.theClient.price" placeholder="salary" style="width: 100%;"/></div>
 								<div class="col-sm-3">begin day: dd/mm/yyyy
-									<!--<input type="text"  ng-model="ctrl.theClient.beginDay" placeholder="beginDay" style="width: 100%;"/>-->
 									<div class='input-group date'>
 										<input ng-model="ctrl.theClient.startDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
 											   show-weeks="false" is-open="ctrl.DPisOpen2" ng-focus="ctrl.DPisOpen2=true"
@@ -87,15 +86,23 @@
 
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
-								<div class="col-sm-3">sms:<p><input type="checkbox"  ng-model="ctrl.theClient.isUnlockSmsFeature" /></p></div>
+								<div class="col-sm-1">sms:
+									<p><input type="checkbox"  ng-model="ctrl.theClient.isUnlockSmsFeature" /></p>
+								</div>
+								<div class="col-sm-2">
+									client Code:<input type="text"  ng-model="ctrl.theClient.clientCode" placeholder="clientCode" style="width: 100%;"/>
+								</div>
 								<div class="col-sm-9">note<input type="text"  ng-model="ctrl.theClient.description" placeholder="note" style="width: 100%;"/></div>
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
-								<div class="col-sm-3">
+								<div class="col-sm-5">
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.clientUpsert(ctrl.theClient)">save client</button>
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
-											ng-click="ctrl.isShowNewShop = ctrl.isShowNewShop ? false : true"
-											ng-if="ctrl.theClient.id != 0">new shop</button>
+											ng-click="ctrl.isShowNewShop = ctrl.isShowNewShop ? false : true">new shop</button>
+									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
+											ng-click="ctrl.clientUpsert(ctrl.theClient)"
+											ng-disabled="ctrl.theClient.id == 0">
+										create super admin</button>
 								</div>
 								<div class="col-sm-9"></div>
 
@@ -104,7 +111,7 @@
 						</div>
 
 						<!--shop input-->
-						<div ng-if="ctrl.isShowNewShop || ctrl.theClient.id == 0" style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+						<div ng-if="ctrl.isShowNewShop" style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-3">shop name:<input type="text"  ng-model="ctrl.theShop.shopName" placeholder="name" style="width: 100%;"/></div>
 								<div class="col-sm-3">shop phone:{{ctrl.theShop.shopPhone | tel}}<input type="text"  ng-model="ctrl.theShop.shopPhone" placeholder="phone" style="width: 100%;"/></div>
@@ -142,7 +149,7 @@
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;">
 								<div class="col-sm-3">
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
-											ng-disabled="ctrl.theClient.id == 0"
+											ng-disabled="ctrl.theClient.id == 0 || ctrl.theClient.clientCode == ''"
 											ng-click="ctrl.upsertTheShop(ctrl.theShop)">save shop</button>
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
 											ng-click="ctrl.clearTheShop()">clear</button>
@@ -197,7 +204,7 @@
 
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.closeDetailModal()">Close</button>
 					</div>
 				</div>
 			</div>

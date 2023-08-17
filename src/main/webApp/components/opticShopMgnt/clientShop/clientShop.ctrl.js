@@ -34,8 +34,13 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.theClient = new ClientDO();
         self.theShop = new ShopDO();
         self.shopList = [];
+        self.shopTableParams = new NgTableParams({}, { dataset: self.shopList});
         console.log(self.theClient);
         console.log(self.theShop);
+    }
+
+    self.closeDetailModal = function(){
+        console.log('close Detail Modal');
     }
 
     self.setTheClient = function(one){
@@ -130,6 +135,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.responseStr = false;
         self.responseStrFail = false;
         one.clientId = self.theClient.id;
+        one.clientCode = self.theClient.clientCode;
         shopService.upsert(one).then(function (data) {
             self.responseStr = data.errorMessage;
             console.log(data);

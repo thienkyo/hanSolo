@@ -124,6 +124,7 @@ function ShopDO(){
     this.description = '';
     this.price = 0;
     this.clientId = 0;
+    this.clientCode = '';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }
