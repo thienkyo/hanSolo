@@ -8,7 +8,7 @@ public class ParentCodeModel {
     @Column(name = "client_code", nullable = false)
     private String clientCode;
 
-    @Column(name = "shop_code", nullable = false, length = 20)
+    @Column(name = "shop_code", length = 20)
     private String shopCode;
 
     public String getShopCode() {

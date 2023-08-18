@@ -1,9 +1,9 @@
 'use strict';
 angular.module('clientShopModule')
 .controller('clientShopController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
-                                    'CommonStatusArray','clientService','shopService','ClientDO','ShopDO',
+                                    'CommonStatusArray','clientService','shopService','ClientDO','ShopDO','memberListService',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
-            CommonStatusArray,clientService,shopService,ClientDO,ShopDO) {
+         CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService) {
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new ContractDO();
@@ -43,6 +43,18 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         console.log('close Detail Modal');
     }
 
+    self.createMember = function(one){
+         self.responseStr = false;
+         self.responseStrFail = false;
+         memberListService.insertByClient(one).then(function (data) {
+            if(data.errorCode == 'SUCCESS'){
+                self.responseStr = data.errorMessage;
+            }else{
+                self.responseStrFail = data.errorMessage;
+            }
+        });
+    }
+
     self.setTheClient = function(one){
         self.theClient = one;
         self.theShop = new ShopDO();
@@ -67,12 +79,8 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
             }else{
                 self.responseStrFail = data.obj;
             }
-
-
         });
     }
-
-
 
     self.deleteClient = function(one){
         self.responseStr = false;

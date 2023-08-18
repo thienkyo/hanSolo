@@ -38,7 +38,16 @@ public class OpticShopController {
     public GeneralResponse<Client> upsertClient(@RequestBody final Client one) throws ParseException {
         if(one.getId() == 0){
             one.setGmtCreate(Utility.getCurrentDate());
-           /* Optional<Member> memOpt = memberRepo.findByPhone(one.getPhone());
+
+        }
+        one.setGmtModify(Utility.getCurrentDate());
+
+        return new GeneralResponse(clientRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save client success");
+    }
+
+    @RequestMapping(value = "insertMemberByClient", method = RequestMethod.POST)
+    public GeneralResponse<Member> createSuperAdmin(@RequestBody final Client one) {
+         Optional<Member> memOpt = memberRepo.findByPhone(one.getPhone());
             if (memOpt.isEmpty() ) {
                 Date now = new Date();
                 List<MemberRole> roleList = new ArrayList<>();
@@ -50,20 +59,17 @@ public class OpticShopController {
                 member.setGmtCreate(now);
                 member.setGmtModify(now);
                 member.setStatus(Utility.INACTIVE_STATUS);
-                member.setClientId(one.getId());
+                member.setClientCode(one.getClientCode());
                 roleList.add(new MemberRole(Utility.MEMBER_ROLE, "0", member.getFullName(), member.getPhone(), member, now, now));
                 roleList.add(new MemberRole(Utility.MOD_ROLE, "0", member.getFullName(), member.getPhone(), member, now, now));
                 roleList.add(new MemberRole(Utility.ADMIN_ROLE, "0", member.getFullName(), member.getPhone(), member, now, now));
                 roleList.add(new MemberRole(Utility.SUPERADMIN_ROLE, "0", member.getFullName(), member.getPhone(), member, now, now));
                 member.setMemberRoles(roleList);
                 memberRepo.save(member);
-            }else{
-                return new GeneralResponse("phone existed",Utility.FAIL_ERRORCODE,"Save client fail");
-            }*/
-        }
-        one.setGmtModify(Utility.getCurrentDate());
+                return new GeneralResponse(member,Utility.SUCCESS_ERRORCODE,"Save member success");
+            }
+            return new GeneralResponse("member existed",Utility.FAIL_ERRORCODE,"member existed");
 
-        return new GeneralResponse(clientRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save client success");
     }
 
     @RequestMapping(value = "getAllClient", method = RequestMethod.GET)

@@ -39,12 +39,12 @@
 							   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
 							thành công
 						</alert>
-						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
+
+						<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+							   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 160px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
 							{{ctrl.responseStrFail}}
-						</div>
+						</alert>
+
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -98,11 +98,11 @@
 								<div class="col-sm-5">
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.clientUpsert(ctrl.theClient)">save client</button>
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
-											ng-click="ctrl.isShowNewShop = ctrl.isShowNewShop ? false : true">new shop</button>
+											ng-click="ctrl.isShowNewShop = ctrl.isShowNewShop ? false : true">shop</button>
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;"
-											ng-click="ctrl.clientUpsert(ctrl.theClient)"
+											ng-click="ctrl.createMember(ctrl.theClient)"
 											ng-disabled="ctrl.theClient.id == 0">
-										create super admin</button>
+										    create  admin</button>
 								</div>
 								<div class="col-sm-9"></div>
 
@@ -160,7 +160,7 @@
 										thành công
 									</alert>
 									<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
-										   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+										   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 160px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
 										{{ctrl.responseStrFail}}
 									</alert>
 								</div>
@@ -173,10 +173,10 @@
 							<table ng-table="ctrl.shopTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 								<tr ng-repeat="one in $data">
 									<td title="'id'" style="width:50px;text-align: center;">
-										<a href="" ng-click="ctrl.setTheShop(one)">{{one.id}}</a>
+										<a href="" ng-click="ctrl.setTheShop(one);ctrl.isShowNewShop=true;">{{one.id}}</a>
 									</td>
 									<td title="'shop name'" filter="{ 'shopName': 'text'}" sortable="'shopName'"  style="width:150px;">
-										<a href="" ng-click="ctrl.setTheShop(one)">{{one.shopName}}</a>
+										<a href="" ng-click="ctrl.setTheShop(one);ctrl.isShowNewShop=true;">{{one.shopName}}</a>
 									</td>
 									<td title="'address'" filter="{ 'shopAddress': 'text'}" sortable="'shopAddress'"  style="width:200px;">
 										{{one.shopAddress}}
