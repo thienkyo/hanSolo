@@ -160,33 +160,48 @@ public class AuthenticationController {
         return response;
     }
 
-    private void manageLensProduct(Order order) {
+    private void manageLensProduct(Order order) throws ParseException {
         if(!order.getOrderDetails().isEmpty()){
-            String lensDeatil = "";
-            String reading = "";
+            String lensDetail = "";
             String extInfo = "";
             for( OrderDetail detail : order.getOrderDetails()){
                 if(!detail.getLensNote().isBlank() && detail.getLensPrice() > 0){
-                    List<LensProduct> lensProductList = lensProductRepo.findByLensNoteAndSellPrice(
-                            detail.getLensNote(), detail.getLensPrice());
+                    lensDetail = buildLensDetail(detail);
+                    List<LensProduct> lensProductList = lensProductRepo.findFirstByLensDetailAndSellPrice(
+                                                        lensDetail, detail.getLensPrice());
                     if(lensProductList.isEmpty()){
-                        reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
-                        lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+" "+detail.getOdPrism()+")" +
-                                     "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+" "+detail.getOsPrism()+")" +
-                                    reading;
                         extInfo = order.getId() + "-" + detail.getId();
-
-                        lensProductRepo.save(new LensProduct(detail.getGmtCreate(),
+                        LensProduct lensProduct = new LensProduct(detail.getGmtCreate(),
                                 detail.getGmtModify(),
                                 detail.getLensNote(),
-                                lensDeatil,
+                                lensDetail,
                                 extInfo,
                                 detail.getLensPrice()
-                        ));
+                        );
+
+                        Optional<LensProduct> lpOpt = lensProductRepo.findFirstByExtInfo(extInfo);
+                        if(lpOpt.isPresent()){
+                            LensProduct lp = lpOpt.get();
+                            lp.setGmtModify(Utility.getCurrentDate());
+                            lp.setLensNote(lensProduct.getLensNote());
+                            lp.setLensDetail(lensProduct.getLensDetail());
+                            lp.setSellPrice(lensProduct.getSellPrice());
+                            lensProductRepo.save(lp);
+                        }else{
+                            lensProductRepo.save(lensProduct);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private String buildLensDetail(OrderDetail detail){
+        String reading = (detail.getReading() == null ? false : detail.getReading() ) ? ", đọc sách" : "";
+        String lensDeatil = "("+detail.getOdSphere() +" "+ detail.getOdCylinder()+" "+detail.getOdPrism()+")" +
+                "("+detail.getOsSphere() +" "+ detail.getOsCylinder()+" "+detail.getOsPrism()+")" +
+                reading;
+        return lensDeatil;
     }
 
     @RequestMapping(value = "updateMe", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
