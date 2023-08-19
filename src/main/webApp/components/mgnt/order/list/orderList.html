@@ -212,10 +212,10 @@
 									<td title="'order'"  style="width:50px;text-align: center;">
 										<a href="#/mgnt/storeOrder/{{item.orderId}}" target="_blank" >{{item.orderId}}</a>
 									</td>
-									<td title="'date'"  style="width:110px;">
+									<td title="'date'" sortable="'gmtCreate'"  style="width:110px;">
 										{{item.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}
 									</td>
-									<td title="'name'"  style="text-align: left;width:180px;">
+									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
 									<td title="'detail'" style="text-align: right;width:250px;">
