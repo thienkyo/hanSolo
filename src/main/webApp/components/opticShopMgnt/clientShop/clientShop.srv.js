@@ -4,10 +4,17 @@ angular.module('clientShopModule')
 		var mainService = {
 				getAll : getAll,
 				upsert : upsert,
-				deleteOne : deleteOne
+				deleteOne : deleteOne,
+				getClientShopList : getClientShopList
 			};
 	return mainService;
 
+    function getClientShopList(){
+        var url = "Hmgnt/getClientShopList/";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function getAll(){
 		var url = "Hmgnt/getAllClient";

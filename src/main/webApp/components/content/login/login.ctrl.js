@@ -1,8 +1,9 @@
 'use strict';
 angular.module('loginModule')
-.controller('loginController',['$rootScope','loginService',
+.controller('loginController',['$rootScope','loginService','clientInfoCacheService',
 							   '$location','MemberDO','memberService','$mdDialog',
-	function($rootScope, loginService,$location,MemberDO,memberService,$mdDialog) {
+	function($rootScope, loginService,clientInfoCacheService,
+	         $location,MemberDO,memberService,$mdDialog) {
 	
 	var self = this;
 	self.newMember = new MemberDO();
@@ -12,16 +13,19 @@ angular.module('loginModule')
 	self.login = function() {
 		if(self.credential.phone && self.credential.pass){
 			loginService.login({loginStr: memberService.makeLoginStr(self.credential.phone,btoa(self.credential.pass))}).then(function(data) {
+			    console.log(data);
 			    if(data.errorCode == 'SUCCESS'){
-			        self.member.token =  'sheep ' + data.token;
-                    var arr = data.token.split('.');
-                    var decodedString = atob(arr[1]);
+
+			        self.member.token =  'sheep ' + data.obj.token;
+                    var arr = data.obj.data.split('.');
+                    var decodedString = decodeURIComponent(escape(atob(data.obj.data)));
                     var a = angular.fromJson(decodedString);
                     self.member.roles = a.roles;
                     self.member.name = a.name;
                     self.member.phone = a.sub;
                     memberService.setCurrentMember(self.member);
-                    console.log(self.member);
+                    clientInfoCacheService.setCurrentCache(a.clientInfo);
+                    console.log(a.clientInfo);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');
 			    }else{

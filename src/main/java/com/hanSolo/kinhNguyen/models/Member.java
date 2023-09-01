@@ -72,6 +72,17 @@ public class Member extends ParentCodeModel {
     @Column(name = "new_pass", length = 20)
     private String newPass;
 
+    @Column(name = "is_show",columnDefinition = "boolean default true")
+    private Boolean isShow;
+
+    public Boolean getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Boolean isShow) {
+        this.isShow = isShow;
+    }
+
     public String getNewPass() {
         return newPass;
     }

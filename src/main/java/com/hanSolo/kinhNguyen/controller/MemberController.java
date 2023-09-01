@@ -1,16 +1,22 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.DTO.ClientInfo;
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
+import com.hanSolo.kinhNguyen.models.Client;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
+import com.hanSolo.kinhNguyen.models.Shop;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.SmsQueue;
+import com.hanSolo.kinhNguyen.repository.ClientRepository;
 import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.MemberRoleRepository;
+import com.hanSolo.kinhNguyen.repository.ShopRepository;
 import com.hanSolo.kinhNguyen.repository.SmsJobRepository;
 import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.request.LoginRequest;
 import com.hanSolo.kinhNguyen.request.SignupRequest;
+import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.SmsJobResponse;
@@ -19,12 +25,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -34,9 +40,11 @@ public class MemberController {
     @Autowired private MemberRoleRepository memberRoleRepo;
     @Autowired private SmsJobRepository smsJobRepo;
     @Autowired private SmsQueueRepository smsQueueRepo;
+    @Autowired private ShopRepository shopRepo;
+    @Autowired private ClientRepository clientRepo;
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final LoginRequest login) throws ServletException, UnsupportedEncodingException {
+    public GeneralResponse<LoginResponse> login(@RequestBody final LoginRequest login) throws ServletException, UnsupportedEncodingException {
         String decoded = new String(Base64.getDecoder().decode(login.getLoginStr()));
         String[] parts = decoded.split(Utility.LOGIN_DILIMITER);
 
@@ -44,29 +52,56 @@ public class MemberController {
         // parts[14] : pass
         Optional<Member> memOpt = memberRepo.findByPhoneAndPassAndStatus(parts[3], parts[14], Utility.ACTIVE_STATUS);
         if (parts[0].isEmpty() || memOpt.isEmpty() ) {
-            return new LoginResponse("",Utility.FAIL_ERRORCODE,"account not exist.");
+            return new GeneralResponse(new LoginResponse("",""),Utility.FAIL_ERRORCODE,"account not exist or inactive");
         }
 
+        Member mem = memOpt.get();
+
         List<String> roleList = new ArrayList<>();
-        for(MemberRole r : memOpt.get().getMemberRoles() ){
+        for(MemberRole r : mem.getMemberRoles() ){
             roleList.add(r.getRole());
         }
 
-        if(CommonCache.LOGIN_MEMBER_LIST.size() == 8){
+        if(CommonCache.LOGIN_MEMBER_LIST.size() == 14){
             CommonCache.LOGIN_MEMBER_LIST.clear();
         }
+        CommonCache.LOGIN_MEMBER_LIST.put(mem.getPhone(),mem);
 
-        CommonCache.LOGIN_MEMBER_LIST.put(memOpt.get().getPhone(),memOpt.get());
+        Client client = clientRepo.findFirstByClientCode(mem.getClientCode());
 
-        return new LoginResponse(Jwts.builder()
+
+
+        ClientInfo clientInfo = new ClientInfo();
+        if(mem.getShopCode() != null && !mem.getShopCode().isBlank()){
+            Shop shop = shopRepo.findFirstByShopCode(mem.getShopCode());
+            clientInfo.setBrandName(shop.getShopName());
+            clientInfo.setPhone(shop.getShopPhone());
+            clientInfo.setAddress(shop.getShopAddress());
+        }else{
+            clientInfo.setBrandName(client.getBrandName());
+            clientInfo.setPhone(client.getPhone());
+            clientInfo.setAddress(client.getAddress());
+        }
+        clientInfo.setClientCode(mem.getClientCode());
+        clientInfo.setUnlockSmsFeature(client.getIsUnlockSmsFeature());
+
+        String token = Jwts.builder()
                 .setSubject(parts[3])
                 .claim("roles", roleList)
-                .claim("name", memOpt.get().getFullName())
-                .claim("status", memOpt.get().getStatus())
+                .claim("name", mem.getFullName())
+                .claim("status", mem.getStatus())
+                .claim("clientInfo", clientInfo)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))
-                .compact(),Utility.SUCCESS_ERRORCODE,"login success");
+                .compact();
+
+        String[] temps = token.split("\\.");
+        String rawData = new String(Base64.getUrlDecoder().decode(temps[1]));
+        String encodeData = Base64.getEncoder().encodeToString(rawData.getBytes());
+        LoginResponse loginResponse = new LoginResponse(token,encodeData);
+
+        return new GeneralResponse(loginResponse,Utility.SUCCESS_ERRORCODE,"login success");
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,

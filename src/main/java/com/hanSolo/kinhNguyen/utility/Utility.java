@@ -51,6 +51,8 @@ public class Utility {
     final public static String SUCCESS_MSG = "executed successfully";
     final public static String FAIL_ERRORCODE = "FAIL";
     final public static String FAIL_MSG = "fail";
+    final public static String INSERT_SU_MSG = "INSERT_SU";
+    final public static String UPDATE_SU_MSG = "UPDATE_SU";
 
     final public static int ORDER_STATUS_ORDERED = 0;
     final public static int ORDER_STATUS_PAID = 1;

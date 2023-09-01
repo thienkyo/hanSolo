@@ -2,10 +2,10 @@
 angular.module('memberListModule')
 	.controller('memberListController',['$rootScope','$location','memberService','FirstTimeLoadSize','RoleList',
 										 'memberListService','NgTableParams','CommonStatusArray','AmountList',
-										 'MemberRoleDO',
+										 'MemberRoleDO','clientService','ClientDO','ShopDO',
 	function($rootScope,$location,memberService,FirstTimeLoadSize,RoleList,
 	        memberListService,NgTableParams,CommonStatusArray,AmountList,
-	        MemberRoleDO
+	        MemberRoleDO,clientService,ClientDO,ShopDO
 	        ){
 	var self = this;
 	self.statusList = CommonStatusArray;
@@ -27,19 +27,106 @@ angular.module('memberListModule')
 	self.amountList=AmountList;
 	self.roleList=RoleList;
 	self.amount = FirstTimeLoadSize;
-	
-	memberListService.getMembersForMgnt(0).then(function (data) {
-		self.members = data;
-		console.log(self.members);
-		self.tableParams = new NgTableParams({}, { dataset: self.members});
-	});
-	
-	self.getMemberByTerm = function(){
-		memberListService.getMembersForMgnt(0).then(function (data) {
-			self.members = data;
-			self.tableParams = new NgTableParams({}, { dataset: self.members});
-		});
-	}
+
+	self.isGodLike = memberService.isGodLike();
+	resetList();
+
+///////////////////////////////////////////////////////
+
+    self.filterShopByClientCode = function(clientCode){
+        self.shopList2 = self.shadowShopList.filter(i => i.clientCode == clientCode || i.shopCode == 'ALL' );
+    }
+
+    self.addMember = function(){
+        self.theMember = new MemberDO();
+        self.clientList2 =  [...self.shadowClientList];
+    }
+
+    self.setTheMember = function(mem){
+        self.theMember = mem;
+        self.responseStr = false;
+        self.responseStrFail = false;
+        self.clientList2 =  [...self.shadowClientList];
+        self.shopList2 = self.shadowShopList.filter(i => i.clientCode == mem.clientCode || i.shopCode == 'ALL' );
+    }
+
+
+	self.filterMemberAndShopByClientCode = function(clientCode){
+
+	   if(clientCode == 'ALL'){
+	        self.shopList = self.shadowShopList;
+	        self.shopCode = 'ALL';
+	        self.memberList = self.shadowMemberList;
+	   }else{
+	        self.shopList = self.shadowShopList.filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
+            self.memberList = self.shadowMemberList.filter(i => i.clientCode == clientCode);
+            self.shopCode = 'ALL';
+	   }
+	   self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+
+
+    }
+
+    function resetList() {
+         self.clientCode = null;
+         self.shopCode = null;
+         if(self.isGodLike){
+            clientService.getClientShopList().then(function (data) {
+                  // console.log(data.obj);
+
+                   var allClient = new ClientDO();
+                   allClient.clientCode = 'ALL';
+                   allClient.brandName = 'all';
+                   data.obj.clientList.unshift(allClient);
+                   self.clientCode = 'ALL';
+                   self.clientList = data.obj.clientList;
+                   self.shadowClientList = data.obj.clientList;
+
+                   self.shopList = data.obj.shopList;
+                   var allShop = new ClientDO();
+                   allShop.shopCode = 'ALL';
+                   allShop.shopName = 'all';
+                   allShop.shopAddress = 'all';
+                   data.obj.shopList.unshift(allShop);
+                   self.shopCode = 'ALL';
+                   self.shopList = data.obj.shopList;
+                   self.shadowShopList = data.obj.shopList;
+               });
+               memberListService.getMembersForMgnt(0).then(function (data) {
+                   data.forEach(getShopName);
+                   self.memberList = data;
+                   self.shadowMemberList = data;
+                   console.log(self.memberList);
+                   self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+               });
+        }else{
+
+        }
+    }
+    self.resetList = resetList;
+
+
+    function getShopName(mem){
+        //console.log(mem);
+        //console.log(self.shopList);
+        if(mem.shopCode){
+            mem.shopName = self.shopList.find(i => i.shopCode == mem.shopCode).shopName;
+        }
+
+    }
+
+    self.filterMemberByShopCode = function(){
+       console.log(self.shopCode);
+
+       if(self.shopCode != 'ALL'){
+           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.clientCode && i.shopCode == self.shopCode);
+       }else{
+           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.clientCode);
+       }
+
+       self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+    }
+
 
 	self.updateStatus = function(mem){
         self.isUpdating = true;
@@ -47,19 +134,6 @@ angular.module('memberListModule')
             self.isUpdating = false;
         });
     }
-	
-	self.updateMember = function(mem){
-		self.theMember = mem;
-
-		if(self.theMember.memberRoles.find(i => i.role == 'ADMIN')){
-		    self.adminRole = true;
-		}else{
-		    self.adminRole = false;
-		}
-
-		self.responseStr = false;
-		self.responseStrFail = false;
-	}
 
 	self.updateRole = function(mem){
 	    console.log(mem);
@@ -71,7 +145,6 @@ angular.module('memberListModule')
                 if(data.errorCode == 'SUCCESS'){
                     mem.memberRoles = mem.memberRoles.filter(i => i.role != mem.roleToBe);
                 }
-
             });
         }else{
             var newRole = new MemberRoleDO();
@@ -85,7 +158,6 @@ angular.module('memberListModule')
                 if(data.errorCode == 'FAIL'){
                     var index = mem.memberRoles.indexOf(newRole);
                     mem.memberRoles.splice(index,1);
-
                 }
             });
         }
@@ -94,7 +166,7 @@ angular.module('memberListModule')
 
 	
 	self.upsert = function(mem){
-	    var isAdmin = mem.memberRoles.find(i => i.role == 'ADMIN');
+	    /*var isAdmin = mem.memberRoles.find(i => i.role == 'ADMIN');
 	    if(self.adminRole){
 	        if(!isAdmin){
 	            role.name = mem.name;
@@ -103,12 +175,23 @@ angular.module('memberListModule')
 	        }
 	    }else if(isAdmin){
             mem.memberRoles = mem.memberRoles.filter(i => i.role != 'ADMIN');
-	    }
+	    }*/
 		self.responseStr = false;
 		self.responseStrFail = false;
-		memberListService.upsert(mem).then(function (data) {
-			self.responseStr = data.obj;
-		});
+		if(mem.clientCode){
+		    memberListService.upsertMemberByAdmin(mem).then(function (data) {
+                self.responseStr = data.obj;
+                console.log(data);
+
+                if(mem.id == 0){
+                    self.memberList.unshift(data.obj);
+                }
+
+            });
+		}else{
+		    self.responseStrFail = 'empty client code.';
+		}
+
 	}
 	
 	self.clear = function(){
@@ -116,6 +199,10 @@ angular.module('memberListModule')
 		self.responseStrFail = false;
 		self.theMember = {};
 	}
+
+    self.closeAlert = function(index) {
+        self.responseStr = false;
+    };
 	
 	self.setStyle = function(status){
 		if(status==0){

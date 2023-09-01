@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -258,10 +257,10 @@ public class ManagementController {
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GeneralResponse<String> upsertMember(@RequestBody final Member member,final HttpServletRequest request)
-            throws ServletException, ParseException {
+            throws ParseException {
 
         if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
-            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+            return new GeneralResponse("mgnt/upsertMember: no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
 
 
@@ -284,6 +283,41 @@ public class ManagementController {
         }
 
         return new GeneralResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,Utility.FAIL_MSG);
+    }
+
+    @RequestMapping(value = "upsertMemberByAdmin", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GeneralResponse<Member> upsertMemberByAdmin(@RequestBody final Member member,final HttpServletRequest request)
+            throws ParseException {
+
+        if(!onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
+            return new GeneralResponse("mgnt/upsertMemberByAdmin: no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
+
+        Date now = Utility.getCurrentDate();
+        Optional<Member>  memberOpt = memberRepo.findByPhone(member.getPhone());
+        if(!memberOpt.isPresent() && member.getId() == 0){
+            List<MemberRole> roleList = new ArrayList<>();
+            member.setPass(Utility.DEFAULT_PW);
+            member.setGmtCreate(now);
+            member.setGmtModify(now);
+            member.setStatus(Utility.INACTIVE_STATUS);
+            roleList.add(new MemberRole(Utility.MEMBER_ROLE, "0", member.getFullName(), member.getPhone(), member, now, now));
+            member.setMemberRoles(roleList);
+
+            return new GeneralResponse(memberRepo.save(member),Utility.SUCCESS_ERRORCODE,Utility.INSERT_SU_MSG);
+        }else{
+            Member mb = memberOpt.get();
+            mb.setFullName(member.getFullName());
+            mb.setPhone(member.getPhone());
+            mb.setAddress(member.getAddress());
+            mb.setEmail(member.getEmail());
+            mb.setClientCode(member.getClientCode());
+            mb.setShopCode(member.getShopCode());
+            mb.setGmtModify(now);
+
+            return new GeneralResponse(memberRepo.save(mb),Utility.SUCCESS_ERRORCODE,Utility.UPDATE_SU_MSG);
+        }
     }
 
     //////////////////////////////Member Role section/////////////////////////////

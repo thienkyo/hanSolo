@@ -1,0 +1,148 @@
+<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
+<link href="css/main2.css" rel="stylesheet">
+</style>
+<section>
+	<div class="container" ng-cloak>
+		<h3 style="margin-bottom: 40px;text-align: center;margin-top: 0px;">Optic Shop Online</h3>
+		<!-- input area-->
+				<div class="modal-body">
+					<!--contract input-->
+					<div style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-3">service name:<input type="text"  ng-model="ctrl.theOne.name" placeholder="name" style="width: 100%;"/></div>
+
+							<div class="col-sm-5">address:<input type="text"  ng-model="ctrl.theOne.address" placeholder="address" style="width: 100%;"/></div>
+							<div class="col-sm-1">
+							</div>
+						</div>
+
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-3">owner name:<input type="text"  ng-model="ctrl.theOne.ownerName" placeholder="name" style="width: 100%;"/></div>
+							<div class="col-sm-3">owner phone: {{ctrl.theOne.ownerPhone | tel}}<input type="text"  ng-model="ctrl.theOne.ownerPhone" placeholder="phone" style="width: 100%;"/></div>
+							<div class="col-sm-3">start Date: dd/mm/yyyy
+								<div class='input-group date'>
+									<input ng-model="ctrl.theOne.startDate"  onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+										   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true"
+										   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" required
+										   style="width: inherit;"/>
+									<span class="input-group-addon" ng-click="ctrl.openDP()">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-12">note:
+								<textarea rows="4"  placeholder="ghi chú cần thiết..." ng-model="ctrl.theOne.description"
+									style="background: white;border:revert;color: black;"
+								></textarea>
+							</div>
+
+						</div>
+
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-2">begin mon excluded<input type="text"  ng-model="ctrl.theOne.bizReportBeginMonthNumber" placeholder="name" style="width: 100%;"/></div>
+							<div class="col-sm-2">end mon excluded:<input type="text"  ng-model="ctrl.theOne.bizReportEndMonthNumber" placeholder="name" style="width: 100%;"/></div>
+						</div>
+
+						<div class="row" style="margin-bottom: 15px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-4">
+								<a ng-click="ctrl.upsert(ctrl.theOne)" href=""
+								   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn check_out'"
+								   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
+
+								<a ng-click="ctrl.refreshShopConfig()" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;">refresh cache</a>
+								<a ng-click="ctrl.clearShopConfig()" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;">clear cache</a>
+							</div>
+							<div class="col-sm-2">
+								<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+									 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only"></span>
+									thất bại
+								</div>
+
+								<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+									   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 140px;
+									   height: 0px;padding: 5px 0px 25px 10px;" >
+									thành công
+								</alert>
+							</div>
+
+						</div>
+
+					</div>
+<!--
+
+					<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+						<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+							<div class="col-sm-2">year:<input type="text"  ng-model="ctrl.theSalary.year" placeholder="year" style="width: 100%;"/></div>
+							<div class="col-sm-2">month:<input type="text"  ng-model="ctrl.theSalary.month" placeholder="month" style="width: 100%;"/></div>
+							<div class="col-sm-2">salary: {{ctrl.theSalary.amount | number:0}}đ<input type="text"  ng-model="ctrl.theSalary.amount" placeholder="salary" style="width: 100%;"/></div>
+							<div class="col-sm-2">bonus: {{ctrl.theSalary.bonus | number:0}}đ<input type="text"  ng-model="ctrl.theSalary.bonus" placeholder="bonus" style="width: 100%;"/></div>
+							<div class="col-sm-4">note:<input type="text"  ng-model="ctrl.theSalary.note" placeholder="note" style="width: 100%;"/></div>
+						</div>
+						<div>
+							<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.upsertSalary(ctrl.theSalary)">save salary</button>
+							<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.clearSalary()">clear</button>
+						</div>
+					</div>
+
+
+
+					&lt;!&ndash;payment table&ndash;&gt;
+					<div class="table-responsive">
+						<table ng-table="ctrl.salaryTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+							<tr ng-repeat="one in $data">
+								<td title="'year'" filter="{ 'year': 'text'}" sortable="'year'" style="width:80px;text-align: center;">
+									<a href="" ng-click="ctrl.setTheSalary(one)">{{one.year}}</a>
+								</td>
+								<td title="'month'" filter="{ 'month': 'text'}" sortable="'month'"  style="width:100px;">
+									{{one.month}}
+								</td>
+								<td title="'salary'" filter="{ 'amount': 'text'}" sortable="'amount'"  style="width:100px;">
+									{{one.amount | number}}đ
+								</td>
+								<td title="'bonus'" filter="{ 'bonus': 'text'}"  style="width:100px;">
+									{{one.bonus | number}}đ
+								</td>
+								<td title="'total'"   style="width:100px;">
+									{{one.bonus + one.amount | number}}đ
+								</td>
+								<td title="'note'" filter="{ 'note': 'text'}" sortable="'note'"  style="width:90px;">
+									{{one.note}}
+								</td>
+								<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
+									{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
+								</td>
+								<td title="'delete'" style="width:90px;" >
+									<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+									<p ng-show="ctrl.deletingId == one.id">
+										Are you sure?
+										<a ng-click="ctrl.deleteSalary(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+										<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+									</p>
+								</td>
+							</tr>
+						</table>
+					</div>
+-->
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+		<!-- table area-->
+
+	</div>
+</section>

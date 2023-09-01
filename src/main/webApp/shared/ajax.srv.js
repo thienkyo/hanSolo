@@ -4,7 +4,7 @@ angular.module('networkServices',[])
 		var urlbase = "http://localhost/"; // dev
 		//var urlbase = "http://128.199.156.9/"; // demo
 		//var urlbase = "http://matkinhnguyen.com/";
-		//var urlbase = "http://opticshop.online/";  //demo
+		//var urlbase = "http://www.opticshop.online/";  //demo
 		var sessionid = $cookies.get('JSESSIONID');
 		
 		var config = {

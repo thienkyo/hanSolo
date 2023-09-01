@@ -8,4 +8,6 @@ import java.util.List;
 public interface ShopRepository extends PagingAndSortingRepository<Shop, Integer> {
     List<Shop> findByClientIdOrderByGmtCreateDesc(Integer clientId);
 
+    Shop findFirstByShopCode(String shopCode);
+
 }

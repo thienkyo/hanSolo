@@ -59,7 +59,7 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-7">
 					<div class="header__top__left">
-						<p style="margin-top: 3px;">{{ctrl.shopInfo.address}} -- Phone: {{ctrl.shopInfo.shopPhone | tel}}</p>
+						<p style="margin-top: 3px;">{{ctrl.clientInfo.address}} -- Phone: {{ctrl.clientInfo.phone | tel}}</p>
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-5">
@@ -107,7 +107,7 @@
 					<span style="font-size: 27px;border-top: 3px solid black;
 								border-bottom: 3px solid;
 								font-family: ui-sans-serif;
-    							font-weight: 600;"><a href="/#/" style="color: black;">{{ctrl.shopInfo.shopName}}</a></span>
+    							font-weight: 600;"><a href="/#/" style="color: black;">{{ctrl.clientInfo.brandName}}</a></span>
 				</div>
 			</div>
 			<div class="col-lg-7 col-md-7">
@@ -139,7 +139,7 @@
 								<li ng-if="ctrl.isAdmin"><a href="#/mgnt/customerSource/">Customer Source</a></li>
 							</ul>
 						</li>
-						<li ng-if="ctrl.isAdmin && ctrl.shopInfo.isUnlockSmsFeature">
+						<li ng-if="(ctrl.isAdmin && ctrl.clientInfo.unlockSmsFeature) || ctrl.isGodLike">
 							<a href="" >sms</a>
 							<ul class="dropdown">
 								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/SmsUserInfo/">sms</a></li>
@@ -153,6 +153,7 @@
 								<li><a href="#/Hmgnt/clientShop">client</a></li>
 								<li><a href="#/mgnt/lensProduct/">lens product</a></li>
 								<li><a href="#/mgnt/shopConfig">shop config</a></li>
+								<li><a href="#/Hmgnt/opticShopOnline">optic shop</a></li>
 							</ul>
 						</li>
 

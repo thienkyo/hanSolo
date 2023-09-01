@@ -39,5 +39,6 @@ angular.module('app', [
 		'lensProductModule',
 		'shopConfigModule',
 		'clientShopModule',
+		'opticShopOnlineModule',
 		'ui.tinymce'
 ]);

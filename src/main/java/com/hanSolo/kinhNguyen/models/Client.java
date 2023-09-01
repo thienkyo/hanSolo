@@ -45,6 +45,8 @@ public class Client extends BaseModel {
     @Column(name = "end_date")
     private Date endDate;
 
+
+
     public Date getEndDate() {
         return endDate;
     }

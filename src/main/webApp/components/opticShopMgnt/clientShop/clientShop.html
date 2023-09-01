@@ -104,7 +104,7 @@
 											ng-disabled="ctrl.theClient.id == 0">
 										    create  admin</button>
 								</div>
-								<div class="col-sm-9"></div>
+								<div class="col-sm-7"></div>
 
 							</div>
 
@@ -144,7 +144,8 @@
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-3">price:{{ctrl.theShop.price | number:0}}đ<input type="text"  ng-model="ctrl.theShop.price" placeholder="price" style="width: 100%;"/></div>
-								<div class="col-sm-9">note:<input type="text"  ng-model="ctrl.theShop.description" placeholder="note" style="width: 100%;"/></div>
+								<div class="col-sm-3">client code:<input type="text"  ng-model="ctrl.theShop.clientCode" placeholder="clientCode" style="width: 100%;"/></div>
+								<div class="col-sm-6">note:<input type="text"  ng-model="ctrl.theShop.description" placeholder="note" style="width: 100%;"/></div>
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;">
 								<div class="col-sm-3">
@@ -156,7 +157,8 @@
 								</div>
 								<div class="col-sm-4">
 									<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
-										   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+										   dismiss-on-timeout="3000"
+										   style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;float: left;font-weight: 400;" >
 										thành công
 									</alert>
 									<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
@@ -175,7 +177,10 @@
 									<td title="'id'" style="width:50px;text-align: center;">
 										<a href="" ng-click="ctrl.setTheShop(one);ctrl.isShowNewShop=true;">{{one.id}}</a>
 									</td>
-									<td title="'shop name'" filter="{ 'shopName': 'text'}" sortable="'shopName'"  style="width:150px;">
+									<td title="'code'" style="width:50px;text-align: center;">
+										<a href="" ng-click="ctrl.setTheShop(one);ctrl.isShowNewShop=true;">{{one.shopCode}}</a>
+									</td>
+									<td title="'shop name'" filter="{ 'shopName': 'text'}" sortable="'shopName'"  style="width:180px;">
 										<a href="" ng-click="ctrl.setTheShop(one);ctrl.isShowNewShop=true;">{{one.shopName}}</a>
 									</td>
 									<td title="'address'" filter="{ 'shopAddress': 'text'}" sortable="'shopAddress'"  style="width:200px;">
@@ -188,7 +193,7 @@
 										{{one.description}}
 									</td>
 									<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
-										{{one.gmtCreate | date:"yyyy-MM-dd"}}
+										{{one.gmtCreate | date:"dd-MM-yyyy"}}
 									</td>
 									<td title="'del'" style="width:30px;" >
 										<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
@@ -222,19 +227,22 @@
 			<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 				<tr ng-repeat="one in $data">
 					<td title="'id'"  style="width:60px;text-align: center;">
-						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.id}}</a>
-					</td>
-					<td title="'name'" filter="{ 'name': 'text'}" sortable="'Name'"  style="">
-						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.name}}</a>
-					</td>
-					<td title="'phone'" filter="{ 'phone': 'text'}" sortable="'phone'"  style="width:130px;">
-						{{one.phone | tel}}
+						{{one.id}}
 					</td>
 					<td title="'brand Name'" filter="{ 'brandName': 'text'}"  style="">
-						{{one.brandName}}
+						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.brandName}}</a>
+					</td>
+					<td title="'client'" filter="{ 'name': 'text'}" sortable="'Name'"  style="">
+						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.name}}</a>
+					</td>
+					<td title="'code'" filter="{ 'clientCode': 'text'}" sortable="'clientCode'"  style="width:100px;">
+						<a href="" ng-click="ctrl.setTheClient(one)" data-toggle="modal" data-target="#detailModal" >{{one.clientCode}}</a>
+					</td>
+					<td title="'phone'" filter="{ 'phone': 'text'}" sortable="'phone'"  style="width:135px;">
+						{{one.phone | tel}}
 					</td>
 					<td title="'startDate'" filter="{ 'startDate' : 'text'}" sortable="'startDate'" style="width:130px;">
-						{{one.startDate | date:"yyyy-MM-dd"}}
+						{{one.startDate | date:"dd-MM-yyyy"}}
 					</td>
 					<td title="'sms'"  style="width:80px;text-align: center;">
 						{{one.isUnlockSmsFeature}}

@@ -2,79 +2,132 @@
 <section>
 	<div class="container" ng-cloak>
 		<h3 style="text-align: center;">Member </h3>
-		<div class="row" >
-			<!--
-			<div class="col-sm-2">
-				<input type="text"  ng-model="ctrl.theMember.email" disabled="disabled" placeholder="email"
-					   style="border: 1px solid rgb(118 118 118);border-radius: 2px;height: 30px;"/>
-			</div>
-			<div class="col-sm-2">
-				<input type="text"  ng-model="ctrl.theMember.fullName" placeholder="name" style="width: 100%;"/>
-			</div>
-			<div class="col-sm-2">
-				<select  ng-model="ctrl.theMember.status" 
-					 ng-options="opt.value as opt.name for opt in ctrl.statusList"
-					 style="width: 100%;height: 30px;
-					 		border: 1px solid rgb(118 118 118);
-					 		border-radius: 2px;
-							background: #FFFFFF;">
-		    	</select> 
-			</div>
-			<div class="col-sm-1">
-				<input type="checkbox" id="admin" name="admin" value="admin" ng-model="ctrl.adminRole">
-				<label > admin</label>
+
+
+			<div class="modal fade" id="addMemberModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-xl" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="summaryModalLabel">Create new member</h4>
+							<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+								   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+								thành công
+							</alert>
+
+							<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+								   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 160px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+								{{ctrl.responseStrFail}}
+							</alert>
+
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<!--member input-->
+							<div style="background: #f3f2ee;margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+								<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+									<div class="col-sm-3">name*:<input type="text"  ng-model="ctrl.theMember.fullName" placeholder="name" style="width: 100%;"/></div>
+									<div class="col-sm-3">phone*:{{ctrl.theMember.phone | tel}}<input type="text"  ng-model="ctrl.theMember.phone" placeholder="phone" style="width: 100%;"/></div>
+									<div class="col-sm-6">address:<input type="text"  ng-model="ctrl.theMember.address" placeholder="address" style="width: 100%;"/></div>
+								</div>
+								<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+									<div class="col-sm-3">email:<input type="text"  ng-model="ctrl.theMember.email" placeholder="email" style="width: 100%;"/></div>
+									<div class="col-sm-3">
+										client Code:
+										<select  ng-model="ctrl.theMember.clientCode"
+												 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList2 | filter:{ clientCode: '!ALL' }"
+												 ng-change="ctrl.filterShopByClientCode(ctrl.theMember.clientCode)"
+												 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
+										</select>
+									</div>
+									<div class="col-sm-3">
+										shop Code:
+										<select  ng-model="ctrl.theMember.shopCode"
+												 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList2"
+												 ng-disabled="!ctrl.theMember.clientCode"
+												 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
+										</select>
+									</div>
+
+								</div>
+
+								<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
+									<div class="col-sm-5">
+										<a ng-click="ctrl.upsert(ctrl.theMember)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">save</a>
+										<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+
+									</div>
+									<div class="col-sm-7"></div>
+
+								</div>
+
+							</div>
+
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="col-sm-2">
-				<a ng-click="ctrl.upsert(ctrl.theMember)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">save</a>
-				
-				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+		<!--add button-->
+		<div class="row" style="margin-bottom: 15px;">
+			<div class="col-sm-3">
+				<a href="" class="btn check_out" style="margin: 20px 0px 0px 0px;"
+				   data-toggle="modal" data-target="#addMemberModal" ng-click="ctrl.addMember()">add</a>
+				<a href="" class="btn check_out" style="margin: 20px 0px 0px 0px;" ng-click="ctrl.resetList()">reset</a>
 			</div>
-			<div class="col-sm-2">
-				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 thành công
-				</div>
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail" 
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					  <span class="sr-only"></span>
-						 fail
-				</div>
+			<div class="col-sm-5"></div>
+
+			<div class="col-sm-4" style="margin-top: 24px;font-weight: 600;text-align: end;">
+				client:
+				<select  ng-model="ctrl.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList"
+						 ng-change="ctrl.filterMemberAndShopByClientCode(ctrl.clientCode)"
+						 style="width: 30%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
+				</select>
+				shop:
+				<select  ng-model="ctrl.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
+						 ng-change="ctrl.filterMemberByShopCode()"
+						 ng-disabled="ctrl.clientCode == 'ALL'"
+						 style="width: 30%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
+				</select>
 			</div>
-			-->
 		</div>
-		<div class="row" style="margin-bottom: 10px;margin-top: 35px;">
-			<div class="col-sm-7"></div>
-		</div>
-		
+
+		<!--member table-->
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="mem in $data">
 			        <td title="'id'" filter="{ id: 'number'}" sortable="'id'" style="width:60px;text-align: center;">
-			        	{{mem.id - 1}}
+			        	{{mem.id}}
 			        </td>
-			        <td title="'email'" filter="{ email : 'text'}" sortable="'email'" style="width:90px;">
-			        	<a href="" ng-click="ctrl.updateMember(mem)">{{mem.email}}</a>
-			        </td>
-			        <td title="'name'" filter="{ fullName: 'text'}" sortable="'fullName'" style="width:100px;">
-			        	{{mem.fullName}}
+					<td title="'client'" filter="{ clientCode: 'number'}" sortable="'clientCode'" style="width:90px;text-align: center;">
+						{{mem.clientCode}}
+					</td>
+					<td title="'shop'" filter="{ shopCode : 'text'}" sortable="'shopCode'" style="width:130px;">
+						{{mem.shopName}} |{{mem.shopCode}}
+					</td>
+			        <td title="'name'" filter="{ fullName: 'text'}" sortable="'fullName'" style="width:130px;">
+						<a href="" ng-click="ctrl.setTheMember(mem)" data-toggle="modal" data-target="#addMemberModal" >{{mem.fullName}}</a>
 			        </td>
 			        <td title="'phone'" filter="{ phone : 'text'}" sortable="'phone'" style="text-align: right;width:100px;">
 						{{mem.phone}}</td>
 			        <td title="'address'" filter="{ address : 'text'}" sortable="'address'" >
 						{{mem.address}}</td>
-					<td title="'roles'"   style="text-align: right;width:100px;">
+					<td title="'roles'" style="text-align: right;width:100px;">
 						<span ng-repeat="role in mem.memberRoles"> {{role.role}},</span> </td>
-					<td title="'action'" style="width:100px;" ng-if="ctrl.isSuperAdmin">
+					<td title="'action'" style="width:90px;" ng-if="ctrl.isSuperAdmin">
 						<select  ng-model="mem.roleToBe"  ng-change="ctrl.updateRole(mem)"
 								 ng-options="opt.value as opt.name for opt in ctrl.roleList"
 								 style="background: #F0F0E9;" ng-disabled="ctrl.isUpdating">
 						</select>
 					</td>
-			        <td title="'status'" filter="{ status : 'number'}"  style="width:60px;">
+			        <td title="'status'" filter="{ status : 'text'}"  style="width:60px;">
 						<p ng-style="ctrl.setStyle(mem.status)" ng-if="!ctrl.isSuperAdmin">
 							{{mem.status == 0 ? 'inactive' : 'active' }}</p>
 

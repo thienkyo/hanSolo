@@ -15,23 +15,12 @@ angular.module('app')
             isAccountant :isAccountant,
             isSuperAccountant :isSuperAccountant,
             isMod : isMod,
-            isGodLike : isGodLike,
-        // local mode for no internet,digital ocean host is down
-            setSiteMode : setSiteMode,
-            getSiteMode : getSiteMode
+            isGodLike : isGodLike
 		};
 	return memberService;
 
 	function logout(){
         setCurrentMember(null);
-    }
-
-	function setSiteMode(mode){
-        store.set('MKN_siteMode', mode);
-    }
-
-    function getSiteMode(){
-        currentMember = store.get('MKN_siteMode');
     }
 	
 	function setCurrentMember(member){
@@ -358,7 +347,7 @@ angular.module('app')
     }
 
 }])
-.factory('commonService',['$location', function($location) {
+.factory('commonService',['$location', function($location) { // no use yet
 	var currentOrderCache = [];
 	var cacheName = 'kinhNguyenOrderCache';
 	var commonService = {
@@ -384,53 +373,110 @@ angular.module('app')
 		}
 	return commonCacheService;
 
+	function setCurrentCache(cacheName, cacheData){
+        //currentCache = cacheData;
 
-	function setCurrentCache(cacheData,cacheName){
-        currentCache = cacheData;
         store.set(cacheName, cacheData);
     }
 
     function getCurrentCache(cacheName){
-        if (store.get(cacheName)) {
+       /* if (store.get(cacheName)) {
             currentCache = store.get(cacheName);
         }else{
             store.set(cacheName, currentCache);
         }
-        return currentCache;
+        return currentCache;*/
+        return store.get(cacheName);
     }
 
     function clearCache(cacheName){
-        currentCache = {};
-        store.set(cacheName, currentCache);
+       // currentCache = {};
+        store.set(cacheName, null);
     }
 
 }])
 .factory('shopInfoCacheService',['shopConfigService','cacheName','commonCacheService',
 function(shopConfigService,cacheName,commonCacheService) {
+    var cacheNameStr = cacheName.shopInfoCacheName;
 	var shopInfoCacheService = {
-		setCurrentCache : setCurrentCache,
-		getCurrentCache : getCurrentCache,
-		clearCache : clearCache
+            setCurrentCache : setCurrentCache,
+            getCurrentCache : getCurrentCache,
+            clearCache : clearCache
 		}
 	return shopInfoCacheService;
 
 	function setCurrentCache(cacheData){
-	    commonCacheService.setCurrentCache(cacheName.shopInfoCacheName, cacheData);
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
 	}
 
     function getCurrentCache(){
-        var shopInfo =  commonCacheService.getCurrentCache(cacheName.shopInfoCacheName);
+        var shopInfo =  commonCacheService.getCurrentCache(cacheNameStr);
         if(!shopInfo.shopName){
             shopConfigService.getDataForMgnt().then(function (data) {
                 shopInfo = data.obj
-                commonCacheService.setCurrentCache(data.obj,cacheName.shopInfoCacheName);
+                commonCacheService.setCurrentCache(cacheNameStr,data.obj);
             });
         }
         return shopInfo;
     }
 
     function clearCache(){
-        commonCacheService.clearCache(cacheName.shopInfoCacheName);
+        commonCacheService.clearCache(cacheNameStr);
+    }
+
+}])
+.factory('clientInfoCacheService',['cacheName','commonCacheService',
+function(cacheName,commonCacheService) {
+    var cacheNameStr = cacheName.clientInfoCacheName;
+
+	var service = {
+            setCurrentCache : setCurrentCache,
+            getCurrentCache : getCurrentCache,
+            clearCache : clearCache
+		}
+	return service;
+
+	function setCurrentCache(cacheData){
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function getCurrentCache(){
+        var clientInfo =  commonCacheService.getCurrentCache(cacheNameStr);
+        return clientInfo;
+    }
+
+    function clearCache(){
+        commonCacheService.clearCache(cacheNameStr);
+    }
+
+}])
+.factory('configOSOCacheService',['opticShopOnlineService','cacheName','commonCacheService',
+function(opticShopOnlineService,cacheName,commonCacheService) {
+    var cacheNameStr = 'configOSOCache';
+	var service = {
+            setCurrentCache : setCurrentCache,
+            getCurrentCache : getCurrentCache,
+            clearCache : clearCache
+		}
+	return service;
+
+	function setCurrentCache(cacheData){
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function getCurrentCache(){
+        var info =  commonCacheService.getCurrentCache(cacheNameStr);
+        if(!info){
+            opticShopOnlineService.getDataForMgnt().then(function (data) {
+                info = data.obj
+                commonCacheService.setCurrentCache(cacheNameStr,data.obj);
+            });
+        }
+        return info;
+    }
+
+    function clearCache(){
+        commonCacheService.clearCache(cacheNameStr);
     }
 
 }])

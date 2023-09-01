@@ -62,6 +62,7 @@ var RoleList=[
 
 var cacheName = {
     shopInfoCacheName : 'shopInfoCache',
+    clientInfoCacheName : 'clientInfoCache',
     cusSourceCacheName : 'cusSourceCache'
 };
 
@@ -107,7 +108,19 @@ angular.module('app')
 		.value('cacheName',cacheName)
 		.value('ClientDO',ClientDO)
 		.value('ShopDO',ShopDO)
+		.value('OSOConfigDO',OSOConfigDO)
 		;
+
+function OSOConfigDO(){
+    //this.id = 0;
+    this.name = '';
+    this.ownerName = '';
+    this.ownerPhone = '';
+    this.address = '';
+    this.description = '';
+    this.bizReportBeginMonthNumber = 0;
+    this.bizReportEndMonthNumber = 0;
+}
 
 function ShopDO(){
     this.id = 0;
@@ -396,7 +409,7 @@ function OrderDetailDO () {
 }
 
 function MemberDO () {
-	this.memberId = 0;
+	this.id = 0;
 	this.fullName = '';
 	this.email = '';
 	this.pass  = '';
@@ -408,7 +421,7 @@ function MemberDO () {
 	this.address  = '';
 	this.postCode = '';
 	this.status   = 1;
-	this.partnerCode='';
+	this.isShow   = 1;
 	this.gmtCreate = (new Date()).getTime();
 	this.gmtModify = (new Date()).getTime();
 	

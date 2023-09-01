@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ClientRepository extends PagingAndSortingRepository<Client, Integer> {
     List<Client> findAllByOrderByGmtCreateDesc();
+
+    Client findFirstByClientCode(String clientCode);
 }

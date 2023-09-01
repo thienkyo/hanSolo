@@ -34,7 +34,7 @@ public class CommonCache {
     /**
      * member list : help to check user status.
      */
-    public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(8);
+    public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(14);
 
     static {
         try {

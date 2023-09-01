@@ -1,10 +1,10 @@
 angular.module('app')
 .controller('headerController', ['$rootScope','$location','ajaxService','shopConfigService',
                                  'memberService','cartStoreService','categoryService',
-                                 'cacheName','commonCacheService','shopInfoCacheService',
+                                 'cacheName','shopInfoCacheService','clientInfoCacheService',
 	function($rootScope,$location,ajaxService,shopConfigService,
 	         memberService,cartStoreService,categoryService,
-	         cacheName,commonCacheService,shopInfoCacheService) {
+	         cacheName,shopInfoCacheService,clientInfoCacheService) {
 	var self=this;
 	self.cart=[];
 	self.currentMember = memberService.getCurrentMember();
@@ -15,18 +15,15 @@ angular.module('app')
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.isMod = memberService.isMod();
 	self.shopInfo =  shopInfoCacheService.getCurrentCache();
+	self.clientInfo =  clientInfoCacheService.getCurrentCache();
 
-/*
-	categoryService.getActiveCategories().then(function(data){
-		self.cateList = data;
-	});
-*/
 	self.logout = function() {
 		self.isAdmin = false;
 		self.isMod = false;
 		self.isGodLike = false;
 		self.currentMember = null;
 		memberService.logout();
+		//clientInfoCacheService.clearCache();
 		$location.path('#/');
     }
 

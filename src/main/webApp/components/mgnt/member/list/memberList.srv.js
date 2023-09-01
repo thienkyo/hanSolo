@@ -4,6 +4,7 @@ angular.module('memberListModule')
 		var service = {
 			getMembersForMgnt : getMembersForMgnt,
 			upsert : upsert,
+			upsertMemberByAdmin : upsertMemberByAdmin,
 			insertByClient : insertByClient,
 			updateMemberStatus : updateMemberStatus,
 			deleteRole : deleteRole,
@@ -24,6 +25,13 @@ angular.module('memberListModule')
 			return response.data;
 		});
 	}
+
+	function upsertMemberByAdmin(mem){
+        var url = "mgnt/upsertMemberByAdmin";
+        return ajaxService.post(url,mem,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function insertByClient(client){
         var url = "Hmgnt/insertMemberByClient";

@@ -33,7 +33,7 @@ angular.module('shopConfigModule')
             self.responseStr = data;
             self.isSaveButtonPressed=false;
             self.theShopConfig = data.obj;
-            commonCacheService.setCurrentCache(data.obj,cacheName.shopInfoCacheName);
+            commonCacheService.setCurrentCache(cacheName.shopInfoCacheName,data.obj);
         });
         shopConfigService.refreshShopConfig().then(function (data) {
             self.isSaveButtonPressed=false;
