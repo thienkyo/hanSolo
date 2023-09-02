@@ -385,16 +385,19 @@ angular.module('orderListModule')
                     oneDetail.lensPrice = 0;
                     oneDetail.lensDiscountAmount = 0;
                     oneDetail.lensDiscountCode = '';
+                    oneDetail.lensNote = '';
 
                     oneDetail.framePriceAtThatTime = 0;
                     oneDetail.frameDiscountAmount = 0;
                     oneDetail.frameDiscountCode = '';
+                    oneDetail.frameNote = '';
                     oneDetail.gmtCreate = (new Date()).getTime();
                     oneDetail.gmtModify = (new Date()).getTime();
                 });
             });
 
             orderListService.doRecovery(self.tempArray).then(function(data){
+               console.log(data.obj);
                data.obj.forEach(calculateOrderTotal);
                data.obj.forEach((oneOrder, index, array) => {
                     self.orderList.unshift(oneOrder);

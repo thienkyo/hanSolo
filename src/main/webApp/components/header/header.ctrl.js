@@ -21,7 +21,6 @@ angular.module('app')
 		self.cateList = data;
 	});
 */
-    console.log('this is header');
 	self.logout = function() {
 		self.isAdmin = false;
 		self.isMod = false;
