@@ -112,10 +112,11 @@ angular.module('orderListModule')
        });
     }
 
-    self.calculateAmount = function(one) {
+    self.calculateAmount = function(oneT) {
         self.tempAmount = 0;
         self.tempFrameNumber=0;
         self.tempLensNumber=0;
+        var one = {...oneT};
         if(one.picked){
             self.tempArray.push(one);
             self.detailArray = self.detailArray.concat(one.orderDetails);
@@ -132,7 +133,7 @@ angular.module('orderListModule')
        buildText();
 
        // for one day report modal
-       self.tempForOneDayReport = one;
+       self.tempForOneDayReport = oneT;
     }
 
     self.getOneDayReport = function() {
@@ -366,6 +367,44 @@ angular.module('orderListModule')
         });
     }
 
+    self.cloneOrders = function() {
+        if(self.tempArray.length >0){
+
+             self.tempArray.forEach((oneOrder, index, array) => {
+                oneOrder.id = 0;
+                oneOrder.gmtCreate = (new Date()).getTime();
+                oneOrder.gmtModify = (new Date()).getTime();
+                oneOrder.status = 0;
+                oneOrder.couponCode = '';
+                oneOrder.couponDiscount = 0;
+                oneOrder.cusSource = null;
+
+                oneOrder.orderDetails.forEach((oneDetail, index, array) => {
+                    oneDetail.id = 0;
+                    oneDetail.orderId = null;
+                    oneDetail.lensPrice = 0;
+                    oneDetail.lensDiscountAmount = 0;
+                    oneDetail.lensDiscountCode = '';
+
+                    oneDetail.framePriceAtThatTime = 0;
+                    oneDetail.frameDiscountAmount = 0;
+                    oneDetail.frameDiscountCode = '';
+                    oneDetail.gmtCreate = (new Date()).getTime();
+                    oneDetail.gmtModify = (new Date()).getTime();
+                });
+            });
+
+            orderListService.doRecovery(self.tempArray).then(function(data){
+               data.obj.forEach(calculateOrderTotal);
+               data.obj.forEach((oneOrder, index, array) => {
+                    self.orderList.unshift(oneOrder);
+               });
+
+               self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+             //  $location.path('/mgnt/storeOrder/'+data.obj[0].id);
+            });
+        }
+    }
 
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {
@@ -400,7 +439,6 @@ angular.module('orderListModule')
     self.getOrderForRecovery = function() {
 
         if(self.tempArray.length >0){
-            var cloneList  = self.tempArray.slice(0);
             self.tempArray.forEach((oneOrder, index, array) => {
                 oneOrder.id = 0;
                 oneOrder.orderDetails.forEach((oneDetail, index, array) => {
@@ -408,7 +446,6 @@ angular.module('orderListModule')
                     oneDetail.orderId = null;
                 });
             });
-
             self.orderListText = JSON.stringify(self.tempArray);
         }
 
@@ -426,7 +463,6 @@ angular.module('orderListModule')
                self.responseStr = data.replyStr;
                self.isRecoveringOrder = false;
            });
-
         }
     }
 

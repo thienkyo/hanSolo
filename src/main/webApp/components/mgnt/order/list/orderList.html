@@ -270,13 +270,13 @@
 			</div>
 
 			<div class="col-sm-1" style="font-size: large;color:limegreen;" ng-if="ctrl.tempAmount <= 0">
-				order:	{{ctrl.statusNumber.ordered}}
+				order: {{ctrl.statusNumber.ordered}}
 			</div>
 			<div class="col-sm-1" style="font-size: large;color:blue;" ng-if="ctrl.tempAmount <= 0">
-				paid :	{{ctrl.statusNumber.paid}}
+				paid: {{ctrl.statusNumber.paid}}
 			</div>
 			<div class="col-sm-1" style="font-size: large;color:darkorchid;" ng-if="ctrl.tempAmount <= 0">
-				ship:	{{ctrl.statusNumber.shipped}}
+				ship: {{ctrl.statusNumber.shipped}}
 			</div>
 			<div class="col-lg-auto" style="font-size: large;color:brown;" ng-if="ctrl.tempAmount <= 0">
 				deposit: {{ctrl.statusNumber.deposit}}
@@ -286,10 +286,10 @@
 			</div>
 
 
-			<div class="col-sm-6" ng-if="ctrl.tempAmount > 0">
+			<div class="col-sm-7" ng-if="ctrl.tempAmount > 0">
 
 					<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-					   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
+					   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 1000" >sum all</a>
 						<!-- Button trigger modal -->
 					<button type="button" class="btn btn-primary" data-toggle="modal"
 							data-target="#exampleModal" style="margin-top: 0px;height: 32px;">
@@ -300,6 +300,8 @@
 							data-target="#oneDayModal" style="margin-top: 0px;height: 32px;">
 						one day
 					</button>
+					<a ng-click="ctrl.cloneOrders()" href="" class="btn btn-default check_out"
+				 	  style="margin: 0px 0px 0px 0px;height: 32px;" >clone</a>
 					<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out"
 					   style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
 					Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
