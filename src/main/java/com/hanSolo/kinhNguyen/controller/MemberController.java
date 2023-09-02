@@ -1,11 +1,11 @@
 package com.hanSolo.kinhNguyen.controller;
 
-import com.hanSolo.kinhNguyen.DTO.ClientInfo;
+import com.hanSolo.kinhNguyen.DTO.ShopInfo;
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
-import com.hanSolo.kinhNguyen.models.Client;
+import com.hanSolo.kinhNguyen.facade.ClientInterface;
+import com.hanSolo.kinhNguyen.facade.ShopInterface;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
-import com.hanSolo.kinhNguyen.models.Shop;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.repository.ClientRepository;
@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -62,28 +61,24 @@ public class MemberController {
             roleList.add(r.getRole());
         }
 
-        if(CommonCache.LOGIN_MEMBER_LIST.size() == 14){
+        if(CommonCache.LOGIN_MEMBER_LIST.size() == Utility.LOGIN_MEMBER_LIST_SIZE){
             CommonCache.LOGIN_MEMBER_LIST.clear();
         }
         CommonCache.LOGIN_MEMBER_LIST.put(mem.getPhone(),mem);
 
-        Client client = clientRepo.findFirstByClientCode(mem.getClientCode());
-
-
-
-        ClientInfo clientInfo = new ClientInfo();
-        if(mem.getShopCode() != null && !mem.getShopCode().isBlank()){
-            Shop shop = shopRepo.findFirstByShopCode(mem.getShopCode());
-            clientInfo.setBrandName(shop.getShopName());
-            clientInfo.setPhone(shop.getShopPhone());
-            clientInfo.setAddress(shop.getShopAddress());
+        /// if client = GODLIKE
+        List<ShopInterface> shopInfoList = new ArrayList<>();
+        if(!mem.getClientCode().equals(Utility.GODLIKE_ROLE)){
+            if(mem.getShopCode().equals("ALL")){
+                shopInfoList = shopRepo.queryByClientCodeOrderByGmtCreateDesc(mem.getClientCode());
+            }else{
+                shopInfoList = shopRepo.findByClientCodeAndShopCode(mem.getClientCode(),mem.getShopCode());
+            }
         }else{
-            clientInfo.setBrandName(client.getBrandName());
-            clientInfo.setPhone(client.getPhone());
-            clientInfo.setAddress(client.getAddress());
+            shopInfoList = shopRepo.queryByOrderByGmtCreateAsc();
         }
-        clientInfo.setClientCode(mem.getClientCode());
-        clientInfo.setUnlockSmsFeature(client.getIsUnlockSmsFeature());
+
+        ClientInterface clientInfo = clientRepo.queryFirstByClientCode(mem.getClientCode());
 
         String token = Jwts.builder()
                 .setSubject(parts[3])
@@ -91,6 +86,7 @@ public class MemberController {
                 .claim("name", mem.getFullName())
                 .claim("status", mem.getStatus())
                 .claim("clientInfo", clientInfo)
+                .claim("shopInfo", shopInfoList)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))

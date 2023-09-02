@@ -78,6 +78,8 @@ public class Utility {
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
+    final public static int LOGIN_MEMBER_LIST_SIZE = 14;
+
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

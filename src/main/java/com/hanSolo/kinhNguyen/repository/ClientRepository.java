@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.repository;
 
+import com.hanSolo.kinhNguyen.facade.ClientInterface;
 import com.hanSolo.kinhNguyen.models.Client;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -9,4 +10,7 @@ public interface ClientRepository extends PagingAndSortingRepository<Client, Int
     List<Client> findAllByOrderByGmtCreateDesc();
 
     Client findFirstByClientCode(String clientCode);
+
+    ClientInterface queryFirstByClientCode(String clientCode);
+
 }

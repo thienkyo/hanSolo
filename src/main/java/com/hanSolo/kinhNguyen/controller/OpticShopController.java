@@ -91,7 +91,7 @@ public class OpticShopController {
     @RequestMapping(value = "deleteClient", method = RequestMethod.POST)
     public GeneralResponse<String> deleteClient(@RequestBody final Client one, final HttpServletRequest request)  {
         if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) ){
-            List<Shop> shopList = shopRepo.findByClientIdOrderByGmtCreateDesc(one.getId());
+            List<Shop> shopList = shopRepo.findByClientCodeOrderByGmtCreateDesc(one.getClientCode());
             if(!shopList.isEmpty()){
                 shopRepo.deleteAll(shopList);
             }

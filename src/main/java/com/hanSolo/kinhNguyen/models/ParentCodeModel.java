@@ -5,7 +5,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class ParentCodeModel {
-    @Column(name = "client_code", nullable = false)
+    @Column(name = "client_code", length = 20)
     private String clientCode;
 
     @Column(name = "shop_code", length = 20)
