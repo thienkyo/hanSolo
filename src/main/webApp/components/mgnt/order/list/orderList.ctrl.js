@@ -369,7 +369,7 @@ angular.module('orderListModule')
 
     self.cloneOrders = function() {
         if(self.tempArray.length >0){
-
+             self.isButtonPressed=true;
              self.tempArray.forEach((oneOrder, index, array) => {
                 oneOrder.id = 0;
                 oneOrder.gmtCreate = (new Date()).getTime();
@@ -397,12 +397,12 @@ angular.module('orderListModule')
             });
 
             orderListService.doRecovery(self.tempArray).then(function(data){
-               console.log(data.obj);
+
                data.obj.forEach(calculateOrderTotal);
                data.obj.forEach((oneOrder, index, array) => {
                     self.orderList.unshift(oneOrder);
                });
-
+               self.isButtonPressed = false;
                self.tableParams = new NgTableParams({}, { dataset: self.orderList});
              //  $location.path('/mgnt/storeOrder/'+data.obj[0].id);
             });
