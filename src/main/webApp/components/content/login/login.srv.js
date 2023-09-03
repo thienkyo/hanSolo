@@ -1,11 +1,12 @@
 'use strict';
 angular.module('loginModule')
 .factory('loginService', ['ajaxService',function(ajaxService) {
-		var loginService = {
+		var service = {
 			login : login,
+			logout : logout,
 			signup : signup
 			};
-	return loginService;
+	return service;
 
 	function login(loginRequest){
 		var url = "member/login";
@@ -13,6 +14,13 @@ angular.module('loginModule')
 			return response.data;
 		});
 	}
+
+	function logout(){
+        var url = "mgnt/logout";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function signup(signupRequest){
 		var url = "member/add";

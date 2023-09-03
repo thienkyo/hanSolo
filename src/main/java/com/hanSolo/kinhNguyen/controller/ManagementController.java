@@ -229,12 +229,8 @@ public class ManagementController {
     //////////////////////////////Member section/////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
-    public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
-            return null;
-        }
+    public List<Member> getMemberForMgnt(@PathVariable final int amount) {
+
 
         List<Member> memberList;
         if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
@@ -284,6 +280,13 @@ public class ManagementController {
         }
 
         return new GeneralResponse("upsert_member_success",Utility.SUCCESS_ERRORCODE,Utility.FAIL_MSG);
+    }
+
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public GeneralResponse<String> logout( final HttpServletRequest request) {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        CommonCache.LOGIN_MEMBER_LIST.remove(claims.get("sub")+"");
+        return new GeneralResponse("logout success",Utility.SUCCESS_ERRORCODE,"logout success");
     }
 
     //////////////////////////////Member Role section/////////////////////////////
@@ -615,11 +618,6 @@ public class ManagementController {
     @RequestMapping(value = "recoverOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GeneralResponse<List<Order>> recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
-            return new GeneralResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
-        }
 
         GeneralResponse response =  new GeneralResponse(orderRepo.saveAll(orders),Utility.SUCCESS_ERRORCODE,"save order success");
         return response;

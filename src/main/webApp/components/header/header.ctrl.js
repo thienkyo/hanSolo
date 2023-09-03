@@ -1,9 +1,9 @@
 angular.module('app')
 .controller('headerController', ['$rootScope','$location','ajaxService','shopConfigService',
-                                 'memberService','cartStoreService','categoryService',
+                                 'memberService','cartStoreService','categoryService','loginService',
                                  'cacheName','commonCacheService','shopInfoCacheService',
 	function($rootScope,$location,ajaxService,shopConfigService,
-	         memberService,cartStoreService,categoryService,
+	         memberService,cartStoreService,categoryService,loginService,
 	         cacheName,commonCacheService,shopInfoCacheService) {
 	var self=this;
 	self.cart=[];
@@ -22,11 +22,17 @@ angular.module('app')
 	});
 */
 	self.logout = function() {
+	    console.log(self.currentMember);
+	    loginService.logout().then(function (data) {
+	        console.log(data);
+	        memberService.logout();
+        });
 		self.isAdmin = false;
 		self.isMod = false;
 		self.isGodLike = false;
+		self.isSuperAdmin = false;
 		self.currentMember = null;
-		memberService.logout();
+
 		$location.path('#/');
     }
 
