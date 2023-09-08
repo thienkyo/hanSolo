@@ -13,7 +13,6 @@ import java.util.List;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer> {
     List<Order> findByShippingPhoneOrderByIdDesc(@NonNull String shippingPhone);
-    List<Order> findFirst50ByOrderByGmtCreateDesc();
     List<Order> findFirst100ByOrderByGmtCreateDesc();
     List<Order> findAllByOrderByGmtCreateDesc();
 
@@ -32,6 +31,16 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
     long countByGmtCreateBetweenAndCusSource(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd, @Nullable Integer cusSource);
+
+
+    //// client and shop
+    List<Order> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+
+    List<Order> findByClientCodeAndShopCodeOrderByGmtCreateAsc(String clientCode, String shopCode);
+
+    List<Order> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
+
+    List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateAsc(String clientCode, String shopCode);
 
 
 }

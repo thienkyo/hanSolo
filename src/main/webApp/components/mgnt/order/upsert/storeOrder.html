@@ -1,0 +1,900 @@
+<style>
+.prescriptionInput {
+    width: 100%;
+    margin: 12px 10px 10px 10px;
+    border: 1px solid #e1e1e1;
+    padding-left: 5px;
+}
+
+.search_class{
+	background: #F0F0E9;
+    border: medium none;
+    color: #B2B2B2;
+    font-family: 'roboto';
+    font-size: 12px;
+    font-weight: 300;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    padding-top: 5px;
+    min-width: 10%;
+    width: 100px;
+    background-image: url(../static/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 75px;
+}
+
+.search_class3{
+	background: #FFFFFF;
+    border: 1px solid #e1e1e1;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    padding-top: 5px;
+    width: 100%;
+    background-image: url(../static/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 330px;
+    float: left;
+    margin-bottom: 20px;
+}
+
+.md-whiteframe-z1 {
+    box-shadow: none;
+}
+
+.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+    width:800px !important;
+}
+
+.autocompletedemoCustomTemplate .autocomplete-custom-template .result_left{
+	width: 800px !important;
+}
+
+.inactive {
+	color: #ccc;
+	pointer-events: none;
+	cursor: default;
+
+  	display: block;
+	padding: 12px 10px;
+	text-align: center;
+	letter-spacing: 2px;
+	background-color: darkgray;
+
+}
+select, textarea {
+  background: #FFFFFF;
+}
+
+
+</style>
+<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
+<!-- Shopping Cart Section Begin -->
+<h2 style="text-align: center;">{{ctrl.theOrder.id == 0 ? 'Create Order' :  'Order ' + ctrl.theOrder.id }}{{ctrl.isLocalWeb ? '[LOCAL]' : ''}}
+
+</h2>
+<h4 style="text-align: center;">
+	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}" target="_blank" ng-show="ctrl.theOrder.id > 0">[print]</a>
+	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}&noAddress=true" target="_blank" ng-show="ctrl.theOrder.id > 0">[print2]</a>
+	<a href="" ng-show="ctrl.isLocalWeb" ng-click="ctrl.dummyData()">[dummyData]</a>
+</h4>
+
+<section class="shopping-cart spad" style="padding-top: 50px;">
+	<div class="container">
+		<!-- Order detail -->
+		<div class="row">
+			<div class="col-lg-8">
+				<h6 class="checkout__title">Order Details</h6>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Full Name<span>*</span></p>
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="true"
+											 md-selected-item="ctrl.theSelectedOrder"
+											 md-search-text-change="ctrl.searchOrderTextChange(ctrl.theOrder.shippingName)"
+											 md-search-text="ctrl.theOrder.shippingName"
+											 md-selected-item-change="ctrl.selectedOrderChange(ctrl.theOrder.shippingName)"
+											 md-items="one in ctrl.querySearchOrder(ctrl.theOrder.shippingName)"
+											 md-item-text="one.shippingName"
+											 md-min-length="3"
+											 md-delay="700"
+											 md-clear-button="true"
+											 md-autoselect="false"
+											 >
+								<md-item-template>
+									<div class="row" >
+										<div class="col-md-1" >{{one.id}}</div>
+										<div class="col-md-2" >{{one.gmtCreate | date:"dd-MM-yyyy"}}</div>
+										<div class="col-md-2" >{{one.shippingPhone | tel}}</div>
+										<div class="col-md-3" >{{one.shippingName}}</div>
+										<div class="col-md-3" >{{one.shippingAddress}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{ctrl.theOrder.shippingName}}".
+								</md-not-found>
+							</md-autocomplete>
+						</div>
+					</div>
+
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Shipping Phone<span>*</span> {{ctrl.theOrder.shippingPhone | tel}}</p>
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="true"
+											 md-selected-item="ctrl.theSelectedOrder"
+											 md-search-text-change="ctrl.searchOrderByPhoneTextChange(ctrl.theOrder.shippingPhone)"
+											 md-search-text="ctrl.theOrder.shippingPhone"
+											 md-selected-item-change="ctrl.selectedOrderChange(ctrl.theOrder.shippingPhone)"
+											 md-items="one in ctrl.querySearchOrderByPhone(ctrl.theOrder.shippingPhone)"
+											 md-item-text="one.shippingPhone"
+											 md-min-length="5"
+											 md-delay="500"
+											 md-clear-button="true"
+											 md-autoselect="false"
+							>
+								<md-item-template>
+									<div class="row" >
+										<div class="col-md-1" >{{one.id}}</div>
+										<div class="col-md-2" >{{one.gmtCreate | date:"dd-MM-yyyy"}}</div>
+										<div class="col-md-2" >{{one.shippingPhone | tel}}</div>
+										<div class="col-md-3" >{{one.shippingName}}</div>
+										<div class="col-md-3" >{{one.shippingAddress}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{ctrl.theOrder.shippingPhone}}".
+								</md-not-found>
+							</md-autocomplete>
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>RelationShip</p>
+							<input type="text"  ng-model="ctrl.theOrder.relationship" ng-change="ctrl.clearErrorMsg()">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="checkout__input">
+							<p>Deposit: {{ctrl.theOrder.deposit | number:0}}đ</p>
+							<input type="text" ng-model="ctrl.theOrder.deposit" ng-change="ctrl.clearErrorMsg();ctrl.updatePrice()"
+								   ng-blur="ctrl.theOrder.deposit = ctrl.theOrder.deposit  ? ctrl.theOrder.deposit : 0"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-9">
+						<div class="checkout__input" >
+							<p>Shipping Address</p>
+							<input type="text" placeholder="Điền địa chỉ chính xác để nhận hàng nhanh chóng.&#10;Và ghi chú cần thiết khi giao hàng."
+								   class="checkout__input__add"
+								   ng-model="ctrl.theOrder.shippingAddress" ng-change="ctrl.clearErrorMsg();ctrl.addressCopy();">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="checkout__input" >
+							<p>Area</p>
+							<select  ng-model="ctrl.theOrder.areaCode"
+									 ng-options="opt.value as opt.name for opt in ctrl.AreaCodeList"
+									 style="height: 40px;border: 1px solid #e1e1e1;width: 100%;">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="">
+					<div class="col-lg-2">
+						<div class="checkout__input">
+							<p>Status</p>
+							<select  ng-model="ctrl.theOrder.status"
+									 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
+									 style="height: 40px;border: 1px solid #e1e1e1;width: 100px;">
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="checkout__input">
+							<p>Gender</p>
+							<select  ng-model="ctrl.theOrder.gender" ng-change="ctrl.genderCopy();"
+									 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
+									 style="height: 40px;border: 1px solid #e1e1e1;">
+							</select>
+						</div>
+
+					</div>
+
+					<div class="col-lg-3">
+						<div class="checkout__input">
+							<p>Date</p>
+							<div class='input-group date'>
+								<input ng-model="ctrl.theOrder.gmtCreate" class="form-control" onkeydown="return false" datepicker-popup="dd/MM/yyyy"
+									   show-weeks="false" is-open="ctrl.DPisOpen" ng-focus="ctrl.DPisOpen=true"
+									   ng-click="ctrl.openDP()" min-date="ctrl.MinDate" required/>
+								<span class="input-group-addon" ng-click="ctrl.openDP()">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<p style="margin-bottom: 6px;">Recheck:
+						<div class="checkout__input">
+							<select  ng-model="ctrl.selectedJob" ng-change="ctrl.tempF()"
+									 ng-options="opt as opt.jobName for opt in ctrl.smsJobList"
+									 style="height: 40px;border: 1px solid #e1e1e1;">
+							</select>
+						</div>
+					</div>
+
+					<div class="col-lg-3">
+						<p style="margin-bottom: 6px;">shop:
+						<div class="checkout__input">
+							<select  ng-model="ctrl.theOrder.shopCode"
+									 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
+									 ng-disabled="!ctrl.theOrder.clientCode"
+									 ng-change="ctrl.setCurrentShopCache(ctrl.theOrder.shopCode)"
+									 style="height: 40px;border: 1px solid #e1e1e1;">
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="row" ng-if="ctrl.isGodLike">
+					<div class="col-lg-3">
+						<p style="margin-bottom: 6px;">client:
+						<div class="checkout__input">
+							<select  ng-model="ctrl.theOrder.clientCode"
+									 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE' }"
+									 ng-change="ctrl.filterShopByClientCode(ctrl.theOrder.clientCode)"
+									 style="height: 40px;border: 1px solid #e1e1e1;">
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="row" style="margin-bottom: 60px;">
+					<div class="col-lg-12"></div>
+				</div>
+
+
+			</div>
+			<!-- Discount codes and order total -->
+			<div class="col-lg-4">
+				<div class="cart__discount" style="margin-bottom: 15px;">
+					<h6 style="margin-bottom: 25px;">Discount codes</h6>
+					<form>
+						<input type="text" placeholder="Coupon code" ng-model="ctrl.couponCode">
+						<button type="button" ng-click="ctrl.getCoupon(ctrl.couponCode)">Apply</button>
+					</form>
+				</div>
+				<div class="cart__total">
+					<h6>Order total</h6>
+					<ul>
+						<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
+						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
+						<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+						<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
+						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
+					</ul>
+					<a href="" ng-click="ctrl.saveOrder()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order'}}</a>
+
+				<!--	<a href="" ng-click="ctrl.splitOrder()"
+					   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'"
+					   ng-show="ctrl.wannaSplit"
+					   style="margin-top: 20px;">
+						{{ctrl.isSaveButtonPressed ? 'Loading...' : 'split order'}}
+					</a>-->
+					<alert class="alert alert-danger" close="ctrl.closeAlert()" ng-if="ctrl.isErrorMsg"
+						   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						{{ctrl.isErrorMsg}}
+					</alert>
+
+					<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.order_return_status"
+						   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}
+					</alert>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- Glass Prescription -->
+		<div style="text-align: center;">
+			<span style="font-size: 35px;font-weight: 500;">Prescription</span>
+			<a ng-click="ctrl.splitOrder()" href=""
+			   ng-show="ctrl.wannaSplit" ng-class="ctrl.isSaveButtonPressed ? 'btn btn-default inactive' : 'btn btn-default'"
+			   style="margin: 0px 0px 10px 10px;">split</a>
+			<a ng-click="ctrl.deselectOrder()" href="" class="btn btn-default check_out"
+			   ng-show="ctrl.wannaSplit"
+			   style="margin: 0px 0px 10px 10px;">deselect</a>
+			<span ng-show="ctrl.wannaSplit">count: {{ctrl.theSplitOrder.orderDetails.length}}| amount:{{ctrl.theSplitOrder.subTotal | number}}đ</span>
+		</div>
+
+		<!--<br>-->
+		<!-- Nav tabs for order detail -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.add1Tab()"> + </a>
+			</li>
+			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
+				<!--<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1 + ' ('+item.orderId+'-'+item.id+')'}}
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
+				</a>-->
+				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
+				   data-toggle="tab" href="" data-target="#home{{$index}}" >
+					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}
+					{{ ' ('+item.orderId+'-'+item.id+')'}}
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
+				</a>
+			</li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
+				<a ng-click="ctrl.remove1Tab($index)" href="" ng-show="$index > 0" class="btn btn-default check_out"
+				   style="margin: 4px 4px 4px 4px;float: right;">remove</a>
+				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out"
+				   style="margin: 4px 4px 4px 4px;float: right;">copy</a>
+				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
+				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
+				<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
+				   ng-class="item.isSplit ? 'btn btn-success' : 'btn btn-default'"
+				   ng-show="ctrl.theOrder.orderDetails.length > 1"
+				   style="margin: 4px 4px 4px 4px;float: right;">select</a>
+				<h4 style="padding-bottom: 20px;margin-top: 0px;">
+					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}:
+					{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
+					item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ
+				</h4>
+
+				<!-- Prescription detail ho va ten -->
+				<div class="row">
+					<!-- ho va ten -->
+					<div class="col-lg-5">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>họ và tên</p>
+									<input type="text"  ng-model="item.name" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="checkout__input">
+									<p>Năm sinh:{{item.yob.length == 4 ? ctrl.year-item.yob + 't': ''}}</p>
+									<input type="text" ng-model="item.yob" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<div class="checkout__input">
+									<p>Giới tính</p>
+									<select  ng-model="item.gender"
+											 ng-options="opt.value as opt.name for opt in ctrl.genderArray"
+											 style="height: 40px;border: 1px solid #e1e1e1;width: 100%;">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>Địa chỉ</p>
+									<input type="text"  ng-model="item.address" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="checkout__input">
+									<p>Số đt {{item.phone | tel}}</p>
+									<input type="text" ng-model="item.phone" ng-change="ctrl.clearErrorMsg()">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<h4 style="padding-bottom: 0px;">Thị lực không kính </h4>
+							</div>
+							<div class="col-md-6">
+								<h4 style="padding-bottom: 0px;">Độ kính cũ </h4>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="checkout__input">
+									<p>Mắt phải</p>
+									<input type="text"  ng-model="item.odVasc" placeholder="odVasc">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="checkout__input">
+									<p>Mắt trái</p>
+									<input type="text"  ng-model="item.osVasc" placeholder="osVasc">
+								</div>
+							</div>
+
+							<div class="col-md-3" style="padding-right: 2px;">
+								<div class="checkout__input">
+									<p>Mắt phải</p>
+									<input type="text"  ng-model="item.odPreviousPrescript"
+										   style="padding-left: 0px;" >
+								</div>
+							</div>
+							<div class="col-md-3" style="padding-left: 2px;">
+								<div class="checkout__input">
+									<p>Mắt trái</p>
+									<input type="text"  ng-model="item.osPreviousPrescript"
+										   style="padding-left: 0px;" >
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="checkout__input" >
+									<p>Lời dặn: </p>
+									<input type="text" placeholder="Ghi chú nếu cần." class="checkout__input__add"
+										   ng-model="item.orderDetailNoteForCus">
+								</div>
+							</div>
+							<div class="col-md-2" >
+								<p>mono: </p>
+								<input type="checkbox"  ng-model="item.monoLens"/>
+
+							</div>
+							<div class="col-md-2" style="padding: 0 0 0 0;">
+								<p>đọc sách:</p>
+								<input type="checkbox"  ng-model="item.reading"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="checkout__input" >
+									<p>Note</p>
+									<textarea rows="3"  placeholder="Ghi chú nếu cần." class="checkout__input__add"
+											  ng-model="item.orderDetailNote" style="height: 100px;width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- chi tiet -->
+					<div class="col-lg-7">
+						<div style="margin-bottom: 12px;">Chi tiết </div>
+						<div class="container" style="width:100%;font-size: 18px;"> <!--begin of don kinh-->
+							<div class="row">
+								<div class="col-md-2 border bg-light">
+
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									ĐỘ CẦU
+									(Sphere)
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									ĐỘ TRỤC
+									(Cylinder)
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									TRỤC
+									(Axis)
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									LĂNG KÍNH
+									(Prism)
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									THỊ LỰC XA
+									(VA)
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-1 border bg-light" style="padding-top: 15px;">
+									Kính nhìn xa
+								</div>
+								<div class="col-md-1 border bg-light">
+									<div class="row border" style="padding-left: 10px;">
+										MP
+										<br>
+										(OD)
+									</div>
+									<div class="row border" style="padding-left: 10px;">
+										MT<br>
+										(OS)
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odSphere" placeholder="odSphere"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osSphere" placeholder="osSphere"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odCylinder" placeholder="odCylinder"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osCylinder" placeholder="osCylinder"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odAxis" placeholder="odAxis"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osAxis" placeholder="osAxis"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odPrism" placeholder="odPrism"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osPrism" placeholder="osPrism"
+											   class="prescriptionInput">
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light">
+									<div class="row border">
+										<input type="text"  ng-model="item.odVacc" placeholder="odVacc"
+											   class="prescriptionInput">
+
+									</div>
+									<div class="row border">
+										<input type="text"  ng-model="item.osVacc" placeholder="osVacc"
+											   class="prescriptionInput">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-2 border bg-light">
+									<br><br>
+									Kính nhìn gần
+									(Near)-ADD
+								</div>
+								<div class="col-md-8 border bg-light">
+									<div class="row" style="padding-left: 10px;">
+										<div class="row">
+											<div class="col-md-7" style="padding-top: 10px;">
+												Khoảng cách đồng tử(PD):
+											</div>
+											<div class="col-md-4" style="padding-left: 0px;">
+												<input type="text"  ng-model="item.pd" placeholder="pd"
+													   class="prescriptionInput">
+											</div>
+
+										</div>
+										<div class="row">
+											<div class="col-md-7" style="padding-top: 10px;">
+												Khoảng cách làm việc(WD)
+											</div>
+											<div class="col-md-4" style="padding-left: 0px;">
+												<input type="text"  ng-model="item.wd" placeholder="wd"
+													   class="prescriptionInput">
+											</div>
+										</div>
+
+									</div>
+									<div class="row border" >
+										<div class="col-md-3 border bg-light" style="padding-top: 6px;padding-bottom: 6px;">
+											MP<br>
+											(OD)
+										</div>
+										<div class="col-md-3 border bg-light" >
+											<input type="text"  ng-model="item.odAdd" placeholder="odAdd"
+												   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+										</div>
+									</div>
+									<div class="row border" >
+										<div class="col-md-3 border bg-light" style="padding-top: 6px;padding-bottom: 6px;">
+											MT<br>
+											(OS)
+										</div>
+										<div class="col-md-3 border bg-light" >
+											<input type="text"  ng-model="item.osAdd" placeholder="osAdd"
+												   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
+									Thị lực gần(VA):
+									<input type="text"  ng-model="item.vaNear" placeholder="vaNear"
+										   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
+								</div>
+
+							</div>
+
+						</div><!--end of don kinh-->
+					</div>
+				</div>
+
+				<!--start trong-->
+				<div class="row" style="border-top: 2px solid #e1e1e1; margin-top: 30px;padding-top: 20px;">
+					<div class="col-lg-1">
+						<h4>Tròng</h4>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="checkout__input" >
+							<!--<input type="text" placeholder="Note: chemi, asx, UV" ng-model="item.lensNote" >-->
+							<md-autocomplete class="search_class3"  flex=""
+											 ng-disabled="false"
+											 md-no-cache="true"
+											 md-selected-item="item.productLens"
+											 md-search-text-change="ctrl.searchLensTextChange(item.lensNote)"
+											 md-search-text="item.lensNote"
+											 md-selected-item-change="ctrl.selectedLensChange(one,item)"
+											 md-items="one in ctrl.querySearchLens(item.lensNote)"
+											 md-item-text="one.lensNote"
+											 md-min-length="3"
+											 md-delay="600"
+											 md-clear-button="true"
+											 md-autoselect="false"
+											 placeholder="Ex: chemi, asx, UV">
+							>
+								<md-item-template>
+									<div class="row" >
+										<!--<div class="col-md-1" style="text-align: left;">{{one.extInfo}}</div>-->
+										<div class="col-md-4" >{{one.lensNote}}</div>
+										<div class="col-md-3" style="text-align: right;">{{one.lensDetail}}</div>
+										<div class="col-md-2" style="text-align: right;">{{one.sellPrice | number:0}}đ</div>
+										<div class="col-md-2" style="">{{one.gmtCreate | date:"yyyy-MM-dd"}} | {{one.extInfo}}</div>
+									</div>
+								</md-item-template>
+								<md-not-found>
+									không có kết quả cho "{{item.lensNote}}".
+								</md-not-found>
+							</md-autocomplete>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="checkout__input" >
+							<input type="number" placeholder="Price" ng-model="item.lensPrice"
+								   ng-change="ctrl.calculateOrderTotal()" ng-blur="item.lensPrice = item.lensPrice == null ? 0 : item.lensPrice">
+						</div>
+					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input">
+							<input type="number" ng-model="item.lensQuantity" ng-change="ctrl.calculateOrderTotal()"
+								   ng-blur="item.lensQuantity = item.lensQuantity == null ? 1 : item.lensQuantity">
+						</div>
+					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input" >
+							<input type="text" placeholder="code" style="padding-left: 4px;"
+								   ng-model="item.lensDiscountCode"
+								   ng-change="ctrl.getLensCoupon(item)"
+								   ng-model-options='{ debounce: 1500 }'>
+						</div>
+					</div>
+					<div class="col-lg-auto">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							<!--{{item.lensDiscountAmount > 0 ? item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity : item.lensPrice*item.lensQuantity | number:0}}đ-->
+							{{item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity | number:0}}đ
+						</p>
+					</div>
+
+					<div class="col-lg-1" ng-if="item.lensDiscountAmount > 0">
+						<p style="font-size: 13px;font-weight: 600;margin-bottom: 0px;text-align: left;" >
+							<!--{{item.lensDiscountAmount > 0 ? item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity : item.lensPrice*item.lensQuantity | number:0}}đ-->
+							{{item.lensPrice*item.lensQuantity | number:0}}đ
+						</p>
+						<span style="font-size: 13px;font-weight: 600;padding-top: 10px;" >
+							{{item.lensDiscountAmount}}%{{item.lensPrice*item.lensQuantity*item.lensDiscountAmount/100 | number:0}}đ
+						</span>
+					</div>
+
+
+				</div>
+				<!--start gong-->
+				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
+					<div class="col-lg-1">
+						<h4>Gọng</h4>
+					</div>
+					<!--<div class="col-lg-1">
+						<md-autocomplete class="search_class"  flex=""
+										 ng-disabled="ctrl.isDisable"
+										 md-no-cache="ctrl.noCache"
+										 md-selected-item="item.product"
+										 md-search-text-change="ctrl.searchTextChange(item.searchText)"
+										 md-search-text="item.searchText"
+										 md-selected-item-change="ctrl.selectedItemChange(one,item)"
+										 md-items="one in ctrl.querySearch(item.searchText)"
+										 md-item-text="one.name"
+										 md-min-length="3"
+										 md-delay="600"
+										 placeholder="search">
+							<md-item-template>
+								<div class="row" >
+									<div class="col-md-1" >{{one.id}}</div>
+									<div class="col-md-3" >
+										<img ng-src="img/product/{{one.thumbnail}}" alt=""  style="height:70px;"/>
+									</div>
+									<div class="col-md-5" style="">{{one.name}}</div>
+									<div class="col-md-2" style="">{{one.sellPrice | number:0}}đ</div>
+
+								</div>
+							</md-item-template>
+							<md-not-found>
+								không có kết quả cho "{{ctrl.searchText}}".
+							</md-not-found>
+						</md-autocomplete>
+
+					</div>-->
+					<div class="col-lg-4" >
+						<div class="checkout__input" >
+							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.frameNote" >
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="checkout__input" >
+							<input type="number" placeholder="Price" ng-model="item.framePriceAfterSale"
+								   ng-change="ctrl.calculateOrderTotal()" ng-blur="item.framePriceAfterSale = item.framePriceAfterSale == null ? 0 : item.framePriceAfterSale">
+						</div>
+					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input">
+							<input type="number" ng-model="item.quantity" ng-change="ctrl.calculateOrderTotal()"
+								   ng-blur="item.quantity = item.quantity == null ? 1 : item.quantity">
+						</div>
+					</div>
+
+					<div class="col-lg-1">
+						<div class="checkout__input" >
+							<input type="text" placeholder="code" style="padding-left: 4px;"
+								   ng-model="item.frameDiscountCode"
+								   ng-change="ctrl.getFrameCoupon(item)"
+								   ng-model-options='{ debounce: 1500 }'>
+						</div>
+					</div>
+					<div class="col-lg-auto">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							<!--{{item.frameDiscountAmount > 0 ? item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 : item.framePriceAfterSale | number:0}}đ-->
+							{{ item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 | number:0}}đ
+						</p>
+					</div>
+					<div class="col-lg-1" ng-if="item.frameDiscountAmount > 0">
+						<p style="font-size: 13px;font-weight: 600;margin-bottom: 0px;text-align: left;" ng-if="item.frameDiscountAmount > 0">
+							<!--{{item.frameDiscountAmount > 0 ? item.framePriceAfterSale*(100 - item.frameDiscountAmount)/100 : item.framePriceAfterSale | number:0}}đ-->
+							{{ item.framePriceAfterSale*item.quantity | number:0}}đ
+						</p>
+						<span style="font-size: 13px;font-weight: 600;padding-top: 10px;" ng-if="item.frameDiscountAmount > 0">
+							{{item.frameDiscountAmount}}%{{item.framePriceAfterSale*item.quantity*item.frameDiscountAmount/100 | number:0}}đ
+						</span>
+					</div>
+
+
+
+				</div>
+				<!--start one product-->
+				<div class="row" ng-if="item.product">
+					<div class="col-md-9">
+						<div class="shopping__cart__table">
+							<table>
+								<tbody>
+								<tr>
+									<td class="product__cart__item" >
+										<div class="product__cart__item__pic">
+											<a href="#/productDetail/{{item.product.id}}#top" target="_blank">
+												<img src="img/product/{{item.product.thumbnail}}" alt="" style="width: 80%;">
+											</a>
+										</div>
+									</td>
+									<td class="product__cart__item" >
+										<div class="product__cart__item__text">
+											<h6>id: {{item.product.id}}</h6>
+											<h6>{{item.product.name}}</h6>
+											<h5>{{item.product.sellPrice*(100 - item.product.discount)/100 | number:0}}đ</h5>
+											<h5 ng-show="item.product.discount != 0"><s style="color: #0d0d0d6e;">{{item.product.sellPrice | number:0}}đ</s></h5>
+										</div>
+									</td>
+
+									<td class="quantity__item">
+										<div class="quantity">
+											<div class="pro-qty-2">
+												<input type="number" value="1" ng-model="item.quantity"
+													   autocomplete="off" style="width:40px;" min="1" max="1" disabled>
+											</div>
+										</div>
+									</td>
+									<td class="cart__price">{{(item.product.sellPrice*item.quantity*(100 - item.product.discount)/100) | number:0}}đ</td>
+									<td class="cart__close"><i class="fa fa-close" ng-click="ctrl.removeSearchResult(item)"></i></td>
+								</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!--start Khac-->
+				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
+					<div class="col-lg-1">
+						<h4>Khác</h4>
+					</div>
+					<div class="col-lg-4">
+						<div class="checkout__input" >
+							<input type="text" placeholder="Note: tên, hiêu, mã sản phẩm" ng-model="item.otherNote" >
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="checkout__input" >
+							<input type="number" placeholder="Price" ng-model="item.otherPrice"
+								   ng-change="ctrl.calculateOrderTotal()" ng-blur="item.otherPrice = item.otherPrice == null ? 0 : item.otherPrice">
+						</div>
+					</div>
+					<div class="col-lg-auto">
+						<p style="font-size: 20px;font-weight: 600;padding-top: 10px;">
+							{{ item.otherPrice | number:0}}đ
+						</p>
+					</div>
+				</div>
+				<!--start 2nd save button-->
+				<div class="row" style="border-top: 2px solid #e1e1e1;padding-top: 20px;">
+					<div class="col-lg-3" >
+						<a href="" ng-click="ctrl.saveOrder()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order'}}</a>
+					</div>
+					<div class="col-lg-3" >
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.order_return_status"
+							   dismiss-on-timeout="2000" style="height: 50px;" >
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							Mã đơn: A{{("000"+ctrl.newOrderId).slice(-4)}}
+						</alert>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.isErrorMsg"
+							 style="margin-top:20px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							{{ctrl.isErrorMsg}}
+						</div>
+					</div>
+
+					<div class="col-lg-4" ></div>
+
+					<div class="col-lg-2" >
+						<span style="font-size: 13px;">
+							[{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}} :
+							{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
+							item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ]
+						</span>
+
+					</div>
+
+
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</section>
+<!-- Shopping Cart Section End -->

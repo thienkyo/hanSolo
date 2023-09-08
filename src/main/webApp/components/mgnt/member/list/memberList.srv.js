@@ -3,6 +3,7 @@ angular.module('memberListModule')
 .factory('memberListService', ['ajaxService',function(ajaxService) {
 		var service = {
 			getMembersForMgnt : getMembersForMgnt,
+			getMemberByClientCode : getMemberByClientCode,
 			upsert : upsert,
 			upsertMemberByAdmin : upsertMemberByAdmin,
 			insertByClient : insertByClient,
@@ -18,6 +19,13 @@ angular.module('memberListModule')
 			return response.data;
 		});
 	}
+
+	function getMemberByClientCode(amount){
+        var url = "mgnt/getMemberByClientCode/"+amount;
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 	
 	function upsert(mem){
 		var url = "mgnt/upsertMember";

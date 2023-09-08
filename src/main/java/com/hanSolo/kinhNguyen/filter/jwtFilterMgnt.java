@@ -59,7 +59,7 @@ public class jwtFilterMgnt extends GenericFilterBean {
                 }
 
             }else{
-                throw new ServletException("USER_INACTIVE");
+                throw new ServletException("USER_NOT_IN_THE_LIST");
             }
 
             request.setAttribute("claims", claims);

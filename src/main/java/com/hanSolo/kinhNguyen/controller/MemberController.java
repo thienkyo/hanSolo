@@ -71,6 +71,11 @@ public class MemberController {
         if(!mem.getClientCode().equals(Utility.GODLIKE_ROLE)){
             if(mem.getShopCode().equals("ALL")){
                 shopInfoList = shopRepo.queryByClientCodeOrderByGmtCreateDesc(mem.getClientCode());
+
+                if(CommonCache.CLIENT_SHOP_LIST.size() == Utility.LOGIN_MEMBER_LIST_SIZE){
+                    CommonCache.CLIENT_SHOP_LIST.clear();
+                }
+                CommonCache.CLIENT_SHOP_LIST.put(mem.getClientCode(),shopInfoList);
             }else{
                 shopInfoList = shopRepo.findByClientCodeAndShopCode(mem.getClientCode(),mem.getShopCode());
             }
@@ -86,7 +91,7 @@ public class MemberController {
                 .claim("name", mem.getFullName())
                 .claim("status", mem.getStatus())
                 .claim("clientInfo", clientInfo)
-                .claim("shopInfo", shopInfoList)
+                .claim("shopList", shopInfoList)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + Utility.AUTHENTICATION_TIMEOUT))
                 .signWith(SignatureAlgorithm.HS256, Utility.SECRET_KEY.getBytes("UTF-8"))

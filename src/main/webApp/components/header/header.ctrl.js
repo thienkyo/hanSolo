@@ -1,10 +1,11 @@
 angular.module('app')
 .controller('headerController', ['$rootScope','$location','ajaxService','shopConfigService',
-                                 'memberService','cartStoreService','categoryService',
-                                 'cacheName','shopInfoCacheService','clientInfoCacheService',
+                                 'memberService','cartStoreService','categoryService','loginService',
+                                 'cacheName','clientInfoCacheService','shopListCacheService','currentShopCacheService',
+
 	function($rootScope,$location,ajaxService,shopConfigService,
-	         memberService,cartStoreService,categoryService,
-	         cacheName,shopInfoCacheService,clientInfoCacheService) {
+	         memberService,cartStoreService,categoryService,loginService,
+	         cacheName,clientInfoCacheService,shopListCacheService,currentShopCacheService) {
 	var self=this;
 	self.cart=[];
 	self.currentMember = memberService.getCurrentMember();
@@ -14,16 +15,31 @@ angular.module('app')
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.isMod = memberService.isMod();
-	self.shopInfo =  shopInfoCacheService.getCurrentCache();
-	self.clientInfo =  clientInfoCacheService.getCurrentCache();
-
+	self.clientInfo =  clientInfoCacheService.get();
+	console.log("this is header");
+	console.log(clientInfoCacheService.get());
+	console.log(shopListCacheService.get());
+	console.log(currentShopCacheService.get());
+/*
+	categoryService.getActiveCategories().then(function(data){
+		self.cateList = data;
+	});
+*/
 	self.logout = function() {
+	    loginService.logout().then(function (data) {
+	        memberService.logout();
+        });
 		self.isAdmin = false;
 		self.isMod = false;
 		self.isGodLike = false;
+		self.isSuperAdmin = false;
 		self.currentMember = null;
-		memberService.logout();
-		//clientInfoCacheService.clearCache();
+
+		console.log('logout');
+		console.log(clientInfoCacheService.get());
+        console.log(shopListCacheService.get());
+        console.log(currentShopCacheService.get());
+
 		$location.path('#/');
     }
 

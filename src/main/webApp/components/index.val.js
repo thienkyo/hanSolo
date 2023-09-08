@@ -350,6 +350,8 @@ function OrderDO () {
 	this.lensNumber = 0;
 	this.frameNumber = 0;
 	this.areaCode = '';
+	this.clientCode = '';
+	this.shopCode = '';
 }
 
 function OrderDetailDO () {
@@ -400,6 +402,8 @@ function OrderDetailDO () {
 	this.orderDetailNote = '';
 
 	this.searchText = ''; // for each md-autocomplete in orderDetail array
+	this.clientCode = '';
+    this.shopCode = '';
 
 	this.quantity = 1;
 	this.lensQuantity = 1;

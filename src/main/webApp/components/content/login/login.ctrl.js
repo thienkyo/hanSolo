@@ -1,10 +1,10 @@
 'use strict';
 angular.module('loginModule')
-.controller('loginController',['$rootScope','loginService','clientInfoCacheService',
-							   '$location','MemberDO','memberService','$mdDialog',
-	function($rootScope, loginService,clientInfoCacheService,
-	         $location,MemberDO,memberService,$mdDialog) {
-	
+.controller('loginController',['$rootScope','loginService','clientInfoCacheService','shopListCacheService',
+							   '$location','MemberDO','memberService','$mdDialog','currentShopCacheService',
+	function($rootScope, loginService,clientInfoCacheService,shopListCacheService,
+	         $location,MemberDO,memberService,$mdDialog,currentShopCacheService) {
+
 	var self = this;
 	self.newMember = new MemberDO();
     self.member = {};
@@ -24,7 +24,20 @@ angular.module('loginModule')
                     self.member.name = a.name;
                     self.member.phone = a.sub;
                     memberService.setCurrentMember(self.member);
-                    clientInfoCacheService.setCurrentCache(a.clientInfo);
+                    clientInfoCacheService.set(a.clientInfo);
+                    if(a.shopList){
+                        shopListCacheService.set(a.shopList);
+                        if(a.shopList.length == 1){
+                            currentShopCacheService.set(a.shopList[0]);
+                        }else{
+                            if(currentShopCacheService.get()) {
+                                if(!a.shopList.some(e => e.shopCode === currentShopCacheService.get().shopCode)){
+                                    currentShopCacheService.clear();
+                                }
+                            }
+                        }
+
+                    }
                     console.log(a);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');

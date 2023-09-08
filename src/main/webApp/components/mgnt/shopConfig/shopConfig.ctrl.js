@@ -1,5 +1,5 @@
 'use strict';
-angular.module('shopConfigModule')
+angular.module('shopConfigModule') // deprecated
 	.controller('shopConfigController',['$rootScope','$routeParams','$location',
 										 'memberService','LensProductDO','ShopConfigDO',
 										 'NgTableParams','OrderStatusArray','AmountList',

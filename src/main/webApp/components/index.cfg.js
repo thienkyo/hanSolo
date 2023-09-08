@@ -156,7 +156,7 @@ angular.module('app')
             controllerAs:'ctrl'
         })
         .when('/mgnt/storeOrder/:orderId',{
-            templateUrl: 'components/mgnt/storeOrder/storeOrder.html',
+            templateUrl: 'components/mgnt/order/upsert/storeOrder.html',
             controller: 'storeOrderController',
             controllerAs:'ctrl'
         })

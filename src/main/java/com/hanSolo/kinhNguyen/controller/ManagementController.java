@@ -1,8 +1,10 @@
 package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
+import com.hanSolo.kinhNguyen.facade.ClientInterface;
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
+import com.hanSolo.kinhNguyen.request.QueryByClientShopAmountRequest;
 import com.hanSolo.kinhNguyen.response.*;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
@@ -26,6 +28,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -228,12 +231,7 @@ public class ManagementController {
     //////////////////////////////Member section/////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)
-    public List<Member> getMemberForMgnt(@PathVariable final int amount, final HttpServletRequest request) throws ServletException {
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
-            return null;
-        }
+    public List<Member> getMemberForMgnt(@PathVariable final int amount) {
 
         List<Member> memberList;
         if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
@@ -242,14 +240,29 @@ public class ManagementController {
             memberList = memberRepo.findByOrderByGmtCreateDesc();
         }
 
-        List<Member> godLike = memberRepo.findByMemberRoles_Role("GODLIKE");
-        memberList.removeAll(godLike);
+       /* List<Member> godLike = memberRepo.findByMemberRoles_Role("GODLIKE");
+        memberList.removeAll(godLike);*/
+
+        MemberRole mr = new MemberRole();
+        mr.setRole(Utility.GODLIKE_ROLE);
+        memberList.removeIf(i -> i.getMemberRoles().contains(mr));
         memberList.forEach(item -> item.setPass(""));
 
-     /*   for(Member item : memberList){
-            item.setPass("");
-           // item.setOrders(Collections.emptyList());
-        }*/
+        return memberList;
+    }
+
+    @RequestMapping(value = "getMemberByClientCode/{amount}", method = RequestMethod.GET)
+    public List<Member> getMemberByClientCode(@PathVariable final int amount,final HttpServletRequest request) {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        List<Member> memberList;
+        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+            memberList =  memberRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
+        }else{
+            memberList = memberRepo.findByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
+        }
+        memberList.forEach(item -> item.setPass(""));
 
         return memberList;
     }
@@ -318,6 +331,13 @@ public class ManagementController {
 
             return new GeneralResponse(memberRepo.save(mb),Utility.SUCCESS_ERRORCODE,Utility.UPDATE_SU_MSG);
         }
+    }
+
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public GeneralResponse<String> logout( final HttpServletRequest request) {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        CommonCache.LOGIN_MEMBER_LIST.remove(claims.get("sub")+"");
+        return new GeneralResponse("logout success",Utility.SUCCESS_ERRORCODE,"logout success");
     }
 
     //////////////////////////////Member Role section/////////////////////////////
@@ -570,6 +590,18 @@ public class ManagementController {
         return orderList;
     }
 
+    //// TBC
+    @RequestMapping(value = "getOrdersByTerms", method = RequestMethod.POST)
+    public List<Order> getOrdersByTerms(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        List<Order> orderList ;
+        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+            orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
+        }else{
+            orderList = orderRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return orderList;
+    }
+
     @RequestMapping(value = "updateOrderStatus", method = RequestMethod.POST)
     public GenericResponse updateOrder(@RequestBody final Order order) throws ParseException {
         orderRepo.updateStatusAndGmtModifyById(order.getStatus(),Utility.getCurrentDate(),order.getId());
@@ -648,21 +680,9 @@ public class ManagementController {
 
     @RequestMapping(value = "recoverOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public GenericResponse recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
-            return new GenericResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
-        }
-        orderRepo.saveAll(orders);
-/*
-        for(Order or : orders){
+    public GeneralResponse<List<Order>> recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
 
-        }*/
-
-
-
-        GenericResponse response =  new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"save order success");
+        GeneralResponse response =  new GeneralResponse(orderRepo.saveAll(orders),Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }
 

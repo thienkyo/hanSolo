@@ -1,15 +1,15 @@
 'use strict';
 angular.module('opticShopOnlineModule')
-	.controller('opticShopOnlineController',['$rootScope','$routeParams','$location',
+	.controller('opticShopOnlineController',['$location',
 										 'memberService','LensProductDO','OSOConfigDO',
-										 'NgTableParams','OrderStatusArray','AmountList',
-										 'opticShopOnlineService','shopInfoCacheService',
-										 'cacheName','commonCacheService','configOSOCacheService',
-	function($rootScope, $routeParams,$location,
+										 'NgTableParams',
+										 'opticShopOnlineService',
+										 'cacheName','configOSOCacheService',
+	function($location,
 	        memberService,LensProductDO,OSOConfigDO,
-	        NgTableParams,OrderStatusArray,AmountList,
-	        opticShopOnlineService,shopInfoCacheService,
-	        cacheName,commonCacheService,configOSOCacheService
+	        NgTableParams,
+	        opticShopOnlineService,
+	        cacheName,configOSOCacheService
 	        ){
 	var self = this;
 	if(!memberService.isGodLike()){
@@ -54,7 +54,7 @@ angular.module('opticShopOnlineModule')
 
 
     self.clearShopConfig = function(){
-        shopInfoCacheService.clearCache();
+        configOSOCacheService.clearCache();
     }
 
 /// modal

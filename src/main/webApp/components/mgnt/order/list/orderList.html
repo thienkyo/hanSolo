@@ -250,58 +250,81 @@
 
 		<!-- first 100 record -->
 		<div class="row">
-			<div class="col-sm-1">
+			<div class="col-sm-5">
 				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderByTerm()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
-					 style="width: 100%;height: 30px;background: #F0F0E9;">
+					 style="width: 20%;height: 35px;background: #F0F0E9;">
 		    	</select>
-			</div>
-
-			<div class="col-sm-4">
-				<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;">
+				<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;height: 35px;">
 				<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone(ctrl.keySearch)"
-						style="margin-top: 0px;height: 32px;">
+						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					search
 				</button>
 				<button type="button" class="btn btn-primary" ng-click="ctrl.keySearch='';ctrl.getOrderByTerm();"
-						style="margin-top: 0px;height: 32px;">
+						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					reset
 				</button>
 			</div>
 
-			<div class="col-sm-1" style="font-size: large;color:limegreen;" ng-if="ctrl.tempAmount <= 0">
-				order:	{{ctrl.statusNumber.ordered}}
-			</div>
-			<div class="col-sm-1" style="font-size: large;color:blue;" ng-if="ctrl.tempAmount <= 0">
-				paid :	{{ctrl.statusNumber.paid}}
-			</div>
-			<div class="col-sm-1" style="font-size: large;color:darkorchid;" ng-if="ctrl.tempAmount <= 0">
-				ship:	{{ctrl.statusNumber.shipped}}
-			</div>
-			<div class="col-lg-auto" style="font-size: large;color:brown;" ng-if="ctrl.tempAmount <= 0">
-				deposit: {{ctrl.statusNumber.deposit}}
-			</div>
-			<div class="col-lg-auto" style="font-size: large" ng-if="ctrl.tempAmount <= 0">
-				done: {{ctrl.statusNumber.done}}
+
+			<div class="col-sm-7" style="text-align: end;" ng-if="ctrl.tempAmount <= 0">
+				client:
+				<select  ng-model="ctrl.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!ALL' }"
+						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.clientCode)"
+						 style="width: 15%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				</select>
+
+
+				shop:
+				<select  ng-model="ctrl.theMember.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
+						 ng-disabled="!ctrl.theMember.clientCode"
+						 style="width: 20%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				</select>
+
+
+
+
+				<div class="btn-group" role="group" aria-label="Basic example" style="height: 35px;vertical-align: bottom;">
+					<button type="button" class="btn btn-secondary"
+							style="font-size: large;color:limegreen;background-color: white;">
+						{{ctrl.statusNumber.ordered}}
+					</button>
+					<button type="button" class="btn btn-secondary"
+							style="font-size: large;color:blue;background-color: white;">
+						{{ctrl.statusNumber.paid}}</button>
+					<button type="button" class="btn btn-secondary"
+							style="font-size: large;color:darkorchid;background-color: white;">
+						{{ctrl.statusNumber.shipped}}</button>
+					<button type="button" class="btn btn-secondary"
+							style="font-size: large;color:brown;background-color: white;">
+						{{ctrl.statusNumber.deposit}}</button>
+					<button type="button" class="btn btn-secondary"
+							style="font-size: large;background-color: white;color: #696763;">
+						{{ctrl.statusNumber.done}}</button>
+				</div>
 			</div>
 
 
-			<div class="col-sm-6" ng-if="ctrl.tempAmount > 0">
+			<div class="col-sm-7" ng-if="ctrl.tempAmount > 0">
 
 					<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-					   style="margin: 0px 0px 0px 0px;height: 32px;" ng-show="ctrl.tableParams.data.length < 60" >sum all</a>
+					   style="margin: 0px 0px 0px 0px;height: 35px;" ng-show="ctrl.tableParams.data.length < 1000" >sum all</a>
 						<!-- Button trigger modal -->
 					<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#exampleModal" style="margin-top: 0px;height: 32px;">
+							data-target="#exampleModal" style="margin-top: 0px;height: 35px;">
 						brief
 					</button>
 						<!-- Button trigger modal : one day report -->
 					<button type="button" class="btn btn-primary" data-toggle="modal" ng-click="ctrl.getOneDayReport()"
-							data-target="#oneDayModal" style="margin-top: 0px;height: 32px;">
+							data-target="#oneDayModal" style="margin-top: 0px;height: 35px;">
 						one day
 					</button>
+					<a ng-click="ctrl.cloneOrders()" href="" class="btn btn-default check_out"
+				 	  style="margin: 0px 0px 0px 0px;height: 35px;" ng-disabled="ctrl.isButtonPressed" >clone {{ctrl.isButtonPressed}}</a>
 					<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out"
-					   style="margin: 0px 0px 0px 0px;height: 32px;" >Clear</a>
+					   style="margin: 0px 0px 0px 0px;height: 35px;" >Clear</a>
 					Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T
 			</div>
 

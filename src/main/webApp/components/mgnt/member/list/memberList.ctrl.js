@@ -2,10 +2,12 @@
 angular.module('memberListModule')
 	.controller('memberListController',['$rootScope','$location','memberService','FirstTimeLoadSize','RoleList',
 										 'memberListService','NgTableParams','CommonStatusArray','AmountList',
-										 'MemberRoleDO','clientService','ClientDO','ShopDO',
+										 'MemberRoleDO','clientService','ClientDO','ShopDO','clientInfoCacheService',
+										 'shopListCacheService','currentShopCacheService',
 	function($rootScope,$location,memberService,FirstTimeLoadSize,RoleList,
 	        memberListService,NgTableParams,CommonStatusArray,AmountList,
-	        MemberRoleDO,clientService,ClientDO,ShopDO
+	        MemberRoleDO,clientService,ClientDO,ShopDO,clientInfoCacheService,
+	        shopListCacheService,currentShopCacheService
 	        ){
 	var self = this;
 	self.statusList = CommonStatusArray;
@@ -72,34 +74,58 @@ angular.module('memberListModule')
          self.shopCode = null;
          if(self.isGodLike){
             clientService.getClientShopList().then(function (data) {
-                  // console.log(data.obj);
+                   console.log(data.obj);
 
                    var allClient = new ClientDO();
                    allClient.clientCode = 'ALL';
-                   allClient.brandName = 'all';
+                   allClient.brandName = 'all client';
                    data.obj.clientList.unshift(allClient);
                    self.clientCode = 'ALL';
                    self.clientList = data.obj.clientList;
                    self.shadowClientList = data.obj.clientList;
 
                    self.shopList = data.obj.shopList;
-                   var allShop = new ClientDO();
+                   var allShop = new ShopDO();
                    allShop.shopCode = 'ALL';
-                   allShop.shopName = 'all';
+                   allShop.shopName = 'shop';
                    allShop.shopAddress = 'all';
                    data.obj.shopList.unshift(allShop);
                    self.shopCode = 'ALL';
                    self.shopList = data.obj.shopList;
                    self.shadowShopList = data.obj.shopList;
-               });
-               memberListService.getMembersForMgnt(0).then(function (data) {
-                   data.forEach(getShopName);
-                   self.memberList = data;
-                   self.shadowMemberList = data;
-                   console.log(self.memberList);
-                   self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+
+                   memberListService.getMembersForMgnt(0).then(function (data) {
+                      data.forEach(getShopName);
+                      self.memberList = data;
+                      self.shadowMemberList = data;
+                      self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+                   });
+
                });
         }else{
+            self.clientList = [];
+            self.clientList.push(clientInfoCacheService.get());
+            self.clientCode = clientInfoCacheService.get().clientCode;
+            self.shopList = shopListCacheService.get();
+            if(self.shopList.length == 1){
+                self.shopCode = self.shopList[0].shopCode;
+                currentShopCacheService.set(self.shopList[0]);
+            }else{
+                var allShop = new ShopDO();
+                allShop.shopCode = 'ALL';
+                allShop.shopName = 'shop';
+                allShop.shopAddress = 'all';
+                self.shopList.unshift(allShop);
+                self.shopCode = 'ALL';
+            }
+
+            memberListService.getMemberByClientCode(0).then(function (data) {
+               //console.log(data);
+               data.forEach(getShopName);
+               self.memberList = data;
+               self.shadowMemberList = data;
+               self.tableParams = new NgTableParams({}, { dataset: self.memberList});
+            });
 
         }
     }
@@ -107,8 +133,6 @@ angular.module('memberListModule')
 
 
     function getShopName(mem){
-        //console.log(mem);
-        //console.log(self.shopList);
         if(mem.shopCode){
             mem.shopName = self.shopList.find(i => i.shopCode == mem.shopCode).shopName;
         }

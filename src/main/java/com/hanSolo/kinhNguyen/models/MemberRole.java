@@ -39,6 +39,12 @@ public class MemberRole {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Override
+    public boolean equals(Object obj) {
+        MemberRole mr = (MemberRole) obj;
+        return this.getRole().equalsIgnoreCase(mr.getRole());
+    }
+
     public MemberRole() {
     }
 

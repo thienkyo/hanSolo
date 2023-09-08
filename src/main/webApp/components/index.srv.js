@@ -395,15 +395,16 @@ angular.module('app')
     }
 
 }])
+//deprecated : shopInfoCacheService
 .factory('shopInfoCacheService',['shopConfigService','cacheName','commonCacheService',
 function(shopConfigService,cacheName,commonCacheService) {
     var cacheNameStr = cacheName.shopInfoCacheName;
-	var shopInfoCacheService = {
+	var service = {
             setCurrentCache : setCurrentCache,
             getCurrentCache : getCurrentCache,
             clearCache : clearCache
 		}
-	return shopInfoCacheService;
+	return service;
 
 	function setCurrentCache(cacheData){
 	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
@@ -424,28 +425,28 @@ function(shopConfigService,cacheName,commonCacheService) {
         commonCacheService.clearCache(cacheNameStr);
     }
 
-}])
+}]) // deprecated
 .factory('clientInfoCacheService',['cacheName','commonCacheService',
-function(cacheName,commonCacheService) {
+    function(cacheName,commonCacheService) {
     var cacheNameStr = cacheName.clientInfoCacheName;
 
 	var service = {
-            setCurrentCache : setCurrentCache,
-            getCurrentCache : getCurrentCache,
-            clearCache : clearCache
+            set : set,
+            get : get,
+            clear : clear
 		}
 	return service;
 
-	function setCurrentCache(cacheData){
+	function set(cacheData){
 	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
 	}
 
-    function getCurrentCache(){
+    function get(){
         var clientInfo =  commonCacheService.getCurrentCache(cacheNameStr);
         return clientInfo;
     }
 
-    function clearCache(){
+    function clear(){
         commonCacheService.clearCache(cacheNameStr);
     }
 
@@ -480,4 +481,52 @@ function(opticShopOnlineService,cacheName,commonCacheService) {
     }
 
 }])
+.factory('shopListCacheService',['commonCacheService',
+    function(commonCacheService) {
+    var cacheNameStr = 'shopListCache';
+
+	var service = {
+            set : set,
+            get : get,
+            clear : clear
+		}
+	return service;
+
+	function set(cacheData){
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function get(){
+        return commonCacheService.getCurrentCache(cacheNameStr);;
+    }
+
+    function clear(){
+        commonCacheService.clearCache(cacheNameStr);
+    }
+
+}])
+.factory('currentShopCacheService',['commonCacheService',
+    function(commonCacheService) {
+    var cacheNameStr = 'currentShopCache';
+	var service = {
+            set : set,
+            get : get,
+            clear : clear
+		}
+	return service;
+
+	function set(cacheData){
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function get(){
+        return commonCacheService.getCurrentCache(cacheNameStr);;
+    }
+
+    function clear(){
+        commonCacheService.clearCache(cacheNameStr);
+    }
+
+}])
+
 ;

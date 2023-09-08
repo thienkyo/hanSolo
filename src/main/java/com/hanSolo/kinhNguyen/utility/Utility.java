@@ -30,7 +30,7 @@ public class Utility {
 
     final public static String LOGIN_DILIMITER = "d3m";
     final public static String DEFAULT_PW = "MTIzNDU2bHR0";//123456ltt
-    final public static String SECRET_KEY = "kinhNguyenSecretKey";
+    final public static String SECRET_KEY = "OSOKDMNT009";
     final public static String SECRET_KEY_API_SMS = "kinhNguyenAPI";
 
     final public static String MEMBER_ROLE = "MEMBER";
@@ -54,13 +54,13 @@ public class Utility {
     final public static String INSERT_SU_MSG = "INSERT_SU";
     final public static String UPDATE_SU_MSG = "UPDATE_SU";
 
-    final public static int ORDER_STATUS_ORDERED = 0;
+ /*   final public static int ORDER_STATUS_ORDERED = 0;
     final public static int ORDER_STATUS_PAID = 1;
     final public static int ORDER_STATUS_SHIPPED = 2;
     final public static int ORDER_STATUS_DONE = 3;
     final public static int ORDER_USER_DELETE = 4;
     final public static int ORDER_SHOP_DELETE = 5;
-    final public static int ORDER_NOT_BOOK = 6;
+    final public static int ORDER_NOT_BOOK = 6;*/
 
     // home page
     final public static int PRODUCT_PAGE_SIZE = 9;
@@ -78,7 +78,7 @@ public class Utility {
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
-    final public static int LOGIN_MEMBER_LIST_SIZE = 14;
+    final public static int LOGIN_MEMBER_LIST_SIZE = 15;
 
 
     final public static Date getCurrentDate() throws ParseException {

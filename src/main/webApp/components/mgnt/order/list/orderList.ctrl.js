@@ -3,11 +3,11 @@ angular.module('orderListModule')
 	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize',
 										 'memberService','orderListService','customerSourceService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
-										 'searchService','commonService',
+										 'searchService','commonService','clientService','clientInfoCacheService',
 	function($rootScope, $routeParams,$location,FirstTimeLoadSize,
 	        memberService,orderListService,customerSourceService,
 	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
-	        searchService,commonService) {
+	        searchService,commonService,clientService,clientInfoCacheService) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
@@ -26,6 +26,7 @@ angular.module('orderListModule')
     self.isSuperAdmin = memberService.isSuperAdmin();
     self.isAdmin = memberService.isAdmin();
     self.isLocalWeb = commonService.isLocalWeb();
+    self.isGodLike = memberService.isGodLike();
 
 	if(!memberService.isMod()){
 		$location.path('#/');
@@ -33,19 +34,27 @@ angular.module('orderListModule')
 	
 	self.amountList=AmountList;
 	self.amount = FirstTimeLoadSize;
-
+///////////////
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
       //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
     });
-
+/*
 	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
 		self.orderList = data;
 		self.orderList.forEach(calculateOrderTotal);
 		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
 		self.showLoadingText = false;
 	});
-	
+	*/
+	resetList();
+//////////
+
+
+    self.filterOrderAndShopByClientCode = function(clientCode){
+
+    }
+
 	self.updateOrderStatus = function(order){
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
 	    self.isUpdatingOrder = true;
@@ -112,10 +121,11 @@ angular.module('orderListModule')
        });
     }
 
-    self.calculateAmount = function(one) {
+    self.calculateAmount = function(oneT) {
         self.tempAmount = 0;
         self.tempFrameNumber=0;
         self.tempLensNumber=0;
+        var one = {...oneT};
         if(one.picked){
             self.tempArray.push(one);
             self.detailArray = self.detailArray.concat(one.orderDetails);
@@ -132,7 +142,7 @@ angular.module('orderListModule')
        buildText();
 
        // for one day report modal
-       self.tempForOneDayReport = one;
+       self.tempForOneDayReport = oneT;
     }
 
     self.getOneDayReport = function() {
@@ -366,6 +376,87 @@ angular.module('orderListModule')
         });
     }
 
+    self.cloneOrders = function() {
+        if(self.tempArray.length >0){
+             self.isButtonPressed=true;
+             self.tempArray.forEach((oneOrder, index, array) => {
+                oneOrder.id = 0;
+                oneOrder.gmtCreate = (new Date()).getTime();
+                oneOrder.gmtModify = (new Date()).getTime();
+                oneOrder.status = 0;
+                oneOrder.couponCode = '';
+                oneOrder.couponDiscount = 0;
+                oneOrder.cusSource = null;
+
+                oneOrder.orderDetails.forEach((oneDetail, index, array) => {
+                    oneDetail.id = 0;
+                    oneDetail.orderId = null;
+                    oneDetail.lensPrice = 0;
+                    oneDetail.lensDiscountAmount = 0;
+                    oneDetail.lensDiscountCode = '';
+                    oneDetail.lensNote = '';
+
+                    oneDetail.framePriceAtThatTime = 0;
+                    oneDetail.frameDiscountAmount = 0;
+                    oneDetail.frameDiscountCode = '';
+                    oneDetail.frameNote = '';
+                    oneDetail.gmtCreate = (new Date()).getTime();
+                    oneDetail.gmtModify = (new Date()).getTime();
+                });
+            });
+
+            orderListService.doRecovery(self.tempArray).then(function(data){
+
+               data.obj.forEach(calculateOrderTotal);
+               data.obj.forEach((oneOrder, index, array) => {
+                    self.orderList.unshift(oneOrder);
+               });
+               self.isButtonPressed = false;
+               self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+             //  $location.path('/mgnt/storeOrder/'+data.obj[0].id);
+            });
+        }
+    }
+
+    function resetList() {
+         self.clientCode = null;
+         self.shopCode = null;
+         if(self.isGodLike){
+            clientService.getClientShopList().then(function (data) {
+                   console.log(data.obj);
+
+                   var allClient = new ClientDO();
+                   allClient.clientCode = 'ALL';
+                   allClient.brandName = 'all';
+                   data.obj.clientList.unshift(allClient);
+                   self.clientCode = 'ALL';
+                   self.clientList = data.obj.clientList;
+                   self.shadowClientList = data.obj.clientList;
+
+                   self.shopList = data.obj.shopList;
+                   var allShop = new ClientDO();
+                   allShop.shopCode = 'ALL';
+                   allShop.shopName = 'shop';
+                   allShop.shopAddress = 'all';
+                   data.obj.shopList.unshift(allShop);
+                   self.shopCode = 'ALL';
+                   self.shopList = data.obj.shopList;
+                   self.shadowShopList = data.obj.shopList;
+               });
+
+               orderListService.getOrdersForMgnt(self.amount).then(function (data) {
+                   self.orderList = data;
+                   self.orderList.forEach(calculateOrderTotal);
+                   self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+                   engineerOrderList();
+               });
+
+
+        }else{
+
+        }
+    }
+    self.resetList = resetList;
 
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {
@@ -400,7 +491,6 @@ angular.module('orderListModule')
     self.getOrderForRecovery = function() {
 
         if(self.tempArray.length >0){
-            var cloneList  = self.tempArray.slice(0);
             self.tempArray.forEach((oneOrder, index, array) => {
                 oneOrder.id = 0;
                 oneOrder.orderDetails.forEach((oneDetail, index, array) => {
@@ -408,7 +498,6 @@ angular.module('orderListModule')
                     oneDetail.orderId = null;
                 });
             });
-
             self.orderListText = JSON.stringify(self.tempArray);
         }
 
@@ -426,7 +515,6 @@ angular.module('orderListModule')
                self.responseStr = data.replyStr;
                self.isRecoveringOrder = false;
            });
-
         }
     }
 

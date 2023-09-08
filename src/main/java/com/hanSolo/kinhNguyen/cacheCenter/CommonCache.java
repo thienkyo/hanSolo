@@ -1,12 +1,16 @@
 package com.hanSolo.kinhNguyen.cacheCenter;
 
+import com.hanSolo.kinhNguyen.facade.ShopInterface;
 import com.hanSolo.kinhNguyen.models.Member;
+import com.hanSolo.kinhNguyen.models.Shop;
 import com.hanSolo.kinhNguyen.utility.Utility;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CommonCache {
 
@@ -36,6 +40,8 @@ public class CommonCache {
      */
     public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
 
+    public static Map<String, List<ShopInterface>> CLIENT_SHOP_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
+
     static {
         try {
             LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
@@ -43,6 +49,19 @@ public class CommonCache {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkValidShop(String clientCode, String shopCode){
+        List<ShopInterface> shopList = CLIENT_SHOP_LIST.getOrDefault(clientCode, null);
+
+        if(shopList == null){
+            return false;
+        }
+
+        List<ShopInterface> filteredList = shopList.stream()
+                .filter(x -> x.getShopCode().contains(shopCode))
+                .collect(Collectors.toList());
+        return !filteredList.isEmpty();
     }
 
 }

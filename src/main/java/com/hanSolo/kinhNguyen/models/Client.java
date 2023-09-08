@@ -45,7 +45,27 @@ public class Client extends BaseModel {
     @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "biz_report_begin_month_number", columnDefinition = "integer default 0")
+    private Integer bizReportBeginMonthNumber;
 
+    @Column(name = "biz_report_end_month_number", columnDefinition = "integer default 1")
+    private Integer bizReportEndMonthNumber;
+
+    public Integer getBizReportEndMonthNumber() {
+        return bizReportEndMonthNumber;
+    }
+
+    public void setBizReportEndMonthNumber(Integer bizReportEndMonthNumber) {
+        this.bizReportEndMonthNumber = bizReportEndMonthNumber;
+    }
+
+    public Integer getBizReportBeginMonthNumber() {
+        return bizReportBeginMonthNumber;
+    }
+
+    public void setBizReportBeginMonthNumber(Integer bizReportBeginMonthNumber) {
+        this.bizReportBeginMonthNumber = bizReportBeginMonthNumber;
+    }
 
     public Date getEndDate() {
         return endDate;

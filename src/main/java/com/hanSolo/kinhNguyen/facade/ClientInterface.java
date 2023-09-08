@@ -6,4 +6,6 @@ public interface ClientInterface {
     String getAddress();
     String getClientCode();
     Boolean getIsUnlockSmsFeature();
+    Integer getBizReportBeginMonthNumber();
+    Integer getBizReportEndMonthNumber();
 }

@@ -27,7 +27,10 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
     @Modifying
     @Query("update Member m set m.status = ?1, m.gmtModify = ?2 where m.id = ?3")
     void updateStatusAndGmtModifyById(Boolean status, Date gmtModify, Integer id);
-
-
     boolean existsByPhoneAndPass(String phone, String pass);
+
+    //// client and shop
+    List<Member> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<Member> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+
 }

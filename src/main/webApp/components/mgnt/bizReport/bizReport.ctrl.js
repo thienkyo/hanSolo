@@ -1,9 +1,9 @@
 'use strict';
 angular.module('bizReportModule')
 .controller('bizReportController', ['$scope','$location','bizReportService','NgTableParams','memberService','ModifiedReportDO',
-                                    'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService','shopInfoCacheService',
+                                    'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService','clientInfoCacheService',
 function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedReportDO,
-            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,shopInfoCacheService) {
+            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,clientInfoCacheService) {
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new BizReportDO;
@@ -28,8 +28,8 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     ];
 
     // exclude some month.
-    self.beginMonthNumber = shopInfoCacheService.getCurrentCache().bizReportBeginMonthNumber;
-    self.endMonthNumber = shopInfoCacheService.getCurrentCache().bizReportEndMonthNumber;
+    self.beginMonthNumber = clientInfoCacheService.get().bizReportBeginMonthNumber;
+    self.endMonthNumber = clientInfoCacheService.get().bizReportEndMonthNumber;
 
     self.modifiedReports2 = [];// array of ModifiedReportDO
 

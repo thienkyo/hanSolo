@@ -4,12 +4,12 @@ angular.module('smsUserInfoModule')
 									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
-									'strategyService','StrategyDO','shopInfoCacheService',
+									'strategyService','StrategyDO','clientInfoCacheService',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
 	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
-	        strategyService,StrategyDO,shopInfoCacheService) {
+	        strategyService,StrategyDO,clientInfoCacheService) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
@@ -28,7 +28,7 @@ angular.module('smsUserInfoModule')
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
 
-	if(!memberService.isAdmin() || !shopInfoCacheService.getCurrentCache().isUnlockSmsFeature){
+	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
 	}
 

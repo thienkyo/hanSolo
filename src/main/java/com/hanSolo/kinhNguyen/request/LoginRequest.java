@@ -1,5 +1,8 @@
 package com.hanSolo.kinhNguyen.request;
 
+/**
+ *
+ */
 public class LoginRequest {
     private String loginStr;
 
