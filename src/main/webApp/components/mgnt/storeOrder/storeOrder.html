@@ -316,7 +316,7 @@ select, textarea {
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
-				<a ng-click="ctrl.remove1Tab($index)" href="" ng-show="$index > 0" class="btn btn-default check_out"
+				<a ng-click="ctrl.remove1Tab($index)" href="" class="btn btn-default check_out"
 				   style="margin: 4px 4px 4px 4px;float: right;">remove</a>
 				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out"
 				   style="margin: 4px 4px 4px 4px;float: right;">copy</a>
