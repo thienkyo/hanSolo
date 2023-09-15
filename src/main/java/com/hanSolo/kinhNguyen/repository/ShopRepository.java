@@ -13,8 +13,10 @@ public interface ShopRepository extends PagingAndSortingRepository<Shop, Integer
 
     List<ShopInterface> queryByClientCodeOrderByGmtCreateDesc(String clientCode);
 
-    List<ShopInterface> findByClientCodeAndShopCode(String clientCode, String shopCode);
+    List<Shop> findByClientCodeAndShopCode(String clientCode, String shopCode);
 
     List<ShopInterface> queryByOrderByGmtCreateAsc();
+
+    List<Shop> findByOrderByGmtCreateDesc();
 
 }

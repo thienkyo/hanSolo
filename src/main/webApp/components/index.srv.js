@@ -268,9 +268,19 @@ angular.module('app')
 .factory('searchService',['ajaxService', function(ajaxService) {
 	var searchService = {
 		    searchByNamePhone : searchByNamePhone,
+		    getOrderByNamePhone : getOrderByNamePhone,
 		    searchLensProduct : searchLensProduct
 		};
 	return searchService;
+
+	function getOrderByNamePhone(req){
+        if(req){
+            var url = "mgnt/orderByNamePhoneMngt";
+            return ajaxService.post(url,req,{}).then(function(response){
+                return response.data;
+            });
+        }
+    }
 
     function searchByNamePhone(searchText){
         if(searchText){
@@ -481,9 +491,13 @@ function(opticShopOnlineService,cacheName,commonCacheService) {
     }
 
 }])
-.factory('shopListCacheService',['commonCacheService',
-    function(commonCacheService) {
+.factory('shopListCacheService',['commonCacheService','ShopDO',
+    function(commonCacheService,ShopDO) {
     var cacheNameStr = 'shopListCache';
+    var allShop = new ShopDO();
+    allShop.shopCode = 'ALL';
+    allShop.shopName = 'shop';
+    allShop.shopAddress = 'all';
 
 	var service = {
             set : set,
@@ -493,6 +507,9 @@ function(opticShopOnlineService,cacheName,commonCacheService) {
 	return service;
 
 	function set(cacheData){
+	    if(cacheData.length >1){
+	        cacheData.unshift(allShop);
+	    }
 	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
 	}
 
@@ -528,5 +545,68 @@ function(opticShopOnlineService,cacheName,commonCacheService) {
     }
 
 }])
+.factory('clientListCacheService',['commonCacheService','ClientDO',
+   function(commonCacheService,ClientDO) {
+   var cacheNameStr = 'clientListCache';
+   var allClient = new ClientDO();
+   allClient.clientCode = 'ALL';
+   allClient.brandName = 'all client';
+
+	var service = {
+            set : set,
+            get : get,
+            clear : clear
+		}
+	return service;
+
+	function set(cacheData){
+	    if(cacheData.length >1){
+            cacheData.unshift(allClient);
+        }
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function get(){
+        return commonCacheService.getCurrentCache(cacheNameStr);;
+    }
+
+    function clear(){
+        commonCacheService.clearCache(cacheNameStr);
+    }
+}])
+
+
+.factory('oneClientShopListCacheService',['commonCacheService','ShopDO',
+    function(commonCacheService,ShopDO) {
+    var cacheNameStr = 'oneClientShopListCache';
+    var allShop = new ShopDO();
+    allShop.shopCode = 'ALL';
+    allShop.shopName = 'shop';
+    allShop.shopAddress = 'all';
+
+	var service = {
+            set : set,
+            get : get,
+            clear : clear
+		}
+	return service;
+
+	function set(cacheData){
+	    if(cacheData.length >1){
+	        cacheData.unshift(allShop);
+	    }
+	    commonCacheService.setCurrentCache(cacheNameStr, cacheData);
+	}
+
+    function get(){
+        return commonCacheService.getCurrentCache(cacheNameStr);;
+    }
+
+    function clear(){
+        commonCacheService.clearCache(cacheNameStr);
+    }
+
+}])
+
 
 ;

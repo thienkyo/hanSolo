@@ -35,7 +35,8 @@ var JobTypeList=[
 	{name : 'COMMON', value:'COMMON' },
     {name : 'SPECIFIC', value:'SPECIFIC' },
     {name : 'PARTICULAR', value:'PARTICULAR' },
-    {name : 'FASTSMS', value:'FASTSMS' }
+    {name : 'FASTSMS', value:'FASTSMS' },
+    {name : 'NOTIFYPAYMENT', value:'NOTIFYPAYMENT' }
 ];
 
 var AreaCodeList=[

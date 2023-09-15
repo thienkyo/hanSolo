@@ -1,15 +1,79 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.DTO.ClientShopList;
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
-import com.hanSolo.kinhNguyen.facade.ClientInterface;
-import com.hanSolo.kinhNguyen.models.*;
-import com.hanSolo.kinhNguyen.repository.*;
+import com.hanSolo.kinhNguyen.models.Article;
+import com.hanSolo.kinhNguyen.models.Banner;
+import com.hanSolo.kinhNguyen.models.BizExpense;
+import com.hanSolo.kinhNguyen.models.BizReport;
+import com.hanSolo.kinhNguyen.models.Category;
+import com.hanSolo.kinhNguyen.models.Client;
+import com.hanSolo.kinhNguyen.models.Contract;
+import com.hanSolo.kinhNguyen.models.Coupon;
+import com.hanSolo.kinhNguyen.models.CustomerSource;
+import com.hanSolo.kinhNguyen.models.CustomerSourceReport;
+import com.hanSolo.kinhNguyen.models.KeyManagement;
+import com.hanSolo.kinhNguyen.models.LensProduct;
+import com.hanSolo.kinhNguyen.models.Member;
+import com.hanSolo.kinhNguyen.models.MemberRole;
+import com.hanSolo.kinhNguyen.models.Order;
+import com.hanSolo.kinhNguyen.models.OrderDetail;
+import com.hanSolo.kinhNguyen.models.Product;
+import com.hanSolo.kinhNguyen.models.Salary;
+import com.hanSolo.kinhNguyen.models.Shop;
+import com.hanSolo.kinhNguyen.models.ShopConfig;
+import com.hanSolo.kinhNguyen.models.SmsJob;
+import com.hanSolo.kinhNguyen.models.SmsQueue;
+import com.hanSolo.kinhNguyen.models.SmsUserInfo;
+import com.hanSolo.kinhNguyen.models.SpecificSmsUserInfo;
+import com.hanSolo.kinhNguyen.models.Strategy;
+import com.hanSolo.kinhNguyen.models.Supplier;
+import com.hanSolo.kinhNguyen.models.UsedCoupons;
+import com.hanSolo.kinhNguyen.repository.ArticleRepository;
+import com.hanSolo.kinhNguyen.repository.BannerRepository;
+import com.hanSolo.kinhNguyen.repository.BizExpenseRepository;
+import com.hanSolo.kinhNguyen.repository.BizReportRepository;
+import com.hanSolo.kinhNguyen.repository.CategoryRepository;
+import com.hanSolo.kinhNguyen.repository.ClientRepository;
+import com.hanSolo.kinhNguyen.repository.ContractRepository;
+import com.hanSolo.kinhNguyen.repository.CouponRepository;
+import com.hanSolo.kinhNguyen.repository.CustomerSourceReportRepository;
+import com.hanSolo.kinhNguyen.repository.CustomerSourceRepository;
+import com.hanSolo.kinhNguyen.repository.KeyManagementRepository;
+import com.hanSolo.kinhNguyen.repository.LensProductRepository;
+import com.hanSolo.kinhNguyen.repository.MemberRepository;
+import com.hanSolo.kinhNguyen.repository.MemberRoleRepository;
+import com.hanSolo.kinhNguyen.repository.OrderDetailRepository;
+import com.hanSolo.kinhNguyen.repository.OrderRepository;
+import com.hanSolo.kinhNguyen.repository.ProductRepository;
+import com.hanSolo.kinhNguyen.repository.SalaryRepository;
+import com.hanSolo.kinhNguyen.repository.ShopConfigRepository;
+import com.hanSolo.kinhNguyen.repository.ShopRepository;
+import com.hanSolo.kinhNguyen.repository.SmsJobRepository;
+import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
+import com.hanSolo.kinhNguyen.repository.SmsUserInfoRepository;
+import com.hanSolo.kinhNguyen.repository.SpecificSmsUserInfoRepository;
+import com.hanSolo.kinhNguyen.repository.StrategyRepository;
+import com.hanSolo.kinhNguyen.repository.SupplierRepository;
+import com.hanSolo.kinhNguyen.repository.UsedCouponsRepository;
 import com.hanSolo.kinhNguyen.request.QueryByClientShopAmountRequest;
-import com.hanSolo.kinhNguyen.response.*;
+import com.hanSolo.kinhNguyen.response.BizReportResponse;
+import com.hanSolo.kinhNguyen.response.CategoryResponse;
+import com.hanSolo.kinhNguyen.response.CouponResponse;
+import com.hanSolo.kinhNguyen.response.CustomerSourceResponse;
+import com.hanSolo.kinhNguyen.response.GeneralResponse;
+import com.hanSolo.kinhNguyen.response.GenericResponse;
+import com.hanSolo.kinhNguyen.response.KeyManagementResponse;
+import com.hanSolo.kinhNguyen.response.SmsJobResponse;
+import com.hanSolo.kinhNguyen.response.SmsQueueResponse;
+import com.hanSolo.kinhNguyen.response.SmsUserInfoResponse;
+import com.hanSolo.kinhNguyen.response.SpecificSmsUserInfoResponse;
+import com.hanSolo.kinhNguyen.response.SupplierResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,9 +81,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +129,8 @@ public class ManagementController {
     @Autowired private StrategyRepository strategyRepo;
     @Autowired private ShopConfigRepository shopConfigRepo;
     @Autowired private MemberRoleRepository memberRoleRepo;
+    @Autowired private ShopRepository shopRepo;
+    @Autowired private ClientRepository clientRepo;
 
     @Autowired private Environment env;
 
@@ -267,6 +338,41 @@ public class ManagementController {
         return memberList;
     }
 
+    @RequestMapping(value = "getMemberByTerms", method = RequestMethod.POST)
+    public List<Member> getMemberByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+        List<Member> memberList = null;
+        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL")) || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
+                memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                memberList =  memberRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                memberList =  memberRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
+        }else{
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) && req.getClientCode().equalsIgnoreCase("ALL")){
+                memberList =  memberRepo.findAllByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                memberList =  memberRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                memberList =  memberRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
+        }
+        memberList.forEach(item -> item.setPass(""));
+        return memberList;
+
+    }
+
+
+
+
+
+
+
+
+
+
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GeneralResponse<String> upsertMember(@RequestBody final Member member,final HttpServletRequest request)
@@ -360,6 +466,36 @@ public class ManagementController {
         return new GeneralResponse("delete_memberRole_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    //////////////////////////////client shop section/////////////////////////////
+    // for not GODLIKE
+    @RequestMapping(value = "getClientShopList", method = RequestMethod.GET)
+    public GeneralResponse<ClientShopList> getClientShopList(final HttpServletRequest request) {
+
+        final Claims claims = (Claims) request.getAttribute("claims");
+        String shopCode = (String) claims.get("shopCode");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        ClientShopList csl = new ClientShopList();
+        List<Shop> shopList;
+        List<Shop> clientShopList = shopRepo.findByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
+
+        List<Client> clientList =  clientRepo.findByClientCode(clientInfo.get("clientCode"));
+        if(shopCode.equals("ALL")){
+            shopList = clientShopList;
+            if(CommonCache.CLIENT_SHOP_LIST.size() == Utility.LOGIN_MEMBER_LIST_SIZE){
+                CommonCache.CLIENT_SHOP_LIST.clear();
+            }
+            CommonCache.CLIENT_SHOP_LIST.put(clientInfo.get("clientCode"),shopList);
+        }else{
+            shopList = shopRepo.findByClientCodeAndShopCode(clientInfo.get("clientCode"), shopCode);
+        }
+
+        csl.setClientList(clientList);
+        csl.setShopList(shopList);
+        csl.setOneClientShopList(clientShopList);
+
+        return new GeneralResponse(csl,Utility.SUCCESS_ERRORCODE,"success");
+    }
 
     //////////////////////////// Coupon section ///////////////////////////////
     @SuppressWarnings("unchecked")
@@ -590,14 +726,28 @@ public class ManagementController {
         return orderList;
     }
 
-    //// TBC
+    ////
     @RequestMapping(value = "getOrdersByTerms", method = RequestMethod.POST)
     public List<Order> getOrdersByTerms(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
-        List<Order> orderList ;
+        List<Order> orderList = null;
         if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
-            orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
+                orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                orderList =  orderRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                orderList =  orderRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
         }else{
-            orderList = orderRepo.findAllByOrderByGmtCreateDesc();
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL") || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ) ){
+                orderList =  orderRepo.findAllByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                orderList =  orderRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                orderList =  orderRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
         }
         return orderList;
     }
@@ -609,16 +759,27 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
-    public Order getOrderById(@PathVariable final int orderId) throws ServletException {
-        Order or = new Order();
-        if(orderRepo.findById(orderId).isPresent()){
-            or = orderRepo.findById(orderId).get();
+    public GeneralResponse<Order> getOrderById(@PathVariable final int orderId,final HttpServletRequest request) throws ServletException {
+
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        Optional<Order> orOpt;
+        if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) ){
+            orOpt = orderRepo.findById(orderId);
+        }else{
+            orOpt = orderRepo.findByIdAndClientCode(orderId,clientInfo.get("clientCode"));
         }
-        return	or;
+
+        if(orOpt.isPresent()){
+            return new GeneralResponse(orOpt.get(),Utility.SUCCESS_ERRORCODE,"Success");
+        }
+
+        return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
     }
 
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
-    public GeneralResponse<String> deleteOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
+    public GeneralResponse<String> deleteOrder(@RequestBody final Order order, final HttpServletRequest request) {
         if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
             return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
@@ -687,9 +848,20 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "getOrderHistory/{phone}", method = RequestMethod.GET)
-    public List<OrderDetail> getOrderHistory(@PathVariable final String phone) throws ServletException {
-        List<Order> orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(phone);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByPhoneContainsOrderByGmtCreateDesc(phone);
+    public List<OrderDetail> getOrderHistory(@PathVariable final String phone, final HttpServletRequest request) {
+        List<Order> orderList;
+        List<OrderDetail> orderDetailList;
+
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        if(Utility.onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(phone);
+            orderDetailList = orderDetailRepo.findFirst40ByPhoneContainsOrderByGmtCreateDesc(phone);
+        }else{
+            orderList = orderRepo.findFirst40ByClientCodeAndShippingPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), phone);
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), phone);
+        }
 
         List<OrderDetail> result = new ArrayList<>();
 
@@ -982,9 +1154,8 @@ public class ManagementController {
     public List<Salary> getAllSalaryOnePerson(@PathVariable final int contractId, final HttpServletRequest request) {
 
         List<Salary> salaryList = new ArrayList<>();
-        final Claims claims = (Claims) request.getAttribute("claims");
-        if(((List<String>) claims.get("roles")).contains(Utility.SUPERADMIN_ROLE)){
-           return salaryRepo.findByContractIdOrderByYearDescMonthDesc(String.valueOf(contractId));
+        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE) ){
+            return salaryRepo.findByContractIdOrderByYearDescMonthDesc(String.valueOf(contractId));
         }
 
         return salaryList;
@@ -1036,6 +1207,103 @@ public class ManagementController {
     public List<LensProduct> searchLensProduct(@PathVariable final String keySearch) {
         return  lensProductRepo.findFirst50ByLensNoteContainsOrderByGmtCreateDesc(keySearch);
     }
+
+
+
+
+
+    @RequestMapping(value = "getOrderByName", method = RequestMethod.POST)
+    public List<Order> getOrderByName(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+        String keySearch = req.getGeneralPurpose();
+        List<Order> orderList ;
+        List<OrderDetail> orderDetailList ;
+
+        if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
+
+            orderList =  orderRepo.findFirst40ByShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
+
+        }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+            orderList =  orderRepo.findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(req.getClientCode(), keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndNameContainsIgnoreCaseOrderByGmtCreateDesc(req.getClientCode(), keySearch);
+
+        }else{
+            orderList =  orderRepo.findFirst40ByClientCodeAndShopCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode(), keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndShopCodeAndNameContainsIgnoreCaseOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode(), keySearch);
+        }
+
+        return orderListBuilder(orderList, orderDetailList);
+    }
+
+    @RequestMapping(value = "getOrderByPhone", method = RequestMethod.POST)
+    public List<Order> getOrderByPhone(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        String keySearch = req.getGeneralPurpose();
+        List<Order> orderList ;
+        List<OrderDetail> orderDetailList ;
+
+        if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
+
+            orderList =  orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByPhoneContainsOrderByGmtCreateDesc(keySearch);
+
+        }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+            orderList =  orderRepo.findFirst40ByClientCodeAndShippingPhoneContainsOrderByGmtCreateDesc(req.getClientCode(), keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndPhoneContainsOrderByGmtCreateDesc(req.getClientCode(), keySearch);
+
+        }else{
+            orderList =  orderRepo.findFirst40ByClientCodeAndShopCodeAndShippingPhoneContainsOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode(), keySearch);
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndShopCodeAndPhoneContainsOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode(), keySearch);
+        }
+
+        return orderListBuilder(orderList, orderDetailList);
+    }
+
+
+    @RequestMapping(value = "orderByNamePhoneMngt", method = RequestMethod.POST)
+    public List<Order> orderByNamePhoneMngt(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+        String regex = "[0-9 ]+";
+        String keySearch = req.getGeneralPurpose();
+        if(keySearch.matches(regex)){
+            keySearch  = keySearch.replace(" ","");
+            req.setGeneralPurpose(keySearch);
+            return getOrderByPhone(req, request);
+        }else{
+            return getOrderByName(req, request);
+        }
+    }
+
+    private List<Order> orderListBuilder(List<Order> orderList, List<OrderDetail> orderDetailList){
+        List<Order> resultList = new ArrayList<>();
+        for(Order or : orderList){
+            if(resultList.contains(or)){
+                continue;
+            }
+            resultList.add(or);
+        }
+        for (OrderDetail orderDetail : orderDetailList){
+            Order or = orderBuilder(orderDetail.getOrderId(),orderDetail.getName(),orderDetail.getPhone(),orderDetail.getAddress(),orderDetail.getGmtCreate());
+            if(resultList.contains(or)){
+                continue;
+            }
+            or = orderRepo.findById(orderDetail.getOrderId()).get();
+            resultList.add(or);
+        }
+        return resultList;
+    }
+
+    private Order orderBuilder(Integer orderId, String name, String phone, String address, Date gmtCreate){
+        Order or = new Order(orderId,name,phone,address,gmtCreate,"STORE");
+        or.getOrderDetails().add(new OrderDetail(name,phone,address,gmtCreate));
+        return or;
+    }
+
+
+
+
+
+
 
     //////////////////////////// lens product section///////////////////////////////
     @RequestMapping(value = "getlensProductForMgnt/{amount}", method = RequestMethod.GET)

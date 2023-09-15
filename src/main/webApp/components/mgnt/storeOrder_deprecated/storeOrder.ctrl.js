@@ -488,7 +488,7 @@ angular.module('storeOrderModule')
     if($routeParams.orderId > 0){
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
-                self.theOrder = data;
+                self.theOrder = data.obj;
                 self.theOrder.currentCouponCode = self.theOrder.couponCode;
                 if(self.theOrder.orderDetails.length > 0){
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);

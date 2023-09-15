@@ -30,7 +30,14 @@ public interface MemberRepository extends CrudRepository<Member, Integer> {
     boolean existsByPhoneAndPass(String phone, String pass);
 
     //// client and shop
+    List<Member> findAllByOrderByGmtCreateDesc();
+
     List<Member> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
     List<Member> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+
+    List<Member> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+    List<Member> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+
+
 
 }

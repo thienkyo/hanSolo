@@ -40,7 +40,7 @@ public class CommonCache {
      */
     public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
 
-    public static Map<String, List<ShopInterface>> CLIENT_SHOP_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
+    public static Map<String, List<Shop>> CLIENT_SHOP_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
 
     static {
         try {
@@ -52,13 +52,13 @@ public class CommonCache {
     }
 
     public boolean checkValidShop(String clientCode, String shopCode){
-        List<ShopInterface> shopList = CLIENT_SHOP_LIST.getOrDefault(clientCode, null);
+        List<Shop> shopList = CLIENT_SHOP_LIST.getOrDefault(clientCode, null);
 
         if(shopList == null){
             return false;
         }
 
-        List<ShopInterface> filteredList = shopList.stream()
+        List<Shop> filteredList = shopList.stream()
                 .filter(x -> x.getShopCode().contains(shopCode))
                 .collect(Collectors.toList());
         return !filteredList.isEmpty();

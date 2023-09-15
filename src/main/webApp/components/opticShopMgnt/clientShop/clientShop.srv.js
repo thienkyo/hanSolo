@@ -5,9 +5,17 @@ angular.module('clientShopModule')
 				getAll : getAll,
 				upsert : upsert,
 				deleteOne : deleteOne,
-				getClientShopList : getClientShopList
+				getClientShopList : getClientShopList,
+				getClientShopList2 : getClientShopList2
 			};
 	return mainService;
+
+    function getClientShopList2(){
+        var url = "mgnt/getClientShopList/";
+        return ajaxService.get(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
     function getClientShopList(){
         var url = "Hmgnt/getClientShopList/";

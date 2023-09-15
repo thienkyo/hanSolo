@@ -9,6 +9,17 @@ public class ClientShopList {
     private List<Client> clientList;
     private List<Shop> shopList;
 
+    public List<Shop> getOneClientShopList() {
+        return oneClientShopList;
+    }
+
+    public void setOneClientShopList(List<Shop> oneClientShopList) {
+        this.oneClientShopList = oneClientShopList;
+    }
+
+    private List<Shop> oneClientShopList;
+
+
     public List<Client> getClientList() {
         return clientList;
     }

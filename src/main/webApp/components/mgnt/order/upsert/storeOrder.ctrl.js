@@ -4,12 +4,12 @@ angular.module('storeOrderModule')
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
 										 'orderCacheService','commonService','$route','shopListCacheService','clientService',
-										 'clientInfoCacheService','currentShopCacheService',
+										 'clientInfoCacheService','currentShopCacheService','clientListCacheService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
 	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
 	            orderCacheService,commonService,$route,shopListCacheService,clientService,
-	            clientInfoCacheService,currentShopCacheService) {
+	            clientInfoCacheService,currentShopCacheService,clientListCacheService) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -145,9 +145,14 @@ angular.module('storeOrderModule')
 
     self.dummyData =function() {
 
+        var first = ['Nguyễn','Trần','Lê','Phạm','Hoàng','Võ','Phan','Trương','Bùi','Đặng'];
+        var middle = ['Văn','Hữu','Thị','Minh','Thuỵ','Võ','Uyên','Ngọc','Bùi','Đặng'];
+        var middle2 = ['Bảo','Khánh','Thị','Trọng','Phúc','Quang','Phú','Thái','Bùi','Tài'];
+        var last = ['Thiện','Linh','Khâm','Thịnh','Như','Thảo','Lan','Tiên','Mẫn','Lệ'];
         //var dummyData = new OrderDO;
         self.theOrder.shippingAddress = '22/1 đường xx, phường 21, quận 3, Tp hcm';
-        self.theOrder.shippingName = 'Dương Trùng Dương';
+        self.theOrder.shippingName = first[Math.floor(Math.random() * 10)] + ' ' +middle[Math.floor(Math.random() * 10)] + ' ' +
+                                     middle2[Math.floor(Math.random() * 10)] + ' ' +last[Math.floor(Math.random() * 10)] ;
         self.theOrder.shippingPhone ='09123456789';
         self.theOrder.gender = true;
 
@@ -192,8 +197,6 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].recommendedSpectacles = '';
         self.theOrder.orderDetails[0].orderDetailNote = '';
 
-        console.log(self.theOrder);
-        console.log(self.theOrder);
     }
 
     self.searchTextChange =function(text) {
@@ -380,10 +383,20 @@ angular.module('storeOrderModule')
                     self.calculateOrderTotal();
                     orderCacheService.addOneOrder(self.theOrder);
                     self.newOrderId = self.theOrder.id;
+
+                    if(self.isGodLike){
+                        var shop = self.shadowShopList.find(i => i.shopCode == self.theOrder.shopCode );
+                        currentShopCacheService.set(shop);
+                        var client = self.clientList.find(i => i.clientCode == self.theOrder.clientCode );
+                        clientInfoCacheService.set(client);
+                    }
+
                     $location.path('/mgnt/storeOrder/'+data.obj.id);
-                    console.log(self.theOrder);
+
                 });
             }
+
+
         }else{
             self.isErrorMsg ='Cần nhập tên/số điện thoại(tối thiểu 3 số), chọn shop.';
         }
@@ -506,47 +519,53 @@ angular.module('storeOrderModule')
     //self.theOrder = new OrderDO;
 	 // load product
 
-
 	if(self.isGodLike){ // only godlike get new data from db.
-        clientService.getClientShopList().then(function (data) {
-            self.clientList = data.obj.clientList;
-            self.shadowClientList = data.obj.clientList;
-
-            self.shopList = data.obj.shopList;
-            self.shadowShopList = data.obj.shopList;
-        });
+	     self.clientList = clientListCacheService.get();
+	     self.shadowClientList = clientListCacheService.get();;
+         self.shopList = shopListCacheService.get();
+         self.shadowShopList = shopListCacheService.get();
     }
-
 
     if($routeParams.orderId > 0){
         orderListService.getOrderById($routeParams.orderId)
             .then(function (data) {
-                self.theOrder = data;
-                if(!self.theOrder.clientCode){
-                    self.theOrder.clientCode = clientInfoCacheService.get().clientCode;
-                }
+                console.log(data);
+                self.theOrder = data.obj;
 
-                self.theOrder.currentCouponCode = self.theOrder.couponCode;
-                if(self.theOrder.orderDetails.length > 0){
-                    self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
-                    self.calculateOrderTotal(self.theOrder);
-                }
+                if(self.theOrder){
+                    if(!self.theOrder.clientCode){
+                        self.theOrder.clientCode = clientInfoCacheService.get().clientCode;
+                    }
 
-                // load jobid for sms send
-                if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){
-                    var smsJobOption = self.smsJobList.find(i => i.id == self.theOrder.specificJobId);
-                    if(smsJobOption){
-                        self.selectedJob = smsJobOption;
+                    if(self.isGodLike){
+                        self.shopList = self.shadowShopList.filter(i => i.clientCode == self.theOrder.clientCode );
+                    }
+
+                    self.theOrder.currentCouponCode = self.theOrder.couponCode;
+                    if(self.theOrder.orderDetails.length > 0){
+                        self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
+                        self.calculateOrderTotal(self.theOrder);
+                    }
+
+                    // load jobid for sms send
+                    if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){
+                        var smsJobOption = self.smsJobList.find(i => i.id == self.theOrder.specificJobId);
+                        if(smsJobOption){
+                            self.selectedJob = smsJobOption;
+                        }else{
+                            var tempSmsJob = new SmsJobDO();
+                            tempSmsJob.id = self.theOrder.specificJobId;
+                            tempSmsJob.jobName = self.theOrder.specificJobName;
+                            self.smsJobList.unshift(tempSmsJob);
+                            self.selectedJob = tempSmsJob;
+                        }
                     }else{
-                        var tempSmsJob = new SmsJobDO();
-                        tempSmsJob.id = self.theOrder.specificJobId;
-                        tempSmsJob.jobName = self.theOrder.specificJobName;
-                        self.smsJobList.unshift(tempSmsJob);
-                        self.selectedJob = tempSmsJob;
+                        self.selectedJob = firstSmsJob;
                     }
                 }else{
-                    self.selectedJob = firstSmsJob;
+                    $location.path('/mgnt/storeOrder/0');
                 }
+
         });
     }else{
         self.theOrder = new OrderDO;
@@ -556,14 +575,17 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].gender=true;
         self.selectedJob = firstSmsJob;
         self.copyActive = true;
+
+        if(!self.isGodLike){
+            self.theOrder.clientCode = clientInfoCacheService.get().clientCode;
+            if(currentShopCacheService.get()){
+                self.theOrder.shopCode = currentShopCacheService.get().shopCode;
+            }
+        }
+        console.log(self.theOrder);
     }
 
-    if(!self.isGodLike){
-        self.theOrder.clientCode = clientInfoCacheService.get().clientCode;
-        if(currentShopCacheService.get()){
-            self.theOrder.shopCode = currentShopCacheService.get().shopCode;
-        }
-    }
+
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
 

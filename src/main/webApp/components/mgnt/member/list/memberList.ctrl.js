@@ -3,11 +3,11 @@ angular.module('memberListModule')
 	.controller('memberListController',['$rootScope','$location','memberService','FirstTimeLoadSize','RoleList',
 										 'memberListService','NgTableParams','CommonStatusArray','AmountList',
 										 'MemberRoleDO','clientService','ClientDO','ShopDO','clientInfoCacheService',
-										 'shopListCacheService','currentShopCacheService',
+										 'shopListCacheService','currentShopCacheService','clientListCacheService',
 	function($rootScope,$location,memberService,FirstTimeLoadSize,RoleList,
 	        memberListService,NgTableParams,CommonStatusArray,AmountList,
 	        MemberRoleDO,clientService,ClientDO,ShopDO,clientInfoCacheService,
-	        shopListCacheService,currentShopCacheService
+	        shopListCacheService,currentShopCacheService,clientListCacheService
 	        ){
 	var self = this;
 	self.statusList = CommonStatusArray;
@@ -28,7 +28,10 @@ angular.module('memberListModule')
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.amountList=AmountList;
 	self.roleList=RoleList;
-	self.amount = FirstTimeLoadSize;
+	// self.amount = FirstTimeLoadSize;
+
+	self.queryRequest={};
+    self.queryRequest.amount = 0;
 
 	self.isGodLike = memberService.isGodLike();
 	resetList();
@@ -41,86 +44,60 @@ angular.module('memberListModule')
 
     self.addMember = function(){
         self.theMember = new MemberDO();
-        self.clientList2 =  [...self.shadowClientList];
+        self.clientList2 =  [...self.clientList];
     }
 
     self.setTheMember = function(mem){
         self.theMember = mem;
         self.responseStr = false;
         self.responseStrFail = false;
-        self.clientList2 =  [...self.shadowClientList];
-        self.shopList2 = self.shadowShopList.filter(i => i.clientCode == mem.clientCode || i.shopCode == 'ALL' );
+        self.clientList2 =  [...self.clientList];
+        self.shopList2 = self.shopList.filter(i => i.clientCode == mem.clientCode || i.shopCode == 'ALL' );
     }
 
 
 	self.filterMemberAndShopByClientCode = function(clientCode){
-
 	   if(clientCode == 'ALL'){
-	        self.shopList = self.shadowShopList;
-	        self.shopCode = 'ALL';
+	        self.shopList = self.shopList;
+	        self.queryRequest.shopCode = 'ALL';
 	        self.memberList = self.shadowMemberList;
 	   }else{
 	        self.shopList = self.shadowShopList.filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
             self.memberList = self.shadowMemberList.filter(i => i.clientCode == clientCode);
-            self.shopCode = 'ALL';
+            self.queryRequest.shopCode = 'ALL';
 	   }
 	   self.tableParams = new NgTableParams({}, { dataset: self.memberList});
-
-
     }
 
     function resetList() {
-         self.clientCode = null;
-         self.shopCode = null;
+         self.queryRequest.clientCode = null;
+         self.queryRequest.shopCode = null;
+         self.clientList = clientListCacheService.get();
+         self.shopList = shopListCacheService.get();
+         self.shadowShopList = self.shopList;
          if(self.isGodLike){
-            clientService.getClientShopList().then(function (data) {
-                   console.log(data.obj);
+               self.queryRequest.clientCode = 'ALL';
+               self.queryRequest.shopCode = 'ALL';
 
-                   var allClient = new ClientDO();
-                   allClient.clientCode = 'ALL';
-                   allClient.brandName = 'all client';
-                   data.obj.clientList.unshift(allClient);
-                   self.clientCode = 'ALL';
-                   self.clientList = data.obj.clientList;
-                   self.shadowClientList = data.obj.clientList;
-
-                   self.shopList = data.obj.shopList;
-                   var allShop = new ShopDO();
-                   allShop.shopCode = 'ALL';
-                   allShop.shopName = 'shop';
-                   allShop.shopAddress = 'all';
-                   data.obj.shopList.unshift(allShop);
-                   self.shopCode = 'ALL';
-                   self.shopList = data.obj.shopList;
-                   self.shadowShopList = data.obj.shopList;
-
-                   memberListService.getMembersForMgnt(0).then(function (data) {
-                      data.forEach(getShopName);
-                      self.memberList = data;
-                      self.shadowMemberList = data;
-                      self.tableParams = new NgTableParams({}, { dataset: self.memberList});
-                   });
-
+               memberListService.getMemberByTerms(self.queryRequest).then(function (data) {
+                  data.forEach(getShopName);
+                  self.memberList = data;
+                  self.shadowMemberList = data;
+                  self.tableParams = new NgTableParams({}, { dataset: self.memberList});
                });
+
         }else{
-            self.clientList = [];
-            self.clientList.push(clientInfoCacheService.get());
-            self.clientCode = clientInfoCacheService.get().clientCode;
-            self.shopList = shopListCacheService.get();
+            //self.clientList = clientListCacheService.get();
+            self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
+            //self.shopList = shopListCacheService.get();
             if(self.shopList.length == 1){
-                self.shopCode = self.shopList[0].shopCode;
-                currentShopCacheService.set(self.shopList[0]);
+                self.queryRequest.shopCode = self.shopList[0].shopCode;
+                //currentShopCacheService.set(self.shopList[0]);
             }else{
-                var allShop = new ShopDO();
-                allShop.shopCode = 'ALL';
-                allShop.shopName = 'shop';
-                allShop.shopAddress = 'all';
-                self.shopList.unshift(allShop);
-                self.shopCode = 'ALL';
+                self.queryRequest.shopCode = 'ALL';
             }
 
-            memberListService.getMemberByClientCode(0).then(function (data) {
-               //console.log(data);
+            memberListService.getMemberByTerms(self.queryRequest).then(function (data) {
                data.forEach(getShopName);
                self.memberList = data;
                self.shadowMemberList = data;
@@ -140,14 +117,11 @@ angular.module('memberListModule')
     }
 
     self.filterMemberByShopCode = function(){
-       console.log(self.shopCode);
-
-       if(self.shopCode != 'ALL'){
-           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.clientCode && i.shopCode == self.shopCode);
+       if(self.queryRequest.shopCode != 'ALL'){
+           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.queryRequest.clientCode && i.shopCode == self.queryRequest.shopCode);
        }else{
-           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.clientCode);
+           self.memberList = self.shadowMemberList.filter(i => i.clientCode == self.queryRequest.clientCode);
        }
-
        self.tableParams = new NgTableParams({}, { dataset: self.memberList});
     }
 
@@ -202,18 +176,19 @@ angular.module('memberListModule')
 	    }*/
 		self.responseStr = false;
 		self.responseStrFail = false;
-		if(mem.clientCode){
+		if(mem.clientCode && mem.shopCode && mem.phone && mem.fullName){
 		    memberListService.upsertMemberByAdmin(mem).then(function (data) {
                 self.responseStr = data.obj;
                 console.log(data);
 
                 if(mem.id == 0){
                     self.memberList.unshift(data.obj);
+                    self.tableParams = new NgTableParams({}, { dataset: self.memberList});
                 }
 
             });
 		}else{
-		    self.responseStrFail = 'empty client code.';
+		    self.responseStrFail = 'empty name/phone/client/shop code.';
 		}
 
 	}
@@ -224,8 +199,9 @@ angular.module('memberListModule')
 		self.theMember = {};
 	}
 
-    self.closeAlert = function(index) {
+    self.closeAlert = function() {
         self.responseStr = false;
+        self.responseStrFail = false;
     };
 	
 	self.setStyle = function(status){

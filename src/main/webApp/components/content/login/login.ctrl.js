@@ -23,21 +23,9 @@ angular.module('loginModule')
                     self.member.roles = a.roles;
                     self.member.name = a.name;
                     self.member.phone = a.sub;
+                    self.member.shopCode = a.shopCode;
                     memberService.setCurrentMember(self.member);
-                    clientInfoCacheService.set(a.clientInfo);
-                    if(a.shopList){
-                        shopListCacheService.set(a.shopList);
-                        if(a.shopList.length == 1){
-                            currentShopCacheService.set(a.shopList[0]);
-                        }else{
-                            if(currentShopCacheService.get()) {
-                                if(!a.shopList.some(e => e.shopCode === currentShopCacheService.get().shopCode)){
-                                    currentShopCacheService.clear();
-                                }
-                            }
-                        }
 
-                    }
                     console.log(a);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');

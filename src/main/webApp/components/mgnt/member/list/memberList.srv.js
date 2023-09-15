@@ -4,6 +4,7 @@ angular.module('memberListModule')
 		var service = {
 			getMembersForMgnt : getMembersForMgnt,
 			getMemberByClientCode : getMemberByClientCode,
+			getMemberByTerms : getMemberByTerms,
 			upsert : upsert,
 			upsertMemberByAdmin : upsertMemberByAdmin,
 			insertByClient : insertByClient,
@@ -12,7 +13,15 @@ angular.module('memberListModule')
 			upsertRole : upsertRole
 			};
 	return service;
-	
+
+
+	function getMemberByTerms(req){
+        var url = "mgnt/getMemberByTerms";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
+
 	function getMembersForMgnt(amount){
 		var url = "mgnt/getMemberForMgnt/"+amount;
 		return ajaxService.get(url,null,{}).then(function(response){

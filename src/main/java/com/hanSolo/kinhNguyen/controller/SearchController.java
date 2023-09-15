@@ -4,14 +4,12 @@ import com.hanSolo.kinhNguyen.facade.ProductInterface;
 import com.hanSolo.kinhNguyen.models.Article;
 import com.hanSolo.kinhNguyen.models.Order;
 import com.hanSolo.kinhNguyen.models.OrderDetail;
-import com.hanSolo.kinhNguyen.models.Product;
 import com.hanSolo.kinhNguyen.repository.ArticleRepository;
 import com.hanSolo.kinhNguyen.repository.OrderDetailRepository;
 import com.hanSolo.kinhNguyen.repository.OrderRepository;
 import com.hanSolo.kinhNguyen.repository.ProductRepository;
 import com.hanSolo.kinhNguyen.response.SearchResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +59,7 @@ public class SearchController {
     @RequestMapping("orderMngt/{keySearch}")
     public List<Order> orderMngt(@PathVariable final String keySearch) {
         List<Order> orderList = orderRepo.findFirst40ByShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst40ByNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
 
         return orderListBuilder(orderList, orderDetailList);
     }
@@ -69,7 +67,7 @@ public class SearchController {
     @RequestMapping("orderByPhoneMngt/{keySearch}")
     public List<Order> orderByPhoneMngt(@PathVariable final String keySearch) {
         List<Order> orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(keySearch);
-        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst30ByPhoneContainsOrderByGmtCreateDesc(keySearch);
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst40ByPhoneContainsOrderByGmtCreateDesc(keySearch);
 
         return orderListBuilder(orderList, orderDetailList);
     }

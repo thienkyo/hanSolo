@@ -1,11 +1,13 @@
 package com.hanSolo.kinhNguyen.utility;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -206,5 +208,20 @@ public class Utility {
         }
 
         return new ResponseEntity<>(fileNameStr.toString(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * ex: onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)
+     * if true: allow continuing.
+     * @param request
+     * @param role
+     * @return
+     */
+    final public static boolean onlyAllowThisRole(final HttpServletRequest request, String role){
+        final Claims claims = (Claims) request.getAttribute("claims");
+        if(((List<String>) claims.get("roles")).contains(role)){
+            return true;
+        }
+        return false;
     }
 }

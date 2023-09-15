@@ -1,23 +1,14 @@
 'use strict';
 angular.module('storeOrderModule')
 .factory('storeOrderService', ['ajaxService',function(ajaxService) {
-		var storeOrderService = {
+		var service = {
 			getOrdersForMgnt : getOrdersForMgnt,
-			getAllOrdersForMgnt : getAllOrdersForMgnt,
+			//getAllOrdersForMgnt : getAllOrdersForMgnt,
 			splitOrder : splitOrder,
-			placeOrder : placeOrder,
 			updateOrder : updateOrder,
 			deleteOrder : deleteOrder
 		};
-	return storeOrderService;
-
-	function placeOrder(order){
-       var url = "http://matkinhnguyen.com/authenticated/syncOrderFromLocal";
-       return ajaxService.post2(url,order,{}).then(function(response){
-            console.log(response);
-            return response.data;
-       });
-   }
+	return service;
 	
 	function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;
@@ -25,13 +16,13 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}
-	
+/*
 	function getAllOrdersForMgnt(){
 		var url = "mgnt/getAllOrdersForMgnt/";
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}
+	}*/
 
 	function splitOrder(orders){
         var url = "mgnt/saveMultipleOrders";

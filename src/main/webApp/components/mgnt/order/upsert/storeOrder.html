@@ -236,10 +236,10 @@ select, textarea {
 					</div>
 
 					<div class="col-lg-3">
-						<p style="margin-bottom: 6px;">shop:
+						<p style="margin-bottom: 6px;">Shop:
 						<div class="checkout__input">
 							<select  ng-model="ctrl.theOrder.shopCode"
-									 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
+									 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL' }"
 									 ng-disabled="!ctrl.theOrder.clientCode"
 									 ng-change="ctrl.setCurrentShopCache(ctrl.theOrder.shopCode)"
 									 style="height: 40px;border: 1px solid #e1e1e1;">
@@ -255,7 +255,7 @@ select, textarea {
 						<p style="margin-bottom: 6px;">client:
 						<div class="checkout__input">
 							<select  ng-model="ctrl.theOrder.clientCode"
-									 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE' }"
+									 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{clientCode: '!GODLIKE'}"
 									 ng-change="ctrl.filterShopByClientCode(ctrl.theOrder.clientCode)"
 									 style="height: 40px;border: 1px solid #e1e1e1;">
 							</select>

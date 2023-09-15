@@ -1,13 +1,16 @@
 'use strict';
 angular.module('orderListModule')
-	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize',
-										 'memberService','orderListService','customerSourceService',
+	.controller('orderListController',['$rootScope','$routeParams','$location','FirstTimeLoadSize','clientListCacheService',
+										 'memberService','orderListService','customerSourceService','shopListCacheService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
 										 'searchService','commonService','clientService','clientInfoCacheService',
-	function($rootScope, $routeParams,$location,FirstTimeLoadSize,
-	        memberService,orderListService,customerSourceService,
+										 'oneClientShopListCacheService',
+	function($rootScope, $routeParams,$location,FirstTimeLoadSize,clientListCacheService,
+	        memberService,orderListService,customerSourceService,shopListCacheService,
 	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
-	        searchService,commonService,clientService,clientInfoCacheService) {
+	        searchService,commonService,clientService,clientInfoCacheService,
+	        oneClientShopListCacheService
+	        ) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
@@ -23,18 +26,22 @@ angular.module('orderListModule')
     self.tempFrameNumber=0;
     self.tempLensNumber=0;
     self.OneDayReport={};
+
     self.isSuperAdmin = memberService.isSuperAdmin();
     self.isAdmin = memberService.isAdmin();
     self.isLocalWeb = commonService.isLocalWeb();
     self.isGodLike = memberService.isGodLike();
 
-	if(!memberService.isMod()){
-		$location.path('#/');
-	}
-	
 	self.amountList=AmountList;
-	self.amount = FirstTimeLoadSize;
+	self.queryRequest={};
+	self.queryRequest.amount = FirstTimeLoadSize;
+	self.oneClientShopList = oneClientShopListCacheService.get();
+
+	if(!memberService.isMod()){
+        $location.path('#/');
+    }
 ///////////////
+    console.log('this is order list');
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
       //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
@@ -48,11 +55,38 @@ angular.module('orderListModule')
 	});
 	*/
 	resetList();
-//////////
-
+//////////////
 
     self.filterOrderAndShopByClientCode = function(clientCode){
+        console.log(clientCode);
+        if(clientCode == 'ALL'){
+            self.shopList = self.shadowShopList;
+            self.queryRequest.shopCode = 'ALL';
+        }else{
+            self.shopList = self.shadowShopList.filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
+            self.queryRequest.shopCode = 'ALL';
+        }
 
+        orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
+            console.log(data);
+            self.orderList = data;
+            self.orderList.forEach(calculateOrderTotal);
+            self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+            engineerOrderList();
+            self.showLoadingText = false;
+        });
+    }
+    /// 4444444
+    self.filterOrderByShopCode = function(){
+        self.tableParams = new NgTableParams({}, { dataset: []});
+        orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
+           console.log(data);
+           self.orderList = data;
+           self.orderList.forEach(calculateOrderTotal);
+           self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+           engineerOrderList();
+           self.showLoadingText = false;
+        });
     }
 
 	self.updateOrderStatus = function(order){
@@ -72,10 +106,10 @@ angular.module('orderListModule')
         });
     }
 
-    self.querySearchOrderByNamePhone = function(searchText){
-        if(searchText){
+    self.querySearchOrderByNamePhone = function(){
+        if(self.queryRequest.generalPurpose){
             self.tableParams = new NgTableParams({}, { dataset: []});
-            searchService.searchByNamePhone(searchText).then(function(data){
+            searchService.getOrderByNamePhone(self.queryRequest).then(function(data){
                 self.orderList = data;
                 self.orderList.forEach(calculateOrderTotal);
                 self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -201,7 +235,7 @@ angular.module('orderListModule')
     }
 	
 	self.getOrderByTerm = function(){
-		orderListService.getOrdersForMgnt(self.amount).then(function (data) {
+		orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
 			self.orderList = data;
 			self.orderList.forEach(calculateOrderTotal);
 			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -325,7 +359,7 @@ angular.module('orderListModule')
         if(order.status == 4){
             order.remain = subTotal - order.couponAmount - order.deposit;
         }
-
+/*
         switch(order.status) {
           case 0:
               self.statusNumber.ordered += 1;
@@ -346,7 +380,7 @@ angular.module('orderListModule')
               self.statusNumber.userDelete += 1;
               break;
           default:
-        }
+        }*/
 
     }
 /*
@@ -419,42 +453,35 @@ angular.module('orderListModule')
     }
 
     function resetList() {
-         self.clientCode = null;
-         self.shopCode = null;
-         if(self.isGodLike){
-            clientService.getClientShopList().then(function (data) {
-                   console.log(data.obj);
+        self.queryRequest.clientCode = null;
+        self.queryRequest.shopCode = null;
 
-                   var allClient = new ClientDO();
-                   allClient.clientCode = 'ALL';
-                   allClient.brandName = 'all';
-                   data.obj.clientList.unshift(allClient);
-                   self.clientCode = 'ALL';
-                   self.clientList = data.obj.clientList;
-                   self.shadowClientList = data.obj.clientList;
+        self.clientList = clientListCacheService.get();
+        self.shopList = shopListCacheService.get();
 
-                   self.shopList = data.obj.shopList;
-                   var allShop = new ClientDO();
-                   allShop.shopCode = 'ALL';
-                   allShop.shopName = 'shop';
-                   allShop.shopAddress = 'all';
-                   data.obj.shopList.unshift(allShop);
-                   self.shopCode = 'ALL';
-                   self.shopList = data.obj.shopList;
-                   self.shadowShopList = data.obj.shopList;
-               });
-
-               orderListService.getOrdersForMgnt(self.amount).then(function (data) {
-                   self.orderList = data;
-                   self.orderList.forEach(calculateOrderTotal);
-                   self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-                   engineerOrderList();
-               });
+        self.shadowShopList = shopListCacheService.get();
+        if(self.isGodLike){
+            self.queryRequest.clientCode = 'ALL';
+            self.queryRequest.shopCode = 'ALL';
 
 
         }else{
-
+            self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
+            if(self.shopList.length == 1){
+                self.queryRequest.shopCode = self.shopList[0].shopCode;
+            }else{
+                self.queryRequest.shopCode = 'ALL';
+            }
         }
+
+        orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
+            console.log(data);
+            self.orderList = data;
+            self.orderList.forEach(calculateOrderTotal);
+            self.tableParams = new NgTableParams({}, { dataset: self.orderList});
+            engineerOrderList();
+            self.showLoadingText = false;
+        });
     }
     self.resetList = resetList;
 
@@ -473,6 +500,7 @@ angular.module('orderListModule')
     self.getHistoryModal = function(phone) {
         orderListService.getOrderHistory(phone).then(function(data){
             console.log(data);
+            data.forEach(getShopName);
             self.theHistoryModal = data;
             self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
        });
@@ -487,6 +515,14 @@ angular.module('orderListModule')
       self.detailArray = [];
       self.copyText = '';
     })
+
+    function getShopName(mem){
+        if(mem.shopCode){
+            var shop = self.oneClientShopList.find(i => i.shopCode == mem.shopCode);
+            mem.shopName = shop.shopName;
+            mem.shopAddress = shop.shopAddress;
+        }
+    }
 //////////// recovery//////////////
     self.getOrderForRecovery = function() {
 

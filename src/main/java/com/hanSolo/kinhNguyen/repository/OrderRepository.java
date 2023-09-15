@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends PagingAndSortingRepository<Order, Integer> {
     List<Order> findByShippingPhoneOrderByIdDesc(@NonNull String shippingPhone);
     List<Order> findFirst100ByOrderByGmtCreateDesc();
     List<Order> findAllByOrderByGmtCreateDesc();
-
     List<Order> findFirst40ByShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(String shippingName);
     List<Order> findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(String shippingPhone);
 
@@ -35,12 +35,25 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     //// client and shop
     List<Order> findByClientCodeOrderByGmtCreateDesc(String clientCode);
-
-    List<Order> findByClientCodeAndShopCodeOrderByGmtCreateAsc(String clientCode, String shopCode);
-
+    List<Order> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
     List<Order> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+    Optional<Order> findByIdAndClientCode(Integer id, String clientCode);
 
-    List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateAsc(String clientCode, String shopCode);
+    Optional<Order> findByIdAndClientCodeAndShopCode(Integer id, String clientCode, String shopCode);
+
+    List<Order> findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(String clientCode, String shippingName);
+    List<Order> findFirst40ByClientCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shippingPhone);
+
+    List<Order> findFirst40ByClientCodeAndShopCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(String clientCode, String shopCode, String shippingName);
+
+    List<Order> findFirst40ByClientCodeAndShopCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shopCode, String shippingPhone);
+
+    List<Order> findFirst40ByClientCodeAndShippingPhoneOrderByGmtCreateDesc(String clientCode, String shippingPhone);
+
+
+
+
 
 
 }

@@ -13,4 +13,6 @@ public interface ClientRepository extends PagingAndSortingRepository<Client, Int
 
     ClientInterface queryFirstByClientCode(String clientCode);
 
+    List<Client> findByClientCode(String clientCode);
+
 }

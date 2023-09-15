@@ -1,9 +1,12 @@
 'use strict';
 angular.module('couponModule')
 .controller('couponController', ['$scope','$location','couponService','NgTableParams','memberService','CommonStatusArray','CouponDO',
-            'Upload','$timeout','uploadService','CouponTypeList','CouponCreatedByList',
+            'Upload','$timeout','uploadService','CouponTypeList','CouponCreatedByList','clientInfoCacheService','shopListCacheService',
+            'currentShopCacheService','clientListCacheService',
 	function($scope,$location,couponService,NgTableParams,memberService,CommonStatusArray,CouponDO,
-	         Upload,$timeout,uploadService,CouponTypeList,CouponCreatedByList) {
+	         Upload,$timeout,uploadService,CouponTypeList,CouponCreatedByList,clientInfoCacheService,shopListCacheService,
+	         currentShopCacheService,clientListCacheService,
+	         ) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.CouponTypeList = CouponTypeList;
@@ -18,11 +21,16 @@ angular.module('couponModule')
 		if(!memberService.isMod()){
 			$location.path('#/');
 		}
-		
+
+		console.log("this is coupon");
+        console.log(clientListCacheService.get());
+        console.log(clientInfoCacheService.get());
+        console.log(shopListCacheService.get());
+        console.log(currentShopCacheService.get());
+
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);
 			self.couponList = data;
-			console.log(data);
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
 /*

@@ -14,7 +14,7 @@ angular.module('invoiceModule')
 
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
-            self.theOrder = data;
+            self.theOrder = data.obj;
             console.log(self.theOrder);
             self.calculateOrderTotal();
     });

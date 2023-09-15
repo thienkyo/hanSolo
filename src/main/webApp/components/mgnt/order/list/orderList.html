@@ -218,7 +218,7 @@
 									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
-									<td title="'detail'" style="text-align: right;width:250px;">
+									<td title="'detail'" style="text-align: right;width:200px;">
 										<div class="row" style="margin-left: 3px;">
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
@@ -227,12 +227,19 @@
 											{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}
 										</div>-->
 									</td>
-									<td title="'hardware'"  style="width:250px;">
+									<td title="'hardware'"  style="width:120px;">
 										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
 									</td>
 									<td title="'note'" >
 										{{item.orderDetailNoteForCus}}
 										{{item.orderDetailNote}}
+									</td>
+									<td title="'client'" ng-if="ctrl.isGodLike">
+										{{item.clientCode}}
+									</td>
+									<td title="'shop'"  style="width:200px;">
+										{{item.shopAddress}} |
+										{{item.shopName}}
 									</td>
 								</tr>
 
@@ -251,12 +258,12 @@
 		<!-- first 100 record -->
 		<div class="row">
 			<div class="col-sm-5">
-				<select  ng-model="ctrl.amount"  ng-change="ctrl.getOrderByTerm()"
+				<select  ng-model="ctrl.queryRequest.amount"  ng-change="ctrl.getOrderByTerm()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 					 style="width: 20%;height: 35px;background: #F0F0E9;">
 		    	</select>
-				<input type="text"  ng-model="ctrl.keySearch" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;height: 35px;">
-				<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone(ctrl.keySearch)"
+				<input type="text"  ng-model="ctrl.queryRequest.generalPurpose" placeholder="tên hoặc số điện thoại" style="margin-bottom: 20px;height: 35px;">
+				<button type="button" class="btn btn-primary" ng-click="ctrl.querySearchOrderByNamePhone()"
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					search
 				</button>
@@ -268,23 +275,20 @@
 
 
 			<div class="col-sm-7" style="text-align: end;" ng-if="ctrl.tempAmount <= 0">
-				client:
-				<select  ng-model="ctrl.clientCode"
-						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!ALL' }"
-						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.clientCode)"
-						 style="width: 15%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				<select  ng-model="ctrl.queryRequest.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
+						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
+						 style="width: 15%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
+						 ng-show="ctrl.isGodLike">
 				</select>
-
 
 				shop:
-				<select  ng-model="ctrl.theMember.shopCode"
-						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
-						 ng-disabled="!ctrl.theMember.clientCode"
+				<select  ng-model="ctrl.queryRequest.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
+						 ng-change="ctrl.filterOrderByShopCode()"
 						 style="width: 20%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
 				</select>
-
-
-
 
 				<div class="btn-group" role="group" aria-label="Basic example" style="height: 35px;vertical-align: bottom;">
 					<button type="button" class="btn btn-secondary"
@@ -351,6 +355,8 @@
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 
+					<td title="'client|shop'" ng-if="ctrl.isGodLike" style="width:60px;">{{order.clientCode}}|{{order.shopCode}}</td>
+
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
 								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList"
@@ -359,16 +365,16 @@
 						</select>
 					</td>
 
-			        <td title="'status'"  sortable="'status'" style="width:80px;">
+			        <td title="'status'"  sortable="'status'" style="width:40px;">
 						<select  ng-model="order.status"  ng-change="ctrl.updateOrderStatus(order)"
 								 ng-options="opt.value as opt.name for opt in ctrl.OrderStatusArray"
 								 ng-disabled="ctrl.isUpdatingOrder" style="background: #F0F0E9;"
 								 ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>
-					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAdmin">
+					<td title="'X'" style="width:fit-content;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out"
-						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin">delete</a>
+						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin">X</a>
 						<p ng-show="ctrl.deletingOrderId == order.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteOrder(order)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>

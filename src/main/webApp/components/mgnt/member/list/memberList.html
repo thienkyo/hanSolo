@@ -15,7 +15,7 @@
 							</alert>
 
 							<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
-								   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 160px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+								   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 290px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
 								{{ctrl.responseStrFail}}
 							</alert>
 
@@ -83,16 +83,17 @@
 			<div class="col-sm-5"></div>
 
 			<div class="col-sm-4" style="margin-top: 24px;font-weight: 600;text-align: end;">
-				<select  ng-model="ctrl.clientCode"
+				<select  ng-model="ctrl.queryRequest.clientCode"
 						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList"
-						 ng-change="ctrl.filterMemberAndShopByClientCode(ctrl.clientCode)"
-						 style="width: 30%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;" ng-show="ctrl.isGodLike">
+						 ng-change="ctrl.filterMemberAndShopByClientCode(ctrl.queryRequest.clientCode)"
+						 style="width: 30%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;"
+						 ng-show="ctrl.isGodLike">
 				</select>
 
-				<select  ng-model="ctrl.shopCode"
+				<select  ng-model="ctrl.queryRequest.shopCode"
 						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList"
 						 ng-change="ctrl.filterMemberByShopCode()"
-						 ng-disabled="ctrl.clientCode == 'ALL'"
+						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
 						 style="width: 50%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
 				</select>
 			</div>
