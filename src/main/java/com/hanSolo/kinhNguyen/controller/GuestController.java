@@ -31,11 +31,11 @@ public class GuestController {
     @Autowired
     private OrderRepository orderRepo;
 
-    @RequestMapping(value = "saveOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "saveOrderDeprecated", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GenericResponse saveOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException {
 
-        Member mem;
+        Member mem = null;
         Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(order.getShippingPhone(), Utility.ACTIVE_STATUS);
         if (memOpt.isEmpty() ) {
             Date now = new Date();
@@ -50,12 +50,13 @@ public class GuestController {
             member.setStatus(Utility.ACTIVE_STATUS);
             roleList.add(new MemberRole(Utility.MEMBER_ROLE,"0", member.getFullName(), member.getPhone(),member,now,now));
             member.setMemberRoles(roleList);
-             mem = memberRepo.save(member);
+          //   mem = memberRepo.save(member);
         }else {
             mem = memOpt.get();
         }
         order.setMember(mem);
-        Order or = orderRepo.save(order);
+        //Order or = orderRepo.save(order);
+        Order or = null;
         GenericResponse response = or == null ? new GenericResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GenericResponse(or.getId()+"",Utility.SUCCESS_ERRORCODE,"save order success");
 
         return response;

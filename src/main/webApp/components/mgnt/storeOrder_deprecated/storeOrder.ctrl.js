@@ -189,6 +189,7 @@ angular.module('storeOrderModule')
         dummyOrderDetail.relationship = '';
         dummyOrderDetail.recommendedSpectacles = '';
         dummyOrderDetail.orderDetailNote = '';
+        dummyOrderDetail.gender = false;
 
         dummyData.orderDetails.push(dummyOrderDetail);
 

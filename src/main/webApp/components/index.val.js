@@ -36,7 +36,7 @@ var JobTypeList=[
     {name : 'SPECIFIC', value:'SPECIFIC' },
     {name : 'PARTICULAR', value:'PARTICULAR' },
     {name : 'FASTSMS', value:'FASTSMS' },
-    {name : 'NOTIFYPAYMENT', value:'NOTIFYPAYMENT' }
+    {name : 'NOTIFYORDER', value:'NOTIFYORDER' }
 ];
 
 var AreaCodeList=[
@@ -351,6 +351,7 @@ function OrderDO () {
 	this.lensNumber = 0;
 	this.frameNumber = 0;
 	this.areaCode = '';
+	this.doneSmsPaymentNotify = false;
 	this.clientCode = '';
 	this.shopCode = '';
 }

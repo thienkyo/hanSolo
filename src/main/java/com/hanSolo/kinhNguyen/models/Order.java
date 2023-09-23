@@ -92,6 +92,17 @@ public class Order extends ParentCodeModel {
     @Column(name = "last_modified_by", length = 110)
     private String lastModifiedBy;
 
+    @Column(name = "done_sms_payment_notify",columnDefinition = "boolean default false")
+    private Boolean doneSmsPaymentNotify;
+
+    public Boolean getDoneSmsPaymentNotify() {
+        return doneSmsPaymentNotify;
+    }
+
+    public void setDoneSmsPaymentNotify(Boolean doneSmsPaymentNotify) {
+        this.doneSmsPaymentNotify = doneSmsPaymentNotify;
+    }
+
     @Override
     public boolean equals(Object obj) {
         Order o = (Order)obj;

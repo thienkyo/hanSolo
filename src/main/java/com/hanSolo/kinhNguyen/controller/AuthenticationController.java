@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.models.*;
 import com.hanSolo.kinhNguyen.repository.*;
 import com.hanSolo.kinhNguyen.response.GeneralResponse;
@@ -35,6 +36,7 @@ public class AuthenticationController {
     @Autowired private UsedCouponsRepository usedCouponsRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
     @Autowired private LensProductRepository lensProductRepo;
+    @Autowired private SmsQueueRepository smsQueueRepo;
 
     @RequestMapping(value = "me", method = RequestMethod.GET)
     public MemberResponse getMe(final HttpServletRequest request) throws ServletException {
@@ -61,6 +63,8 @@ public class AuthenticationController {
             order.setGmtCreate(Utility.getCurrentDate());
         }*/
         order.setGmtModify(Utility.getCurrentDate());
+        // 0. sms notify payment
+        manageSmsNotifyOrder(order);
 
         // 1. save order
         Order or = orderRepo.save(order);
@@ -107,6 +111,7 @@ public class AuthenticationController {
         }
         smsUserInfoRepo.saveAll(smsUserResult);
 
+        // 4. save SpecificSmsUserInfo
         Optional<SpecificSmsUserInfo> specSmsDBOtp = specificSmsUserInfoRepo.findByPhone(order.getShippingPhone());
         if(order.getSpecificJobId() != 0 ){
             SpecificSmsUserInfo specSms;
@@ -158,6 +163,34 @@ public class AuthenticationController {
 
         GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
+    }
+
+    private void manageSmsNotifyOrder(Order order) throws ParseException {
+        if(!order.getDoneSmsPaymentNotify() && order.getId() !=0){
+            if(order.getShippingPhone().replace(" ","").length() > 9){
+                SmsJob job = CommonCache.SMS_JOB_LIST.get(Utility.SMS_JOB_NOTIFYORDER);
+                if(job != null){
+                    SmsQueue smsQueue = generateSmsQueue(job, order);
+                    smsQueueRepo.save(smsQueue);
+                    order.setDoneSmsPaymentNotify(true);
+                }
+            }
+        }
+    }
+
+    private SmsQueue generateSmsQueue(SmsJob job, Order order) throws ParseException {
+        SmsQueue smsQueue = new SmsQueue();
+        smsQueue.setJobId(job.getId());
+        smsQueue.setGmtCreate(Utility.getCurrentDate());
+        smsQueue.setGmtModify(Utility.getCurrentDate());
+        smsQueue.setContent(job.getMsgContentTemplate());
+        smsQueue.setGender(order.getGender());
+        smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
+        smsQueue.setReceiverName(order.getShippingName());
+        smsQueue.setReceiverPhone(order.getShippingPhone());
+        smsQueue.setWeight(job.getWeight());
+
+        return smsQueue;
     }
 
     private void manageLensProduct(Order order) throws ParseException {

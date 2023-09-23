@@ -2,6 +2,7 @@ package com.hanSolo.kinhNguyen.cacheCenter;
 
 import com.hanSolo.kinhNguyen.facade.ShopInterface;
 import com.hanSolo.kinhNguyen.models.Member;
+import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.Shop;
 import com.hanSolo.kinhNguyen.utility.Utility;
 
@@ -41,6 +42,11 @@ public class CommonCache {
     public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
 
     public static Map<String, List<Shop>> CLIENT_SHOP_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);
+
+    /**
+     * sms job list : store sms job data.
+     */
+    public static Map<String, SmsJob> SMS_JOB_LIST = new HashMap<>();
 
     static {
         try {

@@ -74,6 +74,16 @@ public class MemberController {
 
         ClientInterface clientInfo = clientRepo.queryFirstByClientCode(mem.getClientCode());
         String token = Jwts.builder()
+        CommonCache.LOGIN_MEMBER_LIST.put(memOpt.get().getPhone(),memOpt.get());
+
+        Optional<SmsJob> smsJobOpt = smsJobRepo.findFirstByJobType(Utility.SMS_JOB_NOTIFYORDER);
+
+        if(smsJobOpt.isPresent()){
+            SmsJob job = smsJobOpt.get();
+            CommonCache.SMS_JOB_LIST.put(job.getJobType(),job);
+        }
+
+        return new LoginResponse(Jwts.builder()
                 .setSubject(parts[3])
                 .claim("roles", roleList)
                 .claim("name", mem.getFullName())

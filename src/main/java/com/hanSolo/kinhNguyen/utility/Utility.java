@@ -78,9 +78,11 @@ public class Utility {
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
     final public static String SMS_JOB_PARTICULAR = "PARTICULAR";
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
+    final public static String SMS_JOB_NOTIFYORDER = "NOTIFYORDER";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
     final public static int LOGIN_MEMBER_LIST_SIZE = 15;
+    final public static int SMS_JOB_LIST_SIZE = 100;
 
 
     final public static Date getCurrentDate() throws ParseException {
