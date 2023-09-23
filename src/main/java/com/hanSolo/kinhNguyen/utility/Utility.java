@@ -30,7 +30,7 @@ public class Utility {
 
     final public static String LOGIN_DILIMITER = "d3m";
     final public static String DEFAULT_PW = "MTIzNDU2bHR0";//123456ltt
-    final public static String SECRET_KEY = "kinhNguyenSecretKey";
+    final public static String SECRET_KEY = "OSOKDMNT009";
     final public static String SECRET_KEY_API_SMS = "kinhNguyenAPI";
 
     final public static String MEMBER_ROLE = "MEMBER";
@@ -39,6 +39,8 @@ public class Utility {
     final public static String MOD_ROLE = "MOD";
     final public static String ACCOUNTANT_ROLE = "ACCOUNTANT";
     final public static String SUPER_ACCOUNTANT_ROLE = "SUPER_ACCOUNTANT";
+
+    final public static String GODLIKE_ROLE = "GODLIKE";
 
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";
@@ -71,7 +73,11 @@ public class Utility {
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
     final public static String SMS_JOB_PARTICULAR = "PARTICULAR";
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
+    final public static String SMS_JOB_NOTIFYORDER = "NOTIFYORDER";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
+
+    final public static int LOGIN_MEMBER_LIST_SIZE = 15;
+    final public static int SMS_JOB_LIST_SIZE = 100;
 
 
     final public static Date getCurrentDate() throws ParseException {

@@ -1,6 +1,7 @@
 package com.hanSolo.kinhNguyen.cacheCenter;
 
 import com.hanSolo.kinhNguyen.models.Member;
+import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.utility.Utility;
 
 import java.text.ParseException;
@@ -35,6 +36,11 @@ public class CommonCache {
      * member list : help to check user status.
      */
     public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(8);
+
+    /**
+     * sms job list : store sms job data.
+     */
+    public static Map<String, SmsJob> SMS_JOB_LIST = new HashMap<>();
 
     static {
         try {
