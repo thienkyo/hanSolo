@@ -36,6 +36,7 @@ angular.module('orderListModule')
 	self.queryRequest={};
 	self.queryRequest.amount = FirstTimeLoadSize;
 	self.oneClientShopList = oneClientShopListCacheService.get();
+	self.shopList = shopListCacheService.get();
 
 	if(!memberService.isMod()){
         $location.path('#/');
@@ -463,8 +464,6 @@ angular.module('orderListModule')
         if(self.isGodLike){
             self.queryRequest.clientCode = 'ALL';
             self.queryRequest.shopCode = 'ALL';
-
-
         }else{
             self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
             if(self.shopList.length == 1){
@@ -498,7 +497,8 @@ angular.module('orderListModule')
     }
 
     self.getHistoryModal = function(phone) {
-        orderListService.getOrderHistory(phone).then(function(data){
+        self.queryRequest.generalPurpose = phone;
+        orderListService.getOrderHistory(self.queryRequest).then(function(data){
             console.log(data);
             data.forEach(getShopName);
             self.theHistoryModal = data;
@@ -518,7 +518,10 @@ angular.module('orderListModule')
 
     function getShopName(mem){
         if(mem.shopCode){
-            var shop = self.oneClientShopList.find(i => i.shopCode == mem.shopCode);
+            var shop = self.shopList.find(i => i.shopCode == mem.shopCode);
+            console.log(self.shopList);
+            console.log(mem);
+            console.log(shop);
             mem.shopName = shop.shopName;
             mem.shopAddress = shop.shopAddress;
         }

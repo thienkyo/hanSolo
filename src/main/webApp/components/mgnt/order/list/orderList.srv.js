@@ -56,9 +56,9 @@ angular.module('orderListModule')
         });
     }
 
-    function getOrderHistory(phone){
-        var url = "mgnt/getOrderHistory/"+phone;
-        return ajaxService.get(url,null,{}).then(function(response){
+    function getOrderHistory(queryRequest){
+        var url = "mgnt/getOrderHistory/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
             return response.data;
         });
     }

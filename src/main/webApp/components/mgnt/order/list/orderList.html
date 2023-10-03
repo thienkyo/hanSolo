@@ -355,7 +355,8 @@
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 
-					<td title="'client|shop'" ng-if="ctrl.isGodLike" style="width:60px;">{{order.clientCode}}|{{order.shopCode}}</td>
+					<td title="'client|shop'" filter="{ 'shopCode' : 'text'}" ng-if="ctrl.isGodLike" style="width:60px;">
+						{{order.clientCode}}|{{order.shopCode}}</td>
 
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"

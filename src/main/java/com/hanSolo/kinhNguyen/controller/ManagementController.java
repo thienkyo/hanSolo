@@ -847,8 +847,8 @@ public class ManagementController {
         return response;
     }
 
-    @RequestMapping(value = "getOrderHistory/{phone}", method = RequestMethod.GET)
-    public List<OrderDetail> getOrderHistory(@PathVariable final String phone, final HttpServletRequest request) {
+    @RequestMapping(value = "getOrderHistory", method = RequestMethod.POST)
+    public List<OrderDetail> getOrderHistory(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         List<Order> orderList;
         List<OrderDetail> orderDetailList;
 
@@ -856,11 +856,11 @@ public class ManagementController {
         Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
 
         if(Utility.onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
-            orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(phone);
-            orderDetailList = orderDetailRepo.findFirst40ByPhoneContainsOrderByGmtCreateDesc(phone);
+            orderList = orderRepo.findFirst40ByShippingPhoneContainsOrderByGmtCreateDesc(req.getGeneralPurpose());
+            orderDetailList = orderDetailRepo.findFirst40ByPhoneContainsOrderByGmtCreateDesc(req.getGeneralPurpose());
         }else{
-            orderList = orderRepo.findFirst40ByClientCodeAndShippingPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), phone);
-            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), phone);
+            orderList = orderRepo.findFirst40ByClientCodeAndShippingPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), req.getGeneralPurpose());
+            orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndPhoneOrderByGmtCreateDesc(clientInfo.get("clientCode"), req.getGeneralPurpose());
         }
 
         List<OrderDetail> result = new ArrayList<>();

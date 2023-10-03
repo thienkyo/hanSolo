@@ -73,9 +73,6 @@ public class MemberController {
         CommonCache.LOGIN_MEMBER_LIST.put(mem.getPhone(),mem);
 
         ClientInterface clientInfo = clientRepo.queryFirstByClientCode(mem.getClientCode());
-        String token = Jwts.builder()
-        CommonCache.LOGIN_MEMBER_LIST.put(memOpt.get().getPhone(),memOpt.get());
-
         Optional<SmsJob> smsJobOpt = smsJobRepo.findFirstByJobType(Utility.SMS_JOB_NOTIFYORDER);
 
         if(smsJobOpt.isPresent()){
@@ -83,7 +80,7 @@ public class MemberController {
             CommonCache.SMS_JOB_LIST.put(job.getJobType(),job);
         }
 
-        return new LoginResponse(Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(parts[3])
                 .claim("roles", roleList)
                 .claim("name", mem.getFullName())

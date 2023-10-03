@@ -4,12 +4,13 @@ angular.module('storeOrderModule')
 										 'OrderStatusArray','cartService','OrderDO','OrderDetailDO','SmsJobDO',
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
 										 'orderCacheService','commonService','$route','shopListCacheService','clientService',
-										 'clientInfoCacheService','currentShopCacheService','clientListCacheService',
+										 'clientInfoCacheService','currentShopCacheService','clientListCacheService','queryRequestDO',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
 	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
 	            orderCacheService,commonService,$route,shopListCacheService,clientService,
-	            clientInfoCacheService,currentShopCacheService,clientListCacheService) {
+	            clientInfoCacheService,currentShopCacheService,clientListCacheService,queryRequestDO
+	            ) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
 	//self.orderDetailList.unshift(new OrderDetailDO(true));
@@ -32,6 +33,14 @@ angular.module('storeOrderModule')
 	self.theSplitOrder = new OrderDO();
 
 	self.year = (new Date()).getFullYear();
+	self.queryRequest = queryRequestDO;
+	self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
+	self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
+
+	console.log('this is createOrder');
+    console.log(clientInfoCacheService.get());
+    console.log(currentShopCacheService.get());
+
 
 
 //////////////// function section ////////////
@@ -97,30 +106,6 @@ angular.module('storeOrderModule')
         self.isPickDP = true;
     };
 
-    self.querySearch = function(searchText){
-        if(searchText){
-            var url = "search/product/"+searchText;
-            return ajaxService.get(url,null,{}).then(function(response){
-                return response.data;
-            });
-
-        }else{
-            return {id:0,name:'no result',type:1,image:''};
-        }
-    }
-
-   /*
-    self.querySearchLens = function(searchText){
-        if(searchText){
-            var url = "search/productMngt/"+searchText;
-            return ajaxService.get(url,null,{}).then(function(response){
-                return response.data;
-            });
-
-        }
-    }
-    */
-
     self.querySearchLens = function(searchText){
         return searchService.searchLensProduct(searchText);
     }
@@ -128,6 +113,7 @@ angular.module('storeOrderModule')
     self.querySearchOrder = function(searchText){
         if(searchText){
             var url = "search/orderMngt/"+searchText;
+            console.log('old search: name');
             return ajaxService.get(url,null,{}).then(function(response){
                 return response.data;
             });
@@ -137,11 +123,26 @@ angular.module('storeOrderModule')
     self.querySearchOrderByPhone = function(searchText){
         if(searchText){
             var url = "search/orderByPhoneMngt/"+searchText;
+            console.log('old search: phone');
             return ajaxService.get(url,null,{}).then(function(response){
                 return response.data;
             });
         }
     }
+
+    // replace 2 function above.from here
+    self.querySearchOrderByNamePhone = function(searchText){
+        self.queryRequest.generalPurpose = searchText;
+        console.log('new search');
+        console.log(self.queryRequest);
+        return searchService.getOrderByNamePhone(self.queryRequest).then(function(data){
+            return data;
+        });
+
+    }
+
+
+
 
     self.dummyData =function() {
 

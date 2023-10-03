@@ -273,6 +273,7 @@ angular.module('app')
 		};
 	return searchService;
 
+    //// orderList for search function
 	function getOrderByNamePhone(req){
         if(req){
             var url = "mgnt/orderByNamePhoneMngt";
@@ -291,6 +292,7 @@ angular.module('app')
         }
     }
 
+    /// storeOrder page
     function searchLensProduct(searchText){
         if(searchText){
             var url = "mgnt/searchLensProduct/"+searchText;

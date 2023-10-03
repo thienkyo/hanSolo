@@ -53,11 +53,13 @@ public class AuthenticationController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GeneralResponse<Order> saveOrder(@RequestBody final Order order, final HttpServletRequest request) throws ServletException, ParseException {
         final Claims claims = (Claims) request.getAttribute("claims");
-        Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);
-        if (memOpt.isEmpty() ) {
+
+        Member currMem = CommonCache.LOGIN_MEMBER_LIST.getOrDefault(claims.get("sub"),null);
+        if(!currMem.getStatus()){
             return new GeneralResponse(null, Utility.FAIL_ERRORCODE,"member not exist or disable");
         }
-        order.setMember(memOpt.get());
+
+        order.setMember(currMem);
 /*
         if(order.getId() == 0){
             order.setGmtCreate(Utility.getCurrentDate());
@@ -68,10 +70,76 @@ public class AuthenticationController {
 
         // 1. save order
         Order or = orderRepo.save(order);
+
         // 2. update coupon
         updateCouponQuantity(order,order.getCurrentCouponCode(),order.getCouponCode());
 
         // 3. save SmsUserInfo
+        manageSmsUserInfo(order);
+
+        // 4. save SpecificSmsUserInfo
+        manageSpecificSmsUserInfo(order, or);
+
+        /// 5. used coupon
+        //manageCoupon(or);
+
+        // 6. manage lens product
+        manageLensProduct(or);
+
+        GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+
+    private void manageCoupon(Order or) {
+        if(StringUtils.hasText(or.getCouponCode())){
+            int orderAmount = 0;
+            for( OrderDetail orderDetail : or.getOrderDetails()){
+                orderAmount += orderDetail.getFramePriceAtThatTime() + orderDetail.getLensPrice();
+            }
+            usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
+        }
+    }
+
+    private void manageSpecificSmsUserInfo(Order order,Order or) throws ParseException {
+        Optional<SpecificSmsUserInfo> specSmsDBOtp = specificSmsUserInfoRepo.findByPhone(order.getShippingPhone());
+        if(order.getSpecificJobId() != 0 ){
+            SpecificSmsUserInfo specSms;
+            if(specSmsDBOtp.isEmpty()){ // phone doesn't exist in SpecificSmsUserInfo
+                specSms = new SpecificSmsUserInfo();
+                specSms.setGender(order.getGender());
+                specSms.setLastSendSmsDate(order.getGmtCreate());
+                specSms.setOrderCreateDate(order.getGmtCreate());
+                specSms.setGmtCreate(Utility.getCurrentDate());
+                specSms.setPhone(order.getShippingPhone());
+                specSms.setName(order.getShippingName());
+                specSms.setJobIdList("");
+                specSms.setLocation("STORE");
+            }else{ // phone existed in SpecificSmsUserInfo.
+                specSms = specSmsDBOtp.get();
+              /*  if( 0 ==  order.getId()){ // meaning new order,update old specSms
+                    specSms.setJobIdList("");
+                    specSms.setOrderCreateDate(order.getGmtCreate());
+                }*/
+                int specSmsOrderId = specSms.getOrderId() == null ? 0 : specSms.getOrderId();
+                if(or.getId() > specSmsOrderId){ // patient come back, reset recheck config.
+                    specSms.setLastSendSmsDate(order.getGmtCreate());
+                    specSms.setOrderCreateDate(order.getGmtCreate());
+                    specSms.setJobIdList("");
+
+                }
+            }
+            specSms.setAddress(order.getShippingAddress());
+            specSms.setGender(order.getGender());
+            specSms.setJobIdToRun(order.getSpecificJobId().toString());
+            specSms.setGmtModify(Utility.getCurrentDate());
+            specSms.setOrderId(or.getId());
+            specificSmsUserInfoRepo.save(specSms);
+        }else{
+            specSmsDBOtp.ifPresent(x -> specificSmsUserInfoRepo.delete(x));
+        }
+    }
+
+    private void manageSmsUserInfo(Order order) throws ParseException {
         List<SmsUserInfo> smsUserList = new ArrayList<>();
         smsUserList.add(new SmsUserInfo(order.getShippingName(), order.getShippingPhone(), order.getGender(),order.getGmtCreate(),
                 order.getGmtCreate(),Utility.getCurrentDate(),Utility.getCurrentDate(), order.getLocation(),
@@ -110,63 +178,10 @@ public class AuthenticationController {
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);
-
-        // 4. save SpecificSmsUserInfo
-        Optional<SpecificSmsUserInfo> specSmsDBOtp = specificSmsUserInfoRepo.findByPhone(order.getShippingPhone());
-        if(order.getSpecificJobId() != 0 ){
-            SpecificSmsUserInfo specSms;
-            if(specSmsDBOtp.isEmpty()){ // phone doesn't exist in SpecificSmsUserInfo
-                specSms = new SpecificSmsUserInfo();
-                specSms.setGender(order.getGender());
-                specSms.setLastSendSmsDate(order.getGmtCreate());
-                specSms.setOrderCreateDate(order.getGmtCreate());
-                specSms.setGmtCreate(Utility.getCurrentDate());
-                specSms.setPhone(order.getShippingPhone());
-                specSms.setName(order.getShippingName());
-                specSms.setJobIdList("");
-                specSms.setLocation("STORE");
-            }else{ // phone existed in SpecificSmsUserInfo.
-                specSms = specSmsDBOtp.get();
-              /*  if( 0 ==  order.getId()){ // meaning new order,update old specSms
-                    specSms.setJobIdList("");
-                    specSms.setOrderCreateDate(order.getGmtCreate());
-                }*/
-                int specSmsOrderId = specSms.getOrderId() == null ? 0 : specSms.getOrderId();
-                if(or.getId() > specSmsOrderId){ // patient come back, reset recheck config.
-                    specSms.setLastSendSmsDate(order.getGmtCreate());
-                    specSms.setOrderCreateDate(order.getGmtCreate());
-                    specSms.setJobIdList("");
-
-                }
-            }
-            specSms.setAddress(order.getShippingAddress());
-            specSms.setGender(order.getGender());
-            specSms.setJobIdToRun(order.getSpecificJobId().toString());
-            specSms.setGmtModify(Utility.getCurrentDate());
-            specSms.setOrderId(or.getId());
-            specificSmsUserInfoRepo.save(specSms);
-        }else{
-            specSmsDBOtp.ifPresent(x -> specificSmsUserInfoRepo.delete(x));
-        }
-
-        /// 4. coupon
-        if(StringUtils.hasText(or.getCouponCode())){
-            int orderAmount = 0;
-            for( OrderDetail orderDetail : or.getOrderDetails()){
-                orderAmount += orderDetail.getFramePriceAtThatTime() + orderDetail.getLensPrice();
-            }
-            usedCouponsRepo.save(new UsedCoupons(or.getId(),or.getCouponCode(),or.getCouponDiscount(),orderAmount,or.getGmtCreate(),or.getShippingName()));
-        }
-
-        // 5. manage lens product
-        manageLensProduct(or);
-
-        GeneralResponse<Order> response = or == null ? new GeneralResponse("",Utility.FAIL_ERRORCODE,"save order fail") : new GeneralResponse(or,Utility.SUCCESS_ERRORCODE,"save order success");
-        return response;
     }
 
     private void manageSmsNotifyOrder(Order order) throws ParseException {
-        if(!order.getDoneSmsPaymentNotify() && order.getId() !=0){
+        if(!order.getDoneSmsPaymentNotify() && order.getId() !=0 ){
             if(order.getShippingPhone().replace(" ","").length() > 9){
                 SmsJob job = CommonCache.SMS_JOB_LIST.get(Utility.SMS_JOB_NOTIFYORDER);
                 if(job != null){
@@ -212,17 +227,18 @@ public class AuthenticationController {
                                 detail.getLensPrice()
                         );
 
-                        Optional<LensProduct> lpOpt = lensProductRepo.findFirstByExtInfo(extInfo);
-                        if(lpOpt.isPresent()){
-                            LensProduct lp = lpOpt.get();
-                            lp.setGmtModify(Utility.getCurrentDate());
-                            lp.setLensNote(lensProduct.getLensNote());
-                            lp.setLensDetail(lensProduct.getLensDetail());
-                            lp.setSellPrice(lensProduct.getSellPrice());
-                            lensProductRepo.save(lp);
-                        }else{
-                            lensProductRepo.save(lensProduct);
+                        if(CommonCache.LENS_PRODUCT_LIST.containsKey(extInfo)){
+                            LensProduct lp = CommonCache.LENS_PRODUCT_LIST.get(extInfo);
+                            lensProduct.setGmtModify(Utility.getCurrentDate());
+                            lensProduct.setLensNote(lp.getLensNote());
+                            lensProduct.setLensDetail(lp.getLensDetail());
+                            lensProduct.setSellPrice(lp.getSellPrice());
                         }
+                        lensProduct = lensProductRepo.save(lensProduct);
+                        if(CommonCache.LENS_PRODUCT_LIST.size() == Utility.LENS_PRODUCT_LIST_SIZE){
+                            CommonCache.LENS_PRODUCT_LIST.clear();
+                        }
+                        CommonCache.LENS_PRODUCT_LIST.put(lensProduct.getExtInfo(), lensProduct);
                     }
                 }
             }
@@ -289,8 +305,8 @@ public class AuthenticationController {
         return response;
     }*/
     ////
-    @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+  /*  @RequestMapping(value = "syncOrderFromLocal", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)*/
     public ResponseEntity<String> SyncOrderFromLocal(@RequestBody final Order order, final HttpServletRequest request, final HttpServletResponse res) throws ServletException, ParseException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Optional<Member> memOpt = memberRepo.findByPhoneAndStatus(claims.get("sub")+"", Utility.ACTIVE_STATUS);

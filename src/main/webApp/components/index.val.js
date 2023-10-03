@@ -67,6 +67,13 @@ var cacheName = {
     cusSourceCacheName : 'cusSourceCache'
 };
 
+var queryRequestDO = {
+    clientCode : '',
+    shopCode : '',
+    generalPurpose : '',
+    amount: FirstTimeLoadSize
+};
+
 angular.module('app')
 		.value('MemberDO', MemberDO)
 		.value('OrderDO',OrderDO)
@@ -110,6 +117,7 @@ angular.module('app')
 		.value('ClientDO',ClientDO)
 		.value('ShopDO',ShopDO)
 		.value('OSOConfigDO',OSOConfigDO)
+		.value('queryRequestDO',queryRequestDO)
 		;
 
 function OSOConfigDO(){
