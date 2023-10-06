@@ -226,6 +226,8 @@ public class AuthenticationController {
                                 extInfo,
                                 detail.getLensPrice()
                         );
+                        lensProduct.setClientCode(order.getClientCode());
+                        lensProduct.setShopCode(order.getShopCode());
 
                         if(CommonCache.LENS_PRODUCT_LIST.containsKey(extInfo)){
                             LensProduct lp = CommonCache.LENS_PRODUCT_LIST.get(extInfo);

@@ -11,8 +11,13 @@ public interface LensProductRepository extends PagingAndSortingRepository<LensPr
     List<LensProduct> findFirst100ByOrderByGmtCreateDesc();
     List<LensProduct> findAllByOrderByGmtCreateDesc();
     List<LensProduct> findByLensNoteAndSellPrice(String lensNote, Integer sellPrice);
-
     List<LensProduct> findFirstByLensDetailAndSellPrice(String lensDetail, Integer sellPrice);
 
     Optional<LensProduct> findFirstByExtInfo(String extInfo);
+
+    /// clientCode shopCode
+    List<LensProduct> findFirst50ByLensNoteContainsIgnoreCaseAndClientCodeOrderByGmtCreateDesc(String lensNote, String clientCode);
+
+
+
 }

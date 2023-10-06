@@ -269,6 +269,7 @@ angular.module('app')
 	var searchService = {
 		    searchByNamePhone : searchByNamePhone,
 		    getOrderByNamePhone : getOrderByNamePhone,
+		    searchLensProduct2 : searchLensProduct2,
 		    searchLensProduct : searchLensProduct
 		};
 	return searchService;
@@ -297,6 +298,16 @@ angular.module('app')
         if(searchText){
             var url = "mgnt/searchLensProduct/"+searchText;
             return ajaxService.get(url,null,{}).then(function(response){
+                return response.data;
+            });
+        }else {return '';}
+    }
+
+    /// storeOrder page
+    function searchLensProduct2(req){
+        if(req.generalPurpose){
+            var url = "mgnt/searchLensProduct/";
+            return ajaxService.post(url,req,{}).then(function(response){
                 return response.data;
             });
         }else {return '';}

@@ -41,8 +41,9 @@ public class Utility {
     final public static String MOD_ROLE = "MOD";
     final public static String ACCOUNTANT_ROLE = "ACCOUNTANT";
     final public static String SUPER_ACCOUNTANT_ROLE = "SUPER_ACCOUNTANT";
-
     final public static String GODLIKE_ROLE = "GODLIKE";
+
+    final public static String GODLIKE_CLIENTCODE = "GODLIKE";
 
     final public static String GROUP_CATEGORY = "CATEGORY";
     final public static String GROUP_COLLECTION = "COLLECTION";

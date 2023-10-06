@@ -14,13 +14,13 @@ angular.module('orderListModule')
 			};
 	return orderListService;
 
-	function getOrderById(id){
-        var url = "mgnt/getOrderById/"+id;
-        return ajaxService.get(url,null,{}).then(function(response){
+	function getOrderById(queryRequest){
+        var url = "mgnt/getOrderById/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
             return response.data;
         });
     }
-	
+
 	function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;
 		return ajaxService.get(url,null,{}).then(function(response){

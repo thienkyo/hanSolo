@@ -470,7 +470,6 @@ public class ManagementController {
     // for not GODLIKE
     @RequestMapping(value = "getClientShopList", method = RequestMethod.GET)
     public GeneralResponse<ClientShopList> getClientShopList(final HttpServletRequest request) {
-
         final Claims claims = (Claims) request.getAttribute("claims");
         String shopCode = (String) claims.get("shopCode");
         Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
@@ -758,19 +757,15 @@ public class ManagementController {
         return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
-    public GeneralResponse<Order> getOrderById(@PathVariable final int orderId,final HttpServletRequest request) throws ServletException {
-
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+    @RequestMapping(value = "getOrderById", method = RequestMethod.POST)
+    public GeneralResponse<Order> getOrderById(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) throws ServletException {
 
         Optional<Order> orOpt;
         if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) ){
-            orOpt = orderRepo.findById(orderId);
+            orOpt = orderRepo.findById(Integer.parseInt(req.getGeneralPurpose()));
         }else{
-            orOpt = orderRepo.findByIdAndClientCode(orderId,clientInfo.get("clientCode"));
+            orOpt = orderRepo.findByIdAndClientCode(Integer.parseInt(req.getGeneralPurpose()),req.getClientCode());
         }
-
         if(orOpt.isPresent()){
             return new GeneralResponse(orOpt.get(),Utility.SUCCESS_ERRORCODE,"Success");
         }
@@ -1203,9 +1198,19 @@ public class ManagementController {
 
 
     //////////////////////////// search section///////////////////////////////
-    @RequestMapping("searchLensProduct/{keySearch}")
+    /*@RequestMapping("searchLensProduct/{keySearch}")
     public List<LensProduct> searchLensProduct(@PathVariable final String keySearch) {
         return  lensProductRepo.findFirst50ByLensNoteContainsOrderByGmtCreateDesc(keySearch);
+    }*/
+
+    @RequestMapping(value ="searchLensProduct", method = RequestMethod.POST)
+    public List<LensProduct> searchLensProduct(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+
+        if(req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_CLIENTCODE)){
+            return  lensProductRepo.findFirst50ByLensNoteContainsOrderByGmtCreateDesc(req.getGeneralPurpose());
+        }else{
+            return  lensProductRepo.findFirst50ByLensNoteContainsIgnoreCaseAndClientCodeOrderByGmtCreateDesc(req.getGeneralPurpose(), req.getClientCode());
+        }
     }
 
 

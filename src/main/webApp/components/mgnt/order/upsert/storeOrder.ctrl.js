@@ -5,11 +5,13 @@ angular.module('storeOrderModule')
 										 'ajaxService','genderArray','smsJobService','AreaCodeList','searchService','storeOrderService',
 										 'orderCacheService','commonService','$route','shopListCacheService','clientService',
 										 'clientInfoCacheService','currentShopCacheService','clientListCacheService','queryRequestDO',
+										 'oneClientShopListCacheService',
 	function($routeParams,$location,memberService,orderListService,SmsUserInfoDO,
 	            OrderStatusArray,cartService,OrderDO,OrderDetailDO,SmsJobDO,
 	            ajaxService,genderArray,smsJobService,AreaCodeList,searchService,storeOrderService,
 	            orderCacheService,commonService,$route,shopListCacheService,clientService,
-	            clientInfoCacheService,currentShopCacheService,clientListCacheService,queryRequestDO
+	            clientInfoCacheService,currentShopCacheService,clientListCacheService,queryRequestDO,
+	            oneClientShopListCacheService
 	            ) {
 	var self = this;
 	//self.orderDetailList = new Array(3).fill(new OrderDetailDO(false));
@@ -36,12 +38,6 @@ angular.module('storeOrderModule')
 	self.queryRequest = queryRequestDO;
 	self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
 	self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
-
-	console.log('this is createOrder');
-    console.log(clientInfoCacheService.get());
-    console.log(currentShopCacheService.get());
-
-
 
 //////////////// function section ////////////
 
@@ -107,10 +103,11 @@ angular.module('storeOrderModule')
     };
 
     self.querySearchLens = function(searchText){
-        return searchService.searchLensProduct(searchText);
+        self.queryRequest.generalPurpose = searchText;
+        return searchService.searchLensProduct2(self.queryRequest);
     }
 
-    self.querySearchOrder = function(searchText){
+   /* self.querySearchOrder = function(searchText){
         if(searchText){
             var url = "search/orderMngt/"+searchText;
             console.log('old search: name');
@@ -128,19 +125,16 @@ angular.module('storeOrderModule')
                 return response.data;
             });
         }
-    }
+    }*/
 
     // replace 2 function above.from here
     self.querySearchOrderByNamePhone = function(searchText){
         self.queryRequest.generalPurpose = searchText;
-        console.log('new search');
-        console.log(self.queryRequest);
         return searchService.getOrderByNamePhone(self.queryRequest).then(function(data){
             return data;
         });
 
     }
-
 
 
 
@@ -154,7 +148,7 @@ angular.module('storeOrderModule')
         self.theOrder.shippingAddress = '22/1 đường xx, phường 21, quận 3, Tp hcm';
         self.theOrder.shippingName = first[Math.floor(Math.random() * 10)] + ' ' +middle[Math.floor(Math.random() * 10)] + ' ' +
                                      middle2[Math.floor(Math.random() * 10)] + ' ' +last[Math.floor(Math.random() * 10)] ;
-        self.theOrder.shippingPhone ='09123456789';
+        self.theOrder.shippingPhone ='0912345678'+Math.floor(Math.random() * 10);
         self.theOrder.gender = true;
 
         //var dummyOrderDetail = new OrderDetailDO();
@@ -362,7 +356,7 @@ angular.module('storeOrderModule')
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
 
-        if(self.theOrder.shippingName && self.theOrder.shippingPhone && self.theOrder.shopCode ){
+        if(self.theOrder.shippingName && self.theOrder.shippingPhone && self.theOrder.shopCode && self.theOrder.shopCode != 'ALL'){
             if(memberService.isMod()){
                 self.isSaveButtonPressed=true;
 
@@ -500,8 +494,6 @@ angular.module('storeOrderModule')
 
     self.setCurrentShopCache = function(shopCode){
         var shop = self.shopList.find(i => i.shopCode == shopCode );
-
-        console.log(shop);
         if(shop){
             currentShopCacheService.set(shop);
         }else{
@@ -516,19 +508,16 @@ angular.module('storeOrderModule')
 	}
 
 	self.shopList = shopListCacheService.get();
-
-    //self.theOrder = new OrderDO;
-	 // load product
-
 	if(self.isGodLike){ // only godlike get new data from db.
 	     self.clientList = clientListCacheService.get();
 	     self.shadowClientList = clientListCacheService.get();;
-         self.shopList = shopListCacheService.get();
+         //self.shopList = shopListCacheService.get();
          self.shadowShopList = shopListCacheService.get();
     }
 
     if($routeParams.orderId > 0){
-        orderListService.getOrderById($routeParams.orderId)
+        self.queryRequest.generalPurpose = $routeParams.orderId;
+        orderListService.getOrderById(self.queryRequest)
             .then(function (data) {
                 console.log(data);
                 self.theOrder = data.obj;
@@ -540,6 +529,11 @@ angular.module('storeOrderModule')
 
                     if(self.isGodLike){
                         self.shopList = self.shadowShopList.filter(i => i.clientCode == self.theOrder.clientCode );
+                    }
+
+                    console.log(self.shopList);
+                    if(!self.shopList.find(i => i.shopCode == self.theOrder.shopCode)){
+                        self.shopList = oneClientShopListCacheService.get();
                     }
 
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
@@ -583,7 +577,6 @@ angular.module('storeOrderModule')
                 self.theOrder.shopCode = currentShopCacheService.get().shopCode;
             }
         }
-        console.log(self.theOrder);
     }
 
 
