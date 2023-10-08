@@ -368,6 +368,7 @@ angular.module('storeOrderModule')
                 self.currentMember = memberService.getCurrentMember();
                 self.theOrder.lastModifiedBy = self.currentMember.name+self.currentMember.phone;
 
+                orderCacheService.addOneOrder(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
                     self.isSaveButtonPressed=false;
@@ -376,7 +377,6 @@ angular.module('storeOrderModule')
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal();
-                    orderCacheService.addOneOrder(self.theOrder);
                     self.newOrderId = self.theOrder.id;
                     $location.path('/mgnt/storeOrder/'+data.obj.id);
                     console.log(self.theOrder);
