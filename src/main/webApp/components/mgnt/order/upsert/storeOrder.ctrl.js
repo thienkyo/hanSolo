@@ -288,7 +288,7 @@ angular.module('storeOrderModule')
             self.calculateOrderTotal(self.theOrder);
             return;
         }
-         cartService.getCoupon2(code,'BILL').then(function (data) {
+         storeOrderService.getCoupon(code,'BILL').then(function (data) {
              if(data.errorCode == 'SUCCESS'){
                 self.theOrder.couponDiscount = data.replyStr;
                 self.theOrder.couponCode = code;
@@ -303,7 +303,7 @@ angular.module('storeOrderModule')
 
     self.getFrameCoupon = function(orderDetail) {
         if(orderDetail.frameDiscountCode.length >4){
-            cartService.getCoupon2(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
+            storeOrderService.getCoupon(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.frameDiscountAmount = data.replyStr;
                     self.calculateOrderTotal(self.theOrder);
@@ -325,7 +325,7 @@ angular.module('storeOrderModule')
     ///// get lens coupon
     self.getLensCoupon = function(orderDetail) {
         if(orderDetail.lensDiscountCode.length >4){
-            cartService.getCoupon2(orderDetail.lensDiscountCode,'LENS').then(function (data) {
+            storeOrderService.getCoupon(orderDetail.lensDiscountCode,'LENS').then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.lensDiscountAmount = data.replyStr;
                     self.calculateOrderTotal(self.theOrder);

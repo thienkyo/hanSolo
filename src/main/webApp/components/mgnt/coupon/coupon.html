@@ -72,13 +72,21 @@ form .progress {
 						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
 				</select>
 			</div>
-			<div class="col-md-1">
+			<div class="col-md-1" ng-if="ctrl.isGodLike">
+				client:
+				<select  ng-model="ctrl.theCoupon.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{clientCode: '!GODLIKE'}"
+						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;"
+						 ng-change="ctrl.filterCouponByClientCode(ctrl.theCoupon.clientCode)">
+				</select>
+			</div>
+			<!--<div class="col-md-1">
 				function:
 				<select  ng-model="ctrl.theCoupon.createdBy"
 						 ng-options="opt.value as opt.name for opt in ctrl.CouponCreatedByList"
 						 style="height: 30px;border: 1px solid #e1e1e1;width: 100%;">
 				</select>
-			</div>
+			</div>-->
 
 
 		</div>
@@ -87,8 +95,17 @@ form .progress {
 				<a ng-click="ctrl.upsert(ctrl.theCoupon)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
 				<a ng-click="ctrl.clear()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
 			</div>
-			<div class="col-md-1">
-				<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+			<div class="col-md-5">
+				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+					thành công
+				</alert>
+
+				<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 290px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
+					error: duplication, server error...
+				</alert>
+				<!--<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
 					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only"></span>
@@ -99,7 +116,7 @@ form .progress {
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					<span class="sr-only"></span>
 					error: duplication, server error...
-				</div>
+				</div>-->
 			</div>
 		</div>
 

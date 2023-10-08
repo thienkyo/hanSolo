@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "coupons")
-public class Coupon {
+public class Coupon extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -20,7 +20,7 @@ public class Coupon {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "code", unique = true, length = 40)
+    @Column(name = "code", length = 40)
     private String code;
 
     @Column(name = "lifespan")

@@ -282,7 +282,6 @@
 						 ng-show="ctrl.isGodLike">
 				</select>
 
-				shop:
 				<select  ng-model="ctrl.queryRequest.shopCode"
 						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
 						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"

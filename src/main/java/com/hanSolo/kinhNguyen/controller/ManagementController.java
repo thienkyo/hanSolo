@@ -500,7 +500,13 @@ public class ManagementController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getAllCoupons", method = RequestMethod.GET)
     public List<Coupon> getAllCoupons(final HttpServletRequest request) throws ServletException {
-        return couponRepo.findAllByOrderByGmtCreateDesc();
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            return couponRepo.findAllByOrderByGmtCreateDesc();
+        }
+        return couponRepo.findByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
     }
 
     @SuppressWarnings("unchecked")

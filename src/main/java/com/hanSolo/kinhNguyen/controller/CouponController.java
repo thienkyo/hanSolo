@@ -6,17 +6,20 @@ import com.hanSolo.kinhNguyen.repository.CouponRepository;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/coupon")
+@RequestMapping("/mgnt/coupon")
 public class CouponController {
     @Autowired
     private CouponRepository couponRepo;
@@ -47,9 +50,16 @@ public class CouponController {
     }
 
     @RequestMapping("getByCode2/{code}/{type}")
-    public GenericResponse getCouponByCode2(@PathVariable String code,@PathVariable String type) {
+    public GenericResponse getCouponByCode2(@PathVariable String code,@PathVariable String type, final HttpServletRequest request) {
+        Optional<Coupon> couponOpt;
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
 
-        Optional<Coupon> couponOpt = couponRepo.findByCodeAndCouponType(code,type);
+        if(Utility.onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            couponOpt = couponRepo.findByCodeAndCouponType(code,type);
+        }else {
+            couponOpt = couponRepo.findByCodeAndCouponTypeAndClientCode(code,type,clientInfo.get("clientCode"));
+        }
 
         if ( couponOpt.isEmpty() ) {
             return new GenericResponse("Không tồn tại",Utility.FAIL_ERRORCODE,"Không tồn tại.");

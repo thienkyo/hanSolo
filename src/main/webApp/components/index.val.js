@@ -519,6 +519,8 @@ function CouponDO(){
 	this.quantity = null;
 	this.couponType = 'BILL';
 	this.createdBy = 'MANUAL';
+	this.clientCode = '';
+	this.shopCode = '';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

@@ -255,7 +255,7 @@ select, textarea {
 						<p style="margin-bottom: 6px;">client:
 						<div class="checkout__input">
 							<select  ng-model="ctrl.theOrder.clientCode"
-									 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{clientCode: '!GODLIKE'}"
+									 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{clientCode: '!GODLIKE'} | filter:{clientCode: '!ALL'}"
 									 ng-change="ctrl.filterShopByClientCode(ctrl.theOrder.clientCode)"
 									 style="height: 40px;border: 1px solid #e1e1e1;">
 							</select>

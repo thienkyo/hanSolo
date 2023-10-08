@@ -6,7 +6,8 @@ angular.module('storeOrderModule')
 			//getAllOrdersForMgnt : getAllOrdersForMgnt,
 			splitOrder : splitOrder,
 			updateOrder : updateOrder,
-			deleteOrder : deleteOrder
+			deleteOrder : deleteOrder,
+			getCoupon : getCoupon
 		};
 	return service;
 	
@@ -31,14 +32,6 @@ angular.module('storeOrderModule')
         });
     }
 
-	/*
-	function updateOrderStatus(orderId,status){
-		var url = "mgnt/updateOrderStatus/"+orderId+"/"+status;
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}*/
-
 	function updateOrder(order){
     		var url = "mgnt/updateOrder";
     		return ajaxService.post(url,order,{}).then(function(response){
@@ -52,5 +45,12 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}
+
+	function getCoupon(code,type){
+        var url = "mgnt/coupon/getByCode2/" + code +"/"+ type;
+        return ajaxService.get(url,null,{}).then(function(data){
+            return data.data;
+        });
+    }
       
  }]);

@@ -42,7 +42,6 @@ angular.module('orderListModule')
         $location.path('#/');
     }
 ///////////////
-    console.log('this is order list');
 	customerSourceService.getAll().then(function (data) {
         self.cusSourceList = data;
       //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
@@ -59,7 +58,6 @@ angular.module('orderListModule')
 //////////////
 
     self.filterOrderAndShopByClientCode = function(clientCode){
-        console.log(clientCode);
         if(clientCode == 'ALL'){
             self.shopList = self.shadowShopList;
             self.queryRequest.shopCode = 'ALL';
@@ -69,7 +67,6 @@ angular.module('orderListModule')
         }
 
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-            console.log(data);
             self.orderList = data;
             self.orderList.forEach(calculateOrderTotal);
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -81,7 +78,6 @@ angular.module('orderListModule')
     self.filterOrderByShopCode = function(){
         self.tableParams = new NgTableParams({}, { dataset: []});
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-           console.log(data);
            self.orderList = data;
            self.orderList.forEach(calculateOrderTotal);
            self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -474,7 +470,6 @@ angular.module('orderListModule')
         }
 
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-            console.log(data);
             self.orderList = data;
             self.orderList.forEach(calculateOrderTotal);
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
@@ -499,7 +494,6 @@ angular.module('orderListModule')
     self.getHistoryModal = function(phone) {
         self.queryRequest.generalPurpose = phone;
         orderListService.getOrderHistory(self.queryRequest).then(function(data){
-            console.log(data);
             data.forEach(getShopName);
             self.theHistoryModal = data;
             self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
@@ -519,9 +513,6 @@ angular.module('orderListModule')
     function getShopName(mem){
         if(mem.shopCode){
             var shop = self.shopList.find(i => i.shopCode == mem.shopCode);
-            console.log(self.shopList);
-            console.log(mem);
-            console.log(shop);
             mem.shopName = shop.shopName;
             mem.shopAddress = shop.shopAddress;
         }

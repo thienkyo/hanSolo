@@ -16,7 +16,7 @@ angular.module('couponModule')
 		self.discountOrderNumber = 0;
 		self.totalDiscountAmount = 0;
 		self.isAdmin = memberService.isAdmin();
-
+		self.isGodLike = memberService.isGodLike();
 
 		if(!memberService.isMod()){
 			$location.path('#/');
@@ -28,19 +28,26 @@ angular.module('couponModule')
         console.log(shopListCacheService.get());
         console.log(currentShopCacheService.get());
 
+        self.clientList = clientListCacheService.get();
+
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);
 			self.couponList = data;
 			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
-/*
-		couponService.loadUsedCouponHistory().then(function (data) {
-		    //console.log(data);
-		    data.forEach(calculateUserCoupon);
-            self.usedCouponList = data;
-            self.usedCouponTableParams = new NgTableParams({}, { dataset: self.usedCouponList});
-        });*/
-		
+
+
+        self.filterCouponByClientCode = function(clientCode){
+            console.log(clientCode);
+            var tempList;
+            if(clientCode == 'ALL'){
+                tempList = self.couponList;
+            }else{
+                tempList = self.couponList.filter(i => i.clientCode == clientCode);
+            }
+            self.tableParams = new NgTableParams({}, { dataset: tempList});
+        }
+
 		self.updateCoupon = function(coupon){
 			self.theCoupon = coupon;
 			self.responseStr = false;
@@ -48,12 +55,19 @@ angular.module('couponModule')
 		}
 		
 		self.upsert = function(coupon){
-
+		    if(self.isGodLike && coupon.clientCode == ''){
+                self.responseStrFail = 'temp';
+                return;
+            }else{
+                coupon.clientCode = clientInfoCacheService.get().clientCode;
+            }
             self.currentMember = memberService.getCurrentMember();
             if(coupon.id == 0){
                 coupon.owner = self.currentMember.name+self.currentMember.phone;
             }
             coupon.lastModifiedBy = self.currentMember.name+self.currentMember.phone;
+            console.log(coupon);
+            coupon.shopCode = currentShopCacheService.get().shopCode;
 
 			self.responseStr = false;
 			self.responseStrFail = false;
@@ -82,6 +96,11 @@ angular.module('couponModule')
 				}
 			});
 		}
+
+		self.closeAlert = function() {
+            self.responseStr = false;
+            self.responseStrFail = false;
+        };
 
 		self.promptDelete = function(id){
             self.deletingId = self.deletingId ? false : id;
