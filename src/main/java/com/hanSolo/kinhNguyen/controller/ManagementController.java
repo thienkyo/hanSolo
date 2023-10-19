@@ -248,35 +248,37 @@ public class ManagementController {
 
     //////////////////////////// Biz expense section ///////////////////////////////
     @SuppressWarnings("unchecked")
-    @RequestMapping(value = "getBizExpenseForMgnt/{amount}", method = RequestMethod.GET)
-    public List<BizExpense> getBizExpenseForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
-
+    @RequestMapping(value = "getBizExpenseForMgnt", method = RequestMethod.POST)
+    public List<BizExpense> getBizExpenseForMgnt(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         List<BizExpense> bizExpenseList;
-        final Claims claims = (Claims) request.getAttribute("claims");
-        /*if(((List<String>) claims.get("roles")).contains(Utility.ACCOUNTANT_ROLE)){*/
-            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
                 bizExpenseList =  bizExpenseRepo.findFirst100ByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                bizExpenseList =  bizExpenseRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
             }else{
-                bizExpenseList = bizExpenseRepo.findByOrderByGmtCreateDesc();
+                bizExpenseList =  bizExpenseRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
             }
-       /* }else{
-            if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
-                bizExpenseList =  bizExpenseRepo.findFirst100ByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
+        }else{
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL") || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ) ){
+                bizExpenseList =  bizExpenseRepo.findAllByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                bizExpenseList =  bizExpenseRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
             }else{
-                bizExpenseList = bizExpenseRepo.findByOwnerPhoneOrderByGmtCreateDesc(claims.get("sub").toString());
+                bizExpenseList =  bizExpenseRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
             }
-        }*/
+        }
 
         return bizExpenseList;
     }
 
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertBizExpense", method = RequestMethod.POST)
-    public GenericResponse upsertBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
+    public GeneralResponse<BizExpense> upsertBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
         bizExpense.setGmtModify(Utility.getCurrentDate());
-        bizExpenseRepo.save(bizExpense);
-       // TimeUnit.SECONDS.sleep( 4);
-        return new GenericResponse("upsert_banner_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse(bizExpenseRepo.save(bizExpense),Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @SuppressWarnings("unchecked")

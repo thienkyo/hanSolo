@@ -9,12 +9,20 @@ angular.module('bizExpenseModule')
 			};
 	return bizExpenseService;
 
-	function getBizExpenseForMgnt(amount){
+	/*function getBizExpenseForMgnt(amount){
 		var url = "mgnt/getBizExpenseForMgnt/"+amount;
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}   
+	}   */
+
+
+	function getBizExpenseForMgnt(queryRequest){
+        var url = "mgnt/getBizExpenseForMgnt/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
+            return response.data;
+        });
+    }
     
 	function upsert(bizExpense){
 		var url = "mgnt/upsertBizExpense";

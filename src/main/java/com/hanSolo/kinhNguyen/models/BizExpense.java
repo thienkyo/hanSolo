@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "biz_expense")
-public class BizExpense {
+public class BizExpense extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

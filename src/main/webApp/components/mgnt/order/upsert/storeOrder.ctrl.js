@@ -64,7 +64,9 @@ angular.module('storeOrderModule')
     self.add1Tab = function(){
         var newOrderDetail = new OrderDetailDO();
         newOrderDetail.address = self.theOrder.orderDetails[0].address;
-        newOrderDetail.orderId = self.theOrder.id;
+        if(self.theOrder.id != 0){
+           newOrderDetail.orderId = self.theOrder.id;
+        }
         self.theOrder.orderDetails.push(newOrderDetail);
     }
 
@@ -184,7 +186,7 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].wd = '';
         self.theOrder.orderDetails[0].vaNear = '';
 
-        self.theOrder.orderDetails[0].name = 'Lê Nguyễn THiện Thoại';
+        self.theOrder.orderDetails[0].name = 'Lê Nguyễn Thiện Thoại';
         self.theOrder.orderDetails[0].yob ='1983';
         self.theOrder.orderDetails[0].phone = '';
         self.theOrder.orderDetails[0].address = '';
@@ -367,7 +369,7 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails[i].clientCode = self.theOrder.clientCode;
                     self.theOrder.orderDetails[i].shopCode = self.theOrder.shopCode;
                 }
-
+                orderCacheService.addOneOrder(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
                     self.isSaveButtonPressed=false;

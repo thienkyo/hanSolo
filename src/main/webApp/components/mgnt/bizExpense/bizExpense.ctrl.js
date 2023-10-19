@@ -2,10 +2,12 @@
 angular.module('bizExpenseModule')
 	.controller('bizExpenseController',['$rootScope','$location','memberService','bizExpenseService','AmountList',
 									'NgTableParams','BizExpenseStatusArray','BizExpenseDO','uploadService','$timeout',
-									'FirstTimeLoadSize',
+									'FirstTimeLoadSize','clientListCacheService','shopListCacheService','clientInfoCacheService',
+									'currentShopCacheService',
 	function($rootScope,$location,memberService,bizExpenseService,AmountList,
 	        NgTableParams,BizExpenseStatusArray,BizExpenseDO,uploadService,$timeout,
-	        FirstTimeLoadSize) {
+	        FirstTimeLoadSize,clientListCacheService,shopListCacheService,clientInfoCacheService,
+	        currentShopCacheService) {
 	var self = this;
 	self.theBizExpense = new BizExpenseDO;
 	self.statusList = BizExpenseStatusArray;
@@ -14,10 +16,32 @@ angular.module('bizExpenseModule')
 	self.tempArray=[];
 	self.tempAmount=0;
 	self.OneDayExpense={};
+	self.isGodLike = memberService.isGodLike();
+	self.clientList = clientListCacheService.get();
+    self.shopList = shopListCacheService.get();
+    self.clientList2 = clientListCacheService.get();
+    self.shopList2 = shopListCacheService.get();
+    self.queryRequest={};
+    self.queryRequest.amount = FirstTimeLoadSize;
+    console.log('this is biz expense');
+    console.log(currentShopCacheService.get());
 
 	if(!memberService.isMod()){
 		$location.path('#/');
 	}
+
+	if(self.isGodLike){
+        self.queryRequest.clientCode = 'ALL';
+        self.queryRequest.shopCode = 'ALL';
+    }else{
+        self.theBizExpense.clientCode = clientInfoCacheService.get().clientCode;
+        self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+        if(self.shopList.length == 1){
+            self.queryRequest.shopCode = self.shopList[0].shopCode;
+        }else{
+            self.queryRequest.shopCode = 'ALL';
+        }
+    }
 
 	self.currentMember = memberService.getCurrentMember();
 	self.theBizExpense.owner = self.currentMember.name;
@@ -27,12 +51,37 @@ angular.module('bizExpenseModule')
     self.isSuperAdmin = memberService.isSuperAdmin();
 
 	self.amountList=AmountList;
-    self.amount = FirstTimeLoadSize;
+    //self.amount = FirstTimeLoadSize;
 	
-	bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
-		self.BizExpenseList = data;
-		self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
-	});
+	getBizExpenseByCondition(self.queryRequest);
+
+//////////////////////////
+    self.filterBizExpenseAndShopByClientCode = function(clientCode){
+        if(clientCode == 'ALL'){
+            self.queryRequest.shopCode = 'ALL';
+        }else{
+            self.shopList2 = shopListCacheService.get().filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
+            self.queryRequest.shopCode = 'ALL';
+        }
+
+        getBizExpenseByCondition(self.queryRequest);
+    }
+
+     self.filterBizExpenseByShopCode = function(){
+        getBizExpenseByCondition(self.queryRequest);
+    }
+
+    function getBizExpenseByCondition(queryRequest) {
+        self.tableParams = new NgTableParams({}, { dataset: []});
+        bizExpenseService.getBizExpenseForMgnt(queryRequest).then(function (data) {
+            self.BizExpenseList = data;
+            self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+        });
+    }
+
+    self.filterShopByClientCode = function(clientCode){
+        self.shopList = shopListCacheService.get().filter(i => i.clientCode == clientCode );
+    }
 
 	self.uploadPic = function(file) {
 	    uploadService.uploadFunction(file,'BIZEXPENSE');
@@ -106,15 +155,21 @@ angular.module('bizExpenseModule')
 
 		self.responseStr = false;
 		self.responseStrFail = false;
-		bizExpenseService.upsert(bizExpense).then(function (data) {
-			self.responseStr = data;
-			self.isSaveButtonPressed=false;
-			console.log(data);
-			if(bizExpense.id == 0){
-				self.BizExpenseList.unshift(bizExpense);
-				self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
-			}
-		});
+		console.log(bizExpense);
+		if(self.theBizExpense.shopCode){
+		    bizExpenseService.upsert(bizExpense).then(function (data) {
+                self.responseStr = data;
+                self.isSaveButtonPressed=false;
+                console.log(data);
+                if(bizExpense.id == 0){
+                    self.BizExpenseList.unshift(data.obj);
+                    self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+                }
+            });
+		}else{
+		    self.isSaveButtonPressed=false;
+		    self.responseStrFail ='Cần chọn shop.';
+		}
 	}
 
 	self.deleteBizExpense = function(bizExpense){
@@ -142,14 +197,12 @@ angular.module('bizExpenseModule')
     }
 
     self.getBizExpenseByTerm = function(){
-        bizExpenseService.getBizExpenseForMgnt(self.amount).then(function (data) {
-            self.BizExpenseList = data;
-            self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
-        });
+        getBizExpenseByCondition(self.queryRequest);
     }
 
     self.closeAlert = function(index) {
         self.responseStr = false;
+        self.responseStrFail = false;
     };
 
     self.promptDelete = function(id){

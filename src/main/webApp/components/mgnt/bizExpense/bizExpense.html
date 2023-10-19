@@ -99,7 +99,7 @@ form .progress {
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-2">
+			<div class="col-sm-1">
 				<select  ng-model="ctrl.theBizExpense.status"
 						 ng-options="opt.value as opt.name for opt in ctrl.statusList"
 						 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
@@ -108,6 +108,31 @@ form .progress {
 			<div class="col-sm-2">
 				<input type="text"  ng-model="ctrl.theBizExpense.owner" placeholder="owner" style="width: 100%;height: 30px;"/>
 			</div>
+
+
+
+			<div class="col-sm-1" ng-if="ctrl.isGodLike">
+				<select  ng-model="ctrl.theBizExpense.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'} | filter:{ clientCode: '!ALL'}"
+						 ng-change="ctrl.filterShopByClientCode(ctrl.theBizExpense.clientCode)"
+						 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;margin-right: 25px;"
+						 >
+				</select>
+
+			</div>
+			<div class="col-sm-1">
+				<select  ng-model="ctrl.theBizExpense.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+						 ng-disabled="ctrl.theBizExpense.clientCode == null"
+						 ng-change="ctrl.filterOrderByShopCode()"
+						 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 2px;background: #FFFFFF;">
+				</select>
+			</div>
+
+
+
+
+
 			<div class="col-sm-3">
 				<input type="text"  ng-model="ctrl.theBizExpense.amount" placeholder="amount" style="width: 100px;height: 30px;"/>
 				{{ctrl.theBizExpense.amount | number:0}}đ
@@ -129,12 +154,10 @@ form .progress {
 				>upload</a>
 			</div>
 			<div class="col-sm-2">
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span class="sr-only"></span>
-					thất bại
-				</div>
+				<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 200px;height: 0px;padding: 5px 0px 25px 10px;" >
+					{{ctrl.responseStrFail}}
+				</alert>
 
 				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
 					   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;" >
@@ -145,13 +168,31 @@ form .progress {
 	    </div>
 		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
 			<div class="col-sm-2">
-				<select  ng-model="ctrl.amount"
+				<select  ng-model="ctrl.queryRequest.amount"
 						 ng-options="opt.value as opt.name for opt in ctrl.amountList"
-						 ng-change="ctrl.getBizExpenseByTerm(ctrl.amount)"
-						 style="width: 80px;height: 30px;">
+						 ng-change="ctrl.getBizExpenseByTerm()"
+						 style="width: 80px;height: 35px;">
 				</select>
 				size: {{ctrl.BizExpenseList.length}}
 			</div>
+			<div class="col-sm-10" style="text-align: end;">
+				<select  ng-model="ctrl.queryRequest.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList2 | filter:{ clientCode: '!GODLIKE'}"
+						 ng-change="ctrl.filterBizExpenseAndShopByClientCode(ctrl.queryRequest.clientCode)"
+						 style="width: 13%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
+						 ng-show="ctrl.isGodLike">
+				</select>
+
+				<select  ng-model="ctrl.queryRequest.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList2 "
+						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
+						 ng-change="ctrl.filterBizExpenseByShopCode()"
+						 style="width: 13%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				</select>
+			</div>
+
+
+
 			<div ng-show="ctrl.tempAmount > 0">
 				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
 				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
@@ -177,8 +218,11 @@ form .progress {
 					<td title="'amount'" filter="{ 'amount' : 'text'}" sortable="'amount'" style="text-align: right;width:100px;">
 						{{one.amount | number:0}}đ
 					</td>
-					<td title="'note'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:120px;">
+					<td title="'owner'" filter="{ 'owner' : 'text'}" sortable="'owner'" style="text-align: left;width:120px;">
 						{{one.owner}}
+					</td>
+					<td title="'client|shop'" filter="{ 'shopCode' : 'text'}" ng-if="ctrl.isGodLike" style="width:100px;">
+						{{one.clientCode}} {{one.shopCode}}
 					</td>
 					<td title="''"  style="text-align: center;">
 						<input type="checkbox"  ng-model="one.picked" ng-click="ctrl.calculateAmount(one)" />
@@ -197,8 +241,8 @@ form .progress {
 						{{one.status == 0 ? 'đã tạo' : 'xong' }}
 					</td>
 
-					<td title="'delete'" style="width:fit-content;" ng-if="ctrl.isAdmin">
-						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >delete</a>
+					<td title="'X'" style="width: 20px;" ng-if="ctrl.isAdmin">
+						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 						<p ng-if="ctrl.deletingId == one.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteBizExpense(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>

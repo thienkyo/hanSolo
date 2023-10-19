@@ -77,7 +77,7 @@ angular.module('homeModule')
                     shopListCacheService.set(data.obj.shopList);
                     if(data.obj.shopList.find(i => i.shopCode == 'ALL')){
                         currentShopCacheService.set(data.obj.shopList.find(i => i.shopCode == 'ALL'));
-                    }else{
+                    }else if(data.obj.shopList.length == 1){
                         currentShopCacheService.set(data.obj.shopList[0]);
                     }
                 }

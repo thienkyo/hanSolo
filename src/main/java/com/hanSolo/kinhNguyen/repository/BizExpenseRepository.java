@@ -13,11 +13,11 @@ public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpe
 
     List<BizExpense> findFirst100ByOrderByGmtCreateDesc();
 
-    List<BizExpense> findFirst100ByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
+    //List<BizExpense> findFirst100ByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
 
-    List<BizExpense> findByOrderByGmtCreateDesc();
+    List<BizExpense> findAllByOrderByGmtCreateDesc();
 
-    List<BizExpense> findByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
+    //List<BizExpense> findByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
 
     @Transactional
     @Modifying
@@ -27,4 +27,9 @@ public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpe
     @Query("select b from BizExpense b where b.gmtCreate between ?1 and ?2")
     List<BizExpense> findByGmtCreateBetween(Date gmtCreateStart, Date gmtCreateEnd);
 
+    List<BizExpense> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<BizExpense> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+
+    List<BizExpense> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<BizExpense> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
 }

@@ -71,23 +71,24 @@ public class ApiController {
         Optional<SmsQueue> oneSmsOpt = smsQueueRepo.findById(Integer.parseInt(id));
         if(oneSmsOpt.isPresent()){
             SmsQueue oneSms = oneSmsOpt.get();
-
-            Optional<SmsJob> jobOpt = smsJobRepo.findById(oneSms.getJobId());
-            if(jobOpt.isPresent()){
-                SmsJob job = jobOpt.get();
-                if(Utility.SMS_JOB_COMMON.equals(job.getJobType())){
-                    Optional<SmsUserInfo> smsUserInfoOpt = smsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
-                    if(smsUserInfoOpt.isPresent()){
-                        SmsUserInfo smsUserInfo = smsUserInfoOpt.get();
-                        smsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-                        smsUserInfoRepo.save(smsUserInfo);
-                    }
-                }else if(Utility.SMS_JOB_SPECIFIC.equals(job.getJobType())){
-                    Optional<SpecificSmsUserInfo> specSmsUserInfoOpt = specificSmsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
-                    if(specSmsUserInfoOpt.isPresent()){
-                        SpecificSmsUserInfo specSmsUserInfo = specSmsUserInfoOpt.get();
-                        specSmsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-                        specificSmsUserInfoRepo.save(specSmsUserInfo);
+            if (oneSms.getJobId() != null) {
+                Optional<SmsJob> jobOpt = smsJobRepo.findById(oneSms.getJobId());
+                if(jobOpt.isPresent()){
+                    SmsJob job = jobOpt.get();
+                    if(Utility.SMS_JOB_COMMON.equals(job.getJobType())){
+                        Optional<SmsUserInfo> smsUserInfoOpt = smsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
+                        if(smsUserInfoOpt.isPresent()){
+                            SmsUserInfo smsUserInfo = smsUserInfoOpt.get();
+                            smsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
+                            smsUserInfoRepo.save(smsUserInfo);
+                        }
+                    }else if(Utility.SMS_JOB_SPECIFIC.equals(job.getJobType())){
+                        Optional<SpecificSmsUserInfo> specSmsUserInfoOpt = specificSmsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
+                        if(specSmsUserInfoOpt.isPresent()){
+                            SpecificSmsUserInfo specSmsUserInfo = specSmsUserInfoOpt.get();
+                            specSmsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
+                            specificSmsUserInfoRepo.save(specSmsUserInfo);
+                        }
                     }
                 }
             }

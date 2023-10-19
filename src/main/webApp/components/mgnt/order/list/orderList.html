@@ -372,7 +372,7 @@
 								 ng-style="ctrl.setStyle(order.status)">
 						</select>
 					</td>
-					<td title="'X'" style="width:fit-content;" ng-if="ctrl.isAdmin">
+					<td title="'X'" style="width:30px;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out"
 						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin">X</a>
 						<p ng-show="ctrl.deletingOrderId == order.id">
