@@ -82,7 +82,7 @@
 								<div class="col-sm-3">Giảm: ({{ctrl.theSummaryModal.couponDiscount}}%) {{ctrl.theSummaryModal.couponAmount | number:0}}đ</div>
 								<div class="col-sm-3">Thành tiền: {{ctrl.theSummaryModal.total | number:0}}đ</div>
 								<div class="col-sm-2">Cọc: {{ctrl.theSummaryModal.deposit | number:0}}đ</div>
-								<div class="col-sm-2">Còn lại: {{ctrl.theSummaryModal.deposit > 1000 ?  ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.deposit : '0' | number:0}}đ</div>
+								<div class="col-sm-2">Còn lại: {{ctrl.theSummaryModal.deposit > 1000 ?  ctrl.theSummaryModal.subTotal*((100 - ctrl.theSummaryModal.couponDiscount)/100) - ctrl.theSummaryModal.customDiscountAmount - ctrl.theSummaryModal.deposit : '0' | number:0}}đ</div>
 							</div>
 						</div>
 

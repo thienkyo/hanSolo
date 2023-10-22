@@ -80,8 +80,8 @@ angular.module('invoiceModule')
         }
         self.theOrder.subTotal = subTotal;
         self.theOrder.couponAmount = subTotal*self.theOrder.couponDiscount/100;
-        self.theOrder.total = subTotal - self.theOrder.couponAmount;
-        self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.deposit;
+        self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount;
+        self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount - self.theOrder.deposit;
         self.theOrder.doubleLine = count;
     }
 }]);

@@ -362,6 +362,7 @@ function OrderDO () {
 	this.doneSmsPaymentNotify = false;
 	this.clientCode = '';
 	this.shopCode = '';
+	this.customDiscountAmount = 0;
 }
 
 function OrderDetailDO () {

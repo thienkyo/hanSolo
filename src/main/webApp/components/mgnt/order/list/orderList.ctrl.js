@@ -67,7 +67,7 @@ angular.module('orderListModule')
             self.showLoadingText = false;
         });
     }
-    /// 4444444
+
     self.filterOrderByShopCode = function(){
         self.tableParams = new NgTableParams({}, { dataset: []});
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
@@ -188,6 +188,7 @@ angular.module('orderListModule')
         self.OneDayReport.date =  date +'-'+ month +'-'+ (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() ;
 
         self.OneDayReport.data.forEach((dataOne, index, array) => {
+        console.log();
             self.OneDayReport.totalAmount += dataOne.total;
             self.OneDayReport.subTotalAmount += dataOne.subTotal;
             self.OneDayReport.depositAmount += dataOne.deposit;
@@ -344,10 +345,10 @@ angular.module('orderListModule')
         order.subTotal = subTotal;
         order.currentCusSource = order.cusSource;
         order.couponAmount = subTotal*order.couponDiscount/100;
-        order.total = subTotal - order.couponAmount;
+        order.total = subTotal - order.couponAmount - order.customDiscountAmount;
         order.remain = 0;
         if(order.status == 4){
-            order.remain = subTotal - order.couponAmount - order.deposit;
+            order.remain = subTotal - order.couponAmount - order.customDiscountAmount - order.deposit;
         }
 /*
         switch(order.status) {

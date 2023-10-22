@@ -283,7 +283,15 @@ select, textarea {
 					<ul>
 						<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
 						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
-						<li>Total <span>{{ctrl.theOrder.total | number:0}}đ</span></li>
+						<li>Total(*) <span uib-popover-template="ctrl.dynamicPopover.templateUrl"
+										 popover-placement="bottom" popover-title="Custom discount:">
+							{{ctrl.theOrder.total | number:0}}đ</span></li>
+
+						<script type="text/ng-template" id="myPopoverTemplate.html">
+							<div class="form-group">
+								<input type="text" ng-model="ctrl.theOrder.customDiscountAmount" ng-change="ctrl.calculateOrderTotal()" class="form-control">
+							</div>
+						</script>
 						<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
 						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>

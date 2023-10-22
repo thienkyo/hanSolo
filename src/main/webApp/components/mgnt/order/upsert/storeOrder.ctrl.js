@@ -278,8 +278,8 @@ angular.module('storeOrderModule')
     //  self.theOrder.statusName = OrderStatusArray.find(i => i.value == self.theOrder.status).name;
         self.theOrder.subTotal = subTotal;
         self.theOrder.couponAmount = subTotal*self.theOrder.couponDiscount/100;
-        self.theOrder.total = subTotal - self.theOrder.couponAmount;
-        self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.deposit;
+        self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount;
+        self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount - self.theOrder.deposit;
     }
 
     self.getCoupon = function(code) {
@@ -503,6 +503,13 @@ angular.module('storeOrderModule')
 
 
 ////// run when loading page/////
+    self.dynamicPopover = {
+        content: 'Hello, World!',
+        templateUrl: 'myPopoverTemplate.html',
+        title: 'Title'
+    };
+
+
 	if(!memberService.isMod()){
 		$location.path('#/');
 	}

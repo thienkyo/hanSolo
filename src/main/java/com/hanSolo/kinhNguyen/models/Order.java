@@ -95,6 +95,17 @@ public class Order extends ParentCodeModel {
     @Column(name = "done_sms_payment_notify",columnDefinition = "boolean default false")
     private Boolean doneSmsPaymentNotify;
 
+    @Column(name = "custom_discount_amount", columnDefinition = "integer default 0")
+    private Integer customDiscountAmount;
+
+    public Integer getCustomDiscountAmount() {
+        return customDiscountAmount;
+    }
+
+    public void setCustomDiscountAmount(Integer customDiscountAmount) {
+        this.customDiscountAmount = customDiscountAmount;
+    }
+
     public Boolean getDoneSmsPaymentNotify() {
         return doneSmsPaymentNotify;
     }
