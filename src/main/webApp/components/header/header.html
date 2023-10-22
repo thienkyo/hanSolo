@@ -139,7 +139,7 @@
 								<li ng-if="ctrl.isAdmin"><a href="#/mgnt/customerSource/">Customer Source</a></li>
 							</ul>
 						</li>
-						<li ng-if="(ctrl.isAdmin && ctrl.clientInfo.unlockSmsFeature) || ctrl.isGodLike">
+						<li ng-if="(ctrl.isAdmin && ctrl.clientInfo.isUnlockSmsFeature) || ctrl.isGodLike">
 							<a href="" >sms</a>
 							<ul class="dropdown">
 								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/SmsUserInfo/">sms</a></li>

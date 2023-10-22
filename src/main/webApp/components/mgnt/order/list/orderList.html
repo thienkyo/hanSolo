@@ -267,7 +267,7 @@
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					search
 				</button>
-				<button type="button" class="btn btn-primary" ng-click="ctrl.keySearch='';ctrl.getOrderByTerm();"
+				<button type="button" class="btn btn-primary" ng-click="ctrl.queryRequest.generalPurpose='';ctrl.getOrderByTerm();"
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					reset
 				</button>
@@ -388,14 +388,17 @@
         </div>
 
 		<!--local order recovery-->
-		<ul class="nav nav-tabs {{ctrl.isClickMetadata ? 'active' : ''}}"  role="tablist">
+		<ul class="nav nav-tabs {{ctrl.isClickOrderRecovery ? 'active' : ''}}"  role="tablist">
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder"
-				   ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;">recover order</a>
+				   ng-click="ctrl.isClickOrderRecovery = ctrl.isClickOrderRecovery ? false : true;">recover order</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#config">config</a>
 			</li>
 		</ul>
 		<div class="tab-content">
-			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickMetadata ? 'active' : ''}}">
+			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
 				<br/>
 				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
@@ -421,6 +424,31 @@
 						  ng-model="ctrl.orderListText" style="width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>
 
 			</div>
+
+			<div id="config" class="container tab-pane">
+				<br/>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					test
+				</button>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.clearOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					test
+				</button>
+
+				<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
+						ng-disabled="ctrl.isRecoveringOrder">
+					recover
+				</button>
+
+				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"
+					   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
+					thành công
+				</alert>
+
+			</div>
+
 		</div>
 
 	</div>

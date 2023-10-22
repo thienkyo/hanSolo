@@ -264,11 +264,9 @@ select, textarea {
 
 				</div>
 
-
 				<div class="row" style="margin-bottom: 60px;">
 					<div class="col-lg-12"></div>
 				</div>
-
 
 			</div>
 			<!-- Discount codes and order total -->
@@ -876,9 +874,7 @@ select, textarea {
 							{{ctrl.isErrorMsg}}
 						</div>
 					</div>
-
 					<div class="col-lg-4" ></div>
-
 					<div class="col-lg-2" >
 						<span style="font-size: 13px;">
 							[{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}} :
@@ -887,13 +883,48 @@ select, textarea {
 						</span>
 
 					</div>
-
-
-
 				</div>
 
 			</div>
 		</div>
+		<!-- outside of pannel -->
+		<!--local order recovery-->
+		<ul class="nav nav-tabs {{ctrl.isClickOrderRecovery ? 'active' : ''}}"  role="tablist" style="padding-top: 20px;">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder"
+				   ng-click="ctrl.isClickOrderRecovery = ctrl.isClickOrderRecovery ? false : true;">more</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
+				<br/>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					get order in text
+				</button>
+				<button type="button" class="btn btn-primary" ng-click="ctrl.clearOrderForRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
+					clear
+				</button>
+
+				<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
+						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
+						ng-disabled="ctrl.isRecoveringOrder">
+					recover
+				</button>
+
+				<!--<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"
+					   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
+					thành công
+				</alert>-->
+
+				<!--<textarea rows="30"  placeholder="for recovery" class="checkout__input__add"
+						  ng-model="ctrl.orderListText" style="width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>-->
+
+			</div>
+		</div>
+
+
 	</div>
 
 </section>

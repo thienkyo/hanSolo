@@ -46,14 +46,7 @@ angular.module('orderListModule')
         self.cusSourceList = data;
       //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
     });
-/*
-	orderListService.getOrdersForMgnt(self.amount).then(function (data) {
-		self.orderList = data;
-		self.orderList.forEach(calculateOrderTotal);
-		self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-		self.showLoadingText = false;
-	});
-	*/
+
 	resetList();
 //////////////
 
@@ -90,7 +83,7 @@ angular.module('orderListModule')
 	    order.statusName = OrderStatusArray.find(i => i.value == order.status).name;
 	    self.isUpdatingOrder = true;
 		orderListService.updateOrderStatus(order).then(function(data){
-			self.responseStr = data.replyStr;
+			self.responseStr = data.obj;
 			self.isUpdatingOrder = false;
 		});
 	}

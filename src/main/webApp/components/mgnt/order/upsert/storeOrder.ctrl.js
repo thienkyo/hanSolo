@@ -466,8 +466,6 @@ angular.module('storeOrderModule')
         theSplitOrder.extInfo = theSplitOrder.extInfo + " tách từ order " + self.theOrder.id;
         theSplitOrder.deposit = 0;
         self.theOrder.deposit = 0;
-        console.log(theSplitOrder);
-        console.log(self.theOrder);
 
         var orderList = [];
         orderList.push(self.theOrder,theSplitOrder);
@@ -521,7 +519,7 @@ angular.module('storeOrderModule')
         self.queryRequest.generalPurpose = $routeParams.orderId;
         orderListService.getOrderById(self.queryRequest)
             .then(function (data) {
-                console.log(data);
+
                 self.theOrder = data.obj;
 
                 if(self.theOrder){
@@ -533,7 +531,6 @@ angular.module('storeOrderModule')
                         self.shopList = self.shadowShopList.filter(i => i.clientCode == self.theOrder.clientCode );
                     }
 
-                    console.log(self.shopList);
                     if(!self.shopList.find(i => i.shopCode == self.theOrder.shopCode)){
                         self.shopList = oneClientShopListCacheService.get();
                     }
@@ -580,8 +577,6 @@ angular.module('storeOrderModule')
             }
         }
     }
-
-
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
 

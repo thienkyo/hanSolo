@@ -16,7 +16,7 @@ angular.module('app')
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.isMod = memberService.isMod();
 	self.clientInfo =  clientInfoCacheService.get();
-	console.log("this is header");
+	console.log('this is header');
 
 /*
 	categoryService.getActiveCategories().then(function(data){
@@ -33,11 +33,6 @@ angular.module('app')
 		self.isSuperAdmin = false;
 		self.currentMember = null;
 		currentShopCacheService.clear();
-
-		console.log('logout');
-		console.log(clientInfoCacheService.get());
-        console.log(shopListCacheService.get());
-        console.log(currentShopCacheService.get());
 
 		$location.path('#/');
     }

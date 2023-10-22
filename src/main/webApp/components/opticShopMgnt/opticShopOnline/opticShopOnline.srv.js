@@ -9,6 +9,7 @@ angular.module('opticShopOnlineModule')
 	return service;
 
 	function getDataForMgnt(){
+
         var url = "Hmgnt/getOSOConfig/";
         return ajaxService.get(url,null,{}).then(function(response){
             return response.data;

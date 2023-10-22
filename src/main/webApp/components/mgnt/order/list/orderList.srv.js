@@ -1,18 +1,16 @@
 'use strict';
 angular.module('orderListModule')
 .factory('orderListService', ['ajaxService',function(ajaxService) {
-		var orderListService = {
-			getOrdersForMgnt : getOrdersForMgnt, // 100 order
-			getOrdersByTerms : getOrdersByTerms,
-			// getAllOrdersForMgnt : getAllOrdersForMgnt,
-			updateOrderStatus : updateOrderStatus,
-			getOrderById : getOrderById,
-			updateCusSource : updateCusSource,
-			doRecovery : doRecovery,
-			getOrderHistory : getOrderHistory,
-			deleteOrder : deleteOrder
+		var service = {
+                getOrdersByTerms : getOrdersByTerms,
+                updateOrderStatus : updateOrderStatus,
+                getOrderById : getOrderById,
+                updateCusSource : updateCusSource,
+                doRecovery : doRecovery,
+                getOrderHistory : getOrderHistory,
+                deleteOrder : deleteOrder
 			};
-	return orderListService;
+	return service;
 
 	function getOrderById(queryRequest){
         var url = "mgnt/getOrderById/";
@@ -20,13 +18,6 @@ angular.module('orderListModule')
             return response.data;
         });
     }
-
-	function getOrdersForMgnt(amount){
-		var url = "mgnt/getOrdersForMgnt/"+amount;
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}
 
 	function getOrdersByTerms(queryRequest){
         var url = "mgnt/getOrdersByTerms";

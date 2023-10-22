@@ -474,8 +474,8 @@ function(shopConfigService,cacheName,commonCacheService) {
     }
 
 }])
-.factory('configOSOCacheService',['opticShopOnlineService','cacheName','commonCacheService',
-function(opticShopOnlineService,cacheName,commonCacheService) {
+.factory('configOSOCacheService',['opticShopOnlineService','cacheName','commonCacheService','memberService',
+function(opticShopOnlineService,cacheName,commonCacheService,memberService) {
     var cacheNameStr = 'configOSOCache';
 	var service = {
             setCurrentCache : setCurrentCache,
@@ -490,7 +490,7 @@ function(opticShopOnlineService,cacheName,commonCacheService) {
 
     function getCurrentCache(){
         var info =  commonCacheService.getCurrentCache(cacheNameStr);
-        if(!info){
+        if(!info && memberService.isGodLike()){
             opticShopOnlineService.getDataForMgnt().then(function (data) {
                 info = data.obj
                 commonCacheService.setCurrentCache(cacheNameStr,data.obj);

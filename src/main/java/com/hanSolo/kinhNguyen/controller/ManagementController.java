@@ -366,15 +366,6 @@ public class ManagementController {
 
     }
 
-
-
-
-
-
-
-
-
-
     @RequestMapping(value = "upsertMember", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public GeneralResponse<String> upsertMember(@RequestBody final Member member,final HttpServletRequest request)
@@ -722,6 +713,7 @@ public class ManagementController {
 
     /////////////////////////Orders section ///////////////////////
     @SuppressWarnings("unchecked")
+    @Deprecated
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
@@ -760,9 +752,13 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "updateOrderStatus", method = RequestMethod.POST)
-    public GenericResponse updateOrder(@RequestBody final Order order) throws ParseException {
-        orderRepo.updateStatusAndGmtModifyById(order.getStatus(),Utility.getCurrentDate(),order.getId());
-        return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+    public GeneralResponse<String> updateOrder(@RequestBody final Order order, final HttpServletRequest request) throws ParseException {
+        if(checkSameClientCode(request, order.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            orderRepo.updateStatusAndGmtModifyById(order.getStatus(),Utility.getCurrentDate(),order.getId());
+            return new GeneralResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+        }
+        return new GeneralResponse("upsert_order_fail",Utility.FAIL_ERRORCODE,"Error ot not allow");
+
     }
 
     @RequestMapping(value = "getOrderById", method = RequestMethod.POST)
@@ -778,6 +774,31 @@ public class ManagementController {
             return new GeneralResponse(orOpt.get(),Utility.SUCCESS_ERRORCODE,"Success");
         }
 
+        return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+    }
+
+    /**
+     * for printable
+     * @param orderId
+     * @param request
+     * @return
+     * @throws ServletException
+     */
+    @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
+    public GeneralResponse<Order> getOrderById(@PathVariable final int orderId,final HttpServletRequest request) throws ServletException {
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+
+        Optional<Order> orOpt;
+        if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) ){
+            orOpt = orderRepo.findById(orderId);
+        }else{
+            orOpt = orderRepo.findByIdAndClientCode(orderId,clientInfo.get("clientCode"));
+        }
+
+        if(orOpt.isPresent()){
+            return new GeneralResponse(orOpt.get(),Utility.SUCCESS_ERRORCODE,"Success");
+        }
         return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
     }
 
@@ -1433,5 +1454,18 @@ public class ManagementController {
             return true;
         }
         return false;
+    }
+
+    /**
+     * purpose : check action has same clientCode with object
+     * ex: client CTTT only can operate on CTTT object like order, member....
+     * @param request
+     * @param clientCode
+     * @return
+     */
+    private boolean checkSameClientCode(final HttpServletRequest request, String clientCode){
+        final Claims claims = (Claims) request.getAttribute("claims");
+        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
+        return clientCode.equalsIgnoreCase(clientInfo.get("clientCode"));
     }
 }
