@@ -804,11 +804,11 @@ public class ManagementController {
 
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST)
     public GeneralResponse<String> deleteOrder(@RequestBody final Order order, final HttpServletRequest request) {
-        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
-            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        if(checkSameClientCode(request, order.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            orderRepo.delete(order);
+            return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
         }
-        orderRepo.delete(order);
-        return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
     }
 
     @RequestMapping(value = "getOnePrescription/{orderDetailId}", method = RequestMethod.GET)
@@ -833,26 +833,29 @@ public class ManagementController {
     }
 
     @RequestMapping(value = "updateCusSource", method = RequestMethod.POST)
-    public GenericResponse updateCusSource(@RequestBody final Order order) throws ParseException {
-        orderRepo.updateGmtModifyAndCusSourceById(Utility.getCurrentDate(),order.getCusSource(),order.getId());
+    public GeneralResponse<String> updateCusSource(@RequestBody final Order order, final HttpServletRequest request) throws ParseException {
+        if(checkSameClientCode(request, order.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            orderRepo.updateGmtModifyAndCusSourceById(Utility.getCurrentDate(),order.getCusSource(),order.getId());
 
-        Optional<CustomerSource>  customerSourceOpt = customerSourceRepo.findById(order.getCusSource());
-        if(customerSourceOpt.isPresent()){
-            CustomerSource customerSource = customerSourceOpt.get();
-            customerSource.setCount(customerSource.getCount() + 1);
-            customerSourceRepo.save(customerSource);
-        }
-
-        if(order.getCurrentCusSource() != null){
-            Optional<CustomerSource>  currentCustomerSourceOpt = customerSourceRepo.findById(order.getCurrentCusSource());
-            if(currentCustomerSourceOpt.isPresent()){
-                CustomerSource currentCustomerSource = currentCustomerSourceOpt.get();
-                currentCustomerSource.setCount(currentCustomerSource.getCount() - 1);
-                customerSourceRepo.save(currentCustomerSource);
+            Optional<CustomerSource>  customerSourceOpt = customerSourceRepo.findById(order.getCusSource());
+            if(customerSourceOpt.isPresent()){
+                CustomerSource customerSource = customerSourceOpt.get();
+                customerSource.setCount(customerSource.getCount() + 1);
+                customerSourceRepo.save(customerSource);
             }
+
+            if(order.getCurrentCusSource() != null){
+                Optional<CustomerSource>  currentCustomerSourceOpt = customerSourceRepo.findById(order.getCurrentCusSource());
+                if(currentCustomerSourceOpt.isPresent()){
+                    CustomerSource currentCustomerSource = currentCustomerSourceOpt.get();
+                    currentCustomerSource.setCount(currentCustomerSource.getCount() - 1);
+                    customerSourceRepo.save(currentCustomerSource);
+                }
+            }
+            return new GeneralResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
         }
 
-        return new GenericResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse("upsert_order_fail",Utility.FAIL_ERRORCODE,"not allow");
     }
 
     @RequestMapping(value = "saveMultipleOrders", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,

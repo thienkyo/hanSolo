@@ -54,7 +54,7 @@ public class jwtFilterMgnt extends GenericFilterBean {
 
             if(CommonCache.LOGIN_MEMBER_LIST.containsKey(claims.get("sub"))){
                 Member currMem = CommonCache.LOGIN_MEMBER_LIST.getOrDefault(claims.get("sub"),null);
-                if(!currMem.getStatus()){
+                if( currMem == null || !currMem.getStatus()){
                     throw new ServletException("USER_INACTIVE");
                 }
 

@@ -91,7 +91,7 @@ angular.module('orderListModule')
 	self.updateCusSource = function(order){
         self.isUpdatingOrder = true;
         orderListService.updateCusSource(order).then(function(data){
-            self.responseStr = data.replyStr;
+            self.responseStr = data.obj;
             self.isUpdatingOrder = false;
         });
     }
