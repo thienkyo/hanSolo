@@ -43,6 +43,17 @@ public class SmsQueue {
     @Column(name = "weight", length = 2, columnDefinition = "varchar(2) default '1'")
     private String weight;
 
+    @Column(name = "job_type", length = 30)
+    private String jobType;
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
     public String getWeight() {
         return weight;
     }

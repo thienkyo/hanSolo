@@ -231,6 +231,8 @@ function ContractDO(){
     this.note = '';
     this.endDay = '';
     this.beginDay = '';
+    this.clientCode = '';
+    this.shopCode = '';
     this.memberId = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();

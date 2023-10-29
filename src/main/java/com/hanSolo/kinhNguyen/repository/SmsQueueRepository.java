@@ -4,6 +4,7 @@ import com.hanSolo.kinhNguyen.models.SmsQueue;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,4 +16,9 @@ public interface SmsQueueRepository extends PagingAndSortingRepository<SmsQueue,
 
     List<SmsQueue> findFirst100ByOrderByGmtCreateDesc();
     List<SmsQueue> findFirst100ByStatusOrderByGmtCreateAsc(@NonNull String status);
+
+    Optional<SmsQueue> findFirstByJobTypeAndStatusOrderByGmtModifyDesc(String jobType, String status);
+
+    Optional<SmsQueue> findFirstByJobTypeAndStatusInOrderByGmtModifyDesc(String jobType, Collection<String> statuses);
+
 }

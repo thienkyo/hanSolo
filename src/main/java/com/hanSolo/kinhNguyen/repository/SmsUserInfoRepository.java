@@ -1,7 +1,10 @@
 package com.hanSolo.kinhNguyen.repository;
 
 import com.hanSolo.kinhNguyen.models.SmsUserInfo;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -21,4 +24,9 @@ public interface SmsUserInfoRepository extends PagingAndSortingRepository<SmsUse
 
     List<SmsUserInfo> findByOrderCreateDateBeforeAndGenderOrderByOrderCreateDateDesc(Date orderCreateDate, Boolean gender);
     List<SmsUserInfo> findByOrderCreateDateBeforeAndGenderAndAreaCodeOrderByOrderCreateDateDesc(Date orderCreateDate, Boolean gender, String areaCode);
+
+    @Transactional
+    @Modifying
+    @Query("update SmsUserInfo s set s.lastSendSmsDate = ?1 where s.phone = ?2")
+    int updateLastSendSmsDateByPhone(Date lastSendSmsDate, String phone);
 }

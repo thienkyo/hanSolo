@@ -1,9 +1,11 @@
 'use strict';
 angular.module('contractModule')
 .controller('contractController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
-                                    'CommonStatusArray','contractService','salaryService',
+                                    'CommonStatusArray','contractService','salaryService','clientListCacheService',
+                                    'shopListCacheService','clientInfoCacheService',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
-            CommonStatusArray,contractService,salaryService) {
+            CommonStatusArray,contractService,salaryService,clientListCacheService,
+            shopListCacheService,clientInfoCacheService) {
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new ContractDO();
@@ -11,6 +13,29 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     if(!memberService.isSuperAdmin()){
         $location.path('#/');
+    }
+
+    self.isGodLike = memberService.isGodLike();
+    self.clientList = clientListCacheService.get();
+    self.shopList = shopListCacheService.get();
+    self.clientList2 = clientListCacheService.get();
+    self.shopList2 = shopListCacheService.get();
+    self.queryRequest={};
+    self.queryRequest.amount = 0;
+    console.log('this is contract');
+    //console.log(currentShopCacheService.get());
+
+    if(self.isGodLike){
+        self.queryRequest.clientCode = 'ALL';
+        self.queryRequest.shopCode = 'ALL';
+    }else{
+        self.theBizExpense.clientCode = clientInfoCacheService.get().clientCode;
+        self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+        if(self.shopList.length == 1){
+            self.queryRequest.shopCode = self.shopList[0].shopCode;
+        }else{
+            self.queryRequest.shopCode = 'ALL';
+        }
     }
 
     contractService.getAll().then(function (data) {

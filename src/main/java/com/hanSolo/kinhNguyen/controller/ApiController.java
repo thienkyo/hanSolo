@@ -11,6 +11,7 @@ import com.hanSolo.kinhNguyen.repository.SmsUserInfoRepository;
 import com.hanSolo.kinhNguyen.repository.SpecificSmsUserInfoRepository;
 import com.hanSolo.kinhNguyen.response.QueueSmsResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,10 +58,31 @@ public class ApiController {
         CommonCache.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
-            smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
-            smsQueue.setGmtModify(Utility.getCurrentDate());
-            smsQueueRepo.save(smsQueue);
-            return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
+
+            if(smsQueue.getJobType() == null || smsQueue.getJobType().equalsIgnoreCase(Utility.SMS_JOB_COMMON) || smsQueue.getJobType().equalsIgnoreCase("")){
+                List<String> statuses = new ArrayList<>();
+                statuses.add(Utility.SMS_QUEUE_SENDING);
+                statuses.add(Utility.SMS_QUEUE_SENT);
+
+                if( CommonCache.LAST_SENT_SMS == null){
+                    Optional<SmsQueue> latestCommonSmsOpt = smsQueueRepo.findFirstByJobTypeAndStatusInOrderByGmtModifyDesc( Utility.SMS_JOB_COMMON, statuses);
+                    CommonCache.LAST_SENT_SMS = latestCommonSmsOpt.get();
+                }
+
+                Calendar currentTime = Calendar.getInstance();
+                System.out.println("getQueueSms api, currentTime:"+currentTime.toString());
+                currentTime.add(Calendar.MINUTE, -2);// COMMON sms send sms with 2 min interval;
+                System.out.println("getQueueSms api, currentTime minus 2min:"+ currentTime.toString());
+                System.out.println("getQueueSms api, LAST_SENT_SMS:"+ CommonCache.LAST_SENT_SMS.getGmtModify().toString());
+
+                if(CommonCache.LAST_SENT_SMS.getGmtModify().before(currentTime.getTime())){
+                    smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
+                    smsQueue.setGmtModify(Utility.getCurrentDate());
+                    smsQueueRepo.save(smsQueue);
+                    CommonCache.LAST_SENT_SMS = smsQueue;
+                    return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
+                }
+            }
         }
 
         return null;
@@ -71,31 +93,17 @@ public class ApiController {
         Optional<SmsQueue> oneSmsOpt = smsQueueRepo.findById(Integer.parseInt(id));
         if(oneSmsOpt.isPresent()){
             SmsQueue oneSms = oneSmsOpt.get();
-            if (oneSms.getJobId() != null) {
-                Optional<SmsJob> jobOpt = smsJobRepo.findById(oneSms.getJobId());
-                if(jobOpt.isPresent()){
-                    SmsJob job = jobOpt.get();
-                    if(Utility.SMS_JOB_COMMON.equals(job.getJobType())){
-                        Optional<SmsUserInfo> smsUserInfoOpt = smsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
-                        if(smsUserInfoOpt.isPresent()){
-                            SmsUserInfo smsUserInfo = smsUserInfoOpt.get();
-                            smsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-                            smsUserInfoRepo.save(smsUserInfo);
-                        }
-                    }else if(Utility.SMS_JOB_SPECIFIC.equals(job.getJobType())){
-                        Optional<SpecificSmsUserInfo> specSmsUserInfoOpt = specificSmsUserInfoRepo.findByPhone(oneSms.getReceiverPhone());
-                        if(specSmsUserInfoOpt.isPresent()){
-                            SpecificSmsUserInfo specSmsUserInfo = specSmsUserInfoOpt.get();
-                            specSmsUserInfo.setLastSendSmsDate(Utility.getCurrentDate());
-                            specificSmsUserInfoRepo.save(specSmsUserInfo);
-                        }
-                    }
-                }
-            }
-
             oneSms.setStatus(Utility.SMS_QUEUE_SENT);
             oneSms.setGmtModify(Utility.getCurrentDate());
             smsQueueRepo.save(oneSms);
+
+            if(Utility.SMS_JOB_COMMON.equals(oneSms.getJobType())){
+                smsUserInfoRepo.updateLastSendSmsDateByPhone(Utility.getCurrentDate(), oneSms.getReceiverPhone());
+
+            }else if(Utility.SMS_JOB_SPECIFIC.equals(oneSms.getJobType())){
+                specificSmsUserInfoRepo.updateLastSendSmsDateByPhone(Utility.getCurrentDate(), oneSms.getReceiverPhone());
+            }
+
             return "SUCCESS";
         }
         return "FAIL";
@@ -165,8 +173,8 @@ public class ApiController {
             }
         }
 
-        List<SmsQueue> smsQueueSending = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENDING);
-        smsQueueList.addAll(smsQueueSending);
+       // List<SmsQueue> smsQueueSending = smsQueueRepo.findFirst100ByStatusOrderByGmtCreateAsc(Utility.SMS_QUEUE_SENDING);
+       // smsQueueList.addAll(smsQueueSending);
         smsQueueRepo.saveAll(smsQueueList);
         CommonCache.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
         return null;
@@ -177,12 +185,13 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate());
+        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
         smsQueue.setGender(smsUserInfo.getGender());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
         smsQueue.setReceiverPhone(smsUserInfo.getPhone());
         smsQueue.setWeight(job.getWeight());
+        smsQueue.setJobType(job.getJobType());
 
         return smsQueue;
     }
@@ -192,12 +201,13 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate());
+        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
         smsQueue.setGender(smsUserInfo.getGender());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
         smsQueue.setReceiverPhone(smsUserInfo.getPhone());
         smsQueue.setWeight(job.getWeight());
+        smsQueue.setJobType(job.getJobType());
 
     return smsQueue;
     }
@@ -207,10 +217,11 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate());
+        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverPhone(phone);
         smsQueue.setWeight(job.getWeight());
+        smsQueue.setJobType(job.getJobType());
 
         return smsQueue;
     }

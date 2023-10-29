@@ -5,6 +5,7 @@ import com.hanSolo.kinhNguyen.models.LensProduct;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.Shop;
+import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.utility.Utility;
 
 import java.text.ParseException;
@@ -57,6 +58,8 @@ public class CommonCache {
      */
     public static Map<String, LensProduct> LENS_PRODUCT_LIST = new HashMap<>(Utility.LENS_PRODUCT_LIST_SIZE);
 
+
+    public static SmsQueue LAST_SENT_SMS = null;
 
     static {
         try {

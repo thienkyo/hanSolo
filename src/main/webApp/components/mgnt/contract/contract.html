@@ -97,9 +97,30 @@
 
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
-								<div class="col-sm-3">nationality:<input type="text"  ng-model="ctrl.theOne.nationalId" placeholder="nation" style="width: 100%;"/></div>
-								<div class="col-sm-9">note<input type="text"  ng-model="ctrl.theOne.note" placeholder="note" style="width: 100%;"/></div>
+								<div class="col-sm-3">
+									nationality:
+									<input type="text"  ng-model="ctrl.theOne.nationalId" placeholder="nation" style="width: 100%;"/>
+									client:
+									<select  ng-model="ctrl.queryRequest.clientCode"
+													ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
+													ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
+													style="width: 100%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
+													ng-show="ctrl.isGodLike">
+									</select>
+									shop:
+									<select  ng-model="ctrl.queryRequest.shopCode"
+												  ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+												  ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
+												  ng-change="ctrl.filterOrderByShopCode()"
+												  style="width: 100%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+									</select>
+								</div>
+								<div class="col-sm-9">note<!--<input type="text"  ng-model="ctrl.theOne.note" placeholder="note" style="width: 100%;"/>-->
+									<textarea rows="5"  placeholder="note" ng-model="ctrl.theOne.note"
+											  style="width: 100%;background: white;border: 1px solid;" ></textarea>
+								</div>
 							</div>
+
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-2">
 									<button type="button" class="btn btn-primary" style="margin: 0px 0px 10px 0px;" ng-click="ctrl.upsert(ctrl.theOne)">save contract</button>
@@ -111,7 +132,8 @@
 						</div>
 
 						<!--salary input-->
-						<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
+						<div class="cart__total" ng-if="ctrl.theOne.id != 0"
+							 style="margin-bottom: 20px;padding: 20px 20px 5px 20px;font-weight: bolder;">
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
 								<div class="col-sm-2">year:<input type="text"  ng-model="ctrl.theSalary.year" placeholder="year" style="width: 100%;"/></div>
 								<div class="col-sm-2">month:<input type="text"  ng-model="ctrl.theSalary.month" placeholder="month" style="width: 100%;"/></div>
@@ -126,7 +148,7 @@
 						</div>
 
 						<!--salary table-->
-						<div class="table-responsive">
+						<div class="table-responsive" ng-if="ctrl.theOne.id != 0">
 							<table ng-table="ctrl.salaryTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 								<tr ng-repeat="one in $data">
 									<td title="'year'" filter="{ 'year': 'text'}" sortable="'year'" style="width:80px;text-align: center;">
@@ -175,6 +197,24 @@
 			<div class="col-sm-1">
 				<a href="" class="btn check_out" style="margin: 5px 0px 0px 0px;"
 				   data-toggle="modal" data-target="#summaryModal" ng-click="ctrl.addContract()">add</a>
+			</div>
+			<div class="col-sm-7"></div>
+			<div class="col-sm-4" style="text-align: end;">
+
+				<select  ng-model="ctrl.queryRequest.clientCode"
+						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
+						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
+						 style="width: 25%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
+						 ng-show="ctrl.isGodLike">
+				</select>
+
+				<select  ng-model="ctrl.queryRequest.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
+						 ng-change="ctrl.filterOrderByShopCode()"
+						 style="width: 35%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				</select>
+
 			</div>
 		</div>
 		<!--data table-->
