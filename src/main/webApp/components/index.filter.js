@@ -56,5 +56,24 @@ angular.module('app')
         return returnStr;
     };
 })
+.filter('masking', function () {
+    return function (tel) {
+        if (!tel) { return ''; }
+        var returnStr='********';
+        var leng = tel.length;
+        var lastDigit = tel.substring(leng - 3, leng);
+
+        return returnStr+lastDigit;
+    };
+})
+.filter('getShortName', function () {
+    return function (name) {
+        if (!name) { return ''; }
+
+        var returnStr = name.split(' ')[name.split(' ').length-2] +' '+name.split(' ')[name.split(' ').length-1];
+
+        return returnStr;
+    };
+})
 
 ;

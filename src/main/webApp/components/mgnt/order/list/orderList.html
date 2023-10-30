@@ -218,7 +218,7 @@
 									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
-									<td title="'detail'" style="text-align: right;width:200px;">
+									<td title="'detail'" style="text-align: right;width:200px;padding-right: 2px;padding-left: 2px;">
 										<div class="row" style="margin-left: 3px;">
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
@@ -333,7 +333,7 @@
 
 		</div>
 		
-        <div class="table-responsive">
+        <div class="table-responsive" ng-if="!ctrl.isLuckyDrawMode">
             <table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
 			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:50px;text-align: center;">
@@ -387,7 +387,34 @@
 			<h3 ng-show="ctrl.showLoadingText" style="text-align: center;">Loading...</h3>
         </div>
 
-		<!--local order recovery-->
+
+		<!--luck draw table-->
+		<div class="table-responsive" ng-if="ctrl.isLuckyDrawMode">
+			<table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
+				<tr ng-repeat="order in $data">
+					<td title="'id'" filter="{ 'id': 'number'}"  style="width:120px;text-align: center;">
+						{{order.id}}
+					</td>
+					<td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
+						<a href="" ng-click="ctrl.showOrderDetail(order)">{{order.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}</a>
+					</td>
+					<td title="''"  style="text-align: center;">
+						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
+					</td>
+					<td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">
+						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)" >{{order.shippingPhone | masking}}</a>
+					</td>
+					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
+						{{order.shippingName | getShortName}}
+					</td>
+					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
+
+				</tr>
+			</table>
+		</div>
+		<!--end luck draw table-->
+
+		<!--panel tabs-->
 		<ul class="nav nav-tabs {{ctrl.isClickOrderRecovery ? 'active' : ''}}"  role="tablist">
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder"
@@ -427,9 +454,9 @@
 
 			<div id="config" class="container tab-pane">
 				<br/>
-				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
+				<button type="button" class="btn btn-primary" ng-click="ctrl.isLuckyDrawMode = ctrl.isLuckyDrawMode ? false : true;"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
-					test
+					lucky draw
 				</button>
 				<button type="button" class="btn btn-primary" ng-click="ctrl.clearOrderForRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
@@ -439,7 +466,7 @@
 				<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
 						ng-disabled="ctrl.isRecoveringOrder">
-					recover
+					test
 				</button>
 
 				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"

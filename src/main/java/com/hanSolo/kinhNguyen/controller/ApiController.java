@@ -56,6 +56,7 @@ public class ApiController {
         }
         Optional<SmsQueue> smsQueueOpt = smsQueueRepo.findFirstByStatusOrderByWeightDescGmtCreateAsc(Utility.SMS_QUEUE_INIT);
         CommonCache.LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
+        System.out.println("getQueueSms api ##############################");
         if(smsQueueOpt.isPresent()){
             SmsQueue smsQueue = smsQueueOpt.get();
 
@@ -70,18 +71,24 @@ public class ApiController {
                 }
 
                 Calendar currentTime = Calendar.getInstance();
-                System.out.println("getQueueSms api, currentTime:"+currentTime.toString());
-                currentTime.add(Calendar.MINUTE, -2);// COMMON sms send sms with 2 min interval;
-                System.out.println("getQueueSms api, currentTime minus 2min:"+ currentTime.toString());
+                System.out.println("getQueueSms api, currentTime:"+currentTime.getTime().toString());
+               /* currentTime.add(Calendar.MINUTE, -2);// COMMON sms send sms with 2 min interval;
+                System.out.println("getQueueSms api, currentTime minus 2min:"+ currentTime.toString());*/
                 System.out.println("getQueueSms api, LAST_SENT_SMS:"+ CommonCache.LAST_SENT_SMS.getGmtModify().toString());
 
-                if(CommonCache.LAST_SENT_SMS.getGmtModify().before(currentTime.getTime())){
+                if(currentTime.getTime().getMinutes() - CommonCache.LAST_SENT_SMS.getGmtModify().getMinutes() >=2){
                     smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
                     smsQueue.setGmtModify(Utility.getCurrentDate());
                     smsQueueRepo.save(smsQueue);
                     CommonCache.LAST_SENT_SMS = smsQueue;
                     return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
                 }
+            }else{
+                smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
+                smsQueue.setGmtModify(Utility.getCurrentDate());
+                smsQueueRepo.save(smsQueue);
+                CommonCache.LAST_SENT_SMS = smsQueue;
+                return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
             }
         }
 
