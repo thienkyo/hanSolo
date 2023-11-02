@@ -58,25 +58,13 @@ angular.module('orderListModule')
             self.shopList = self.shadowShopList.filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
             self.queryRequest.shopCode = 'ALL';
         }
-
-        orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-            self.orderList = data;
-            self.orderList.forEach(calculateOrderTotal);
-            self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-            engineerOrderList();
-            self.showLoadingText = false;
-        });
+        self.queryRequest.generalPurpose = '';
+        getOrdersByTerms();
     }
 
     self.filterOrderByShopCode = function(){
-        self.tableParams = new NgTableParams({}, { dataset: []});
-        orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-           self.orderList = data;
-           self.orderList.forEach(calculateOrderTotal);
-           self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-           engineerOrderList();
-           self.showLoadingText = false;
-        });
+        self.queryRequest.generalPurpose = '';
+        getOrdersByTerms();
     }
 
 	self.updateOrderStatus = function(order){
@@ -224,15 +212,10 @@ angular.module('orderListModule')
             }
         });
     }
-	
-	self.getOrderByTerm = function(){
-		orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
-			self.orderList = data;
-			self.orderList.forEach(calculateOrderTotal);
-			self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-			engineerOrderList();
-		});
-	}
+
+
+
+
 	
 	self.setStyle = function(status){
 		if(status==0){
@@ -463,6 +446,13 @@ angular.module('orderListModule')
             }
         }
 
+        getOrdersByTerms();
+    }
+    self.resetList = resetList;
+
+    function getOrdersByTerms(){
+        self.tableParams = new NgTableParams({}, { dataset: []});
+        console.log(self.queryRequest);
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
             self.orderList = data;
             self.orderList.forEach(calculateOrderTotal);
@@ -471,7 +461,7 @@ angular.module('orderListModule')
             self.showLoadingText = false;
         });
     }
-    self.resetList = resetList;
+    self.getOrdersByTerms = getOrdersByTerms;
 
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {

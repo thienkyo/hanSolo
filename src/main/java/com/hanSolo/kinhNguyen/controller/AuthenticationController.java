@@ -8,6 +8,7 @@ import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.MemberResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -198,7 +199,7 @@ public class AuthenticationController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate());
+        smsQueue.setContent(job.getMsgContentTemplate() +" ["+ RandomStringUtils.randomAlphanumeric(4)+"]");
         smsQueue.setGender(order.getGender());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(order.getShippingName());

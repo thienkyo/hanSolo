@@ -258,7 +258,7 @@
 		<!-- first 100 record -->
 		<div class="row">
 			<div class="col-sm-5">
-				<select  ng-model="ctrl.queryRequest.amount"  ng-change="ctrl.getOrderByTerm()"
+				<select  ng-model="ctrl.queryRequest.amount"  ng-change="ctrl.getOrdersByTerms()"
 					 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 					 style="width: 20%;height: 35px;background: #F0F0E9;">
 		    	</select>
@@ -267,7 +267,7 @@
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					search
 				</button>
-				<button type="button" class="btn btn-primary" ng-click="ctrl.queryRequest.generalPurpose='';ctrl.getOrderByTerm();"
+				<button type="button" class="btn btn-primary" ng-click="ctrl.queryRequest.generalPurpose='';ctrl.getOrdersByTerms();"
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
 					reset
 				</button>

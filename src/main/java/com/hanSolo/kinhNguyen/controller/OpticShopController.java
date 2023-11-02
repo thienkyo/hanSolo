@@ -84,7 +84,7 @@ public class OpticShopController {
     }
 
     @RequestMapping(value = "getAllClient", method = RequestMethod.GET)
-    public List<Client> getAllContract() {
+    public List<Client> getAllClient() {
         return clientRepo.findAllByOrderByGmtCreateDesc();
     }
 

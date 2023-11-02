@@ -23,13 +23,11 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.queryRequest={};
     self.queryRequest.amount = 0;
     console.log('this is contract');
-    //console.log(currentShopCacheService.get());
 
     if(self.isGodLike){
         self.queryRequest.clientCode = 'ALL';
         self.queryRequest.shopCode = 'ALL';
     }else{
-        self.theBizExpense.clientCode = clientInfoCacheService.get().clientCode;
         self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
         if(self.shopList.length == 1){
             self.queryRequest.shopCode = self.shopList[0].shopCode;
@@ -39,10 +37,21 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     }
 
     contractService.getAll().then(function (data) {
+        data.forEach(getShopName);
         self.contractList = data;
+        console.log(self.contractList);
         self.contractList.forEach(enrichContractList);
         self.tableParams = new NgTableParams({}, { dataset: self.contractList});
     });
+
+
+////////////////////////
+
+    self.filterShopByClientCode = function(clientCode){
+        self.shopList2 = shopListCacheService.get().filter(i => i.clientCode == clientCode || i.shopCode == 'ALL' );
+    }
+
+    //filterOrderAndShopByClientCode
 
     function enrichContractList(contract){
         if(contract.endDay){
@@ -55,7 +64,18 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.addContract = function(){
         self.theOne = new ContractDO();
         self.theSalary = new SalaryDO();
-        console.log(self.theOne);
+
+        if(self.isGodLike){
+            self.theOne.clientCode = 'ALL';
+            self.theOne.shopCode = 'ALL';
+        }else{
+            self.theOne.clientCode  = clientInfoCacheService.get().clientCode;
+            if(self.shopList.length == 1){
+                self.theOne.shopCode = self.shopList[0].shopCode;
+            }else{
+                self.theOne.shopCode = 'ALL';
+            }
+        }
     }
 
     self.setTheOne = function(one){
@@ -101,6 +121,13 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
                 self.responseStrFail = error;
             }
         });
+    }
+
+    function getShopName(contract){
+        if(contract.shopCode){
+            contract.shopName = self.shopList.find(i => i.shopCode == contract.shopCode).shopName;
+        }
+
     }
 
     self.clear = function(){

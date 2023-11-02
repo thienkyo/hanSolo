@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -91,7 +95,6 @@ public class ApiController {
                 return new QueueSmsResponse(smsQueue.getId().toString(),smsQueue.getReceiverPhone(),smsQueue.getContent());
             }
         }
-
         return null;
     }
 
@@ -110,7 +113,6 @@ public class ApiController {
             }else if(Utility.SMS_JOB_SPECIFIC.equals(oneSms.getJobType())){
                 specificSmsUserInfoRepo.updateLastSendSmsDateByPhone(Utility.getCurrentDate(), oneSms.getReceiverPhone());
             }
-
             return "SUCCESS";
         }
         return "FAIL";
@@ -192,7 +194,7 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
+        smsQueue.setContent(job.getMsgContentTemplate() +" ["+ RandomStringUtils.randomAlphanumeric(4)+"]");
         smsQueue.setGender(smsUserInfo.getGender());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
@@ -208,7 +210,7 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
+        smsQueue.setContent(job.getMsgContentTemplate() +" ["+ RandomStringUtils.randomAlphanumeric(4)+"]");
         smsQueue.setGender(smsUserInfo.getGender());
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverName(smsUserInfo.getName());
@@ -224,7 +226,7 @@ public class ApiController {
         smsQueue.setJobId(job.getId());
         smsQueue.setGmtCreate(Utility.getCurrentDate());
         smsQueue.setGmtModify(Utility.getCurrentDate());
-        smsQueue.setContent(job.getMsgContentTemplate() +" "+ RandomStringUtils.randomAlphanumeric(4));
+        smsQueue.setContent(job.getMsgContentTemplate() +" ["+ RandomStringUtils.randomAlphanumeric(4)+"]");
         smsQueue.setStatus(Utility.SMS_QUEUE_INIT);
         smsQueue.setReceiverPhone(phone);
         smsQueue.setWeight(job.getWeight());
