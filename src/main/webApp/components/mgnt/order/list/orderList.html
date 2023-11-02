@@ -332,7 +332,8 @@
 			</div>
 
 		</div>
-		
+
+		<!--normal table-->
         <div class="table-responsive" ng-if="!ctrl.isLuckyDrawMode">
             <table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
@@ -405,7 +406,7 @@
 						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)" >{{order.shippingPhone | masking}}</a>
 					</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
-						{{order.shippingName | getShortName}}
+						***** ***** {{order.shippingName | getShortName}}
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 

@@ -346,8 +346,9 @@ select, textarea {
 				</a>-->
 				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
 				   data-toggle="tab" href="" data-target="#home{{$index}}" >
-					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}
-					{{ ' ('+item.orderId+'-'+item.id+')'}}
+					<!--{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}-->
+
+					{{item.name | getShortName}}{{ ' ('+item.orderId+'-'+item.id+')'}}
 					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
 				</a>
 			</li>
@@ -367,7 +368,7 @@ select, textarea {
 				   ng-show="ctrl.theOrder.orderDetails.length > 1"
 				   style="margin: 4px 4px 4px 4px;float: right;">select</a>
 				<h4 style="padding-bottom: 20px;margin-top: 0px;">
-					{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}:
+					{{item.name | getShortName}}:
 					{{item.framePriceAfterSale*item.quantity*(100 - item.frameDiscountAmount)/100 +
 					item.lensPrice*(100 - item.lensDiscountAmount)/100*item.lensQuantity + item.otherPrice | number:0}}đ
 				</h4>
