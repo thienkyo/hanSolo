@@ -22,6 +22,7 @@ import com.hanSolo.kinhNguyen.response.SmsJobResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -140,6 +141,8 @@ public class MemberController {
     @RequestMapping(value = "upsertSmsQueue", method = RequestMethod.POST)
     public GenericResponse upsertSmsQueue(@RequestBody final SmsQueue one, final HttpServletRequest request) {
         if(one.getPassCode().equalsIgnoreCase(Utility.SMS_JOB_FASTSMS_PASSCODE)){
+            String str = one.getContent() +" ["+ RandomStringUtils.randomAlphanumeric(4)+"]";
+            one.setContent(str);
             smsQueueRepo.save(one);
             return new GenericResponse("insert SmsQueue success",Utility.SUCCESS_ERRORCODE,"Success");
         }

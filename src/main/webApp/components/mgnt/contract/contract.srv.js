@@ -3,11 +3,18 @@ angular.module('contractModule')
 .factory('contractService', ['ajaxService',function(ajaxService) {
 		var mainService = {
 				getAll : getAll,
+				getDataByCondition : getDataByCondition,
 				upsert : upsert,
 				deleteOne : deleteOne
 			};
 	return mainService;
 
+    function getDataByCondition(req){
+        var url = "mgnt/contract/getDataByCondition";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function getAll(){
 		var url = "mgnt/getAllContract";

@@ -75,12 +75,12 @@ public class ApiController {
                 }
 
                 Calendar currentTime = Calendar.getInstance();
-                System.out.println("getQueueSms api, currentTime:"+currentTime.getTime().toString());
-               /* currentTime.add(Calendar.MINUTE, -2);// COMMON sms send sms with 2 min interval;
-                System.out.println("getQueueSms api, currentTime minus 2min:"+ currentTime.toString());*/
+                System.out.println("getQueueSms api, currentTime:"+currentTime.toString());
+                currentTime.add(Calendar.MINUTE, -2);// COMMON sms send sms with 2 min interval;
+                System.out.println("getQueueSms api, currentTime minus 2min:"+ currentTime.toString());
                 System.out.println("getQueueSms api, LAST_SENT_SMS:"+ CommonCache.LAST_SENT_SMS.getGmtModify().toString());
 
-                if(currentTime.getTime().getMinutes() - CommonCache.LAST_SENT_SMS.getGmtModify().getMinutes() >=2){
+                if(CommonCache.LAST_SENT_SMS.getGmtModify().before(currentTime.getTime())){
                     smsQueue.setStatus(Utility.SMS_QUEUE_SENDING);
                     smsQueue.setGmtModify(Utility.getCurrentDate());
                     smsQueueRepo.save(smsQueue);

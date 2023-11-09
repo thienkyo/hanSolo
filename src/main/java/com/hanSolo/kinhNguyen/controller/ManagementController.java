@@ -1008,6 +1008,7 @@ public class ManagementController {
     @RequestMapping(value = "toggleSmsSend", method = RequestMethod.POST)
     public boolean toggleSmsSend()  {
         CommonCache.SMS_SEND_CONTROL = CommonCache.SMS_SEND_CONTROL ? false : true;
+        CommonCache.LAST_SENT_SMS = null;
         return CommonCache.SMS_SEND_CONTROL;
     }
 
