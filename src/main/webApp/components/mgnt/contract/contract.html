@@ -202,7 +202,7 @@
 
 				<select  ng-model="ctrl.queryRequest.clientCode"
 						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
-						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
+						 ng-change="ctrl.filterContractAndShopByClientCode(ctrl.queryRequest.clientCode)"
 						 style="width: 25%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
 						 ng-show="ctrl.isGodLike">
 				</select>
@@ -210,7 +210,7 @@
 				<select  ng-model="ctrl.queryRequest.shopCode"
 						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
 						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
-						 ng-change="ctrl.filterOrderByShopCode()"
+						 ng-change="ctrl.filterContractByShopCode()"
 						 style="width: 35%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
 				</select>
 

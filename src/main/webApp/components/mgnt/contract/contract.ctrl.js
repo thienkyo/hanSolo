@@ -22,7 +22,6 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.shopList2 = shopListCacheService.get();
     self.queryRequest={};
     self.queryRequest.amount = 0;
-    console.log('this is contract');
 
     if(self.isGodLike){
         self.queryRequest.clientCode = 'ALL';
@@ -36,16 +35,35 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         }
     }
 
-    contractService.getAll().then(function (data) {
-        data.forEach(getShopName);
-        self.contractList = data;
-        console.log(self.contractList);
-        self.contractList.forEach(enrichContractList);
-        self.tableParams = new NgTableParams({}, { dataset: self.contractList});
-    });
-
+    getContractByTerms();
 
 ////////////////////////
+    self.filterContractAndShopByClientCode = function(clientCode){
+        if(clientCode == 'ALL'){
+            self.shopList = shopListCacheService.get();
+            self.queryRequest.shopCode = 'ALL';
+        }else{
+            self.shopList = shopListCacheService.get().filter(i => i.clientCode == clientCode || i.shopCode == 'ALL');
+            self.queryRequest.shopCode = 'ALL';
+        }
+        self.queryRequest.generalPurpose = '';
+        getContractByTerms();
+    }
+
+    self.filterContractByShopCode = function(){
+        getContractByTerms(self.queryRequest);
+    }
+
+    function getContractByTerms(){
+        self.tableParams = new NgTableParams({}, { dataset: []});
+        contractService.getDataByCondition(self.queryRequest).then(function (data) {
+            data.forEach(getShopName);
+            self.contractList = data;
+            self.contractList.forEach(enrichContractList);
+            self.tableParams = new NgTableParams({}, { dataset: self.contractList});
+        });
+    }
+    self.getContractByTerms = getContractByTerms;
 
     self.filterShopByClientCode = function(clientCode){
         self.shopList2 = shopListCacheService.get().filter(i => i.clientCode == clientCode || i.shopCode == 'ALL' );
@@ -95,17 +113,12 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.responseStrFail = false;
         contractService.upsert(one).then(function (data) {
             self.responseStr = data.errorMessage;
-            console.log(data);
-            console.log(data.contract);
-            console.log(data.obj);
             if(one.id == 0){
                 self.contractList.unshift(data.obj);
                 self.tableParams = new NgTableParams({}, { dataset: self.contractList});
             }
         });
     }
-
-
 
     self.deleteOne = function(one){
         self.responseStr = false;
@@ -171,9 +184,6 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         one.contractId = self.theOne.id;
         salaryService.upsert(one).then(function (data) {
             self.responseStr = data.errorMessage;
-            console.log(data);
-            console.log(data.salary);
-            console.log(data.obj);
             if(one.id == 0){
                 self.salaryList.unshift(data.obj);
                 self.salaryTableParams = new NgTableParams({}, { dataset: self.salaryList});

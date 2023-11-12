@@ -1153,6 +1153,36 @@ public class ManagementController {
         return contractRepo.findAllByOrderByGmtCreateDesc();
     }
 
+
+    @RequestMapping(value = "getContractByCondition", method = RequestMethod.POST)
+    public List<Contract> getContractByCondition(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+        List<Contract> contractList = null;
+        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
+                    && (req.getClientCode().equalsIgnoreCase("ALL")) || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
+                contractList =  contractRepo.findFirst100ByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                contractList =  contractRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                contractList =  contractRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
+        }else{
+            if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE) && req.getClientCode().equalsIgnoreCase("ALL")){
+                contractList =  contractRepo.findAllByOrderByGmtCreateDesc();
+            }else if(req.getShopCode().equalsIgnoreCase("ALL")){
+                contractList =  contractRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                contractList =  contractRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(),req.getShopCode());
+            }
+        }
+
+        return contractList;
+
+    }
+
+
+
+
     @RequestMapping(value = "upsertContract", method = RequestMethod.POST)
     public GeneralResponse<Contract> upsertSalary(@RequestBody final Contract one) throws ParseException {
         if(one.getId() == 0){

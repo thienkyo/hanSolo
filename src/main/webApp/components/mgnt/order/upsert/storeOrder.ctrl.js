@@ -158,12 +158,12 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].clientId ='0';
         self.theOrder.orderDetails[0].shopId ='0';
 
-        self.theOrder.orderDetails[0].framePriceAfterSale = Math.floor(Math.random() * 10000)*1000;
-        self.theOrder.orderDetails[0].framePriceAtThatTime = Math.floor(Math.random() * 10000)*1000;
+        self.theOrder.orderDetails[0].framePriceAfterSale = Math.floor(Math.random() * 1000)*1000;
+        self.theOrder.orderDetails[0].framePriceAtThatTime = Math.floor(Math.random() * 1000)*1000;
         self.theOrder.orderDetails[0].frameNote = 'velo 30-4500';
 
         self.theOrder.orderDetails[0].lensNote = 'essilor ASX 1.71';
-        self.theOrder.orderDetails[0].lensPrice = Math.floor(Math.random() * 10000)*1000;
+        self.theOrder.orderDetails[0].lensPrice = Math.floor(Math.random() * 1000)*1000;
 
 
         self.theOrder.orderDetails[0].osVasc = '4/10';

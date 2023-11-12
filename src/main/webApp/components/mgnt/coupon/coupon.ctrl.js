@@ -38,7 +38,8 @@ angular.module('couponModule')
 
 
         self.filterCouponByClientCode = function(clientCode){
-            console.log(clientCode);
+
+            console.log(self.theCoupon);
             var tempList;
             if(clientCode == 'ALL'){
                 tempList = self.couponList;
@@ -55,10 +56,11 @@ angular.module('couponModule')
 		}
 		
 		self.upsert = function(coupon){
+		    console.log(coupon);
 		    if(self.isGodLike && coupon.clientCode == ''){
                 self.responseStrFail = 'temp';
                 return;
-            }else{
+            }else if(!self.isGodLike){
                 coupon.clientCode = clientInfoCacheService.get().clientCode;
             }
             self.currentMember = memberService.getCurrentMember();
@@ -66,9 +68,9 @@ angular.module('couponModule')
                 coupon.owner = self.currentMember.name+self.currentMember.phone;
             }
             coupon.lastModifiedBy = self.currentMember.name+self.currentMember.phone;
-            console.log(coupon);
             coupon.shopCode = currentShopCacheService.get().shopCode;
 
+            console.log(coupon);
 			self.responseStr = false;
 			self.responseStrFail = false;
 			couponService.upsert(coupon).then(function (data) {

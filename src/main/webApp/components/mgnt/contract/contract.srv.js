@@ -10,7 +10,7 @@ angular.module('contractModule')
 	return mainService;
 
     function getDataByCondition(req){
-        var url = "mgnt/contract/getDataByCondition";
+        var url = "mgnt/getContractByCondition";
         return ajaxService.post(url,req,{}).then(function(response){
             return response.data;
         });
