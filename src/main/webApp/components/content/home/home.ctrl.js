@@ -57,7 +57,6 @@ angular.module('homeModule')
         console.log(shopListCacheService.get());
         console.log(currentShopCacheService.get());
         console.log(oneClientShopListCacheService.get());
-        console.log(memberService.getCurrentMember());
 
 		if(self.isGodLike){ // only godlike get new data from db.
             clientService.getClientShopList().then(function (data) {
