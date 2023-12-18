@@ -2,8 +2,10 @@
 angular.module('bizReportModule')
 .controller('bizReportController', ['$scope','$location','bizReportService','NgTableParams','memberService','ModifiedReportDO',
                                     'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService','clientInfoCacheService',
+                                    'clientListCacheService','shopListCacheService',
 function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedReportDO,
-            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,clientInfoCacheService) {
+            CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,clientInfoCacheService,
+            clientListCacheService,shopListCacheService){
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new BizReportDO;
@@ -14,18 +16,29 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     self.allLenses = 0;
     self.allDiscountAmount = 0;
     self.allProfit = 0;
-    self.modifiedReports = [
-        new ModifiedReportDO('2022'),
-        new ModifiedReportDO('2023'),
-        new ModifiedReportDO('2024'),
-        new ModifiedReportDO('2025'),
-        new ModifiedReportDO('2026'),
-        new ModifiedReportDO('2027'),
-        new ModifiedReportDO('2028'),
-        new ModifiedReportDO('2029'),
-        new ModifiedReportDO('2030'),
-        new ModifiedReportDO('2031')
-    ];
+    self.modifiedReports = resetModifiedReports();
+
+    self.isGodLike = memberService.isGodLike();
+    self.clientList = clientListCacheService.get().filter(i => i.clientCode != 'ALL' );
+    //self.shopList = shopListCacheService.get();
+    //self.clientList2 = clientListCacheService.get();
+    //self.shopList2 = shopListCacheService.get();
+    self.queryRequest={};
+    self.queryRequest.amount = 0;
+
+    /*if(self.isGodLike){
+        self.queryRequest.clientCode = 'ALL';
+        self.queryRequest.shopCode = 'ALL';
+    }else{*/
+        self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+        self.shopList = shopListCacheService.get().filter(i => i.clientCode == self.queryRequest.clientCode || i.shopCode == 'ALL' );
+        if(self.shopList.length > 0){
+            self.queryRequest.shopCode = self.shopList[1].shopCode;
+        }else{
+            self.queryRequest.shopCode = 'ALL';
+        }
+
+    //}
 
     // exclude some month.
     self.beginMonthNumber = clientInfoCacheService.get().bizReportBeginMonthNumber;
@@ -37,30 +50,73 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         $location.path('#/');
     }
 
-    bizReportService.getAll().then(function (data) {
-        self.bizReportList = data;
-        self.setModifiedReports(data);
+    getDataByCondition();
 
-        var data2 = [...data];
-        for(var i = 0; i < self.beginMonthNumber; i++){
-            data2.pop();
+    ///////////////////////////////////
+
+    function resetModifiedReports(){
+        var startYear = 2010;
+        var endYear = 2040;
+        var modifiedReports = [];
+        for(var i = startYear; i < endYear; i++){
+            modifiedReports.push(new ModifiedReportDO(i+""));
         }
+        return modifiedReports;
+    }
 
-        for(var i = 0; i < self.endMonthNumber; i++){
-            data2.shift();
+    function getDataByCondition(){
+        self.allIncome = 0;
+        self.allOutcome = 0;
+        self.allOrders = 0;
+        self.allFrames = 0;
+        self.allLenses = 0;
+        self.allDiscountAmount = 0;
+        self.allProfit = 0;
+        self.tableParams = new NgTableParams({}, { dataset: []});
+        self.modifiedReports2 = [];
+        self.modifiedReports = resetModifiedReports();
+        bizReportService.getDataByCondition(self.queryRequest).then(function (data) {
+            self.bizReportList = data;
+            console.log(self.bizReportList);
+            self.setModifiedReports(data);
+
+            var data2 = [...data];// clone
+            for(var i = 0; i < self.beginMonthNumber; i++){
+                data2.pop();
+            }
+
+            for(var i = 0; i < self.endMonthNumber; i++){
+                data2.shift();
+            }
+
+            self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
+            self.minAllIncomeMonth = data2.find(item => item.income == Math.min(...data2.map(o => o.income)));
+
+            self.maxAllOutcomeMonth = data2.find(item => item.outcome == Math.max(...data2.map(o => o.outcome)));
+            self.minAllOutcomeMonth = data2.find(item => item.outcome == Math.min(...data2.map(o => o.outcome)));
+
+            self.maxAllProfitMonth = data2.find(item => item.profit == Math.max(...data2.map(o => o.profit)));
+            self.minAllProfitMonth = data2.find(item => item.profit == Math.min(...data2.map(o => o.profit)));
+
+            self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
+        });
+    }
+    self.getDataByCondition = getDataByCondition;
+
+
+    self.filterShopAndCalByClientCode = function(clientCode){
+        self.shopList = shopListCacheService.get().filter(i => i.clientCode == clientCode || i.shopCode == 'ALL' );
+        if(self.shopList.length > 0){
+            self.queryRequest.shopCode = self.shopList[1].shopCode;
+        }else{
+            self.queryRequest.shopCode = 'ALL';
         }
+        getDataByCondition();
+    }
 
-        self.maxAllIncomeMonth = data2.find(item => item.income == Math.max(...data2.map(o => o.income)));
-        self.minAllIncomeMonth = data2.find(item => item.income == Math.min(...data2.map(o => o.income)));
-
-        self.maxAllOutcomeMonth = data2.find(item => item.outcome == Math.max(...data2.map(o => o.outcome)));
-        self.minAllOutcomeMonth = data2.find(item => item.outcome == Math.min(...data2.map(o => o.outcome)));
-
-        self.maxAllProfitMonth = data2.find(item => item.profit == Math.max(...data2.map(o => o.profit)));
-        self.minAllProfitMonth = data2.find(item => item.profit == Math.min(...data2.map(o => o.profit)));
-
-        self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
-    });
+    self.filterBizReportByShopCode = function(){
+        getDataByCondition(self.queryRequest);
+    }
 
     self.setModifiedReports = function(data){
         data.forEach((dataOne, index, array) => {
@@ -104,20 +160,23 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         self.responseStrFail = false;
         bizReportService.calculateReport(one).then(function (data) {
           self.responseStr = data.errorMessage;
-          one.income = data.bizReport.income;
-          one.outcome = data.bizReport.outcome;
+          one.income = data.obj.income;
+          one.outcome = data.obj.outcome;
             //self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
         });
     }
 
     self.upsert = function(bizReport){
-
         self.responseStr = false;
         self.responseStrFail = false;
+        bizReport.clientCode = self.queryRequest.clientCode;
+        bizReport.shopCode = self.queryRequest.shopCode;
+
         bizReportService.upsert(bizReport).then(function (data) {
+            console.log(data);
             self.responseStr = data.errorMessage;
             if(bizReport.id == 0){
-                self.bizReportList.unshift(data.bizReport);
+                self.bizReportList.unshift(data.obj);
                 self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});
             }
         });

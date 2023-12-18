@@ -1,5 +1,7 @@
 package com.hanSolo.kinhNguyen.utility;
 
+import com.hanSolo.kinhNguyen.models.Coupon;
+import com.hanSolo.kinhNguyen.models.OrderDetail;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -82,10 +85,15 @@ public class Utility {
     final public static String SMS_JOB_NOTIFYORDER = "NOTIFYORDER";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
 
+    final public static String COUPON_TYPE_BILL = "BILL";
+    final public static String COUPON_TYPE_FRAME = "FRAME";
+    final public static String COUPON_TYPE_LENS = "LENS";
+
     final public static int LOGIN_MEMBER_LIST_SIZE = 40;
     final public static int CLIENT_SHOP_LIST_SIZE = 40;
     final public static int SMS_JOB_LIST_SIZE = 25;
     final public static int LENS_PRODUCT_LIST_SIZE = 30;
+    final public static int ORDER_LIST_SIZE = 50;
 
 
     final public static Date getCurrentDate() throws ParseException {
@@ -228,5 +236,68 @@ public class Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * validate coupon
+     * @param couponList
+     * @return
+     */
+    final public static List<Coupon> filterCoupon(List<Coupon> couponList){
+        if ( couponList.isEmpty() ) {
+            return couponList;
+        }
+        List<Coupon> result = new ArrayList<>();
+        Date today = new Date();
+        couponList.forEach(item->{
+            Date expiredDate = new Date(item.getGmtModify().getTime() + (1000 * 60 * 60 * 24 * item.getLifespan().longValue()));
+            if(today.before(expiredDate)){
+                result.add(item);
+            }
+        });
+        return result;
+    }
+
+    public static <T> T mergeObjects(T first, T second){
+        Class<?> clas = first.getClass();
+        Field[] fields = clas.getDeclaredFields();
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value1 = field.get(first);
+                Object value2 = field.get(second);
+
+                if (value1 instanceof String || value2 instanceof String) {
+                    String str1 = (value1 != null) ? (String) value1 : "";
+                    String str2 = (value2 != null) ? (String) value2 : "";
+
+                    String value = (str1.length() >= str2.length()) ? str1 : str2;
+                    field.set(first, value);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (T) first;
+    }
+
+    public static <T> T mergeOrderDetail(T first, T second){
+        Class<?> clas = first.getClass();
+        Field[] fields = clas.getDeclaredFields();
+        Object result = null;
+        try {
+            result = clas.getDeclaredConstructor().newInstance();
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value1 = field.get(first);
+                Object value2 = field.get(second);
+                Object value = (value1 != null ) ? value1 : value2;
+                field.set(result, value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (T) result;
     }
 }

@@ -2,7 +2,7 @@
 angular.module('contractModule')
 .factory('contractService', ['ajaxService',function(ajaxService) {
 		var mainService = {
-				getAll : getAll,
+				//getAll : getAll,
 				getDataByCondition : getDataByCondition,
 				upsert : upsert,
 				deleteOne : deleteOne
@@ -16,12 +16,12 @@ angular.module('contractModule')
         });
     }
 
-	function getAll(){
+	/*function getAll(){
 		var url = "mgnt/getAllContract";
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}
+	}*/
 
 	function upsert(one){
 		var url = "mgnt/upsertContract";

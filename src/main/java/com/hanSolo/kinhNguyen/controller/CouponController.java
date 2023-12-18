@@ -3,16 +3,21 @@ package com.hanSolo.kinhNguyen.controller;
 import com.hanSolo.kinhNguyen.models.Coupon;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.repository.CouponRepository;
+import com.hanSolo.kinhNguyen.request.QueryByClientShopAmountRequest;
+import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.response.LoginResponse;
+import com.hanSolo.kinhNguyen.response.SearchResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,60 +29,17 @@ public class CouponController {
     @Autowired
     private CouponRepository couponRepo;
 
-    @RequestMapping("getByCode/{code}/")
-    public GenericResponse getCouponByCode(@PathVariable String code) {
+    @RequestMapping("getByCode3")
+    public GeneralResponse<Coupon> getCouponByCode3(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        String[] parts = req.getGeneralPurpose().split("\\|");
+        List<Coupon> couponList = couponRepo.findByCodeAndCouponTypeAndQuantityGreaterThanAndClientCodeOrderByGmtCreateDesc(
+                    parts[0],parts[1],0, req.getClientCode());
 
-        Optional<Coupon> couponOpt = couponRepo.findByCode(code);
-
-        if ( couponOpt.isEmpty() ) {
-            return new GenericResponse("Không tồn tại",Utility.FAIL_ERRORCODE,"Không tồn tại.");
+        List<Coupon> result = Utility.filterCoupon(couponList);
+        if ( result.isEmpty() ) {
+            return new GeneralResponse(null,Utility.FAIL_ERRORCODE,"Không có/đã hết/hết hạn.");
         }
 
-        Coupon coupon = couponOpt.get();
-
-        if(coupon.getQuantity() <= 0){
-            return new GenericResponse("Số lượng đã hết",Utility.FAIL_ERRORCODE,"Số lượng đã hết.");
-        }
-
-        Date expiredDate = new Date(coupon.getGmtModify().getTime() + (1000 * 60 * 60 * 24 * coupon.getLifespan().longValue()));
-        Date today = new Date();
-
-        if(today.after(expiredDate)){
-            return new GenericResponse("Hết hạn",Utility.FAIL_ERRORCODE,"Hết hạn.");
-        }
-
-        return new GenericResponse(coupon.getValue()+"",Utility.SUCCESS_ERRORCODE,"success.");
-    }
-
-    @RequestMapping("getByCode2/{code}/{type}")
-    public GenericResponse getCouponByCode2(@PathVariable String code,@PathVariable String type, final HttpServletRequest request) {
-        Optional<Coupon> couponOpt;
-        final Claims claims = (Claims) request.getAttribute("claims");
-        Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
-
-        if(Utility.onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
-            couponOpt = couponRepo.findByCodeAndCouponType(code,type);
-        }else {
-            couponOpt = couponRepo.findByCodeAndCouponTypeAndClientCode(code,type,clientInfo.get("clientCode"));
-        }
-
-        if ( couponOpt.isEmpty() ) {
-            return new GenericResponse("Không tồn tại",Utility.FAIL_ERRORCODE,"Không tồn tại.");
-        }
-
-        Coupon coupon = couponOpt.get();
-
-        if(coupon.getQuantity() <= 0){
-            return new GenericResponse("Số lượng đã hết",Utility.FAIL_ERRORCODE,"Số lượng đã hết.");
-        }
-
-        Date expiredDate = new Date(coupon.getGmtModify().getTime() + (1000 * 60 * 60 * 24 * coupon.getLifespan().longValue()));
-        Date today = new Date();
-
-        if(today.after(expiredDate)){
-            return new GenericResponse("Hết hạn",Utility.FAIL_ERRORCODE,"Hết hạn.");
-        }
-
-        return new GenericResponse(coupon.getValue()+"",Utility.SUCCESS_ERRORCODE,"success.");
+        return new GeneralResponse(result.get(0),Utility.SUCCESS_ERRORCODE,"success.");
     }
 }

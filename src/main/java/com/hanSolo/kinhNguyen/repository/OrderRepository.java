@@ -40,7 +40,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
     Optional<Order> findByIdAndClientCode(Integer id, String clientCode);
 
-    Optional<Order> findByIdAndClientCodeAndShopCode(Integer id, String clientCode, String shopCode);
+    //Optional<Order> findByIdAndClientCodeAndShopCode(Integer id, String clientCode, String shopCode);
 
     List<Order> findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(String clientCode, String shippingName);
     List<Order> findFirst40ByClientCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shippingPhone);
@@ -50,6 +50,9 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     List<Order> findFirst40ByClientCodeAndShopCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shopCode, String shippingPhone);
 
     List<Order> findFirst40ByClientCodeAndShippingPhoneOrderByGmtCreateDesc(String clientCode, String shippingPhone);
+
+    List<Order> findByClientCodeAndShopCodeAndGmtCreateBetween(@NonNull String clientCode, @NonNull String shopCode, Date gmtCreateStart, Date gmtCreateEnd);
+
 
 
 

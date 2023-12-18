@@ -172,6 +172,11 @@ public class OrderDetail extends ParentCodeModel {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        OrderDetail o = (OrderDetail)obj;
+        return this.getId().intValue() == o.getId().intValue();
+    }
 
     public Integer getLensQuantity() {
         return lensQuantity;

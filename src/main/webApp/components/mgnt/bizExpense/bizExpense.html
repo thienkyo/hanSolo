@@ -167,15 +167,35 @@ form .progress {
 			</div>
 	    </div>
 		<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-			<div class="col-sm-2">
+			<div class="col-sm-6">
 				<select  ng-model="ctrl.queryRequest.amount"
 						 ng-options="opt.value as opt.name for opt in ctrl.amountList"
 						 ng-change="ctrl.getBizExpenseByTerm()"
 						 style="width: 80px;height: 35px;">
 				</select>
 				size: {{ctrl.BizExpenseList.length}}
+
+
+				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" ng-show="ctrl.tempAmount > 0"
+				   style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
+				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out" ng-show="ctrl.tempAmount > 0"
+				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 60" >Select all</a>
+				<a ng-click="ctrl.getOneDayExpense()" href="" class="btn btn-default check_out" ng-show="ctrl.tempAmount > 0"
+				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 100" >one day</a>
+				<span ng-show="ctrl.tempAmount > 0">Total: {{ctrl.tempAmount | number:0}}đ</span>
+
 			</div>
-			<div class="col-sm-10" style="text-align: end;">
+
+			<!--<div class="col-sm-4" ng-show="ctrl.tempAmount > 0">
+				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
+				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
+				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 60" >Select all</a>
+				<a ng-click="ctrl.getOneDayExpense()" href="" class="btn btn-default check_out"
+				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 100" >one day</a>
+				Total: {{ctrl.tempAmount | number:0}}đ
+			</div>-->
+
+			<div class="col-sm-6" style="text-align: end;">
 				<select  ng-model="ctrl.queryRequest.clientCode"
 						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList2 | filter:{ clientCode: '!GODLIKE'}"
 						 ng-change="ctrl.filterBizExpenseAndShopByClientCode(ctrl.queryRequest.clientCode)"
@@ -193,14 +213,7 @@ form .progress {
 
 
 
-			<div ng-show="ctrl.tempAmount > 0">
-				<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;height: 30px;" >Clear</a>
-				<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 60" >Select all</a>
-				<a ng-click="ctrl.getOneDayExpense()" href="" class="btn btn-default check_out"
-				   style="margin: 0px 0px 0px 0px;height: 30px;" ng-show="ctrl.tableParams.data.length < 100" >one day</a>
-				Total: {{ctrl.tempAmount | number:0}}đ
-			</div>
+
 		</div>
 
         <div class="table-responsive">

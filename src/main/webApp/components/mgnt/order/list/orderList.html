@@ -376,7 +376,7 @@
 					</td>
 					<td title="'X'" style="width:30px;" ng-if="ctrl.isAdmin">
 						<a ng-click="ctrl.promptDelete(order.id)" href="" class="btn btn-default check_out"
-						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin">X</a>
+						   style="margin: 0px 0px 0px 0px;" ng-if="ctrl.isAdmin" ng-show="ctrl.deletingOrderId != order.id">X</a>
 						<p ng-show="ctrl.deletingOrderId == order.id">
 							Are you sure?
 							<a ng-click="ctrl.deleteOrder(order)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>

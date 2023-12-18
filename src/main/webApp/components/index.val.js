@@ -293,6 +293,9 @@ function BizReportDO(){
 	this.income = 0;
 	this.outcome = 0;
 	this.discountAmount = 0;
+	this.quantity = 0;
+	this.frameQuantity = 0;
+	this.lensQuantity = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }

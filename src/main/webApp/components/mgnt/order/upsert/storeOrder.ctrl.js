@@ -70,16 +70,24 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails.push(newOrderDetail);
     }
 
-    self.removeLastTab = function(){
-         if(self.theOrder.orderDetails.length > 1){
-            self.theOrder.orderDetails.pop();
-        }
-    }
+    self.remove1Tab = function(index,orderDetail){
+        self.isSaveButtonPressed = true;
+        console.log(orderDetail);
+        storeOrderService.deleteOrderDetail(orderDetail).then(function (data) {
+            console.log(data);
+             if(data.errorCode == 'SUCCESS' ){
+                if(self.theOrder.orderDetails.length > 1){
+                    self.theOrder.orderDetails.splice(index,1);
+                }
+                self.calculateOrderTotal(self.theOrder);
+                self.isErrorMsg = false;
+                self.isSaveButtonPressed = false;
+                self.order_return_status = data.errorMessage;
+             }else{
+                self.isErrorMsg = data.errorMessage;
+             }
+         });
 
-    self.remove1Tab = function(index){
-         if(self.theOrder.orderDetails.length > 1){
-            self.theOrder.orderDetails.splice(index,1);
-        }
     }
 
     self.nameCopy = function(){
@@ -290,13 +298,20 @@ angular.module('storeOrderModule')
             self.calculateOrderTotal(self.theOrder);
             return;
         }
-         storeOrderService.getCoupon(code,'BILL').then(function (data) {
-             if(data.errorCode == 'SUCCESS'){
-                self.theOrder.couponDiscount = data.replyStr;
+
+        self.queryRequest.generalPurpose = code+"|"+"BILL";
+
+         //storeOrderService.getCoupon(code,'BILL').then(function (data) {
+         storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
+            console.log(data);
+             if(data.errorCode == 'SUCCESS' && data.obj.clientCode == self.theOrder.clientCode){
+                self.theOrder.couponDiscount = data.obj.value;
                 self.theOrder.couponCode = code;
               //  self.isCouponApplied = true;
                 self.calculateOrderTotal(self.theOrder);
                 self.isErrorMsg = false;
+             }else if(data.errorCode == 'SUCCESS' && data.obj.clientCode != self.theOrder.clientCode){
+                self.isErrorMsg = 'không hợp lệ';
              }else{
                 self.isErrorMsg = data.errorMessage;
              }
@@ -305,9 +320,13 @@ angular.module('storeOrderModule')
 
     self.getFrameCoupon = function(orderDetail) {
         if(orderDetail.frameDiscountCode.length >4){
-            storeOrderService.getCoupon(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
+
+            self.queryRequest.generalPurpose = orderDetail.frameDiscountCode+"|"+"FRAME";
+            //storeOrderService.getCoupon(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
+            storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
+                console.log(data);
                  if(data.errorCode == 'SUCCESS'){
-                    orderDetail.frameDiscountAmount = data.replyStr;
+                    orderDetail.frameDiscountAmount = data.obj.value;
                     self.calculateOrderTotal(self.theOrder);
                     self.isErrorMsg = false;
                  }else{
@@ -327,9 +346,11 @@ angular.module('storeOrderModule')
     ///// get lens coupon
     self.getLensCoupon = function(orderDetail) {
         if(orderDetail.lensDiscountCode.length >4){
-            storeOrderService.getCoupon(orderDetail.lensDiscountCode,'LENS').then(function (data) {
+            self.queryRequest.generalPurpose = orderDetail.lensDiscountCode+"|"+"LENS";
+            //storeOrderService.getCoupon(orderDetail.lensDiscountCode,'LENS').then(function (data) {
+            storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
                  if(data.errorCode == 'SUCCESS'){
-                    orderDetail.lensDiscountAmount = data.replyStr;
+                    orderDetail.lensDiscountAmount = data.obj.value;
                     self.calculateOrderTotal(self.theOrder);
                     self.isErrorMsg = false;
                  }else{
@@ -365,10 +386,24 @@ angular.module('storeOrderModule')
                 self.currentMember = memberService.getCurrentMember();
                 self.theOrder.lastModifiedBy = self.currentMember.name+'|'+self.currentMember.phone;
 
+                var gotFrameDiscount = false;
+                var gotLensDiscount = false;
                 for (var i = 0; i < self.theOrder.orderDetails.length; i++){
                     self.theOrder.orderDetails[i].clientCode = self.theOrder.clientCode;
                     self.theOrder.orderDetails[i].shopCode = self.theOrder.shopCode;
+                    if(self.theOrder.orderDetails[i].frameDiscountCode){
+                        gotFrameDiscount = true;
+                    }
+                    if(self.theOrder.orderDetails[i].lensDiscountCode){
+                        gotLensDiscount = true;
+                    }
                 }
+                if(self.theOrder.couponCode && (gotFrameDiscount || gotLensDiscount)){
+                    self.isErrorMsg ='Không thể áp dụng 2 loại giảm giá cùng lúc';
+                    self.isSaveButtonPressed=false;
+                    return;
+                }
+                self.theOrder.customDiscountAmount = self.theOrder.customDiscountAmount ? self.theOrder.customDiscountAmount : 0;
                 orderCacheService.addOneOrder(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
@@ -524,11 +559,10 @@ angular.module('storeOrderModule')
 
     if($routeParams.orderId > 0){
         self.queryRequest.generalPurpose = $routeParams.orderId;
-        orderListService.getOrderById(self.queryRequest)
+        storeOrderService.getOrderById(self.queryRequest)
             .then(function (data) {
-
                 self.theOrder = data.obj;
-
+                console.log(self.theOrder);
                 if(self.theOrder){
                     if(!self.theOrder.clientCode){
                         self.theOrder.clientCode = clientInfoCacheService.get().clientCode;

@@ -2,21 +2,23 @@
 angular.module('storeOrderModule')
 .factory('storeOrderService', ['ajaxService',function(ajaxService) {
 		var service = {
-			getOrdersForMgnt : getOrdersForMgnt,
+			//getOrdersForMgnt : getOrdersForMgnt,
 			//getAllOrdersForMgnt : getAllOrdersForMgnt,
 			splitOrder : splitOrder,
 			updateOrder : updateOrder,
 			deleteOrder : deleteOrder,
-			getCoupon : getCoupon
+			deleteOrderDetail : deleteOrderDetail,
+			getOrderById : getOrderById,
+			getCoupon3 : getCoupon3
 		};
 	return service;
 	
-	function getOrdersForMgnt(amount){
+	/*function getOrdersForMgnt(amount){
 		var url = "mgnt/getOrdersForMgnt/"+amount;
 		return ajaxService.get(url,null,{}).then(function(response){
 			return response.data;
 		});
-	}
+	}*/
 /*
 	function getAllOrdersForMgnt(){
 		var url = "mgnt/getAllOrdersForMgnt/";
@@ -24,6 +26,12 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}*/
+	function getOrderById(queryRequest){
+        var url = "mgnt/getOrderById/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function splitOrder(orders){
         var url = "mgnt/saveMultipleOrders";
@@ -46,10 +54,17 @@ angular.module('storeOrderModule')
 		});
 	}
 
-	function getCoupon(code,type){
-        var url = "mgnt/coupon/getByCode2/" + code +"/"+ type;
-        return ajaxService.get(url,null,{}).then(function(data){
-            return data.data;
+	function deleteOrderDetail(orderDetail){
+        var url = "mgnt/deleteOrderDetail";
+        return ajaxService.post(url,orderDetail,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getCoupon3(queryRequest){
+        var url = "mgnt/coupon/getByCode3/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
+            return response.data;
         });
     }
       

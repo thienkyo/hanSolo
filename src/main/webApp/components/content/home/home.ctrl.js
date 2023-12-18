@@ -52,11 +52,11 @@ angular.module('homeModule')
         */
 
 		console.log('this is home');
-		console.log(clientListCacheService.get());
+		/*console.log(clientListCacheService.get());
         console.log(clientInfoCacheService.get());
         console.log(shopListCacheService.get());
         console.log(currentShopCacheService.get());
-        console.log(oneClientShopListCacheService.get());
+        console.log(oneClientShopListCacheService.get());*/
 
 		if(self.isGodLike){ // only godlike get new data from db.
             clientService.getClientShopList().then(function (data) {

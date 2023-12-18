@@ -4,20 +4,12 @@ angular.module('orderListModule')
 		var service = {
                 getOrdersByTerms : getOrdersByTerms,
                 updateOrderStatus : updateOrderStatus,
-                getOrderById : getOrderById,
                 updateCusSource : updateCusSource,
                 doRecovery : doRecovery,
                 getOrderHistory : getOrderHistory,
                 deleteOrder : deleteOrder
 			};
 	return service;
-
-	function getOrderById(queryRequest){
-        var url = "mgnt/getOrderById/";
-        return ajaxService.post(url,queryRequest,{}).then(function(response){
-            return response.data;
-        });
-    }
 
 	function getOrdersByTerms(queryRequest){
         var url = "mgnt/getOrdersByTerms";

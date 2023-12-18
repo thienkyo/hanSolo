@@ -27,6 +27,10 @@ public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpe
     @Query("select b from BizExpense b where b.gmtCreate between ?1 and ?2")
     List<BizExpense> findByGmtCreateBetween(Date gmtCreateStart, Date gmtCreateEnd);
 
+    List<BizExpense> findByClientCodeAndGmtCreateBetween(String clientCode, Date gmtCreateStart, Date gmtCreateEnd);
+
+    List<BizExpense> findByClientCodeAndShopCodeAndGmtCreateBetween(String clientCode, String shopCode, Date gmtCreateStart, Date gmtCreateEnd);
+
     List<BizExpense> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
     List<BizExpense> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
 

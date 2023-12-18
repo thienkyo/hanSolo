@@ -10,5 +10,6 @@ public interface SalaryRepository extends PagingAndSortingRepository<Salary, Int
     List<Salary> findByContractIdOrderByYearDescMonthDesc(String contractId);
 
     List<Salary> findByYearAndMonth(String year, String month);
+    List<Salary> findByYearAndMonthAndClientCodeAndShopCode(String year, String month, String clientCode, String shopCode);
 
 }

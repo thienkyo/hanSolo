@@ -146,7 +146,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.clear = function(){
         self.responseStr = false;
         self.responseStrFail = false;
-        self.theOne = new BizReportDO;
+        self.theOne = new ContractDO;
         self.isShowUploadPic = false;
     }
 
@@ -182,6 +182,8 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.responseStr = false;
         self.responseStrFail = false;
         one.contractId = self.theOne.id;
+        one.shopCode = self.theOne.shopCode;
+        one.clientCode = self.theOne.clientCode;
         salaryService.upsert(one).then(function (data) {
             self.responseStr = data.errorMessage;
             if(one.id == 0){

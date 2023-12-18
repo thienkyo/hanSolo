@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "salary")
-public class Salary {
+public class Salary extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

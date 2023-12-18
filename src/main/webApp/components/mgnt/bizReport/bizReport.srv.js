@@ -3,6 +3,7 @@ angular.module('bizReportModule')
 .factory('bizReportService', ['ajaxService',function(ajaxService) {
 		var bizReportService = {
 				getAll : getAll,
+				getDataByCondition : getDataByCondition,
 				upsert : upsert,
 				calculateReport : calculateReport,
 				deleteOne : deleteOne
@@ -16,6 +17,13 @@ angular.module('bizReportModule')
 			return response.data;
 		});
 	}
+
+	function getDataByCondition(req){
+        var url = "mgnt/getBizReportByCondition";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function upsert(one){
 		var url = "mgnt/upsertBizReport";

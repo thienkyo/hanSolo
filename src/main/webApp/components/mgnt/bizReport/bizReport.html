@@ -48,6 +48,25 @@ form .progress {
 
 		<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;">
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
+				<div class="col-sm-12 border" style="padding: 10px 10px 10px 10px;">
+					Shop:
+					<select  ng-model="ctrl.queryRequest.shopCode"
+							 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+							 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
+							 ng-change="ctrl.filterBizReportByShopCode()"
+							 style="width: 50%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: rgb(243, 242, 238);">
+					</select>
+					<select  ng-model="ctrl.queryRequest.clientCode"
+							 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList "
+							 ng-change="ctrl.filterShopAndCalByClientCode(ctrl.queryRequest.clientCode)"
+							 style="width: 25%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: rgb(243, 242, 238);"
+							 ng-show="ctrl.isGodLike">
+					</select>
+				</div>
+
+
+			</div>
+			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">All Income : {{ctrl.allIncome | number:0}}đ</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">All Outcome: {{ctrl.allOutcome | number:0}}đ</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Discount: {{ctrl.allDiscountAmount | number:0}}đ</div>
@@ -196,14 +215,16 @@ form .progress {
 				<div class="table-responsive">
 					<table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
-							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
+							<!--<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheOne(one)">{{one.id}}</a>
-							</td>
+							</td>-->
 							<td title="'year'" filter="{ 'year': 'text'}" sortable="'year'"  style="width:180px;">
 								{{one.year}}
 							</td>
 							<td title="'month'" filter="{ 'month': 'number'}" sortable="'month'"  style="width:180px;">
 								{{one.month}}
+							<td title="'client|shop'"  ng-if="ctrl.isGodLike">
+								{{one.clientCode+"|"+one.shopCode}}
 							<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" >
 								{{one.gmtCreate | date:"yyyy-MM-dd hh:mm:ss"}}
 							</td>

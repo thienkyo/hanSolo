@@ -603,34 +603,81 @@ public class ManagementController {
         return bizReportRepo.findByOrderByGmtCreateDesc();
     }
 
-    @RequestMapping(value = "upsertBizReport", method = RequestMethod.POST)
-    public BizReportResponse upsertBizReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
-        if(bizReport.getId() == 0){
-            bizReport.setGmtCreate(Utility.getCurrentDate());
+
+    @RequestMapping(value = "getBizReportByCondition", method = RequestMethod.POST)
+    public List<BizReport> getBizReportByCondition(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
+        List<BizReport> bizReportList = new ArrayList<>();
+        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)){
+            if(req.getShopCode().equalsIgnoreCase("ALL")){
+                bizReportList =  bizReportRepo.findByClientCodeOrderByYearDescMonthDesc(req.getClientCode());
+            }else{
+                bizReportList =  bizReportRepo.findByClientCodeAndShopCodeOrderByYearDescMonthDesc(req.getClientCode(),req.getShopCode());
+            }
         }
-        bizReport.setGmtModify(Utility.getCurrentDate());
-        return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
+        return bizReportList;
+    }
+
+
+    @RequestMapping(value = "upsertBizReport", method = RequestMethod.POST)
+    public GeneralResponse upsertBizReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
+        if(!Utility.onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
+
+        if(bizReport.getId() != 0){
+            return new GeneralResponse(null,Utility.FAIL_ERRORCODE,"fail");
+        }
+
+        List<Shop> shopList = shopRepo.findByClientCodeOrderByGmtCreateDesc(bizReport.getClientCode());
+        List<BizReport> reportList = new ArrayList<>();
+        for(Shop shop : shopList){
+            BizReport newReport = new BizReport();
+            newReport.setYear(bizReport.getYear());
+            newReport.setMonth(bizReport.getMonth());
+            newReport.setClientCode(bizReport.getClientCode());
+            newReport.setShopCode(shop.getShopCode());
+            newReport.setGmtCreate(Utility.getCurrentDate());
+            newReport.setGmtModify(Utility.getCurrentDate());
+
+            reportList.add(newReport);
+        }
+        reportList = (List<BizReport>) bizReportRepo.saveAll(reportList);
+
+        BizReport report1 = reportList.stream()
+                .filter(rp -> bizReport.getShopCode().equals(rp.getShopCode()))
+                .findAny()
+                .orElse(null);
+
+        return new GeneralResponse(report1,Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "calculateReport", method = RequestMethod.POST)
-    public BizReportResponse calculateReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
+    public GeneralResponse calculateReport(@RequestBody final BizReport bizReport, final HttpServletRequest request) throws ParseException {
+        if(!Utility.onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
         bizReport.setGmtModify(Utility.getCurrentDate());
-
         Date startDate = Utility.getFirstDateOfMonth(bizReport.getYear(),bizReport.getMonth());
         Date endDate = Utility.getLastDateOfMonth(bizReport.getYear(),bizReport.getMonth());
-        List<BizExpense> expenses = bizExpenseRepo.findByGmtCreateBetween(startDate,endDate);
 
+        // get biz expense
+        List<BizExpense> expenses = bizExpenseRepo.findByClientCodeAndShopCodeAndGmtCreateBetween(
+                bizReport.getClientCode(), bizReport.getShopCode(), startDate,endDate);
         int expAmount = 0;
         for(BizExpense exp : expenses){
             expAmount += exp.getAmount() != null ? exp.getAmount() : 0;
         }
-        List<Salary>  salaries = salaryRepo.findByYearAndMonth(bizReport.getYear(),bizReport.getMonth());
+        // get salary
+        List<Salary>  salaries = salaryRepo.findByYearAndMonthAndClientCodeAndShopCode(bizReport.getYear(),bizReport.getMonth(),
+                bizReport.getClientCode(), bizReport.getShopCode());
         for(Salary sal : salaries){
             expAmount += (sal.getAmount() != null ? sal.getAmount() : 0 ) + (sal.getBonus() != null ? sal.getBonus() : 0);
         }
         bizReport.setOutcome(expAmount);
 
-        List<Order> orderList = orderRepo.findByGmtCreateBetween(startDate,endDate);
+        // get order from client.shop in a month
+        List<Order> orderList = orderRepo.findByClientCodeAndShopCodeAndGmtCreateBetween(bizReport.getClientCode(),
+                bizReport.getShopCode(),startDate,endDate);
         int incomeAmount = 0;
         int discountAmount = 0;
         int lensQty = 0;
@@ -639,7 +686,7 @@ public class ManagementController {
         for(Order or : orderList){
             int amount = 0;// one order amount
             int disAmount = 0;//
-            int tempDisAmount = 0;//
+            int tempDisAmount ;//
             for(OrderDetail orderDetail : or.getOrderDetails()){
                 int lensPrice = orderDetail.getLensPrice() != null ? orderDetail.getLensPrice() : 0;
                 int otherPrice = orderDetail.getOtherPrice() != null ? orderDetail.getOtherPrice() : 0;
@@ -649,7 +696,8 @@ public class ManagementController {
                              + lensPrice*orderDetail.getLensDiscountAmount()*orderDetail.getLensQuantity()/100;
                 disAmount += tempDisAmount;
                 //calculate each orderDetail amount
-                amount += orderDetail.getFramePriceAtThatTime()*orderDetail.getQuantity() + lensPrice*orderDetail.getLensQuantity() + otherPrice - tempDisAmount;
+                amount += orderDetail.getFramePriceAtThatTime()*orderDetail.getQuantity() + lensPrice*orderDetail.getLensQuantity() +
+                        otherPrice - tempDisAmount;
 
                 if(orderDetail.getFramePriceAtThatTime() > 1000){
                     frameQty += orderDetail.getQuantity();
@@ -658,8 +706,10 @@ public class ManagementController {
                     lensQty += orderDetail.getLensQuantity();
                 }
             }
-            discountAmount += disAmount + amount*or.getCouponDiscount()/100;
-            incomeAmount += amount - amount*or.getCouponDiscount()/100;
+            //total discount in one order
+            discountAmount += disAmount + amount*or.getCouponDiscount()/100 + or.getCustomDiscountAmount();
+            //total amount in one order
+            incomeAmount += amount - amount*or.getCouponDiscount()/100 - or.getCustomDiscountAmount();
 
             if(amount > 10000){
                 orderQty += 1;
@@ -671,7 +721,7 @@ public class ManagementController {
         bizReport.setOrderQuantity(orderQty);
         bizReport.setDiscountAmount(discountAmount);
 
-        return new BizReportResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,"Success");
+        return new GeneralResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
     }
 
     @RequestMapping(value = "deleteBizReport", method = RequestMethod.POST)
@@ -771,6 +821,10 @@ public class ManagementController {
             orOpt = orderRepo.findByIdAndClientCode(Integer.parseInt(req.getGeneralPurpose()),req.getClientCode());
         }
         if(orOpt.isPresent()){
+            if(CommonCache.ORDER_LIST.size() == Utility.ORDER_LIST_SIZE){
+                CommonCache.ORDER_LIST.clear();
+            }
+            CommonCache.ORDER_LIST.put(orOpt.get().getId(),orOpt.get());
             return new GeneralResponse(orOpt.get(),Utility.SUCCESS_ERRORCODE,"Success");
         }
 
@@ -784,7 +838,7 @@ public class ManagementController {
      * @return
      * @throws ServletException
      */
-    @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
+    //@RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
     public GeneralResponse<Order> getOrderById(@PathVariable final int orderId,final HttpServletRequest request) throws ServletException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
@@ -806,6 +860,15 @@ public class ManagementController {
     public GeneralResponse<String> deleteOrder(@RequestBody final Order order, final HttpServletRequest request) {
         if(checkSameClientCode(request, order.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
             orderRepo.delete(order);
+            return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
+        }
+        return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+    }
+
+    @RequestMapping(value = "deleteOrderDetail", method = RequestMethod.POST)
+    public GeneralResponse<String> deleteOrderDetail(@RequestBody final OrderDetail orderDetail, final HttpServletRequest request) {
+        if(checkSameClientCode(request, orderDetail.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
+            orderDetailRepo.delete(orderDetail);
             return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
         }
         return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
@@ -1148,11 +1211,11 @@ public class ManagementController {
     }
 
     //////////////////////////// contract Management section /////////////////////////////
-    @RequestMapping(value = "getAllContract", method = RequestMethod.GET)
+   /* @RequestMapping(value = "getAllContract", method = RequestMethod.GET)
     public List<Contract> getAllContract() {
         return contractRepo.findAllByOrderByGmtCreateDesc();
     }
-
+*/
 
     @RequestMapping(value = "getContractByCondition", method = RequestMethod.POST)
     public List<Contract> getContractByCondition(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
