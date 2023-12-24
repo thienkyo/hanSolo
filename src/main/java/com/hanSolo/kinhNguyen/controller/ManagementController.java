@@ -838,7 +838,7 @@ public class ManagementController {
      * @return
      * @throws ServletException
      */
-    //@RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
+    @RequestMapping(value = "getOrderById/{orderId}", method = RequestMethod.GET)
     public GeneralResponse<Order> getOrderById(@PathVariable final int orderId,final HttpServletRequest request) throws ServletException {
         final Claims claims = (Claims) request.getAttribute("claims");
         Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");

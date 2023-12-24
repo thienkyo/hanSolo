@@ -107,18 +107,25 @@ public class AuthenticationController {
         if(order.getId() == 0){
             return;
         }
-        Optional<Order> dbOrderOpt = orderRepo.findById(order.getId());
-        if(dbOrderOpt.isPresent()){
-            Order dbOrder = dbOrderOpt.get();
+
+        Order tempOrder = CommonCache.ORDER_LIST.get(order.getId());
+        if(tempOrder == null){
+            tempOrder = orderRepo.findById(order.getId()).get();
+        }
+        if(tempOrder != null){
+            //Order dbOrder = cacheOrder;
             List<OrderDetail> small,big;
-            if(order.getOrderDetails().size() <= dbOrder.getOrderDetails().size()){
+            if(order.getOrderDetails().size() <= tempOrder.getOrderDetails().size()){
                 small = order.getOrderDetails(); // orderDetail from client
-                big   = dbOrder.getOrderDetails(); // orderDetail from db
+                big   = tempOrder.getOrderDetails(); // orderDetail from db
             }else{
-                small = dbOrder.getOrderDetails();
+                small = tempOrder.getOrderDetails();
                 big   = order.getOrderDetails();
             }
+            //small = order.getOrderDetails().size() <= tempOrder.getOrderDetails().size() ? order.getOrderDetails() : tempOrder.getOrderDetails();
+            //big   = order.getOrderDetails().size() > tempOrder.getOrderDetails().size() ? order.getOrderDetails() : tempOrder.getOrderDetails();
             order.setOrderDetails(merge2OrderDetailList(small,big));
+            CommonCache.ORDER_LIST.put(order.getId(),order);
         }
     }
 
