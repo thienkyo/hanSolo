@@ -536,6 +536,18 @@ angular.module('storeOrderModule')
         }
     }
 
+/// get concurrence edit mod
+    storeOrderService.getEditMode().then(function (data) {
+        self.isMultipleEdit = data;
+    });
+
+    self.toggleMultipleEdit = function(){
+        self.isSaveButtonPressed=true;
+        storeOrderService.toggleMultipleEdit().then(function (data) {
+            self.isSaveButtonPressed=false;
+            self.isMultipleEdit = data;
+        });
+    }
 
 ////// run when loading page/////
     self.dynamicPopover = {

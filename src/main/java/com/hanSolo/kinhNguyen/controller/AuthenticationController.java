@@ -108,6 +108,10 @@ public class AuthenticationController {
             return;
         }
 
+        if(!CommonCache.MULTIPLE_EDIT_CONCURRENCE){
+            return;
+        }
+
         Order tempOrder = CommonCache.ORDER_LIST.get(order.getId());
         if(tempOrder == null){
             tempOrder = orderRepo.findById(order.getId()).get();

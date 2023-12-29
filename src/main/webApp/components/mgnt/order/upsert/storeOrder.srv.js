@@ -9,6 +9,8 @@ angular.module('storeOrderModule')
 			deleteOrder : deleteOrder,
 			deleteOrderDetail : deleteOrderDetail,
 			getOrderById : getOrderById,
+			getEditMode : getEditMode,
+			toggleMultipleEdit : toggleMultipleEdit,
 			getCoupon3 : getCoupon3
 		};
 	return service;
@@ -26,6 +28,20 @@ angular.module('storeOrderModule')
 			return response.data;
 		});
 	}*/
+	function toggleMultipleEdit(){
+        var url = "mgnt/toggleMultipleEdit";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getEditMode(){
+        var url = "mgnt/getCurrentEditMode";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
+
 	function getOrderById(queryRequest){
         var url = "mgnt/getOrderById/";
         return ajaxService.post(url,queryRequest,{}).then(function(response){

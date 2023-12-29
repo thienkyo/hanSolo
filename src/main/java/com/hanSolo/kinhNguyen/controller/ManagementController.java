@@ -978,6 +978,19 @@ public class ManagementController {
         return	result;
     }
 
+    //////////////////////////// edit concurrence mode section /////////////////////////////
+    @RequestMapping(value = "toggleMultipleEdit", method = RequestMethod.POST)
+    public boolean toggleMultipleEdit()  {
+        CommonCache.MULTIPLE_EDIT_CONCURRENCE = CommonCache.MULTIPLE_EDIT_CONCURRENCE ? false : true;
+        return CommonCache.MULTIPLE_EDIT_CONCURRENCE;
+    }
+
+    @RequestMapping(value = "getCurrentEditMode", method = RequestMethod.POST)
+    public boolean getCurrentEditMode()  {
+        return CommonCache.MULTIPLE_EDIT_CONCURRENCE;
+    }
+
+
     //////////////////////////// smsUserInfo section /////////////////////////////
     @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {

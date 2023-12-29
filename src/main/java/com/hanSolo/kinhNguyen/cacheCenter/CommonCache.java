@@ -42,7 +42,7 @@ public class CommonCache {
     /**
      * control concurrency mode
      */
-    public static boolean SINGLE_EDIT_CONCURRENCE = true;
+    public static boolean MULTIPLE_EDIT_CONCURRENCE = true;
 
     /**
      * member list : help to check user status.

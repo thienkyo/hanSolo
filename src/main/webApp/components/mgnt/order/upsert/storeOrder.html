@@ -920,20 +920,16 @@ select, textarea {
 		<div class="tab-content">
 			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
 				<br/>
-				<button type="button" class="btn btn-primary" ng-click="ctrl.getOrderForRecovery();"
-						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
-					get order in text
-				</button>
-				<button type="button" class="btn btn-primary" ng-click="ctrl.clearOrderForRecovery();"
-						style="margin-top: 0px;height: 32px;margin-bottom: 20px;">
-					clear
-				</button>
+				<a ng-click="ctrl.toggleMultipleEdit()" href=""
+				   ng-class="ctrl.isMultipleEdit ? 'btn btn-success' : 'btn btn-danger'"
+				   ng-disabled="ctrl.isSaveButtonPressed"
+				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isMultipleEdit ? '[Multiple]' : '[Single]'}} edit mode</a>
 
-				<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
+				<!--<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
 						ng-disabled="ctrl.isRecoveringOrder">
 					recover
-				</button>
+				</button>-->
 
 				<!--<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"
 					   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
