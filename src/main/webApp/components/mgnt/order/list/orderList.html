@@ -275,7 +275,7 @@
 			</div>
 
 
-			<div class="col-sm-7" style="text-align: end;" ng-if="ctrl.tempAmount <= 0">
+			<div class="col-sm-7" style="text-align: end;" ng-if="!ctrl.anyPicked">
 				<select  ng-model="ctrl.queryRequest.clientCode"
 						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
 						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
@@ -310,8 +310,7 @@
 				</div>
 			</div>
 
-
-			<div class="col-sm-7" ng-if="ctrl.tempAmount > 0">
+			<div class="col-sm-6" ng-if="ctrl.anyPicked">
 
 					<a ng-click="ctrl.selectAllAmount()" href="" class="btn btn-default check_out"
 					   style="margin: 0px 0px 0px 0px;height: 35px;" ng-show="ctrl.tableParams.data.length < 1000" >sum all</a>
@@ -326,7 +325,7 @@
 						one day
 					</button>
 					<a ng-click="ctrl.cloneOrders()" href="" class="btn btn-default check_out"
-				 	  style="margin: 0px 0px 0px 0px;height: 35px;" ng-disabled="ctrl.isButtonPressed" >clone {{ctrl.isButtonPressed}}</a>
+					   style="margin: 0px 0px 0px 0px;height: 35px;" ng-disabled="ctrl.isButtonPressed" >clone {{ctrl.isButtonPressed}}</a>
 					<a ng-click="ctrl.clearAmount()" href="" class="btn btn-default check_out"
 					   style="margin: 0px 0px 0px 0px;height: 35px;" >Clear</a>
 					Total: {{ctrl.tempAmount | number:0}}đ | {{ctrl.tempFrameNumber}}G+{{ctrl.tempLensNumber}}T

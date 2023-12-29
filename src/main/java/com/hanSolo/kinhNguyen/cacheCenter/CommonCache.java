@@ -40,6 +40,11 @@ public class CommonCache {
     public static boolean SMS_SEND_CONTROL = true;
 
     /**
+     * control concurrency mode
+     */
+    public static boolean SINGLE_EDIT_CONCURRENCE = true;
+
+    /**
      * member list : help to check user status.
      */
     public static Map<String, Member> LOGIN_MEMBER_LIST = new HashMap<>(Utility.LOGIN_MEMBER_LIST_SIZE);

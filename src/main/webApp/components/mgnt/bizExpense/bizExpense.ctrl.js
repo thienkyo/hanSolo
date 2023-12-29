@@ -38,7 +38,9 @@ angular.module('bizExpenseModule')
         self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
         if(self.shopList.length == 1){
             self.queryRequest.shopCode = self.shopList[0].shopCode;
+
         }else{
+            self.theBizExpense.shopCode = self.shopList[1].shopCode;
             self.queryRequest.shopCode = 'ALL';
         }
     }
@@ -52,7 +54,7 @@ angular.module('bizExpenseModule')
 
 	self.amountList=AmountList;
     //self.amount = FirstTimeLoadSize;
-	
+	console.log(self.theBizExpense);
 	getBizExpenseByCondition(self.queryRequest);
 
 //////////////////////////

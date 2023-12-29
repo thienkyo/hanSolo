@@ -97,9 +97,11 @@ angular.module('orderListModule')
 
     self.clearAmount = function() {
         self.tempAmount = 0;
-        self.tempArray.forEach((dataOne, index, array) => {
+        console.log(self.tempArray);
+        self.tableParams.data.forEach((dataOne, index, array) => {
            dataOne.picked = false;
-       });
+        });
+        self.anyPicked = false;
         self.tempArray=[];
         self.detailArray = [];
         self.copyText = '';
@@ -141,10 +143,12 @@ angular.module('orderListModule')
         if(one.picked){
             self.tempArray.push(one);
             self.detailArray = self.detailArray.concat(one.orderDetails);
+            self.anyPicked = true;
         }else{
             var index = self.tempArray.indexOf(one);
             self.tempArray.splice(index,1);
             self.detailArray = self.detailArray.filter(i => i.orderId != one.id);
+            self.anyPicked = false;
         }
         self.tempArray.forEach((dataOne, index, array) => {
            self.tempAmount += dataOne.total;
