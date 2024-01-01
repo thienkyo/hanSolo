@@ -5,7 +5,8 @@ angular.module('networkServices',[])
 		var host = $location.host();
 
 		//var urlbase = "http://localhost/"; // dev
-		var urlbase = "http://"+host+"/"; // dev
+		//var urlbase = "http://"+host+"/"; // dev
+		var urlbase = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"; // dev
 		//var urlbase = "http://128.199.156.9/"; // demo
 		//var urlbase = "http://matkinhnguyen.com/"; //sandbox
 		//var urlbase = "http://opticshop.online/";  //product
