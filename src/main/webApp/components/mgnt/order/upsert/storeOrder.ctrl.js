@@ -300,10 +300,15 @@ angular.module('storeOrderModule')
         }
 
         self.queryRequest.generalPurpose = code+"|"+"BILL";
+        console.log(self.queryRequest);
+        if(self.queryRequest.clientCode == 'GODLIKE'){
+            self.queryRequest.clientCode = self.theOrder.clientCode;
+            self.queryRequest.shopCode = self.theOrder.shopCode;
+        }
+        console.log(self.queryRequest);
 
-         //storeOrderService.getCoupon(code,'BILL').then(function (data) {
-         storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
-            console.log(data);
+        storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
+
              if(data.errorCode == 'SUCCESS' && data.obj.clientCode == self.theOrder.clientCode){
                 self.theOrder.couponDiscount = data.obj.value;
                 self.theOrder.couponCode = code;
@@ -315,7 +320,7 @@ angular.module('storeOrderModule')
              }else{
                 self.isErrorMsg = data.errorMessage;
              }
-         });
+        });
     }
 
     self.getFrameCoupon = function(orderDetail) {
