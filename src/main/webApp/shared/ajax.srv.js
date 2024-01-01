@@ -1,12 +1,16 @@
 angular.module('networkServices',[])
-	.factory('ajaxService',['$http','$cookies',function($http,$cookies){
-		
-		var urlbase = "http://localhost/"; // dev
+	.factory('ajaxService',['$http','$cookies','$location',function($http,$cookies,$location){
+
+
+		var host = $location.host();
+
+		//var urlbase = "http://localhost/"; // dev
+		var urlbase = "http://"+host+"/"; // dev
 		//var urlbase = "http://128.199.156.9/"; // demo
 		//var urlbase = "http://matkinhnguyen.com/"; //sandbox
 		//var urlbase = "http://opticshop.online/";  //product
 		var sessionid = $cookies.get('JSESSIONID');
-		
+		console.log(urlbase);
 		var config = {
 				headers:{
 					'Accept': 'application/json',
