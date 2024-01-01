@@ -8,7 +8,7 @@ angular.module('networkServices',[])
 		//var urlbase = "http://"+host+"/"; // dev
 		var urlbase = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"; // dev
 		//var urlbase = "http://128.199.156.9/"; // demo
-		//var urlbase = "http://matkinhnguyen.com/"; //sandbox
+		//var urlbase = "https://matkinhnguyen.com/"; //sandbox
 		//var urlbase = "http://opticshop.online/";  //product
 		var sessionid = $cookies.get('JSESSIONID');
 		console.log(urlbase);
