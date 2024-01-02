@@ -79,6 +79,7 @@ select, textarea {
 <h4 style="text-align: center;">
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}" target="_blank" ng-show="ctrl.theOrder.id > 0">[print]</a>
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}&noAddress=true" target="_blank" ng-show="ctrl.theOrder.id > 0">[print2]</a>
+	<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.deposit > 0 ? ctrl.theOrder.deposit : ctrl.theOrder.total }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao" target="_blank" ng-show="ctrl.theOrder.id > 0">[QR]</a>
 	<a href="" ng-show="ctrl.isGodLike" ng-click="ctrl.dummyData()">[dummyData]</a>
 </h4>
 
