@@ -11,7 +11,10 @@
 	<packaging>war</packaging>
 	<groupId>com.hanSolo</groupId>
 	<artifactId>kinhNguyen</artifactId>
-	<version>0.2.0.0-SNAPSHOT</version>
+	<!--<version>0.2.1.5-kinhNguyen</version>-->
+	<version>0.2.3.4_master</version>
+	<!--<version>0.2.3.3_master_sandbox_https_04</version>-->
+	<!--<version>0.2.1.3-dev</version>-->
 	<name>kinhNguyen</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
