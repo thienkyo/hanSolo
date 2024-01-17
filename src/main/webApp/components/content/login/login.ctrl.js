@@ -13,7 +13,7 @@ angular.module('loginModule')
 	self.login = function() {
 		if(self.credential.phone && self.credential.pass){
 			loginService.login({loginStr: memberService.makeLoginStr(self.credential.phone,btoa(self.credential.pass))}).then(function(data) {
-			    console.log(data);
+			    //console.log(data);
 			    if(data.errorCode == 'SUCCESS'){
 
 			        self.member.token =  'sheep ' + data.obj.token;
@@ -26,7 +26,6 @@ angular.module('loginModule')
                     self.member.shopCode = a.shopCode;
                     memberService.setCurrentMember(self.member);
 
-                    console.log(a);
                     $rootScope.$broadcast('authorized');
                     $location.path('#/');
 			    }else{

@@ -136,10 +136,9 @@ angular.module('memberListModule')
 	self.updateRole = function(mem){
 	    console.log(mem);
 	    var currentRole = mem.memberRoles.find(i => i.role == mem.roleToBe);
-        console.log(currentRole);
+        //console.log(currentRole);
         if(currentRole){
             memberListService.deleteRole(currentRole).then(function (data) {
-                console.log(data);
                 if(data.errorCode == 'SUCCESS'){
                     mem.memberRoles = mem.memberRoles.filter(i => i.role != mem.roleToBe);
                 }
@@ -152,7 +151,6 @@ angular.module('memberListModule')
             newRole.role = mem.roleToBe;
             mem.memberRoles.push(newRole);
             memberListService.upsert(mem).then(function (data) {
-                console.log(data);
                 if(data.errorCode == 'FAIL'){
                     var index = mem.memberRoles.indexOf(newRole);
                     mem.memberRoles.splice(index,1);

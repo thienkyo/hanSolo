@@ -17,7 +17,6 @@ function($scope,$location,NgTableParams,memberService,KeyManagementDO,
 
     keyManagementService.getAll().then(function (data) {
         self.KeyManagementList = data;
-        console.log(data);
         self.tableParams = new NgTableParams({}, { dataset: self.KeyManagementList});
     });
 
@@ -60,7 +59,6 @@ function($scope,$location,NgTableParams,memberService,KeyManagementDO,
         keyManagementService.renewKey(one).then(function (data) {
             self.responseStr = data;
             one = data.keyManagement;
-            console.log(data);
            /* var index = self.KeyManagementList.indexOf(data.keyManagement);
             self.KeyManagementList.splice(index,1);
             self.tableParams = new NgTableParams({}, { dataset: self.KeyManagementList});*/

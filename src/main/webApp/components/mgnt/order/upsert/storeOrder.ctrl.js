@@ -72,7 +72,6 @@ angular.module('storeOrderModule')
 
     self.remove1Tab = function(index,orderDetail){
         self.isSaveButtonPressed = true;
-        console.log(orderDetail);
         storeOrderService.deleteOrderDetail(orderDetail).then(function (data) {
             console.log(data);
              if(data.errorCode == 'SUCCESS' ){

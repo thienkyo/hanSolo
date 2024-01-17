@@ -23,8 +23,6 @@ angular.module('bizExpenseModule')
     self.shopList2 = shopListCacheService.get();
     self.queryRequest={};
     self.queryRequest.amount = FirstTimeLoadSize;
-    console.log('this is biz expense');
-    console.log(currentShopCacheService.get());
 
 	if(!memberService.isMod()){
 		$location.path('#/');
@@ -53,8 +51,6 @@ angular.module('bizExpenseModule')
     self.isSuperAdmin = memberService.isSuperAdmin();
 
 	self.amountList=AmountList;
-    //self.amount = FirstTimeLoadSize;
-	console.log(self.theBizExpense);
 	getBizExpenseByCondition(self.queryRequest);
 
 //////////////////////////
@@ -122,7 +118,6 @@ angular.module('bizExpenseModule')
 
         });
         self.tempAmount = self.OneDayExpense.totalAmount;
-        console.log(self.OneDayExpense);
     }
 
     function sameDay(d1, d2) {
@@ -157,12 +152,11 @@ angular.module('bizExpenseModule')
 
 		self.responseStr = false;
 		self.responseStrFail = false;
-		console.log(bizExpense);
+
 		if(self.theBizExpense.shopCode){
 		    bizExpenseService.upsert(bizExpense).then(function (data) {
                 self.responseStr = data;
                 self.isSaveButtonPressed=false;
-                console.log(data);
                 if(bizExpense.id == 0){
                     self.BizExpenseList.unshift(data.obj);
                     self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});

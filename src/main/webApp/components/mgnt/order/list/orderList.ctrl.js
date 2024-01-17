@@ -180,7 +180,7 @@ angular.module('orderListModule')
         self.OneDayReport.date =  date +'-'+ month +'-'+ (new Date(self.tempForOneDayReport.gmtCreate)).getFullYear() ;
 
         self.OneDayReport.data.forEach((dataOne, index, array) => {
-        console.log();
+
             self.OneDayReport.totalAmount += dataOne.total;
             self.OneDayReport.subTotalAmount += dataOne.subTotal;
             self.OneDayReport.depositAmount += dataOne.deposit;
@@ -305,13 +305,13 @@ angular.module('orderListModule')
                         order.orderDetails[i].lensPrice*(100 - order.orderDetails[i].lensDiscountAmount)/100*order.orderDetails[i].lensQuantity +
                         order.orderDetails[i].otherPrice;
             if(order.orderDetails[i].framePriceAtThatTime > 1000){
-                order.frameNumber +=1;
+                order.frameNumber +=order.orderDetails[i].quantity;
             }
             if(order.orderDetails[i].lensPrice > 1000){
                 if(order.orderDetails[i].monoLens){
                      order.lensNumber +=0.5;
                 }else{
-                     order.lensNumber +=1;
+                     order.lensNumber += order.orderDetails[i].lensQuantity;
                 }
             }
             if(order.orderDetails[i].reading){
@@ -456,7 +456,6 @@ angular.module('orderListModule')
 
     function getOrdersByTerms(){
         self.tableParams = new NgTableParams({}, { dataset: []});
-        console.log(self.queryRequest);
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
             self.orderList = data;
             self.orderList.forEach(calculateOrderTotal);

@@ -116,7 +116,6 @@ angular.module('lensProductModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
-        console.log(self.theSummaryModal);
     }
 
 }]);

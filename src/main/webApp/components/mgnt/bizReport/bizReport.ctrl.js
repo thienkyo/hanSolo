@@ -77,7 +77,6 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         self.modifiedReports = resetModifiedReports();
         bizReportService.getDataByCondition(self.queryRequest).then(function (data) {
             self.bizReportList = data;
-            console.log(self.bizReportList);
             self.setModifiedReports(data);
 
             var data2 = [...data];// clone
@@ -173,7 +172,6 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
         bizReport.shopCode = self.queryRequest.shopCode;
 
         bizReportService.upsert(bizReport).then(function (data) {
-            console.log(data);
             self.responseStr = data.errorMessage;
             if(bizReport.id == 0){
                 self.bizReportList.unshift(data.obj);

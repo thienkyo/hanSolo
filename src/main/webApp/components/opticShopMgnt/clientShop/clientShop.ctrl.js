@@ -35,7 +35,6 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.theShop = new ShopDO();
         self.shopList = [];
         self.shopTableParams = new NgTableParams({}, { dataset: self.shopList});
-        console.log(self.theClient);
         console.log(self.theShop);
     }
 

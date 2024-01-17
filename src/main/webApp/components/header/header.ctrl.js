@@ -16,13 +16,7 @@ angular.module('app')
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.isMod = memberService.isMod();
 	self.clientInfo =  clientInfoCacheService.get();
-	console.log('this is header');
 
-/*
-	categoryService.getActiveCategories().then(function(data){
-		self.cateList = data;
-	});
-*/
 	self.logout = function() {
 	    loginService.logout().then(function (data) {
 	        memberService.logout();

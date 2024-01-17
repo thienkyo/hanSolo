@@ -22,12 +22,6 @@ angular.module('couponModule')
 			$location.path('#/');
 		}
 
-		console.log("this is coupon");
-        console.log(clientListCacheService.get());
-        console.log(clientInfoCacheService.get());
-        console.log(shopListCacheService.get());
-        console.log(currentShopCacheService.get());
-
         self.clientList = clientListCacheService.get();
 
 		couponService.getAllCoupons().then(function (data) {
@@ -38,8 +32,6 @@ angular.module('couponModule')
 
 
         self.filterCouponByClientCode = function(clientCode){
-
-            console.log(self.theCoupon);
             var tempList;
             if(clientCode == 'ALL'){
                 tempList = self.couponList;
@@ -56,7 +48,6 @@ angular.module('couponModule')
 		}
 		
 		self.upsert = function(coupon){
-		    console.log(coupon);
 		    if(self.isGodLike && coupon.clientCode == ''){
                 self.responseStrFail = 'temp';
                 return;

@@ -51,7 +51,7 @@ angular.module('homeModule')
         });
         */
 
-		console.log('this is home');
+		//console.log('this is home');
 		/*console.log(clientListCacheService.get());
         console.log(clientInfoCacheService.get());
         console.log(shopListCacheService.get());

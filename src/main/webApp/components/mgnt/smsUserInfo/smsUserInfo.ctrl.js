@@ -131,7 +131,6 @@ angular.module('smsUserInfoModule')
     self.getSmsQueueByTerm = function(){
         smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
             self.smsQueueList = data;
-            console.log(self.smsQueueAmount);
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }
@@ -348,7 +347,6 @@ angular.module('smsUserInfoModule')
     self.getStrategyByTerm = function(){
         strategyService.getDataForMgnt(0).then(function (data) {
             self.strategyList = data;
-            console.log(data);
             self.strategyTableParams = new NgTableParams({}, { dataset: self.strategyList});
         });
     }

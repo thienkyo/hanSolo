@@ -15,7 +15,6 @@ angular.module('invoiceModule')
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data.obj;
-            console.log(self.theOrder);
             self.calculateOrderTotal();
     });
 
@@ -63,7 +62,6 @@ angular.module('invoiceModule')
             if(self.theOrder.orderDetails[i].otherNote.length >= 24){count++;}
         }
 
-        console.log(count);
         var totalLine = 10;
         if(count < 3){
             totalLine = 12;
@@ -71,8 +69,6 @@ angular.module('invoiceModule')
         if(count > 5){
             totalLine = 9;
         }
-
-        console.log(self.OrderDetailList);
 
         var temp = totalLine - self.OrderDetailList.length;
         for (var i = 0; i < temp; i++){

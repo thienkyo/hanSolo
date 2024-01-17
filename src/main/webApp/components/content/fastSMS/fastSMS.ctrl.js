@@ -6,7 +6,6 @@ angular.module('fastSMSModule')
 	self.theSmsQueue = new SmsQueueDO();
 
     fastSMSService.getSMSConfig().then(function (data) {
-		console.log(data);
 		self.theSmsQueue.content = data.smsJob.msgContentTemplate;
 		self.theSmsQueue.receiverName = 'fastSMS';
 		self.theSmsQueue.jobId = data.smsJob.id;
@@ -14,7 +13,6 @@ angular.module('fastSMSModule')
 	});
 
 	self.addQueue = function(one){
-	    console.log(one);
 	    one.gmtCreate = (new Date()).getTime();
         one.gmtModify = (new Date()).getTime();
         self.isSaveButtonPressed=true;
