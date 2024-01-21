@@ -59,10 +59,10 @@ form .progress {
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li class="nav-item">
-				<a class="nav-link active" data-toggle="tab" href="" data-target="#job">Sms job</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#job">Sms job</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#queue" ng-click="ctrl.loadSmsQueue()">Sms queue</a>
+			<li class="nav-item ">
+				<a class="nav-link active" data-toggle="tab" href="" data-target="#queue">Sms queue</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#info">Sms user info</a>
@@ -73,12 +73,15 @@ form .progress {
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#strategy" ng-click="ctrl.getStrategyByTerm()">Strategy</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#luckyDraw" ng-click="ctrl.loadSmsQueue()">lucky draw</a>
+			</li>
 		</ul>
 
 		<!-- Tab panes -->
 		<div class="tab-content">
 			<!-- config job tab pane-->
-			<div id="job" class="container tab-pane active"><br>
+			<div id="job" class="container tab-pane"><br>
 				<div class="row" >
 					<div class="col-sm-1">
 						<input type="number"  ng-model="ctrl.theSmsJob.id" disabled="disabled" placeholder="id" style="width:50px;"/>
@@ -131,19 +134,25 @@ form .progress {
 						| data: {{ctrl.lastPrepareDataTime | date:"yyyy-MM-dd HH:mm:ss"}}
 					</div>
 
-
 				</div>
 				<div class="row" style="margin-top: 20px;">
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<textarea name="content" placeholder="specificPhones" rows="5"  style="white-space: pre-line;"
 								  ng-model="ctrl.theSmsJob.specificPhones" maxlength="160" ng-cloak ></textarea>
 					</div>
-					<div class="col-sm-7">
+					<div class="col-sm-4">
 						<textarea name="content" placeholder="content" rows="5"  style="white-space: pre-line;"
 								  ng-model="ctrl.theSmsJob.msgContentTemplate" maxlength="153" ng-cloak ></textarea>
 						<div id="the-count2">
 							<span>{{ctrl.theSmsJob.msgContentTemplate.length}}</span>
 							<span>/153</span>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<textarea name="attList" placeholder="attribute list" rows="5"  style="white-space: pre-line;"
+								  ng-model="ctrl.theSmsJob.attList"  ng-cloak ></textarea>
+						<div id="the-count4">
+							<span>{code = fn:random|6, name = att:name}</span>
 						</div>
 					</div>
 				</div>
@@ -233,7 +242,7 @@ form .progress {
 
 			</div>
 			<!-- sms queue tab pane-->
-			<div id="queue" class="container tab-pane"><br>
+			<div id="queue" class="container tab-pane active"><br>
 				<!-- sms queue insert/update-->
 				<div class="row" >
 					<div class="col-sm-1">
@@ -736,6 +745,118 @@ form .progress {
 					</table>
 				</div>
 
+			</div>
+			<!-- luckyDraw tab pane-->
+			<div id="luckyDraw" class="container tab-pane "><br>
+				<!--  insert/update-->
+				<div class="row" style="margin-top: 20px;">
+					<div class="col-sm-4">
+						<textarea name="content" placeholder="order id list" rows="3"  style="white-space: pre-line;"
+								  ng-model="ctrl.luckyDrawReq.orderIdList" maxlength="500" ng-cloak ></textarea>
+					</div>
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.luckyDrawReq.expiry" placeholder="expiry" style="width: 100%;"/>
+						<select  ng-model="ctrl.luckyDrawReq.smsJobId"
+								 ng-options="opt.id as opt.jobName for opt in ctrl.smsJobList | filter:{ jobType: 'LUCKYDRAW'}"
+								 style="width: 100%;height: 30px;margin-top: 20px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;color: black;">
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.luckyDrawReq.clientCode" placeholder="client code" style="width: 100%;"/>
+						<input type="text"  ng-model="ctrl.luckyDrawReq.shopCode" placeholder="shop code" style="width: 100%;margin-top: 20px;"/>
+					</div>
+
+					<div class="col-sm-2">
+						<input type="text"  ng-model="ctrl.luckyDrawReq.couponValue" placeholder="coupon value" style="width: 100%;"/>
+
+					</div>
+
+					<div class="col-sm-2">
+						<a ng-click="ctrl.saveProgramResult(ctrl.luckyDrawReq)" href=""
+						   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
+						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'create'}}</a>
+
+						<a ng-click="ctrl.clearSmsQueue()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-sm-1">
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
+							thành công
+						</alert>
+					</div>
+				</div>
+
+				<!-- lucky draw table-->
+				<!--<h3 style="margin-top: 20px;">Sms queue </h3>-->
+				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+					<div class="col-sm-2">
+						<select  ng-model="ctrl.queryRequest.amount"
+								 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+								 ng-change="ctrl.getProgramResultForMgnt()"
+								 style="width: 90px;height: 30px;">
+						</select>
+						size:{{ctrl.programResultList.length}}
+					</div>
+					<div class="col-sm-7">
+						<a ng-click="ctrl.prepareCouponAndSms(ctrl.luckyDrawReq)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >prepare</a>
+						<a ng-click="ctrl.getProgramResultForMgnt()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >reset</a>
+						<a ng-click="ctrl.promptDelete100()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete 100</a>
+						<span ng-show="ctrl.isDelete100">
+							Are you sure?
+							<a ng-click="ctrl.delete100SmsQueue()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="ctrl.resetDelete100()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+						</span>
+
+					</div>
+				</div>
+				<!-- sms queue table-->
+				<div class="table-responsive">
+					<table ng-table="ctrl.programResultTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
+						<tr ng-repeat="one in $data">
+							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+								<a href="" ng-click="ctrl.setTheSmsQueue(one)">{{one.id}}</a>
+							</td>
+							<td title="'phone'" filter="{ 'winnerPhone' : 'text'}" sortable="'winnerPhone'" style="text-align: left;width:160px;">
+								{{one.winnerPhone | tel}}
+							</td>
+							<td title="'name'" filter="{ 'winnerName' : 'text'}" sortable="'winnerName'" style="text-align: right;width:150px;">
+								{{one.winnerName}}
+							</td>
+							<td title="'content'" filter="{ 'smsContent' : 'text'}" sortable="'smsContent'" style="text-align: left;">
+								{{one.smsContent}}
+							</td>
+
+							<td title="'value'" filter="{ 'couponValue' : 'text'}" sortable="'couponValue'" style="text-align: left;">
+								{{one.couponValue}}
+							</td>
+
+							<td title="'create'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:130px;">
+								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
+							</td>
+
+							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;">
+								{{one.status}}
+							</td>
+
+							<td title="'X'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
+								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >X</a>
+								<p ng-show="ctrl.deletingId == one.id">
+									Are you sure?
+									<a ng-click="ctrl.deleteSmsQueue(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
+								</p>
+							</td>
+
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 		<!-- end Tab panes -->

@@ -36,7 +36,8 @@ var JobTypeList=[
     {name : 'SPECIFIC', value:'SPECIFIC' },
     {name : 'PARTICULAR', value:'PARTICULAR' },
     {name : 'FASTSMS', value:'FASTSMS' },
-    {name : 'NOTIFYORDER', value:'NOTIFYORDER' }
+    {name : 'NOTIFYORDER', value:'NOTIFYORDER' },
+    {name : 'LUCKYDRAW', value:'LUCKYDRAW' }
 ];
 
 var AreaCodeList=[
@@ -118,7 +119,19 @@ angular.module('app')
 		.value('ShopDO',ShopDO)
 		.value('OSOConfigDO',OSOConfigDO)
 		.value('queryRequestDO',queryRequestDO)
+		.value('LuckyDrawRequest',LuckyDrawRequest)
 		;
+
+function LuckyDrawRequest(){
+    this.orderIdList = '';
+    this.expiry = 60;
+    this.couponValue = 20;
+    this.smsJobId = 0;
+    this.clientCode = 'CMKN';
+    this.shopCode = 'SB8ZTM';// dev
+    //this.shopCode = ''; // production
+
+}
 
 function OSOConfigDO(){
     //this.id = 0;

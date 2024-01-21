@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "sms_user_info")
-public class SmsUserInfo {
+public class SmsUserInfo extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

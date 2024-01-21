@@ -4,17 +4,20 @@ angular.module('smsUserInfoModule')
 									'NgTableParams','SmsUserInfoDO','uploadService','$timeout','JobTypeList',
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
-									'strategyService','StrategyDO','clientInfoCacheService',
+									'strategyService','StrategyDO','clientInfoCacheService','LuckyDrawRequest','programService',
+									'queryRequestDO',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
 	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
-	        strategyService,StrategyDO,clientInfoCacheService) {
+	        strategyService,StrategyDO,clientInfoCacheService,LuckyDrawRequest,programService,
+	        queryRequestDO) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
 	self.theSmsJob = new SmsJobDO();
 	self.theStrategy = new StrategyDO();
+	self.luckyDrawReq = new LuckyDrawRequest();
 	self.theSpecificSmsUserInfo = new SmsUserInfoDO();
 	self.jobTypeList = JobTypeList; // sms job
 	self.statusList = CommonStatusArray;
@@ -27,6 +30,10 @@ angular.module('smsUserInfoModule')
 	self.OneDayExpense={};
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
+	self.queryRequest = queryRequestDO;
+
+	self.queryRequest.clientCode = self.luckyDrawReq.clientCode;
+	self.queryRequest.shopCode = self.luckyDrawReq.shopCode
 
 	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
@@ -114,6 +121,10 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms queue//////
+    smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
+        self.smsQueueList = data;
+        self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
+    });
 
     self.prepareData = function(){
         smsQueueService.prepareData(self.smsQueueAmount).then(function (data) {
@@ -227,7 +238,9 @@ angular.module('smsUserInfoModule')
 
     smsJobService.getDataForMgnt(0).then(function (data) {
         self.smsJobList = data;
+        console.log(data);
         self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+        self.luckyDrawReq.smsJobId = self.smsJobList.find(i => i.jobType == 'LUCKYDRAW').id;
     });
 
     self.upsertSmsJob = function(one){
@@ -376,5 +389,35 @@ angular.module('smsUserInfoModule')
         });
     }
 
+//////////////  lucky draw section //////
+    console.log(self.queryRequest);
+    programService.getDataForMgnt(self.queryRequest).then(function (data) {
+        self.programResultList = data;
+        console.log(data);
+        self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+    });
 
+    self.getProgramResultForMgnt = function(req){
+        self.programResultList = [];
+        self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+        programService.getDataForMgnt(self.queryRequest).then(function (data) {
+            self.programResultList = data;
+            console.log(data);
+            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+        });
+    }
+
+    self.saveProgramResult = function(req){
+        programService.saveResult(req).then(function (data) {
+            self.programResultList = data;
+            console.log(self.programResultList);
+            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+        });
+    }
+
+    self.prepareCouponAndSms = function(req){
+        programService.prepareCouponAndSms(req).then(function (data) {
+            console.log(data);
+        });
+    }
 }]);

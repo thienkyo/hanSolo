@@ -211,4 +211,41 @@ angular.module('smsUserInfoModule')
          });
     }
  }])
+ .factory('programService', ['ajaxService',function(ajaxService) {
+  	var service = {
+  			getDataForMgnt : getDataForMgnt,
+  			saveResult : saveResult,
+  			prepareCouponAndSms : prepareCouponAndSms,
+  			deleteOne : deleteOne
+  			};
+  	return service;
+
+  	function getDataForMgnt(req){
+  		var url = "mgnt/program/getByClientCode";
+  		return ajaxService.post(url,req,{}).then(function(response){
+  			return response.data;
+  		});
+  	}
+
+  	function saveResult(req){
+  		var url = "mgnt/program/saveResult";
+  		return ajaxService.post(url,req,{}).then(function(response){
+  			return response.data;
+  		});
+  	}
+
+  	function prepareCouponAndSms(req){
+        var url = "mgnt/program/createCouponAndSms";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+  	function deleteOne(one){
+          var url = "mgnt/deleteStrategy";
+          return ajaxService.post(url,one,{}).then(function(response){
+              return response.data;
+          });
+     }
+ }])
 ;

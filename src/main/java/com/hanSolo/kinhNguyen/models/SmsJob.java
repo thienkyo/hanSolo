@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "sms_job")
-public class SmsJob {
+public class SmsJob extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -49,6 +49,17 @@ public class SmsJob {
 
     @Column(name = "weight", length = 2, columnDefinition = "varchar(2) default '1'")
     private String weight;
+
+    @Column(name = "att_list", length = 500)
+    private String attList;
+
+    public String getAttList() {
+        return attList;
+    }
+
+    public void setAttList(String attList) {
+        this.attList = attList;
+    }
 
     public String getWeight() {
         return weight;

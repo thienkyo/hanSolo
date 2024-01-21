@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -53,8 +54,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     List<Order> findByClientCodeAndShopCodeAndGmtCreateBetween(@NonNull String clientCode, @NonNull String shopCode, Date gmtCreateStart, Date gmtCreateEnd);
 
-
-
+    List<Order> findByIdInAndClientCode(Collection<Integer> ids, @NonNull String clientCode);
 
 
 

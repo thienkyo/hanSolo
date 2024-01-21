@@ -1,8 +1,10 @@
 package com.hanSolo.kinhNguyen.utility;
 
 import com.hanSolo.kinhNguyen.models.Coupon;
-import com.hanSolo.kinhNguyen.models.OrderDetail;
+import com.hanSolo.kinhNguyen.models.SmsJob;
 import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -82,12 +84,15 @@ public class Utility {
     final public static String SMS_JOB_SPECIFIC = "SPECIFIC";
     final public static String SMS_JOB_PARTICULAR = "PARTICULAR";
     final public static String SMS_JOB_FASTSMS = "FASTSMS";
-    final public static String SMS_JOB_NOTIFYORDER = "NOTIFYORDER";
     final public static String SMS_JOB_FASTSMS_PASSCODE = "1122";
+    final public static String SMS_JOB_NOTIFYORDER = "NOTIFYORDER";
+    final public static String SMS_JOB_LUCKYDRAW = "LUCKYDRAW";
 
     final public static String COUPON_TYPE_BILL = "BILL";
     final public static String COUPON_TYPE_FRAME = "FRAME";
     final public static String COUPON_TYPE_LENS = "LENS";
+    final public static String COUPON_CREATED_BY_TOOL = "TOOL";
+    final public static String COUPON_CREATED_BY_MANUAL = "MANUAL";
 
     final public static int LOGIN_MEMBER_LIST_SIZE = 40;
     final public static int CLIENT_SHOP_LIST_SIZE = 40;
@@ -258,6 +263,13 @@ public class Utility {
         return result;
     }
 
+    /**
+     * for merge orderDetail in multiple editing
+     * @param first
+     * @param second
+     * @param <T>
+     * @return
+     */
     public static <T> T mergeObjects(T first, T second){
         Class<?> clas = first.getClass();
         Field[] fields = clas.getDeclaredFields();
@@ -300,4 +312,96 @@ public class Utility {
         }
         return (T) result;
     }
+
+    /**
+     * convert string into map
+     * ex: String value = {code = fn:random|6, name = att:name, year = fix:2022};
+     * to map : [ "code":"fn:random|6", "name":"att:name", "year":"fix:2022" ]
+     * fn: function, att: attribute, fix: fix value
+     * @param value
+     * @return
+     */
+    final public static Map<String, String> stringToMap( String value){
+        value = value.substring(1, value.length()-1);           //remove curly brackets
+        String[] keyValuePairs = value.split(",");        //split the string to create key-value pairs
+        Map<String,String> map = new HashMap<>();
+
+        for(String pair : keyValuePairs)                        //iterate over the pairs
+        {
+            String[] entry = pair.split("=");                   //split the pairs to get key and value
+            map.put(entry[0].trim(), entry[1].trim());          //add them to the hashmap and trim whitespaces
+        }
+        return map;
+    }
+
+    /**
+     * build sms content based on attribute
+     * ex: String value = {code = fn:random|6, name = att:name, year = fix:2022};
+     * to map : [ "code":"fn:random|6", "name":"att:name", "year":"fix:2022" ]
+     * fn: function ex random, att: attribute of order, fix: fix value
+     * @param job
+     * @return
+     */
+    final public static String buildDynamicSms(SmsJob job){
+
+        if(StringUtils.isEmpty(job.getAttList())){
+            return job.getMsgContentTemplate();
+        }
+
+        Map<String, String> attMap = Utility.stringToMap(job.getAttList());
+
+        if(attMap.isEmpty()){return job.getMsgContentTemplate();}
+
+        String smsString = job.getMsgContentTemplate();
+        for (Map.Entry<String, String> entry : attMap.entrySet()) {
+            // entry.getValue() ex: fn:random|6
+            // parts[0] is indicator ex: fn(call function), att(get name), fix : fix value
+            // parts[1] is config ex: random|6
+            String[] parts = entry.getValue().split(":");
+
+            switch (parts[0]) {
+                case "fn":
+                    smsString = buildWithFunction(smsString, entry.getKey(), parts[1]);
+                    break;
+                case "att":
+
+                    break;
+                case "fix":
+                    smsString = buildWithFixValue(smsString, entry.getKey(), parts[1]);
+                    break;
+
+                default:
+                    return smsString;
+            }
+
+        }
+
+        return smsString;
+    }
+
+    private static String buildWithFixValue(String smsString, String position, String config) {
+        return smsString.replaceAll("<"+position+">",config);
+    }
+
+    /**
+     *
+     * @param smsString ex: coupon 40% code:<code>,ctrinh hang tuan tren FB
+     * @param position ex: code
+     * @param config ex: random|6
+     */
+    private static String buildWithFunction(String smsString, String position, String config) {
+        String[] functionAtt = config.split("\\|");
+        String result = StringUtils.EMPTY;
+        switch (functionAtt[0]) {
+            case "random":
+                result = RandomStringUtils.randomAlphanumeric(Integer.parseInt(functionAtt[1])).toUpperCase(Locale.ROOT);
+                break;
+            default:
+                result =  "<"+position+">";
+        }
+        smsString = smsString.replaceAll("<"+position+">",result);
+        return smsString+"|"+result;
+    }
+
+
 }
