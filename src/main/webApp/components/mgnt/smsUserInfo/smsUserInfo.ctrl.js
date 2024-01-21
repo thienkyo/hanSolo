@@ -32,8 +32,15 @@ angular.module('smsUserInfoModule')
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.queryRequest = queryRequestDO;
 
+    // temp logic for production and dev
+    var urlbase = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"; // dev
+
+    if($location.host().includes('localhost')){
+        self.luckyDrawReq.shopCode = 'S7LJ6W';
+    }
+
 	self.queryRequest.clientCode = self.luckyDrawReq.clientCode;
-	self.queryRequest.shopCode = self.luckyDrawReq.shopCode
+	self.queryRequest.shopCode = self.luckyDrawReq.shopCode;
 
 	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
@@ -81,6 +88,7 @@ angular.module('smsUserInfoModule')
 
     self.closeAlert = function(index) {
         self.responseStr = false;
+        self.responseStrFail = false;
     };
 
     self.getSmsUserInfoByTerm = function(){
@@ -408,16 +416,52 @@ angular.module('smsUserInfoModule')
     }
 
     self.saveProgramResult = function(req){
+        self.isSaveButtonPressed = true;
+        self.responseStr = false;
+        self.responseStrFail = false;
+        console.log(req);
+        if(req.orderIdList == ''){
+            self.responseStrFail = 'pls input orderId';
+            self.isSaveButtonPressed = false;
+            return;
+        }
         programService.saveResult(req).then(function (data) {
-            self.programResultList = data;
-            console.log(self.programResultList);
-            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+             self.isSaveButtonPressed = false;
+             if(data.errorCode == 'SUCCESS' ){
+                console.log(data.obj);
+                self.responseStr = data.errorMessage;
+
+                data.obj.forEach((dataOne, index, array) => {
+                    self.programResultList.unshift(dataOne);
+
+                });
+
+                self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+             }else{
+                self.responseStrFail = data.errorMessage;
+             }
         });
     }
 
     self.prepareCouponAndSms = function(req){
         programService.prepareCouponAndSms(req).then(function (data) {
             console.log(data);
+        });
+    }
+
+    self.deleteProgramResult = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        programService.deleteOne(one).then(function (data) {
+            self.responseStr = data.errorMessage;
+            var index = self.programResultList.indexOf(one);
+            self.programResultList.splice(index,1);
+            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
         });
     }
 }]);

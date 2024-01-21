@@ -1,7 +1,9 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.models.Banner;
 import com.hanSolo.kinhNguyen.models.BizReport;
 import com.hanSolo.kinhNguyen.models.Coupon;
+import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.models.Order;
 import com.hanSolo.kinhNguyen.models.ProgramResult;
 import com.hanSolo.kinhNguyen.models.SmsJob;
@@ -14,6 +16,7 @@ import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.request.LuckyDrawRequest;
 import com.hanSolo.kinhNguyen.request.QueryByClientShopAmountRequest;
 import com.hanSolo.kinhNguyen.response.GeneralResponse;
+import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -40,7 +44,7 @@ public class ProgramController {
     @Autowired private SmsQueueRepository smsQueueRepo;
 
     @RequestMapping("saveResult")
-    public List<ProgramResult> saveResult(@RequestBody final LuckyDrawRequest req, final HttpServletRequest request) throws ParseException {
+    public GeneralResponse<List<ProgramResult>> saveResult(@RequestBody final LuckyDrawRequest req, final HttpServletRequest request) throws ParseException {
 
         //List<String> orderIdList = Arrays.asList(req.getOrderIdList().split(","));
         String[] orderIdList = req.getOrderIdList().split(",");
@@ -74,7 +78,7 @@ public class ProgramController {
             result.add(oneResult);
         }
 
-        return (List<ProgramResult>) programResultRepo.saveAll(result);
+        return new GeneralResponse<>((List<ProgramResult>) programResultRepo.saveAll(result),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
     }
 
     @RequestMapping("createCouponAndSms")
@@ -132,6 +136,12 @@ public class ProgramController {
     @RequestMapping(value = "getByClientCode", method = RequestMethod.POST)
     public List<ProgramResult> getByClientCode(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         return programResultRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public GeneralResponse<String> delete(@RequestBody final ProgramResult role, final HttpServletRequest request) {
+        programResultRepo.delete(role);
+        return new GeneralResponse("delete_ProgramResult_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
 }

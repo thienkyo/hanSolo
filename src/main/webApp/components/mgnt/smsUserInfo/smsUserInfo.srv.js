@@ -242,7 +242,7 @@ angular.module('smsUserInfoModule')
     }
 
   	function deleteOne(one){
-          var url = "mgnt/deleteStrategy";
+          var url = "mgnt/program/delete";
           return ajaxService.post(url,one,{}).then(function(response){
               return response.data;
           });

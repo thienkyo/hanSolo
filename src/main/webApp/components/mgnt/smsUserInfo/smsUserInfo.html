@@ -777,8 +777,22 @@ form .progress {
 						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'create'}}</a>
 
 						<a ng-click="ctrl.clearSmsQueue()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+
+
+						<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
+							   dismiss-on-timeout="3000"
+							   style="margin: 20px 0px 0px 0px;width: 100%;height: 0px;padding: 0px 0px 25px 10px;" >
+							{{ctrl.responseStrFail}}
+						</alert>
+
+						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
+							   dismiss-on-timeout="3000"
+							   style="margin: 20px 0px 0px 0px;width: 100%;height: 0px;padding: 0px 0px 23px 10px;" >
+							   {{ctrl.responseStr}}
+						</alert>
+
 					</div>
-					<div class="col-sm-1">
+					<!--<div class="col-sm-1">
 						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
 							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
 							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -790,7 +804,7 @@ form .progress {
 							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
 							thành công
 						</alert>
-					</div>
+					</div>-->
 				</div>
 
 				<!-- lucky draw table-->
@@ -810,7 +824,7 @@ form .progress {
 						<a ng-click="ctrl.promptDelete100()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >delete 100</a>
 						<span ng-show="ctrl.isDelete100">
 							Are you sure?
-							<a ng-click="ctrl.delete100SmsQueue()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+							<a ng-click="" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 							<a ng-click="ctrl.resetDelete100()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
 						</span>
 
@@ -820,36 +834,44 @@ form .progress {
 				<div class="table-responsive">
 					<table ng-table="ctrl.programResultTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
-							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
+							<!--<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheSmsQueue(one)">{{one.id}}</a>
+							</td>-->
+							<td title="'order'" style="width:50px;text-align: center;">
+								<a href="" ng-click="">{{one.orderId}}</a>
 							</td>
-							<td title="'phone'" filter="{ 'winnerPhone' : 'text'}" sortable="'winnerPhone'" style="text-align: left;width:160px;">
-								{{one.winnerPhone | tel}}
+							<td title="'phone'" filter="{ 'winnerPhone' : 'text'}" sortable="'winnerPhone'" style="text-align: left;width:100px;">
+								{{one.winnerPhone}}
 							</td>
-							<td title="'name'" filter="{ 'winnerName' : 'text'}" sortable="'winnerName'" style="text-align: right;width:150px;">
+							<td title="'name'" filter="{ 'winnerName' : 'text'}" sortable="'winnerName'" style="text-align: right;width:110px;">
 								{{one.winnerName}}
 							</td>
 							<td title="'content'" filter="{ 'smsContent' : 'text'}" sortable="'smsContent'" style="text-align: left;">
 								{{one.smsContent}}
 							</td>
-
-							<td title="'value'" filter="{ 'couponValue' : 'text'}" sortable="'couponValue'" style="text-align: left;">
+							<td title="'code'" filter="{ 'code' : 'text'}"  style="text-align: left;width:60px;">
+								{{one.code}}
+							</td>
+							<td title="'val'"  style="text-align: left;">
 								{{one.couponValue}}
 							</td>
+							<td title="'exp'"  style="text-align: left;">
+								{{one.expiry}}
+							</td>
 
-							<td title="'create'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:130px;">
+							<td title="'create'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="text-align: left;width:110px;">
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;">
-								{{one.status}}
+							<td title="'stat'" filter="{ 'status' : 'text'}"  style="width:70px;text-align: center;">
+								{{one.status ? 'DONE' : 'INIT'}}
 							</td>
 
 							<td title="'X'" style="width:fit-content;" ng-if="ctrl.isSuperAdmin">
 								<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 								<p ng-show="ctrl.deletingId == one.id">
 									Are you sure?
-									<a ng-click="ctrl.deleteSmsQueue(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
+									<a ng-click="ctrl.deleteProgramResult(one)" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 									<a ng-click="ctrl.resetDelete()" href="" class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;">no</a>
 								</p>
 							</td>
