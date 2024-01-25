@@ -63,7 +63,6 @@ public class ProgramController {
             oneResult.setOrderCreateDate(or.getGmtCreate());
             oneResult.setStatus(false);
             oneResult.setExpiry(req.getExpiry());
-            oneResult.setOrderId(or.getId());
             oneResult.setWinnerName(or.getShippingName());
             oneResult.setGmtModify(Utility.getCurrentDate());
             oneResult.setGmtCreate(Utility.getCurrentDate());
@@ -75,6 +74,7 @@ public class ProgramController {
             oneResult.setCode(smsDynamic[1]);
             oneResult.setCouponValue(req.getCouponValue());
             oneResult.setOrderId(or.getId());
+            oneResult.setJobName(job.getJobName());
             result.add(oneResult);
         }
 
@@ -82,7 +82,7 @@ public class ProgramController {
     }
 
     @RequestMapping("createCouponAndSms")
-    public GeneralResponse<String> createCouponAndSms(@RequestBody final LuckyDrawRequest req, final HttpServletRequest request) throws ParseException {
+    public GeneralResponse<List<ProgramResult>> createCouponAndSms(@RequestBody final LuckyDrawRequest req, final HttpServletRequest request) throws ParseException {
 
         List<ProgramResult> programResults = programResultRepo.findByClientCodeAndStatus(req.getClientCode(),false);
 
@@ -130,7 +130,7 @@ public class ProgramController {
         programResultRepo.saveAll(programResults);
 
 
-        return new GeneralResponse("process success",Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
+        return new GeneralResponse(programResults,Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
     }
 
     @RequestMapping(value = "getByClientCode", method = RequestMethod.POST)

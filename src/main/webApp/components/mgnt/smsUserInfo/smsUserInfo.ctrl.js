@@ -33,9 +33,7 @@ angular.module('smsUserInfoModule')
 	self.queryRequest = queryRequestDO;
 
     // temp logic for production and dev
-    var urlbase = $location.protocol()+"://"+$location.host()+":"+$location.port()+"/"; // dev
-
-    if($location.host().includes('localhost')){
+    if($location.host().includes('opticshop')){
         self.luckyDrawReq.shopCode = 'S7LJ6W';
     }
 
@@ -401,7 +399,6 @@ angular.module('smsUserInfoModule')
     console.log(self.queryRequest);
     programService.getDataForMgnt(self.queryRequest).then(function (data) {
         self.programResultList = data;
-        console.log(data);
         self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
     });
 
@@ -429,11 +426,10 @@ angular.module('smsUserInfoModule')
              self.isSaveButtonPressed = false;
              if(data.errorCode == 'SUCCESS' ){
                 console.log(data.obj);
-                self.responseStr = data.errorMessage;
+                self.responseStr = "Thành công";
 
                 data.obj.forEach((dataOne, index, array) => {
                     self.programResultList.unshift(dataOne);
-
                 });
 
                 self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
@@ -444,8 +440,20 @@ angular.module('smsUserInfoModule')
     }
 
     self.prepareCouponAndSms = function(req){
+        self.isSaveButtonPressed = true;
+        self.responseStr = false;
+        self.responseStrFail = false;
         programService.prepareCouponAndSms(req).then(function (data) {
             console.log(data);
+            self.isSaveButtonPressed = false;
+            if(data.errorCode == 'SUCCESS' ){
+            self.responseStr = 'Thành công';
+            self.programResultList2 = self.programResultList.map(obj => data.obj.find(o => o.orderId == obj.orderId) || obj);
+
+            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList2});
+            }else{
+            self.responseStrFail = data.errorMessage;
+            }
         });
     }
 
@@ -464,4 +472,15 @@ angular.module('smsUserInfoModule')
             }
         });
     }
+
+    self.setStyle = function(status){
+        if(status==0){
+            self.statusStyle.color = "crimson";
+        }else if(status==1){
+            self.statusStyle.color = "blue";
+        }
+        return self.statusStyle;
+    }
+/////////////////////
+
 }]);

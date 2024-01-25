@@ -268,7 +268,6 @@ form .progress {
 						{{ctrl.theSmsQueue.receiverPhone | tel}}
 					</div>
 
-
 				</div>
 				<div class="row" style="margin-top: 20px;">
 					<div class="col-sm-7">
@@ -349,7 +348,8 @@ form .progress {
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;">
+							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;"
+								ng-style="ctrl.setStyle(one.status)">
 								{{one.status}}
 							</td>
 
@@ -792,19 +792,6 @@ form .progress {
 						</alert>
 
 					</div>
-					<!--<div class="col-sm-1">
-						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
-							thất bại
-						</div>
-
-						<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
-							   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;" >
-							thành công
-						</alert>
-					</div>-->
 				</div>
 
 				<!-- lucky draw table-->
@@ -830,10 +817,10 @@ form .progress {
 
 					</div>
 				</div>
-				<!-- sms queue table-->
+				<!-- program result table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.programResultTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
-						<tr ng-repeat="one in $data">
+						<tr ng-repeat="one in $data track by $index">
 							<!--<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:60px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheSmsQueue(one)">{{one.id}}</a>
 							</td>-->
@@ -852,6 +839,9 @@ form .progress {
 							<td title="'code'" filter="{ 'code' : 'text'}"  style="text-align: left;width:60px;">
 								{{one.code}}
 							</td>
+							<td title="'job'" >
+								{{one.jobName}}
+							</td>
 							<td title="'val'"  style="text-align: left;">
 								{{one.couponValue}}
 							</td>
@@ -863,7 +853,8 @@ form .progress {
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'stat'" filter="{ 'status' : 'text'}"  style="width:70px;text-align: center;">
+							<td title="'stat'" filter="{ 'status' : 'text'}"  style="width:70px;text-align: center;"
+								ng-style="ctrl.setStyle(one.status)">
 								{{one.status ? 'DONE' : 'INIT'}}
 							</td>
 

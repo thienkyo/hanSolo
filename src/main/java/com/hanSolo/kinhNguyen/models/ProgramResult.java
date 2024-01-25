@@ -38,6 +38,17 @@ public class ProgramResult extends CommonBaseModel {
     @Column(name = "coupon_value")
     private Integer couponValue;
 
+    @Column(name = "job_name", length = 150)
+    private String jobName;
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
     public Integer getCouponValue() {
         return couponValue;
     }
