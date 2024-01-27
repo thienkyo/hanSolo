@@ -1,9 +1,16 @@
 package com.hanSolo.kinhNguyen.request;
 
+import java.io.Serializable;
+
 /**
  * for query with clientCode, shopCode, Amount for all cases.
  */
-public class QueryByClientShopAmountRequest {
+public class QueryByClientShopAmountRequest  implements Serializable {
+
+    /**
+     * serialVersionUID
+     */
+    private static final long    serialVersionUID  = 6141036582285763472L;
 
     /**
      * code of client

@@ -424,6 +424,7 @@ angular.module('smsUserInfoModule')
         }
         programService.saveResult(req).then(function (data) {
              self.isSaveButtonPressed = false;
+             console.log(data);
              if(data.errorCode == 'SUCCESS' ){
                 console.log(data.obj);
                 self.responseStr = "Thành công";

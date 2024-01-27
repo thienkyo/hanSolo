@@ -24,17 +24,20 @@ angular.module('invoiceModule')
         var temp = 0;
         var count = 0;
         for (var i = 0; i < self.theOrder.orderDetails.length; i++){
-            self.theOrder.orderDetails[i].framePriceAfterSale = self.theOrder.orderDetails[i].framePriceAtThatTime*(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100;
+            self.theOrder.orderDetails[i].framePriceAfterSale =
+                self.theOrder.orderDetails[i].framePriceAtThatTime
+                *(100 - self.theOrder.orderDetails[i].frameDiscountAtThatTime)/100;
 
-            temp = self.theOrder.orderDetails[i].framePriceAfterSale;
+            temp = self.theOrder.orderDetails[i].framePriceAfterSale
+                   *self.theOrder.orderDetails[i].quantity;
             // apply discount
             if(self.theOrder.orderDetails[i].frameDiscountAmount && self.theOrder.orderDetails[i].frameDiscountAmount > 0){
-                temp = self.theOrder.orderDetails[i].framePriceAfterSale*self.theOrder.orderDetails[i].quantity*
-                       (100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
+                temp = temp*(100 - self.theOrder.orderDetails[i].frameDiscountAmount)/100
             }
-            subTotal += temp +
-                        self.theOrder.orderDetails[i].lensPrice*self.theOrder.orderDetails[i].lensQuantity*
-                        (100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100
+            subTotal += temp
+                        +self.theOrder.orderDetails[i].lensPrice
+                        *self.theOrder.orderDetails[i].lensQuantity
+                        *(100 - self.theOrder.orderDetails[i].lensDiscountAmount)/100
                         + self.theOrder.orderDetails[i].otherPrice;
 
             if(self.theOrder.orderDetails[i].lensPrice > 0 ){
@@ -79,5 +82,7 @@ angular.module('invoiceModule')
         self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount;
         self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount - self.theOrder.deposit;
         self.theOrder.doubleLine = count;
+
+        console.log(self.theOrder);
     }
 }]);

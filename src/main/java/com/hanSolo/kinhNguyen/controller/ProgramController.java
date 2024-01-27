@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.controller;
 
+import com.hanSolo.kinhNguyen.DTO.SmsStringResult;
 import com.hanSolo.kinhNguyen.models.Banner;
 import com.hanSolo.kinhNguyen.models.BizReport;
 import com.hanSolo.kinhNguyen.models.Coupon;
@@ -53,7 +54,9 @@ public class ProgramController {
                 .collect(Collectors.toList());
         List<Order> orderList = orderRepo.findByIdInAndClientCode(orderIdList2, req.getClientCode());
 
-        if(orderList.isEmpty()){ return null;}
+        if(orderList.isEmpty()){
+            return new GeneralResponse<>(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
 
         SmsJob job = smsJobRepo.findById(req.getSmsJobId()).get();
 
@@ -69,9 +72,9 @@ public class ProgramController {
             oneResult.setWinnerPhone(or.getShippingPhone());
             oneResult.setClientCode(req.getClientCode());
             oneResult.setShopCode(req.getShopCode());
-            String[] smsDynamic = Utility.buildDynamicSms(job).split("\\|");
-            oneResult.setSmsContent(smsDynamic[0]);
-            oneResult.setCode(smsDynamic[1]);
+            SmsStringResult smsDynamic = Utility.buildDynamicSms(job);
+            oneResult.setSmsContent(smsDynamic.getSmsString());
+            oneResult.setCode(smsDynamic.getExtendInfo());
             oneResult.setCouponValue(req.getCouponValue());
             oneResult.setOrderId(or.getId());
             oneResult.setJobName(job.getJobName());

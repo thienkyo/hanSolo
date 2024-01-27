@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.utility;
 
+import com.hanSolo.kinhNguyen.DTO.SmsStringResult;
 import com.hanSolo.kinhNguyen.models.Coupon;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import io.jsonwebtoken.Claims;
@@ -342,17 +343,18 @@ public class Utility {
      * @param job
      * @return
      */
-    final public static String buildDynamicSms(SmsJob job){
+    final public static SmsStringResult buildDynamicSms(SmsJob job){
 
         if(StringUtils.isEmpty(job.getAttList())){
-            return job.getMsgContentTemplate();
+            return new SmsStringResult(job.getMsgContentTemplate(),StringUtils.EMPTY) ;
         }
 
         Map<String, String> attMap = Utility.stringToMap(job.getAttList());
 
-        if(attMap.isEmpty()){return job.getMsgContentTemplate();}
+        if(attMap.isEmpty()){return new SmsStringResult(job.getMsgContentTemplate(),StringUtils.EMPTY);}
 
         String smsString = job.getMsgContentTemplate();
+        SmsStringResult re = new SmsStringResult(smsString,StringUtils.EMPTY);
         for (Map.Entry<String, String> entry : attMap.entrySet()) {
             // entry.getValue() ex: fn:random|6
             // parts[0] is indicator ex: fn(call function), att(get name), fix : fix value
@@ -361,26 +363,26 @@ public class Utility {
 
             switch (parts[0]) {
                 case "fn":
-                    smsString = buildWithFunction(smsString, entry.getKey(), parts[1]);
+                    re = buildWithFunction(smsString, entry.getKey(), parts[1]);
                     break;
                 case "att":
-
                     break;
                 case "fix":
-                    smsString = buildWithFixValue(smsString, entry.getKey(), parts[1]);
+                    re = buildWithFixValue(smsString, entry.getKey(), parts[1]);
                     break;
 
                 default:
-                    return smsString;
+                    return  re;
             }
 
         }
 
-        return smsString;
+        return re;
     }
 
-    private static String buildWithFixValue(String smsString, String position, String config) {
-        return smsString.replaceAll("<"+position+">",config);
+    private static SmsStringResult buildWithFixValue(String smsString, String position, String config) {
+        String sms = smsString.replaceAll("<"+position+">",config);
+        return new SmsStringResult(sms, config);
     }
 
     /**
@@ -389,7 +391,7 @@ public class Utility {
      * @param position ex: code
      * @param config ex: random|6
      */
-    private static String buildWithFunction(String smsString, String position, String config) {
+    private static SmsStringResult buildWithFunction(String smsString, String position, String config) {
         String[] functionAtt = config.split("\\|");
         String result = StringUtils.EMPTY;
         switch (functionAtt[0]) {
@@ -400,7 +402,7 @@ public class Utility {
                 result =  "<"+position+">";
         }
         smsString = smsString.replaceAll("<"+position+">",result);
-        return smsString+"|"+result;
+        return new SmsStringResult(smsString,result);
     }
 
 

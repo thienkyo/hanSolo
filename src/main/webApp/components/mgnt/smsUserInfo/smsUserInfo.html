@@ -348,8 +348,7 @@ form .progress {
 								{{one.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}
 							</td>
 
-							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;"
-								ng-style="ctrl.setStyle(one.status)">
+							<td title="'status'" filter="{ 'status' : 'text'}"  style="width:100px;text-align: center;">
 								{{one.status}}
 							</td>
 
@@ -827,24 +826,25 @@ form .progress {
 							<td title="'order'" style="width:50px;text-align: center;">
 								<a href="" ng-click="">{{one.orderId}}</a>
 							</td>
-							<td title="'phone'" filter="{ 'winnerPhone' : 'text'}" sortable="'winnerPhone'" style="text-align: left;width:100px;">
-								{{one.winnerPhone}}
-							</td>
-							<td title="'name'" filter="{ 'winnerName' : 'text'}" sortable="'winnerName'" style="text-align: right;width:110px;">
-								{{one.winnerName}}
-							</td>
-							<td title="'content'" filter="{ 'smsContent' : 'text'}" sortable="'smsContent'" style="text-align: left;">
-								{{one.smsContent}}
-							</td>
+
 							<td title="'code'" filter="{ 'code' : 'text'}"  style="text-align: left;width:60px;">
 								{{one.code}}
 							</td>
-							<td title="'job'" >
-								{{one.jobName}}
-							</td>
+
 							<td title="'val'"  style="text-align: left;">
 								{{one.couponValue}}
 							</td>
+
+							<td title="'phone'" filter="{ 'winnerPhone' : 'text'}" sortable="'winnerPhone'" style="text-align: left;width:100px;">
+								{{one.winnerName+ ' '+ one.winnerPhone}}
+							</td>
+							<!--<td title="'name'" filter="{ 'winnerName' : 'text'}" sortable="'winnerName'" style="text-align: right;width:110px;">
+								{{one.winnerName}}
+							</td>-->
+							<td title="'content'" filter="{ 'smsContent' : 'text'}" sortable="'smsContent'" style="text-align: left;">
+								{{one.smsContent}} | {{one.jobName}}
+							</td>
+
 							<td title="'exp'"  style="text-align: left;">
 								{{one.expiry}}
 							</td>
