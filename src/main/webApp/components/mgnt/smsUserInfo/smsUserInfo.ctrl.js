@@ -31,6 +31,7 @@ angular.module('smsUserInfoModule')
 	self.isAdmin = memberService.isAdmin();
 	self.isSuperAdmin = memberService.isSuperAdmin();
 	self.queryRequest = queryRequestDO;
+	self.smsJobList = [];
 
     // temp logic for production and dev
     if($location.host().includes('opticshop')){
@@ -126,9 +127,103 @@ angular.module('smsUserInfoModule')
         return self.statusStyle;
     }
 
+////////  sms job //////
+
+    smsJobService.getLastHeartBeatTime().then(function (data) {
+        self.lastHeartBeatTime = data;
+    });
+    smsJobService.getLastPrepareDataTime().then(function (data) {
+        self.lastPrepareDataTime = data;
+    });
+
+    /// for sms send api
+    smsJobService.getSmsSendStatus().then(function (data) {
+        self.isRunSmsSend = data;
+    });
+
+    self.toggleSmsSend = function(){
+        self.isSaveButtonPressed=true;
+        smsJobService.toggleSmsSend().then(function (data) {
+            self.isSaveButtonPressed=false;
+            self.isRunSmsSend = data;
+        });
+    }
+
+    /// for sms data prepare api
+    smsJobService.getSmsDataPrepareStatus().then(function (data) {
+        self.isRunSmsDataPrepare = data;
+    });
+
+    self.toggleSmsDataPrepare = function(){
+        self.isSaveButtonPressed=true;
+        smsJobService.toggleSmsDataPrepare().then(function (data) {
+            self.isSaveButtonPressed=false;
+            self.isRunSmsDataPrepare = data;
+        });
+    }
+
+
+    smsJobService.getDataForMgnt(0).then(function (data) {
+        self.smsJobList = data;
+        console.log(data);
+        self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+        self.luckyDrawReq.smsJobId = self.smsJobList.find(i => i.jobType == 'LUCKYDRAW' && i.status ).id;
+    });
+
+    self.upsertSmsJob = function(one){
+        self.isSaveButtonPressed=true;
+        self.responseStr = false;
+        smsJobService.upsert(one).then(function (data) {
+            self.responseStr = data;
+            self.isSaveButtonPressed=false;
+            if(one.id == 0){
+                self.smsJobList.unshift(data.smsJob);
+                self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+            }
+        });
+    }
+
+    // open datePicker
+    self.openDP = function() {
+        self.DPisOpen = true;
+        self.isPickDP = true;
+    };
+
+    self.setTheSmsJob = function(one){
+        self.theSmsJob = one;
+        self.responseStr = false;
+    }
+
+    self.clearSmsJob = function(){
+        self.responseStr = false;
+        self.theSmsJob = new SmsJobDO();
+    }
+
+    self.deleteSmsJob = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        smsJobService.deleteOne(one).then(function (data) {
+            self.responseStr = data;
+            var index = self.smsJobList.indexOf(one);
+            self.smsJobList.splice(index,1);
+            self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+
+        },function(error){
+            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
+                self.responseStrFail = error;
+            }
+        });
+    }
+
 ////////  sms queue//////
     smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
         self.smsQueueList = data;
+        self.smsQueueList.forEach((dataOne, index, array) => {
+           var tempJob = self.smsJobList.find(i => i.id == dataOne.jobId);
+           if(tempJob){
+              dataOne.jobName = self.smsJobList.find(i => i.id == dataOne.jobId).jobName;
+           }
+        });
         self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
     });
 
@@ -206,93 +301,7 @@ angular.module('smsUserInfoModule')
         });
     }
 
-////////  sms job //////
 
-    smsJobService.getLastHeartBeatTime().then(function (data) {
-        self.lastHeartBeatTime = data;
-    });
-    smsJobService.getLastPrepareDataTime().then(function (data) {
-        self.lastPrepareDataTime = data;
-    });
-
-    /// for sms send api
-    smsJobService.getSmsSendStatus().then(function (data) {
-        self.isRunSmsSend = data;
-    });
-
-    self.toggleSmsSend = function(){
-        self.isSaveButtonPressed=true;
-        smsJobService.toggleSmsSend().then(function (data) {
-            self.isSaveButtonPressed=false;
-            self.isRunSmsSend = data;
-        });
-    }
-
-    /// for sms data prepare api
-    smsJobService.getSmsDataPrepareStatus().then(function (data) {
-        self.isRunSmsDataPrepare = data;
-    });
-
-    self.toggleSmsDataPrepare = function(){
-        self.isSaveButtonPressed=true;
-        smsJobService.toggleSmsDataPrepare().then(function (data) {
-            self.isSaveButtonPressed=false;
-            self.isRunSmsDataPrepare = data;
-        });
-    }
-
-
-    smsJobService.getDataForMgnt(0).then(function (data) {
-        self.smsJobList = data;
-        console.log(data);
-        self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
-        self.luckyDrawReq.smsJobId = self.smsJobList.find(i => i.jobType == 'LUCKYDRAW').id;
-    });
-
-    self.upsertSmsJob = function(one){
-        self.isSaveButtonPressed=true;
-        self.responseStr = false;
-        smsJobService.upsert(one).then(function (data) {
-            self.responseStr = data;
-            self.isSaveButtonPressed=false;
-            if(one.id == 0){
-                self.smsJobList.unshift(data.smsJob);
-                self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
-            }
-        });
-    }
-
-    // open datePicker
-    self.openDP = function() {
-        self.DPisOpen = true;
-        self.isPickDP = true;
-    };
-
-    self.setTheSmsJob = function(one){
-        self.theSmsJob = one;
-        self.responseStr = false;
-    }
-
-    self.clearSmsJob = function(){
-        self.responseStr = false;
-        self.theSmsJob = new SmsJobDO();
-    }
-
-    self.deleteSmsJob = function(one){
-        self.responseStr = false;
-        self.responseStrFail = false;
-        smsJobService.deleteOne(one).then(function (data) {
-            self.responseStr = data;
-            var index = self.smsJobList.indexOf(one);
-            self.smsJobList.splice(index,1);
-            self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
-
-        },function(error){
-            if(error.data.exception == 'org.springframework.dao.DataIntegrityViolationException'){
-                self.responseStrFail = error;
-            }
-        });
-    }
 
 //////// specific sms user info //////
     self.loadSpecificSmsUserInfo = function(){

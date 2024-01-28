@@ -20,6 +20,7 @@ import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,6 +79,7 @@ public class ProgramController {
             oneResult.setCouponValue(req.getCouponValue());
             oneResult.setOrderId(or.getId());
             oneResult.setJobName(job.getJobName());
+            oneResult.setJobId(job.getId());
             result.add(oneResult);
         }
 
@@ -97,20 +99,23 @@ public class ProgramController {
         List<SmsQueue> smsList = new ArrayList<>();
 
         for (ProgramResult pro : programResults) {
-            Coupon coupon = new Coupon();
-            coupon.setQuantity(1);
-            coupon.setGmtCreate(Utility.getCurrentDate());
-            coupon.setGmtModify(Utility.getCurrentDate());
-            coupon.setCouponType(Utility.COUPON_TYPE_BILL);
-            coupon.setCode(pro.getCode());
-            coupon.setCreatedBy(Utility.COUPON_CREATED_BY_TOOL);
-            coupon.setLastModifiedBy(Utility.COUPON_CREATED_BY_TOOL);
-            coupon.setLifespan(pro.getExpiry());
-            coupon.setName(pro.getWinnerName()+" "+pro.getWinnerPhone());
-            coupon.setValue(pro.getCouponValue());
-            coupon.setClientCode(req.getClientCode());
-            coupon.setShopCode(req.getShopCode());
-            couponList.add(coupon);
+
+            if(StringUtils.isNotEmpty(pro.getCode())){
+                Coupon coupon = new Coupon();
+                coupon.setQuantity(1);
+                coupon.setGmtCreate(Utility.getCurrentDate());
+                coupon.setGmtModify(Utility.getCurrentDate());
+                coupon.setCouponType(Utility.COUPON_TYPE_BILL);
+                coupon.setCode(pro.getCode());
+                coupon.setCreatedBy(Utility.COUPON_CREATED_BY_TOOL);
+                coupon.setLastModifiedBy(Utility.COUPON_CREATED_BY_TOOL);
+                coupon.setLifespan(pro.getExpiry());
+                coupon.setName(pro.getWinnerName()+" "+pro.getWinnerPhone() +" "+ pro.getJobName());
+                coupon.setValue(pro.getCouponValue());
+                coupon.setClientCode(req.getClientCode());
+                coupon.setShopCode(req.getShopCode());
+                couponList.add(coupon);
+            }
 
             SmsQueue sms = new SmsQueue();
             sms.setContent(pro.getSmsContent()+"["+ RandomStringUtils.randomAlphanumeric(4)+"]");
@@ -123,6 +128,7 @@ public class ProgramController {
             sms.setStatus(Utility.SMS_QUEUE_INIT);
             sms.setClientCode(req.getClientCode());
             sms.setShopCode(req.getShopCode());
+            sms.setJobId(pro.getJobId());
             smsList.add(sms);
 
             // set it done.

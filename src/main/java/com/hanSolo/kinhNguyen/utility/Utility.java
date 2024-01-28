@@ -363,12 +363,12 @@ public class Utility {
 
             switch (parts[0]) {
                 case "fn":
-                    re = buildWithFunction(smsString, entry.getKey(), parts[1]);
+                    buildWithFunction(smsString, entry.getKey(), parts[1], re);
                     break;
                 case "att":
                     break;
                 case "fix":
-                    re = buildWithFixValue(smsString, entry.getKey(), parts[1]);
+                    buildWithFixValue(smsString, entry.getKey(), parts[1], re);
                     break;
 
                 default:
@@ -380,20 +380,24 @@ public class Utility {
         return re;
     }
 
-    private static SmsStringResult buildWithFixValue(String smsString, String position, String config) {
-        String sms = smsString.replaceAll("<"+position+">",config);
-        return new SmsStringResult(sms, config);
+    private static SmsStringResult buildWithFixValue(String smsString, String position, String config, SmsStringResult re) {
+
+        re.setSmsString(re.getSmsString().replaceAll("<"+position+">",config));
+       // re.setExtendInfo(re.getExtendInfo()+"|"+config);
+
+        //String sms = smsString.replaceAll("<"+position+">",config);
+        return re;
     }
 
     /**
-     *
-     * @param smsString ex: coupon 40% code:<code>,ctrinh hang tuan tren FB
+     *  @param smsString ex: coupon 40% code:<code>,ctrinh hang tuan tren FB
      * @param position ex: code
      * @param config ex: random|6
+     * @param re
      */
-    private static SmsStringResult buildWithFunction(String smsString, String position, String config) {
+    private static SmsStringResult buildWithFunction(String smsString, String position, String config, SmsStringResult re) {
         String[] functionAtt = config.split("\\|");
-        String result = StringUtils.EMPTY;
+        String result;
         switch (functionAtt[0]) {
             case "random":
                 result = RandomStringUtils.randomAlphanumeric(Integer.parseInt(functionAtt[1])).toUpperCase(Locale.ROOT);
@@ -401,8 +405,9 @@ public class Utility {
             default:
                 result =  "<"+position+">";
         }
-        smsString = smsString.replaceAll("<"+position+">",result);
-        return new SmsStringResult(smsString,result);
+        re.setSmsString(re.getSmsString().replaceAll("<"+position+">",result));
+        re.setExtendInfo(result);
+        return re;
     }
 
 

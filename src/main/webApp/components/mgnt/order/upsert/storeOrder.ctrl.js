@@ -304,7 +304,6 @@ angular.module('storeOrderModule')
         if(self.queryRequest.clientCode == 'GODLIKE' || self.queryRequest.clientCode == ''){
             self.queryRequest.clientCode = self.theOrder.clientCode;
             self.queryRequest.shopCode = self.theOrder.shopCode;
-
         }
         console.log(self.queryRequest);
 

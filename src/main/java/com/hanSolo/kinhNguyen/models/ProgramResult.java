@@ -41,6 +41,17 @@ public class ProgramResult extends CommonBaseModel {
     @Column(name = "job_name", length = 150)
     private String jobName;
 
+    @Column(name = "job_id")
+    private Integer jobId;
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
     public String getJobName() {
         return jobName;
     }
