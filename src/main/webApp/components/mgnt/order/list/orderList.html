@@ -354,10 +354,6 @@
 						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
-
-					<td title="'client|shop'" filter="{ 'shopCode' : 'text'}" ng-if="ctrl.isGodLike" style="width:60px;">
-						{{order.clientCode}}|{{order.shopCode}}</td>
-
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
 								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList"

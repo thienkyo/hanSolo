@@ -38,6 +38,7 @@ angular.module('storeOrderModule')
 	self.queryRequest = queryRequestDO;
 	self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
 	self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
+	console.log(self.queryRequest);
 
 //////////////// function section ////////////
 
@@ -300,9 +301,10 @@ angular.module('storeOrderModule')
 
         self.queryRequest.generalPurpose = code+"|"+"BILL";
         console.log(self.queryRequest);
-        if(self.queryRequest.clientCode == 'GODLIKE'){
+        if(self.queryRequest.clientCode == 'GODLIKE' || self.queryRequest.clientCode == ''){
             self.queryRequest.clientCode = self.theOrder.clientCode;
             self.queryRequest.shopCode = self.theOrder.shopCode;
+
         }
         console.log(self.queryRequest);
 
