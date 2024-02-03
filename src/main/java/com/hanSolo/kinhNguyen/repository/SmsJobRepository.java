@@ -12,5 +12,7 @@ public interface SmsJobRepository extends PagingAndSortingRepository<SmsJob, Int
     List<SmsJob> findByStatus(@NonNull Boolean status);
     Optional<SmsJob> findFirstByJobType(String jobType);
 
+    Optional<SmsJob> findFirstByJobTypeAndStatus(String jobType, Boolean status);
+
 
 }

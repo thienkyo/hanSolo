@@ -47,6 +47,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -69,6 +70,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -842,7 +844,22 @@ public class ManagementController {
     @RequestMapping(value = "deleteOrderDetail", method = RequestMethod.POST)
     public GeneralResponse<String> deleteOrderDetail(@RequestBody final OrderDetail orderDetail, final HttpServletRequest request) {
         if(checkSameClientCode(request, orderDetail.getClientCode()) || onlyAllowThisRole(request,Utility.GODLIKE_ROLE)){
-            orderDetailRepo.delete(orderDetail);
+            Order tempOrder = CommonCache.ORDER_LIST.get(orderDetail.getOrderId());
+            if(tempOrder == null){
+                tempOrder = orderRepo.findById(orderDetail.getOrderId()).get();
+            }
+            if(tempOrder != null){
+                orderDetailRepo.delete(orderDetail);
+                List<OrderDetail> orderDetailList = tempOrder.getOrderDetails();
+                Iterator<OrderDetail> it = orderDetailList.iterator();
+                while (it.hasNext()) {
+                    OrderDetail od = it.next();
+                    if (od.getId().intValue() == orderDetail.getId().intValue()) {
+                        it.remove();
+                    }
+                }
+                CommonCache.ORDER_LIST.put(tempOrder.getId(), tempOrder);
+            }
             return new GeneralResponse("delete_order_success",Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
         }
         return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);

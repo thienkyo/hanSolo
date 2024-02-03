@@ -1,10 +1,7 @@
 package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.DTO.SmsStringResult;
-import com.hanSolo.kinhNguyen.models.Banner;
-import com.hanSolo.kinhNguyen.models.BizReport;
 import com.hanSolo.kinhNguyen.models.Coupon;
-import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.models.Order;
 import com.hanSolo.kinhNguyen.models.ProgramResult;
 import com.hanSolo.kinhNguyen.models.SmsJob;
@@ -17,7 +14,6 @@ import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.request.LuckyDrawRequest;
 import com.hanSolo.kinhNguyen.request.QueryByClientShopAmountRequest;
 import com.hanSolo.kinhNguyen.response.GeneralResponse;
-import com.hanSolo.kinhNguyen.response.GenericResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;

@@ -111,6 +111,7 @@ form .progress {
 			<div id="tab{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}"
 				 ng-repeat="item in ctrl.modifiedReports2 track by $index" >
 				<br>
+				<!-- one Year info -->
 				<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: auto">
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Income: {{item.income | number:0}}đ</div>

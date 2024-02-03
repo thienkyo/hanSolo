@@ -10,16 +10,12 @@ import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -238,6 +234,7 @@ public class AuthenticationController {
             if(order.getShippingPhone().replace(" ","").length() > 9){
                 SmsJob job = CommonCache.SMS_JOB_LIST.get(Utility.SMS_JOB_NOTIFYORDER);
                 if(job != null){
+
                     SmsQueue smsQueue = generateSmsQueue(job, order);
                     smsQueueRepo.save(smsQueue);
                     order.setDoneSmsPaymentNotify(true);

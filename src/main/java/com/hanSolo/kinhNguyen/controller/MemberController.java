@@ -2,7 +2,6 @@ package com.hanSolo.kinhNguyen.controller;
 
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.facade.ClientInterface;
-import com.hanSolo.kinhNguyen.facade.ShopInterface;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.MemberRole;
 import com.hanSolo.kinhNguyen.models.SmsJob;
@@ -74,9 +73,9 @@ public class MemberController {
         CommonCache.LOGIN_MEMBER_LIST.put(mem.getPhone(),mem);
 
         ClientInterface clientInfo = clientRepo.queryFirstByClientCode(mem.getClientCode());
-        Optional<SmsJob> smsJobOpt = smsJobRepo.findFirstByJobType(Utility.SMS_JOB_NOTIFYORDER);
+        Optional<SmsJob> smsJobOpt = smsJobRepo.findFirstByJobTypeAndStatus(Utility.SMS_JOB_NOTIFYORDER, true);
 
-        if(smsJobOpt.isPresent()){
+        if(smsJobOpt.isPresent() && !CommonCache.SMS_JOB_LIST.containsKey(Utility.SMS_JOB_NOTIFYORDER)){
             SmsJob job = smsJobOpt.get();
             CommonCache.SMS_JOB_LIST.put(job.getJobType(),job);
         }

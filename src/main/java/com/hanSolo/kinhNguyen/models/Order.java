@@ -3,6 +3,8 @@ package com.hanSolo.kinhNguyen.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class Order extends ParentCodeModel {
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_id")
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
    // @Transient
