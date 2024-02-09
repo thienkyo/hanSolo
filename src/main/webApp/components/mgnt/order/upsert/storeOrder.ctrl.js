@@ -325,11 +325,10 @@ angular.module('storeOrderModule')
 
     self.getFrameCoupon = function(orderDetail) {
         if(orderDetail.frameDiscountCode.length >4){
-
+            self.queryRequest.clientCode = self.theOrder.clientCode;
             self.queryRequest.generalPurpose = orderDetail.frameDiscountCode+"|"+"FRAME";
             //storeOrderService.getCoupon(orderDetail.frameDiscountCode,'FRAME').then(function (data) {
             storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
-                console.log(data);
                  if(data.errorCode == 'SUCCESS'){
                     orderDetail.frameDiscountAmount = data.obj.value;
                     self.calculateOrderTotal(self.theOrder);
@@ -351,6 +350,7 @@ angular.module('storeOrderModule')
     ///// get lens coupon
     self.getLensCoupon = function(orderDetail) {
         if(orderDetail.lensDiscountCode.length >4){
+            self.queryRequest.clientCode = self.theOrder.clientCode;
             self.queryRequest.generalPurpose = orderDetail.lensDiscountCode+"|"+"LENS";
             //storeOrderService.getCoupon(orderDetail.lensDiscountCode,'LENS').then(function (data) {
             storeOrderService.getCoupon3(self.queryRequest).then(function (data) {

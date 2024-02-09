@@ -483,6 +483,7 @@ angular.module('orderListModule')
         orderListService.getOrderHistory(self.queryRequest).then(function(data){
             data.forEach(getShopName);
             self.theHistoryModal = data;
+            self.theHistoryModal[0].phone = phone;
             self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
        });
     }

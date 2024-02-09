@@ -86,9 +86,47 @@
 							</div>
 						</div>
 
-						<div class="container" style="width:100%;font-size: 18px;">
+						<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="false">
+
+							<tr ng-repeat="item in ctrl.theSummaryModal.orderDetails">
+								<td title="'id'"  style="width:50px;text-align: center;">
+									{{item.id}}
+								</td>
+								<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
+									{{item.name}} ({{item.yob}})
+								</td>
+								<td title="'lens'" style="text-align: right;width:200px;padding-right: 2px;padding-left: 2px;">
+									<div class="row" style="margin-left: 3px;">
+										({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
+										({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
+									</div>
+									<div class="row" style="margin-left: 3px;">
+										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+                                    </div>
+
+									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
+										{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
+									</div>
+
+								</td>
+								<td title="'frame'"  style="width:200px;">
+									{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
+								</td>
+								<td title="'note'" >
+									{{item.orderDetailNoteForCus}}
+									{{item.orderDetailNote}}
+								</td>
+								<td title="'other'"  style="width:200px;">
+									{{item.otherNote}}
+								</td>
+							</tr>
+
+						</table>
+
+
+						<!--<div class="container" style="width:100%;font-size: 18px;">
 							<div class="row" style="background-color: beige;font-weight: bolder;">
-								<div class="col-sm-1 border">id</div>
+								<div class="col-sm-1 border" >id</div>
 								<div class="col-sm-2 border">Name</div>
 								<div class="col-sm-2 border">Lens</div>
 								<div class="col-sm-2 border">Detail</div>
@@ -97,14 +135,19 @@
 								<div class="col-sm-1 border">Other</div>
 							</div>
 							<div class="row" ng-repeat="item in ctrl.theSummaryModal.orderDetails ">
-								<div class="col-sm-1 border" style="padding: 10px 0px 0px 15px">{{item.id}}</div>
-								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.name}}({{item.yob}})</div>
-								<div class="col-sm-2 border" >
-									<div class="row" style="margin-left: 3px;margin-top: 5px">{{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}}</div>
-									<div class="row" style="margin-left: 3px;">{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}</div>
+								<div class="col-sm-1 border" style="padding: 10px 0px 0px 5px">{{item.id}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 5px">{{item.name}}({{item.yob}})</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 5px">
+									<div class="row" style="margin-left: 3px;margin-top: 5px">
+										({{ item.odSphere +' '+ item.odCylinder}} {{item.reading ? '('+item.odReading +' '+item.odCylinder+')' :  ''}} {{item.odPrism}})
+										({{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}})
+									</div>
+
 									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">(discount:{{item.lensDiscountAmount}}%)</div>
 								</div>
-								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}</div>
+								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">
+									{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+								</div>
 								<div class="col-sm-2 border" style="padding: 10px 0px 0px 15px">{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}</div>
 								<div class="col-sm-2 border">
 									{{item.orderDetailNoteForCus}}
@@ -114,7 +157,7 @@
 									{{item.otherNote}}
 								</div>
 							</div>
-						</div>
+						</div>-->
 					</div>
 
 					<!-- metadata-->
@@ -218,24 +261,24 @@
 									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
-									<td title="'detail'" style="text-align: right;width:200px;padding-right: 2px;padding-left: 2px;">
+									<td title="'lens'" style="text-align: right;width:200px;padding-right: 2px;padding-left: 2px;">
 										<div class="row" style="margin-left: 3px;">
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
 										</div>
-										<!--<div class="row" style="margin-left: 3px;">
-											{{ item.osSphere +' '+ item.osCylinder}} {{item.reading ? '('+item.osReading +' '+item.osCylinder+')' :  ''}} {{item.osPrism}}
-										</div>-->
+										<div class="row" style="margin-left: 3px;">
+											{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+										</div>
+										<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
+											{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
+										</div>
 									</td>
-									<td title="'hardware'"  style="width:120px;">
-										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+									<td title="'frame'"  style="width:120px;">
+										{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
 									</td>
 									<td title="'note'" >
 										{{item.orderDetailNoteForCus}}
 										{{item.orderDetailNote}}
-									</td>
-									<td title="'client'" ng-if="ctrl.isGodLike">
-										{{item.clientCode}}
 									</td>
 									<td title="'shop'"  style="width:200px;">
 										{{item.shopAddress}} |

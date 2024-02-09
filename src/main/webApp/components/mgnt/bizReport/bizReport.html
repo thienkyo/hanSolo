@@ -130,13 +130,13 @@ form .progress {
 					</div>
 				</div>
 				<div class="table-responsive">
-					<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="true" style="width: auto;">
+					<table ng-table="" class="table table-bordered table-hover table-striped"  style="width: auto;">
 						<tr ng-repeat="one in item.details">
 
 							<td data-title="'month'"  style="width:10px;text-align: center;">
 								{{one.month}}
 							</td>
-							<td data-title="'income'"  style="width:130px;text-align: right;">
+							<td data-title="'income'" style="width:130px;text-align: right;">
 								{{one.income | number:0}}đ
 							</td>
 							<td data-title="'outcome'" style="text-align: right;">
