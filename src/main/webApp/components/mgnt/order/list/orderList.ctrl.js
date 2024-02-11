@@ -4,19 +4,20 @@ angular.module('orderListModule')
 										 'memberService','orderListService','customerSourceService','shopListCacheService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
 										 'searchService','commonService','clientService','clientInfoCacheService',
-										 'oneClientShopListCacheService',
+										 'oneClientShopListCacheService','OrderStatusAmount',
 	function($rootScope, $routeParams,$location,FirstTimeLoadSize,clientListCacheService,
 	        memberService,orderListService,customerSourceService,shopListCacheService,
 	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
 	        searchService,commonService,clientService,clientInfoCacheService,
-	        oneClientShopListCacheService
+	        oneClientShopListCacheService,OrderStatusAmount,
 	        ) {
 	var self = this;
 	self.orderList = [];
 	self.cusSourceList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "80px" };
-	self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
+	//self.statusNumber = {"ordered":0, "paid":0,"shipped":0, "done":0, "deposit":0, "userDelete":0};
+	self.statusNumber = new OrderStatusAmount();
 	self.isUpdatingOrder = false; // disable/able the select for update order status
 	self.showLoadingText = true; // disable/able Loading..
 	self.isRecoveringOrder = false; // disable/able the select for recover button
@@ -89,6 +90,7 @@ angular.module('orderListModule')
             self.tableParams = new NgTableParams({}, { dataset: []});
             searchService.getOrderByNamePhone(self.queryRequest).then(function(data){
                 self.orderList = data;
+                self.statusNumber = new OrderStatusAmount();
                 self.orderList.forEach(calculateOrderTotal);
                 self.tableParams = new NgTableParams({}, { dataset: self.orderList});
             });
@@ -257,12 +259,7 @@ angular.module('orderListModule')
     }
 	
 	function engineerOrderList(){
-		self.statusNumber.ordered = 0;
-        self.statusNumber.paid = 0;
-        self.statusNumber.shipped = 0;
-        self.statusNumber.done = 0;
-        self.statusNumber.deposit = 0;
-        self.statusNumber.userDelete = 0;
+		self.statusNumber = new OrderStatusAmount();
 		
 		for(var i = 0; i < self.orderList.length; i++){
 
@@ -337,7 +334,7 @@ angular.module('orderListModule')
         if(order.status == 4){
             order.remain = subTotal - order.couponAmount - order.customDiscountAmount - order.deposit;
         }
-/*
+
         switch(order.status) {
           case 0:
               self.statusNumber.ordered += 1;
@@ -358,19 +355,8 @@ angular.module('orderListModule')
               self.statusNumber.userDelete += 1;
               break;
           default:
-        }*/
-
-    }
-/*
-    function buildSearchResult(order){
-        let phoneStr = '';
-        let NameStr = '';
-        for (var i = 0; i < order.orderDetails.length; i++){
-            if(){
-
-            }
         }
-    }*/
+    }
 
     function buildText(){
         self.copyText='';
@@ -458,13 +444,18 @@ angular.module('orderListModule')
         self.tableParams = new NgTableParams({}, { dataset: []});
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
             self.orderList = data;
+            self.statusNumber = new OrderStatusAmount();
             self.orderList.forEach(calculateOrderTotal);
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-            engineerOrderList();
             self.showLoadingText = false;
         });
     }
     self.getOrdersByTerms = getOrdersByTerms;
+
+    self.filterOrderByStatus = function(orderStatus){
+        self.tempOrderList = self.orderList.filter(i => i.status == orderStatus);
+        self.tableParams = new NgTableParams({}, { dataset: self.tempOrderList});
+    }
 
 //////////// modal section start here. /////////////////
      self.setModal = function(one) {

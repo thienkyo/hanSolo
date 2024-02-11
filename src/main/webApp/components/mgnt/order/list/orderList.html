@@ -318,36 +318,34 @@
 			</div>
 
 
-			<div class="col-sm-7" style="text-align: end;" ng-if="!ctrl.anyPicked">
+			<div class="col-sm-7" style="text-align: end;" ng-if="!ctrl.anyPicked && !ctrl.isLuckyDrawMode">
 				<select  ng-model="ctrl.queryRequest.clientCode"
 						 ng-options="opt.clientCode as opt.brandName for opt in ctrl.clientList | filter:{ clientCode: '!GODLIKE'}"
 						 ng-change="ctrl.filterOrderAndShopByClientCode(ctrl.queryRequest.clientCode)"
 						 style="width: 15%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;"
 						 ng-show="ctrl.isGodLike">
 				</select>
-
 				<select  ng-model="ctrl.queryRequest.shopCode"
 						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
 						 ng-disabled="ctrl.queryRequest.clientCode == 'ALL'"
 						 ng-change="ctrl.filterOrderByShopCode()"
 						 style="width: 20%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
 				</select>
-
+				<!-- status amount -->
 				<div class="btn-group" role="group" aria-label="Basic example" style="height: 35px;vertical-align: bottom;">
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-secondary" ng-click="ctrl.filterOrderByStatus('0')"
 							style="font-size: large;color:limegreen;background-color: white;">
-						{{ctrl.statusNumber.ordered}}
-					</button>
-					<button type="button" class="btn btn-secondary"
+						{{ctrl.statusNumber.ordered}}</button>
+					<button type="button" class="btn btn-secondary" ng-click="ctrl.filterOrderByStatus('1')"
 							style="font-size: large;color:blue;background-color: white;">
 						{{ctrl.statusNumber.paid}}</button>
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-secondary" ng-click="ctrl.filterOrderByStatus('2')"
 							style="font-size: large;color:darkorchid;background-color: white;">
 						{{ctrl.statusNumber.shipped}}</button>
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-secondary" ng-click="ctrl.filterOrderByStatus('4')"
 							style="font-size: large;color:brown;background-color: white;">
 						{{ctrl.statusNumber.deposit}}</button>
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-secondary" ng-click="ctrl.filterOrderByStatus('3')"
 							style="font-size: large;background-color: white;color: #696763;">
 						{{ctrl.statusNumber.done}}</button>
 				</div>
@@ -376,7 +374,7 @@
 
 		</div>
 
-		<!--normal table-->
+		<!--normal order list-->
         <div class="table-responsive" ng-if="!ctrl.isLuckyDrawMode">
             <table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data">
@@ -427,8 +425,7 @@
 			<h3 ng-show="ctrl.showLoadingText" style="text-align: center;">Loading...</h3>
         </div>
 
-
-		<!--luck draw table-->
+		<!--luck draw order list -->
 		<div class="table-responsive" ng-if="ctrl.isLuckyDrawMode">
 			<table ng-table="ctrl.tableParams" class="table table-condensed table-bordered table-hover table-striped" show-filter="true">
 				<tr ng-repeat="order in $data">

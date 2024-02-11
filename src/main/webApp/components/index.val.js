@@ -120,6 +120,7 @@ angular.module('app')
 		.value('OSOConfigDO',OSOConfigDO)
 		.value('queryRequestDO',queryRequestDO)
 		.value('LuckyDrawRequest',LuckyDrawRequest)
+		.value('OrderStatusAmount',OrderStatusAmount)
 		;
 
 function LuckyDrawRequest(){
@@ -131,6 +132,15 @@ function LuckyDrawRequest(){
     this.shopCode = 'SB8ZTM';// dev
     //this.shopCode = ''; // production
 
+}
+
+function OrderStatusAmount(){
+    this.ordered = 0;
+    this.paid = 0;
+    this.shipped = 0;
+    this.done = 0;
+    this.deposit = 0;
+    this.userDelete = 0;// dev
 }
 
 function OSOConfigDO(){
