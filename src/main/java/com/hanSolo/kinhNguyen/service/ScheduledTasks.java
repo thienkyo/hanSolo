@@ -1,10 +1,15 @@
 package com.hanSolo.kinhNguyen.service;
 
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
+import com.hanSolo.kinhNguyen.models.BizReport;
+import com.hanSolo.kinhNguyen.models.Shop;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import com.hanSolo.kinhNguyen.models.SmsQueue;
 import com.hanSolo.kinhNguyen.models.SmsUserInfo;
 import com.hanSolo.kinhNguyen.models.SpecificSmsUserInfo;
+import com.hanSolo.kinhNguyen.repository.BizReportRepository;
+import com.hanSolo.kinhNguyen.repository.ClientRepository;
+import com.hanSolo.kinhNguyen.repository.ShopRepository;
 import com.hanSolo.kinhNguyen.repository.SmsJobRepository;
 import com.hanSolo.kinhNguyen.repository.SmsQueueRepository;
 import com.hanSolo.kinhNguyen.repository.SmsUserInfoRepository;
@@ -31,17 +36,25 @@ public class ScheduledTasks {
     @Autowired private SmsUserInfoRepository smsUserInfoRepo;
     @Autowired private SmsJobRepository smsJobRepo;
     @Autowired private SpecificSmsUserInfoRepository specificSmsUserInfoRepo;
+    @Autowired private ClientRepository clientRepo;
+    @Autowired private ShopRepository shopRepo;
+    @Autowired private BizReportRepository bizReportRepo;
 
-    @Scheduled(cron = "0 0 0/4 * * *")
+    @Autowired private BizReportService bizReportService;
+
+    /**
+     * build data for sms function
+     * first run 00:30:35
+     * run at 00 04 08 12 16 20
+     * @throws ParseException
+     */
+    @Scheduled(cron = "35 30 0/4 * * *")
     //@Scheduled(cron = "15 * * * * ?")
     public void schedulePrepareSmsData() throws ParseException {
-        LOGGER.info("prepare sms data every 4hrs");
-
-        if(CommonCache.SMS_DATA_PREPARE_CONTROL){
+        if(!CommonCache.SMS_DATA_PREPARE_CONTROL){
             return ;
         }
 
-        LOGGER.info("prepare sms data every 4hrs: cont");
         List<SmsJob> smsJobList = smsJobRepo.findByStatus(true);
         List<SmsQueue> smsQueueList = new ArrayList<>();
         for (SmsJob job : smsJobList) {
@@ -102,6 +115,7 @@ public class ScheduledTasks {
 
         smsQueueRepo.saveAll(smsQueueList);
         CommonCache.LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
+        LOGGER.info("prepare sms data every 4hrs");
     }
 
     private SmsQueue generateSmsQueue(SmsJob job, SmsUserInfo smsUserInfo) throws ParseException {
@@ -155,4 +169,48 @@ public class ScheduledTasks {
 
         return smsQueue;
     }
+
+    /**
+     * build data for sms function
+     * run every 6h
+     * first run at 00:01:25
+     * @throws ParseException
+     */
+    @Scheduled(cron = "25 1 0/6 * * *")
+    //@Scheduled(cron = "*/5 * * * * *")
+    public void scheduleExpenseCalculation() throws ParseException {
+
+        Calendar calendar = Calendar.getInstance();
+
+        // container only used as a place to hold year, month
+        List<BizReport> container = new ArrayList<>();
+        BizReport tempHolder;
+        for(int i = 0; i<3 ;i++){
+            tempHolder = new BizReport();
+            calendar.setTime(Utility.getCurrentDate());
+            calendar.add(Calendar.MONTH, -i);
+            //int month = calendar.get(Calendar.MONTH) + 1;
+            String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            month = month.length() > 1 ? month : "0" + month;
+            int year = calendar.get(Calendar.YEAR);
+            tempHolder.setYear(String.valueOf(year));
+            tempHolder.setMonth(month);
+            container.add(tempHolder);
+        }
+
+        LOGGER.info("expense calculation every 6hrs: year/month container size :" + container.size());
+
+        List<BizReport> bizReportList = new ArrayList<>();
+        for(BizReport br : container){
+            List<BizReport> tempList = bizReportRepo.findByYearAndMonth(br.getYear(), br.getMonth());
+            bizReportList.addAll(tempList);
+        }
+
+        LOGGER.info("expense calculation every 6hrs: year/month bizReportList size :" + bizReportList.size());
+
+        for(BizReport br : bizReportList){
+            bizReportService.calculateReport(br);
+        }
+    }
+
 }

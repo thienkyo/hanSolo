@@ -42,12 +42,12 @@ import com.hanSolo.kinhNguyen.response.SmsQueueResponse;
 import com.hanSolo.kinhNguyen.response.SmsUserInfoResponse;
 import com.hanSolo.kinhNguyen.response.SpecificSmsUserInfoResponse;
 import com.hanSolo.kinhNguyen.response.SupplierResponse;
+import com.hanSolo.kinhNguyen.service.BizReportService;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -107,6 +107,7 @@ public class ManagementController {
     @Autowired private ShopRepository shopRepo;
     @Autowired private ClientRepository clientRepo;
 
+    @Autowired private BizReportService bizReportService;
     @Autowired private Environment env;
 
     ////////////////////////////category section//////////////////////////
@@ -631,7 +632,7 @@ public class ManagementController {
         if(!Utility.onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
             return new GeneralResponse(null,Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
         }
-        bizReport.setGmtModify(Utility.getCurrentDate());
+        /*bizReport.setGmtModify(Utility.getCurrentDate());
         Date startDate = Utility.getFirstDateOfMonth(bizReport.getYear(),bizReport.getMonth());
         Date endDate = Utility.getLastDateOfMonth(bizReport.getYear(),bizReport.getMonth());
 
@@ -696,7 +697,9 @@ public class ManagementController {
         bizReport.setOrderQuantity(orderQty);
         bizReport.setDiscountAmount(discountAmount);
 
-        return new GeneralResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
+        return new GeneralResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);*/
+
+        return bizReportService.calculateReport(bizReport);
     }
 
     @RequestMapping(value = "deleteBizReport", method = RequestMethod.POST)

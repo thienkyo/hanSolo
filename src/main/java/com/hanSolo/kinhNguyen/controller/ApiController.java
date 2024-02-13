@@ -114,7 +114,8 @@ public class ApiController {
         return "FAIL";
     }
 
-    @RequestMapping("prepareSmsData")
+    //deprecated
+    //@RequestMapping("prepareSmsData")
     public QueueSmsResponse prepareSmsData() throws ParseException {
         if(!CommonCache.SMS_DATA_PREPARE_CONTROL){
             return null;

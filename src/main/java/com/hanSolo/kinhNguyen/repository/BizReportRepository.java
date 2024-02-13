@@ -4,6 +4,7 @@ import com.hanSolo.kinhNguyen.models.BizReport;
 import com.hanSolo.kinhNguyen.models.Contract;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface BizReportRepository extends PagingAndSortingRepository<BizReport, Integer> {
@@ -19,5 +20,7 @@ public interface BizReportRepository extends PagingAndSortingRepository<BizRepor
 
     List<BizReport> findByClientCodeOrderByYearDescMonthDesc(String clientCode);
     List<BizReport> findByClientCodeAndShopCodeOrderByYearDescMonthDesc(String clientCode, String shopCode);
+
+    List<BizReport> findByYearAndMonth(String year, String month);
 
 }
