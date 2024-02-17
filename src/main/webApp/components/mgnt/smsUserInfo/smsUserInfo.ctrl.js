@@ -44,8 +44,8 @@ angular.module('smsUserInfoModule')
 	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
 	}
-
 	self.amountList=AmountList;
+	self.smsQueueAmountList = AmountList.map(a => ({...a}));// clone array
     self.amount = FirstTimeLoadSize;
     self.smsQueueAmount = FirstTimeLoadSize;
 
@@ -243,6 +243,11 @@ angular.module('smsUserInfoModule')
     self.getSmsQueueByTerm = function(){
         smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
             self.smsQueueList = data;
+            if(self.smsQueueList.length != 100){
+                self.smsQueueAmountList.find(i => i.value == 0).name = self.smsQueueList.length;
+            }else{
+                self.smsQueueAmountList.find(i => i.value == 0).name = 'all';
+            }
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }

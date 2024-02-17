@@ -40,7 +40,7 @@ form .progress {
 	<div class="container" ng-cloak>
 		<h3 style="padding-bottom: 40px;text-align: center;">Coupon management </h3>
 
-		<div class="row" style="margin-bottom: 30px;">
+		<div class="row" style="margin-bottom: 10px;">
 			<div class="col-md-1">
 				id:
 				<input type="number"  ng-model="ctrl.theCoupon.id" disabled="disabled" placeholder="id" style="width:60px;"/>
@@ -105,18 +105,22 @@ form .progress {
 					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 290px;height: 0px;padding: 5px 0px 25px 10px;float: left;" >
 					error: duplication, server error...
 				</alert>
-				<!--<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span class="sr-only"></span>
-					thành công
-				</div>
-				<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-					 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span class="sr-only"></span>
-					error: duplication, server error...
-				</div>-->
+
+			</div>
+		</div>
+
+		<div class="row" style="margin-top: 20px;margin-bottom: 10px;">
+
+			<div class="col-sm-2" style="">
+				<select  ng-model="ctrl.couponCreatedBy"
+						 ng-options="opt.value as opt.name for opt in ctrl.CouponCreatedByList"
+						 ng-change="ctrl.filterCoupon(ctrl.couponCreatedBy)"
+						 style="width: 60%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+				</select>
+
+			</div>
+			<div class="col-sm-11">
+
 			</div>
 		</div>
 

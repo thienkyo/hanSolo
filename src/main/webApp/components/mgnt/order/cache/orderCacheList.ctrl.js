@@ -56,7 +56,7 @@ angular.module('orderCacheListModule')
         if(memberService.isMod()){
             self.isSyncingOrder=true;
 
-            var clone = Object.assign({}, order);
+            var clone = Object.assign({}, order); //clone object
             clone.id = 0;
 
             for (var i = 0; i < clone.orderDetails.length; i++){

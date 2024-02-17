@@ -13,7 +13,6 @@ import com.hanSolo.kinhNguyen.response.GeneralResponse;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.ParseException;
 import java.util.Date;

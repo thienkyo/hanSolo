@@ -189,7 +189,7 @@ form .progress {
 				<a ng-click="ctrl.toggleSmsDataPrepare()" href=""
 				   ng-class="ctrl.isRunSmsDataPrepare ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
-				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsDataPrepare ? '[ON]' : '[OFF]'}} prepare data api</a>
+				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsDataPrepare ? '[ON]' : '[OFF]'}} sms data api/task</a>
 				<!-- sms job table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
@@ -306,13 +306,12 @@ form .progress {
 				<!-- sms queue table-->
 				<h3 style="margin-top: 20px;">Sms queue </h3>
 				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
-					<div class="col-sm-2">
+					<div class="col-sm-1">
 						<select  ng-model="ctrl.smsQueueAmount"
-								 ng-options="opt.value as opt.name for opt in ctrl.amountList"
+								 ng-options="opt.value as opt.name for opt in ctrl.smsQueueAmountList"
 								 ng-change="ctrl.getSmsQueueByTerm(ctrl.smsQueueAmount)"
 								 style="width: 90px;height: 30px;">
 						</select>
-						size:{{ctrl.smsQueueList.length}}
 					</div>
 					<div class="col-sm-7">
 						<a ng-click="ctrl.prepareData()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;" >prepare</a>

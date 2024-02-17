@@ -21,13 +21,14 @@ angular.module('couponModule')
 		if(!memberService.isMod()){
 			$location.path('#/');
 		}
-
+		self.couponCreatedBy = 'MANUAL';
         self.clientList = clientListCacheService.get();
 
 		couponService.getAllCoupons().then(function (data) {
 			data.forEach(calculateExpiry);
 			self.couponList = data;
-			self.tableParams = new NgTableParams({}, { dataset: self.couponList});
+			self.filterCoupon('MANUAL');
+			//self.tableParams = new NgTableParams({}, { dataset: self.couponList});
 		});
 
 
@@ -108,6 +109,11 @@ angular.module('couponModule')
 			self.theCoupon = new CouponDO;
 			self.isShowUploadPic = false;
 		}
+
+		self.filterCoupon = function(param){
+            self.tempCouponList = self.couponList.filter(i => i.createdBy == param);
+            self.tableParams = new NgTableParams({}, { dataset: self.tempCouponList});
+        }
 
 		function calculateExpiry(coupon){
             var modifyDate = new Date(coupon.gmtModify);
