@@ -51,6 +51,17 @@ public class Client extends BaseModel {
     @Column(name = "biz_report_end_month_number", columnDefinition = "integer default 1")
     private Integer bizReportEndMonthNumber;
 
+    @Column(name = "status", length = 30, columnDefinition = "varchar(30) default 'INIT'")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Integer getBizReportEndMonthNumber() {
         return bizReportEndMonthNumber;
     }

@@ -155,13 +155,13 @@ public class ManagementController {
     public List<Product> getProductsForMgnt(@PathVariable final int cateId, @PathVariable final int amount, final HttpServletRequest request) throws ServletException {
         List<Product> productList;
             if(cateId==0){
-                if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                if(amount==Utility.FIRST_TIME_LOAD_SIZE){
                     productList =  prodRepo.findFirst100ByOrderByGmtModifyDesc();
                 }else{
                     productList =  prodRepo.findByOrderByGmtModifyDesc();
                 }
             }else{
-                if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+                if(amount==Utility.FIRST_TIME_LOAD_SIZE){
                     productList =  prodRepo.findFirst100ByCategories_IdOrderByGmtModifyDesc(cateId);
                 }else{
                     productList =  prodRepo.findByCategories_IdOrderByGmtModifyDesc(cateId);
@@ -227,7 +227,7 @@ public class ManagementController {
     @RequestMapping(value = "getBizExpenseForMgnt", method = RequestMethod.POST)
     public List<BizExpense> getBizExpenseForMgnt(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         List<BizExpense> bizExpenseList;
-        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
             if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
                     && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
                 bizExpenseList =  bizExpenseRepo.findFirst100ByOrderByGmtCreateDesc();
@@ -283,7 +283,7 @@ public class ManagementController {
     public List<Member> getMemberForMgnt(@PathVariable final int amount) {
 
         List<Member> memberList;
-        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount==Utility.FIRST_TIME_LOAD_SIZE){
             memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             memberList = memberRepo.findByOrderByGmtCreateDesc();
@@ -306,7 +306,7 @@ public class ManagementController {
         Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
 
         List<Member> memberList;
-        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount==Utility.FIRST_TIME_LOAD_SIZE){
             memberList =  memberRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
         }else{
             memberList = memberRepo.findByClientCodeOrderByGmtCreateDesc(clientInfo.get("clientCode"));
@@ -319,7 +319,7 @@ public class ManagementController {
     @RequestMapping(value = "getMemberByTerms", method = RequestMethod.POST)
     public List<Member> getMemberByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
         List<Member> memberList = null;
-        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
             if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
                     && (req.getClientCode().equalsIgnoreCase("ALL")) || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
                 memberList =  memberRepo.findFirst100ByOrderByGmtCreateDesc();
@@ -649,7 +649,7 @@ public class ManagementController {
     @RequestMapping(value = "getArticlesForMgnt/{amount}", method = RequestMethod.GET)
     public List<Article> getArticlesForMgnt(@PathVariable final int amount) throws ServletException {
         List<Article> articleList;
-        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount==Utility.FIRST_TIME_LOAD_SIZE){
             articleList =  articleRepo.findFirst100ByOrderByGmtModifyDesc();
         }else{
             articleList = articleRepo.findByOrderByGmtModifyDesc();
@@ -679,7 +679,7 @@ public class ManagementController {
     @RequestMapping(value = "getOrdersForMgnt/{amount}", method = RequestMethod.GET)
     public List<Order> getOrdersForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Order> orderList ;
-        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount==Utility.FIRST_TIME_LOAD_SIZE){
             orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             orderList = orderRepo.findAllByOrderByGmtCreateDesc();
@@ -691,7 +691,7 @@ public class ManagementController {
     @RequestMapping(value = "getOrdersByTerms", method = RequestMethod.POST)
     public List<Order> getOrdersByTerms(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         List<Order> orderList = null;
-        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
             if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
                     && (req.getClientCode().equalsIgnoreCase("ALL") || req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
                 orderList =  orderRepo.findFirst100ByOrderByGmtCreateDesc();
@@ -815,7 +815,7 @@ public class ManagementController {
     @RequestMapping(value = "getPrescriptionsForMgnt/{amount}", method = RequestMethod.GET)
     public List<OrderDetail> getPrescriptionsForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<OrderDetail> orderDetailListList ;
-        if(amount==Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount==Utility.FIRST_TIME_LOAD_SIZE){
             orderDetailListList =  orderDetailRepo.findFirst100ByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
         }else{
             orderDetailListList = orderDetailRepo.findByNameNotAndPhoneNotOrderByGmtCreateDesc("","");
@@ -923,7 +923,7 @@ public class ManagementController {
     @RequestMapping(value = "getSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<SmsUserInfo> SmsUserInfoList ;
-        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount == Utility.FIRST_TIME_LOAD_SIZE){
             SmsUserInfoList =  smsUserInfoRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             SmsUserInfoList = smsUserInfoRepo.findAllByOrderByGmtCreateDesc();
@@ -955,7 +955,7 @@ public class ManagementController {
     @RequestMapping(value = "getSmsQueueForMgnt/{amount}", method = RequestMethod.GET)
     public List<SmsQueue> getSmsQueueForMgnt(@PathVariable final int amount) {
         List<SmsQueue> SmsQueueList ;
-        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount == Utility.FIRST_TIME_LOAD_SIZE){
             SmsQueueList =  smsQueueRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             SmsQueueList = smsQueueRepo.findAllByOrderByGmtCreateDesc();
@@ -1059,7 +1059,7 @@ public class ManagementController {
     @RequestMapping(value = "getSpecificSmsUserInfoForMgnt/{amount}", method = RequestMethod.GET)
     public List<SpecificSmsUserInfo> getSpecificSmsUserInfoForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<SpecificSmsUserInfo> specificSmsUserInfoList ;
-        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount == Utility.FIRST_TIME_LOAD_SIZE){
             specificSmsUserInfoList =  specificSmsUserInfoRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             specificSmsUserInfoList = specificSmsUserInfoRepo.findAllByOrderByGmtCreateDesc();
@@ -1091,7 +1091,7 @@ public class ManagementController {
     @RequestMapping(value = "getStrategyForMgnt/{amount}", method = RequestMethod.GET)
     public List<Strategy> getStrategyForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<Strategy> list ;
-        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount == Utility.FIRST_TIME_LOAD_SIZE){
             list =  strategyRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             list = strategyRepo.findAllByOrderByGmtCreateDesc();
@@ -1161,7 +1161,7 @@ public class ManagementController {
     @RequestMapping(value = "getContractByCondition", method = RequestMethod.POST)
     public List<Contract> getContractByCondition(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
         List<Contract> contractList = null;
-        if(req.getAmount() == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
             if(onlyAllowThisRole(request,Utility.GODLIKE_ROLE)
                     && (req.getClientCode().equalsIgnoreCase("ALL")) || (req.getClientCode().equalsIgnoreCase(Utility.GODLIKE_ROLE)) ){
                 contractList =  contractRepo.findFirst100ByOrderByGmtCreateDesc();
@@ -1381,7 +1381,7 @@ public class ManagementController {
     @RequestMapping(value = "getlensProductForMgnt/{amount}", method = RequestMethod.GET)
     public List<LensProduct> getlensProductForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
         List<LensProduct> lensProductList ;
-        if(amount == Utility.FIRTST_TIME_LOAD_SIZE){
+        if(amount == Utility.FIRST_TIME_LOAD_SIZE){
             lensProductList =  lensProductRepo.findFirst100ByOrderByGmtCreateDesc();
         }else{
             lensProductList = lensProductRepo.findAllByOrderByGmtCreateDesc();

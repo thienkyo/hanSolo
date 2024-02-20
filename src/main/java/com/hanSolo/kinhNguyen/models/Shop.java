@@ -51,6 +51,17 @@ public class Shop extends BaseModel {
     @Column(name = "client_code", nullable = false, length = 20)
     private String clientCode;
 
+    @Column(name = "status", length = 30, columnDefinition = "varchar(30) default 'INIT'")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getClientCode() {
         return clientCode;
     }
