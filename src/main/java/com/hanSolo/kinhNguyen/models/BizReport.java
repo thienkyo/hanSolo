@@ -51,6 +51,17 @@ public class BizReport extends ParentCodeModel{
     @Column(name = "discount_amount", columnDefinition = "integer default 0")
     private Integer discountAmount;
 
+    @Column(name = "note", length = 600)
+    private String note;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     public Integer getDiscountAmount() {
         return discountAmount;
     }

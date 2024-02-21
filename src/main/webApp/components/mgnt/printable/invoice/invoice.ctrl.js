@@ -1,7 +1,7 @@
 'use strict';
 angular.module('invoiceModule')
-	.controller('invoiceController',['$routeParams','$location','invoiceService',
-	function($routeParams,$location,invoiceService) {
+	.controller('invoiceController',['$routeParams','$location','invoiceService','orderCacheService',
+	function($routeParams,$location,invoiceService,orderCacheService) {
 	var self = this;
 	self.OrderDetailList=[];
 	function MiniOrderDetailDO (price,quantity,description,discount) {
@@ -11,7 +11,7 @@ angular.module('invoiceModule')
     	this.description = description;
     }
     self.paramValue = $location.search();
-
+    self.addDetailToBill = orderCacheService.getOneOrder(self.paramValue.orderId).addDetailToBill;
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data.obj;
@@ -43,14 +43,16 @@ angular.module('invoiceModule')
             if(self.theOrder.orderDetails[i].lensPrice > 0 ){
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,
                                                                  self.theOrder.orderDetails[i].lensQuantity,
-                                                                 self.theOrder.orderDetails[i].lensNote,
+                                                                 //self.theOrder.orderDetails[i].lensNote,
+                                                                 self.buildDescription(self.addDetailToBill,self.theOrder.orderDetails[i].name,self.theOrder.orderDetails[i].lensNote),
                                                                  self.theOrder.orderDetails[i].lensDiscountAmount));
             }
 
             if(self.theOrder.orderDetails[i].framePriceAfterSale > 0){
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,
                                                                  self.theOrder.orderDetails[i].quantity,
-                                                                 self.theOrder.orderDetails[i].frameNote,
+                                                                 //self.theOrder.orderDetails[i].frameNote,
+                                                                 self.buildDescription(self.addDetailToBill,self.theOrder.orderDetails[i].name,self.theOrder.orderDetails[i].frameNote),
                                                                  self.theOrder.orderDetails[i].frameDiscountAmount));
             }
 
@@ -82,7 +84,15 @@ angular.module('invoiceModule')
         self.theOrder.total = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount;
         self.theOrder.remain = subTotal - self.theOrder.couponAmount - self.theOrder.customDiscountAmount - self.theOrder.deposit;
         self.theOrder.doubleLine = count;
+    }
 
-        console.log(self.theOrder);
+
+    self.buildDescription = function(isDo, name, note){
+        if (!name || name == '') { return note; }
+        var shortName = name;
+        if(name.split(' ').length >= 2){
+            shortName = name.split(' ')[name.split(' ').length-2] +' '+name.split(' ')[name.split(' ').length-1];
+        }
+        return isDo ? note+" "+ shortName : note;
     }
 }]);

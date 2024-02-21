@@ -25,7 +25,7 @@ public class CommonCache {
     public static Date LAST_SMS_HEARTBEAT_TIME;
 
     /**
-     * the last time build data.
+     * the last time build sms data.
      */
     public static Date LAST_PREPARE_DATA_HEARTBEAT_TIME;
 
@@ -42,7 +42,7 @@ public class CommonCache {
     /**
      * control concurrency mode
      */
-    public static boolean MULTIPLE_EDIT_CONCURRENCE = true;
+    public static boolean MULTIPLE_EDIT_CONCURRENCE = false;
 
     /**
      * member list : help to check user status.
@@ -69,7 +69,9 @@ public class CommonCache {
      */
     public static Map<Integer, Order> ORDER_LIST = new HashMap<>(Utility.ORDER_LIST_SIZE);
 
-
+    /**
+     * use in get smsQueue , every 2min.
+     */
     public static SmsQueue LAST_SENT_SMS = null;
 
     static {

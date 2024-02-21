@@ -355,7 +355,7 @@ select, textarea {
 			</li>
 		</ul>
 
-		<!-- Tab panes -->
+		<!-- Tab panes order detail -->
 		<div class="tab-content">
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
 				<a ng-click="ctrl.deletingOrderId = false"
@@ -907,17 +907,26 @@ select, textarea {
 		<!--local order recovery-->
 		<ul class="nav nav-tabs {{ctrl.isClickOrderRecovery ? 'active' : ''}}"  role="tablist" style="padding-top: 20px;">
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#recoverOrder"
+				<a class="nav-link" data-toggle="tab" href="" data-target="#orderControl"
 				   ng-click="ctrl.isClickOrderRecovery = ctrl.isClickOrderRecovery ? false : true;">more</a>
 			</li>
 		</ul>
 		<div class="tab-content">
-			<div id="recoverOrder" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
+			<div id="orderControl" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
 				<br/>
 				<a ng-click="ctrl.toggleMultipleEdit()" href=""
 				   ng-class="ctrl.isMultipleEdit ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
-				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isMultipleEdit ? '[Multiple]' : '[Single]'}} edit mode</a>
+				   style="margin: 0px 10px 4px 4px;float: left;">
+					{{ctrl.isMultipleEdit ? '[Multiple]' : '[Single]'}} edit mode
+				</a>
+
+				<a ng-click="ctrl.addDetailToBill()" href=""
+				   ng-class="ctrl.tempCacheOrder.addDetailToBill ? 'btn btn-success' : 'btn btn-danger'"
+				   ng-disabled="ctrl.isSaveButtonPressed"
+				   style="margin: 0px 10px 4px 4px;float: left;">
+					add detail to bill {{ctrl.tempCacheOrder.addDetailToBill ? '[Y]' : '[N]'}}
+				</a>
 
 				<!--<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
 						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"

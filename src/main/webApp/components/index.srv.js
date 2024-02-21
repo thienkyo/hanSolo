@@ -322,9 +322,15 @@ angular.module('app')
 		getCurrentOrderCache : getCurrentOrderCache,
 		addOneOrder : addOneOrder,
 		getQuantity : getQuantity,
+		getOneOrder : getOneOrder,
 		clearCache : clearCache
 		}
 	return orderCacheService;
+
+	function getOneOrder(orderId){
+	    currentOrderCache = getCurrentOrderCache();
+        return currentOrderCache.find(i => i.id == orderId);
+	}
 
 	function addOneOrder(order){
 	    currentOrderCache = getCurrentOrderCache();
@@ -449,6 +455,7 @@ function(shopConfigService,cacheName,commonCacheService) {
     }
 
 }]) // deprecated
+
 .factory('clientInfoCacheService',['cacheName','commonCacheService',
     function(cacheName,commonCacheService) {
     var cacheNameStr = cacheName.clientInfoCacheName;
@@ -474,6 +481,8 @@ function(shopConfigService,cacheName,commonCacheService) {
     }
 
 }])
+
+// for opticShopOnline
 .factory('configOSOCacheService',['opticShopOnlineService','cacheName','commonCacheService','memberService',
 function(opticShopOnlineService,cacheName,commonCacheService,memberService) {
     var cacheNameStr = 'configOSOCache';
@@ -558,6 +567,8 @@ function(opticShopOnlineService,cacheName,commonCacheService,memberService) {
     }
 
 }])
+
+//for godlike logic
 .factory('clientListCacheService',['commonCacheService','ClientDO',
    function(commonCacheService,ClientDO) {
    var cacheNameStr = 'clientListCache';

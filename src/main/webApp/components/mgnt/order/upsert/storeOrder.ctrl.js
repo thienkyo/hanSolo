@@ -419,6 +419,7 @@ angular.module('storeOrderModule')
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal();
                     orderCacheService.addOneOrder(self.theOrder);
+                    self.tempCacheOrder = self.theOrder; // for check addDetailToBill
                     self.newOrderId = self.theOrder.id;
 
                     if(self.isGodLike){
@@ -554,6 +555,20 @@ angular.module('storeOrderModule')
         });
     }
 
+////// addDetailToBill
+    //var tempOrder = orderCacheService.getOneOrder(self.theOrder.id);
+    self.addDetailToBill = function(){
+        //self.isSaveButtonPressed=true;
+        self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id);
+        console.log(self.tempCacheOrder);
+        if(self.tempCacheOrder){
+            self.tempCacheOrder.addDetailToBill = self.tempCacheOrder.addDetailToBill ? false : true;
+        }else{
+            self.tempCacheOrder.addDetailToBill = true;
+        }
+        orderCacheService.addOneOrder(self.tempCacheOrder);
+    }
+
 ////// run when loading page/////
     self.dynamicPopover = {
         content: 'Hello, World!',
@@ -579,6 +594,7 @@ angular.module('storeOrderModule')
         storeOrderService.getOrderById(self.queryRequest)
             .then(function (data) {
                 self.theOrder = data.obj;
+                self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id); // for check addDetailToBill
                 console.log(self.theOrder);
                 if(self.theOrder){
                     if(!self.theOrder.clientCode){
