@@ -66,7 +66,7 @@ public class AuthenticationController {
         manageSmsNotifyOrder(order);
 
         // 0.1 manage concurrency on orderDetail lv.
-        manageConcurrencyOrder(order);
+        //manageConcurrencyOrder(order);
 
         // 1. save order
         Order or = orderRepo.save(order);

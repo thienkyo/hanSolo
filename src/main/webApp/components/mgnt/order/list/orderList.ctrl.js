@@ -470,6 +470,7 @@ angular.module('orderListModule')
     }
 
     self.getHistoryModal = function(phone) {
+        self.theHistoryParams = new NgTableParams({}, { dataset: []});
         self.queryRequest.generalPurpose = phone;
         orderListService.getOrderHistory(self.queryRequest).then(function(data){
             data.forEach(getShopName);
