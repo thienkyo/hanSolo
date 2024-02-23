@@ -11,7 +11,11 @@ angular.module('invoiceModule')
     	this.description = description;
     }
     self.paramValue = $location.search();
-    self.addDetailToBill = orderCacheService.getOneOrder(self.paramValue.orderId).addDetailToBill;
+    if(orderCacheService.getOneOrder(self.paramValue.orderId)){
+        self.addDetailToBill = orderCacheService.getOneOrder(self.paramValue.orderId).addDetailToBill;
+    }
+
+    console.log(self.addDetailToBill);
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data.obj;

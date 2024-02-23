@@ -914,14 +914,14 @@ select, textarea {
 		<div class="tab-content">
 			<div id="orderControl" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
 				<br/>
-				<a ng-click="ctrl.toggleMultipleEdit()" href=""
+				<!--<a ng-click="ctrl.toggleMultipleEdit()" href=""
 				   ng-class="ctrl.isMultipleEdit ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
 				   style="margin: 0px 10px 4px 4px;float: left;">
 					{{ctrl.isMultipleEdit ? '[Multiple]' : '[Single]'}} edit mode
-				</a>
+				</a>-->
 
-				<a ng-click="ctrl.addDetailToBill()" href=""
+				<a ng-click="ctrl.addDetailToBill()" href="" ng-show="ctrl.theOrder.id > 0"
 				   ng-class="ctrl.tempCacheOrder.addDetailToBill ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
 				   style="margin: 0px 10px 4px 4px;float: left;">

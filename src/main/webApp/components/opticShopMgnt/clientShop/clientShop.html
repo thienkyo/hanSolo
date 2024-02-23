@@ -27,7 +27,7 @@
 <!--<link rel="stylesheet" href="css/main2.css">-->
 <section>
 	<div class="container" ng-cloak>
-		<h3 style="margin-bottom: 20px;text-align: center;">Client</h3>
+		<h3 style="margin-bottom: 20px;text-align: center;">Clients</h3>
 		<br>
 		<!--modal-->
 		<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
@@ -93,11 +93,8 @@
 									client Code:<input type="text"  ng-model="ctrl.theClient.clientCode" placeholder="clientCode" style="width: 100%;"/>
 								</div>
 
-
 								<div class="col-sm-2">begin mon excluded<input type="text"  ng-model="ctrl.theClient.bizReportBeginMonthNumber" placeholder="0" style="width: 100%;"/></div>
 								<div class="col-sm-2">end mon excluded:<input type="text"  ng-model="ctrl.theClient.bizReportEndMonthNumber" placeholder="0" style="width: 100%;"/></div>
-
-
 								<div class="col-sm-5">note<input type="text"  ng-model="ctrl.theClient.description" placeholder="note" style="width: 100%;"/></div>
 							</div>
 							<div class="row" style="margin-bottom: 20px;font-size: 16px;font-weight: bolder;">
@@ -256,8 +253,12 @@
 					<td title="'address'" filter="{ 'address': 'text'}" sortable="'address'"  style="">
 						{{one.address}}
 					</td>
-					<td title="'active'"  style="width:80px;text-align: center;">
-						{{one.active}}
+					<td title="'active'"  style="width:100px;text-align: center;">
+						<select  ng-model="one.status"
+								 ng-options="opt.value as opt.name for opt in ctrl.clientStatusList"
+								 ng-change=""
+								 >
+						</select>
 					</td>
 					<td title="'del'" style="width: 20px;text-align: center;" >
 

@@ -40,6 +40,12 @@ var JobTypeList=[
     {name : 'LUCKYDRAW', value:'LUCKYDRAW' }
 ];
 
+var ClientStatusList=[
+	{name : 'INIT', value:'INIT' },
+    {name : 'ACTIVE', value:'ACTIVE' },
+    {name : 'INACTIVE', value:'INACTIVE' }
+];
+
 var AreaCodeList=[
 	{name : 'HCM,Thủ Đức,Đồng Nai,Tây Ninh,Vũng Tàu,Long An, Tiền Giang', value:'NEARHCM' },
     {name : '---khác---', value:'OTHERS' },
@@ -121,6 +127,7 @@ angular.module('app')
 		.value('queryRequestDO',queryRequestDO)
 		.value('LuckyDrawRequest',LuckyDrawRequest)
 		.value('OrderStatusAmount',OrderStatusAmount)
+		.value('ClientStatusList',ClientStatusList)
 		;
 
 function LuckyDrawRequest(){

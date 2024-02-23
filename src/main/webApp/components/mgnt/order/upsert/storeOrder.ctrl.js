@@ -558,14 +558,13 @@ angular.module('storeOrderModule')
 ////// addDetailToBill
     //var tempOrder = orderCacheService.getOneOrder(self.theOrder.id);
     self.addDetailToBill = function(){
-        //self.isSaveButtonPressed=true;
-        self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id);
-        console.log(self.tempCacheOrder);
-        if(self.tempCacheOrder){
-            self.tempCacheOrder.addDetailToBill = self.tempCacheOrder.addDetailToBill ? false : true;
-        }else{
-            self.tempCacheOrder.addDetailToBill = true;
+
+        if(!self.tempCacheOrder){
+            self.tempCacheOrder = self.theOrder;
         }
+
+        self.tempCacheOrder.addDetailToBill = self.tempCacheOrder.addDetailToBill ? false : true;
+
         orderCacheService.addOneOrder(self.tempCacheOrder);
     }
 
@@ -595,6 +594,7 @@ angular.module('storeOrderModule')
             .then(function (data) {
                 self.theOrder = data.obj;
                 self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id); // for check addDetailToBill
+                console.log(self.tempCacheOrder);
                 console.log(self.theOrder);
                 if(self.theOrder){
                     if(!self.theOrder.clientCode){

@@ -2,8 +2,11 @@
 angular.module('clientShopModule')
 .controller('clientShopController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
                                     'CommonStatusArray','clientService','shopService','ClientDO','ShopDO','memberListService',
+                                    'ClientStatusList',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
-         CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService) {
+         CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService,
+         ClientStatusList
+         ){
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new ContractDO();
@@ -11,6 +14,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     self.theClient = new ClientDO();
     self.theSalary = new ShopDO();
+    self.clientStatusList = ClientStatusList;
 
     if(!memberService.isGodLike()){
         $location.path('#/');
@@ -18,16 +22,13 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     clientService.getAll().then(function (data) {
         self.clientList = data;
-        self.clientList.forEach(enrichClientList);
+        //self.clientList.forEach(enrichClientList);
+        console.log(self.clientList);
         self.tableParams = new NgTableParams({}, { dataset: self.clientList});
     });
 
     function enrichClientList(client){
-        if(client.endDay){
-            client.active = false;
-        }else{
-            client.active = true;
-        }
+
     }
 
     self.addClient = function(){
