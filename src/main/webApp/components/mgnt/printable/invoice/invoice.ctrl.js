@@ -47,7 +47,6 @@ angular.module('invoiceModule')
             if(self.theOrder.orderDetails[i].lensPrice > 0 ){
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].lensPrice,
                                                                  self.theOrder.orderDetails[i].lensQuantity,
-                                                                 //self.theOrder.orderDetails[i].lensNote,
                                                                  self.buildDescription(self.addDetailToBill,self.theOrder.orderDetails[i].name,self.theOrder.orderDetails[i].lensNote),
                                                                  self.theOrder.orderDetails[i].lensDiscountAmount));
             }
@@ -55,7 +54,6 @@ angular.module('invoiceModule')
             if(self.theOrder.orderDetails[i].framePriceAfterSale > 0){
                 self.OrderDetailList.push(new MiniOrderDetailDO (self.theOrder.orderDetails[i].framePriceAfterSale,
                                                                  self.theOrder.orderDetails[i].quantity,
-                                                                 //self.theOrder.orderDetails[i].frameNote,
                                                                  self.buildDescription(self.addDetailToBill,self.theOrder.orderDetails[i].name,self.theOrder.orderDetails[i].frameNote),
                                                                  self.theOrder.orderDetails[i].frameDiscountAmount));
             }
@@ -66,17 +64,17 @@ angular.module('invoiceModule')
                                                                  self.theOrder.orderDetails[i].otherNote,
                                                                  0));
             }
-            if(self.theOrder.orderDetails[i].frameNote.length >= 23){count++;}
-            if(self.theOrder.orderDetails[i].lensNote.length  >= 24){count++;}
-            if(self.theOrder.orderDetails[i].otherNote.length >= 24){count++;}
+            if(self.theOrder.orderDetails[i].frameNote.length >= 30){count++;}
+            if(self.theOrder.orderDetails[i].lensNote.length  >= 31){count++;}
+            if(self.theOrder.orderDetails[i].otherNote.length >= 31){count++;}
         }
 
-        var totalLine = 10;
+        var totalLine = 11;
         if(count < 3){
-            totalLine = 12;
+            totalLine = 13;
         }
         if(count > 5){
-            totalLine = 9;
+            totalLine = 10;
         }
 
         var temp = totalLine - self.OrderDetailList.length;
