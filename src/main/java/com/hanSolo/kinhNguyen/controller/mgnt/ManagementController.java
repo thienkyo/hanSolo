@@ -1,4 +1,4 @@
-package com.hanSolo.kinhNguyen.controller;
+package com.hanSolo.kinhNguyen.controller.mgnt;
 
 import com.hanSolo.kinhNguyen.DTO.ClientShopList;
 import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;

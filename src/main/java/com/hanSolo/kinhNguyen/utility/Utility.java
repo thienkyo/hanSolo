@@ -97,6 +97,7 @@ public class Utility {
 
     final public static int LOGIN_MEMBER_LIST_SIZE = 40;
     final public static int CLIENT_SHOP_LIST_SIZE = 40;
+    final public static int CLIENT_LIST_SIZE = 40;
     final public static int SMS_JOB_LIST_SIZE = 25;
     final public static int LENS_PRODUCT_LIST_SIZE = 30;
     final public static int ORDER_LIST_SIZE = 50;

@@ -4,6 +4,7 @@ angular.module('clientShopModule')
 		var mainService = {
 				getAll : getAll,
 				upsert : upsert,
+				updateClientStatus : updateClientStatus,
 				deleteOne : deleteOne,
 				getClientShopList : getClientShopList,
 				getClientShopList2 : getClientShopList2
@@ -37,6 +38,13 @@ angular.module('clientShopModule')
 			return response.data;
 		});
 	}
+
+	function updateClientStatus(one){
+        var url = "Hmgnt/updateClientStatus";
+        return ajaxService.post(url,one,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function deleteOne(one){
 		var url = "Hmgnt/deleteClient";

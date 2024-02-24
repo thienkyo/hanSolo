@@ -254,9 +254,9 @@
 						{{one.address}}
 					</td>
 					<td title="'active'"  style="width:100px;text-align: center;">
-						<select  ng-model="one.status"
+						<select  ng-model="one.status" ng-change="ctrl.updateClientStatus(one);"
 								 ng-options="opt.value as opt.name for opt in ctrl.clientStatusList"
-								 ng-change=""
+								 ng-style="ctrl.setStyle(one.status)"
 								 >
 						</select>
 					</td>

@@ -15,6 +15,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.theClient = new ClientDO();
     self.theSalary = new ShopDO();
     self.clientStatusList = ClientStatusList;
+    self.statusStyle = {};
 
     if(!memberService.isGodLike()){
         $location.path('#/');
@@ -82,6 +83,24 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         });
     }
 
+    self.updateClientStatus = function(one){
+        self.responseStr = false;
+        self.responseStrFail = false;
+        clientService.updateClientStatus(one).then(function (data) {
+        console.log(data);
+            if(data.errorCode == 'SUCCESS'){
+                self.responseStr = data.errorMessage;
+                if(one.id == 0){
+                    self.theClient = data.obj;
+                    self.clientList.unshift(data.obj);
+                    self.tableParams = new NgTableParams({}, { dataset: self.clientList});
+                }
+            }else{
+                self.responseStrFail = data.obj;
+            }
+        });
+    }
+
     self.deleteClient = function(one){
         self.responseStr = false;
         self.responseStrFail = false;
@@ -129,6 +148,17 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
     self.openDP5 = function() {
         self.DPisOpen5 = true;
     };
+
+    self.setStyle = function(status){
+        if(status=='ACTIVE'){
+            self.statusStyle.color = "limegreen";
+        }else if(status=='INACTIVE'){
+            self.statusStyle.color = "brown";
+        }else if(status=='INIT'){
+            self.statusStyle.color = "blue";
+        }
+        return self.statusStyle;
+    }
 
     /////// shop
 

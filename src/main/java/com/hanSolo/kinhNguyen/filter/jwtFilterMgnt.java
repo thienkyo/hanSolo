@@ -17,6 +17,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class jwtFilterMgnt extends GenericFilterBean {
 
@@ -52,12 +53,15 @@ public class jwtFilterMgnt extends GenericFilterBean {
 
             if(CommonCache.LOGIN_MEMBER_LIST.containsKey(claims.get("sub"))){
                 Member currMem = CommonCache.LOGIN_MEMBER_LIST.getOrDefault(claims.get("sub"),null);
+                Map<String,String> clientInfo = (Map<String, String>) claims.get("clientInfo");
                 if( currMem == null || !currMem.getStatus()){
-                    throw new ServletException("USER_INACTIVE");
+                    throw new ServletException("USER_INACTIVE"+", userid:"+ claims.get("sub") +", clientCode:"+clientInfo.get("clientCode"));
                 }
-
+                if(!CommonCache.CLIENT_LIST.containsKey(clientInfo.get("clientCode"))){
+                    throw new ServletException("CLIENT_INACTIVE"+", userid:"+ claims.get("sub") +", clientCode:"+clientInfo.get("clientCode"));
+                }
             }else{
-                throw new ServletException("USER_NOT_IN_THE_LIST");
+                throw new ServletException("USER_NOT_IN_THE_LIST"+", userid:"+ claims.get("sub") +", clientCode:");
             }
 
             request.setAttribute("claims", claims);

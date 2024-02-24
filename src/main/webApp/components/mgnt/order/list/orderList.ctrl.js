@@ -219,10 +219,6 @@ angular.module('orderListModule')
         });
     }
 
-
-
-
-	
 	self.setStyle = function(status){
 		if(status==0){
 			self.statusStyle.color = "limegreen";

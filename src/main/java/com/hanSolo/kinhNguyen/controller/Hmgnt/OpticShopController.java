@@ -1,4 +1,4 @@
-package com.hanSolo.kinhNguyen.controller;
+package com.hanSolo.kinhNguyen.controller.Hmgnt;
 
 import com.hanSolo.kinhNguyen.DTO.ClientShopList;
 import com.hanSolo.kinhNguyen.models.Client;
@@ -14,6 +14,7 @@ import com.hanSolo.kinhNguyen.repository.MemberRepository;
 import com.hanSolo.kinhNguyen.repository.OpticShopOnlineConfigRepository;
 import com.hanSolo.kinhNguyen.repository.ShopRepository;
 import com.hanSolo.kinhNguyen.response.GeneralResponse;
+import com.hanSolo.kinhNguyen.service.ClientService;
 import com.hanSolo.kinhNguyen.utility.Utility;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,6 +44,8 @@ public class OpticShopController {
     @Autowired private MemberRepository memberRepo;
     @Autowired private OpticShopOnlineConfigRepository opticShopOnlineRepo;
 
+    @Autowired private ClientService clientService;
+
     @RequestMapping(value = "upsertClient", method = RequestMethod.POST)
     public GeneralResponse<Client> upsertClient(@RequestBody final Client one) throws ParseException {
         if(one.getId() == 0){
@@ -52,6 +55,12 @@ public class OpticShopController {
         one.setGmtModify(Utility.getCurrentDate());
 
         return new GeneralResponse(clientRepo.save(one),Utility.SUCCESS_ERRORCODE,"Save client success");
+    }
+
+    @RequestMapping(value = "updateClientStatus", method = RequestMethod.POST)
+    public GeneralResponse<String> updateClientStatus(@RequestBody final Client one) throws ParseException {
+        clientService.updateClientStatus(one);
+        return new GeneralResponse("upsert_order_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
     @RequestMapping(value = "insertMemberByClient", method = RequestMethod.POST)

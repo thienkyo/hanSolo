@@ -52,7 +52,10 @@ public class jwtFilterOpticShopMgnt extends GenericFilterBean {
                 }
                 boolean isGodLike = false;
                 for (MemberRole role : currMem.getMemberRoles()) {
-                    if(role.getRole().equals(Utility.GODLIKE_ROLE)){isGodLike = true;}
+                    if(role.getRole().equals(Utility.GODLIKE_ROLE)){
+                        isGodLike = true;
+                        break;
+                    }
                 }
                 if(!isGodLike){
                     throw new ServletException("USER_UNAVAILABLE");

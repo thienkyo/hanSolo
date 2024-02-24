@@ -14,8 +14,6 @@ angular.module('invoiceModule')
     if(orderCacheService.getOneOrder(self.paramValue.orderId)){
         self.addDetailToBill = orderCacheService.getOneOrder(self.paramValue.orderId).addDetailToBill;
     }
-
-    console.log(self.addDetailToBill);
     invoiceService.getOneOrder(self.paramValue.orderId)
         .then(function (data) {
             self.theOrder = data.obj;
@@ -64,21 +62,18 @@ angular.module('invoiceModule')
                                                                  self.theOrder.orderDetails[i].otherNote,
                                                                  0));
             }
-            if(self.theOrder.orderDetails[i].frameNote.length >= 30){count++;}
-            if(self.theOrder.orderDetails[i].lensNote.length  >= 31){count++;}
-            if(self.theOrder.orderDetails[i].otherNote.length >= 31){count++;}
+            if(self.theOrder.orderDetails[i].frameNote.length > 31){count++;}
+            if(self.theOrder.orderDetails[i].lensNote.length  > 31){count++;}
+            if(self.theOrder.orderDetails[i].otherNote.length > 31){count++;}
         }
 
-        var totalLine = 11;
-        if(count < 3){
-            totalLine = 13;
-        }
-        if(count > 5){
-            totalLine = 10;
-        }
+        var totalLine = 14;
 
-        var temp = totalLine - self.OrderDetailList.length;
-        for (var i = 0; i < temp; i++){
+
+        console.log(count);
+
+        var filler = totalLine - self.OrderDetailList.length - count;
+        for (var i = 0; i < filler; i++){
             self.OrderDetailList.push(new MiniOrderDetailDO());
         }
         self.theOrder.subTotal = subTotal;

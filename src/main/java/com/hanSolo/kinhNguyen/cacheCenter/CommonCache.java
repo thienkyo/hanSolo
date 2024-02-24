@@ -1,6 +1,7 @@
 package com.hanSolo.kinhNguyen.cacheCenter;
 
 import com.hanSolo.kinhNguyen.facade.ShopInterface;
+import com.hanSolo.kinhNguyen.models.Client;
 import com.hanSolo.kinhNguyen.models.LensProduct;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.Order;
@@ -51,8 +52,15 @@ public class CommonCache {
 
     /**
      * client shop list
+     * <clientCode, list of shops>
      */
     public static Map<String, List<Shop>> CLIENT_SHOP_LIST = new HashMap<>(Utility.CLIENT_SHOP_LIST_SIZE);
+
+    /**
+     * client  list
+     * <clientCode, client object>
+     */
+    public static Map<String, Client> CLIENT_LIST = new HashMap<>(Utility.CLIENT_LIST_SIZE);
 
     /**
      * sms job list : store sms job data temporarily.
