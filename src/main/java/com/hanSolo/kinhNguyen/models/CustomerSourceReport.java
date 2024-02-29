@@ -5,18 +5,21 @@ import java.util.Date;
 
 @Entity
 @Table(name = "customer_source_report")
-public class CustomerSourceReport {
+public class CustomerSourceReport extends ParentCodeModel{
 
     public CustomerSourceReport() {
     }
 
-    public CustomerSourceReport(Date gmtCreate, Date gmtModify, String year, String month, Integer customerSourceId,Integer count) {
+    public CustomerSourceReport(Date gmtCreate, Date gmtModify, String year, String month, Integer customerSourceId,
+                                Integer count, String clientCode, String shopCode) {
         this.gmtCreate = gmtCreate;
         this.gmtModify = gmtModify;
         this.year = year;
         this.month = month;
         this.customerSourceId = customerSourceId;
         this.count = count;
+        super.setClientCode(clientCode);
+        super.setShopCode(shopCode);
     }
 
     @Id

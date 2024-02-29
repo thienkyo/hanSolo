@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "customer_source")
-public class CustomerSource {
+public class CustomerSource extends ParentCodeModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

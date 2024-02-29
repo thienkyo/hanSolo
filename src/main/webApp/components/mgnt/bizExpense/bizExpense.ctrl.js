@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 angular.module('bizExpenseModule')
 	.controller('bizExpenseController',['$rootScope','$location','memberService','bizExpenseService','AmountList',
 									'NgTableParams','BizExpenseStatusArray','BizExpenseDO','uploadService','$timeout',

@@ -529,7 +529,9 @@ public class ManagementController {
                         customerSourceReport.getYear(),
                         customerSourceReport.getMonth(),
                         cs.getId(),
-                        0
+                        0,
+                        customerSourceReport.getClientCode(),
+                        customerSourceReport.getShopCode()
                 ));
             }
             customerSourceReportRepo.saveAll(csrList);

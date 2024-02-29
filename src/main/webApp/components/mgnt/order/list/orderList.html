@@ -260,7 +260,7 @@
 									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
-									<td title="'lens'" style="text-align: right;width:200px;padding-right: 2px;padding-left: 2px;">
+									<td title="'lens'" style="text-align: right;padding-right: 2px;padding-left: 2px;">
 										<div class="row" style="margin-left: 3px;">
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
@@ -272,7 +272,7 @@
 											{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
 										</div>
 									</td>
-									<td title="'frame'"  style="width:120px;">
+									<td title="'frame'"  style="">
 										{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
 									</td>
 									<td title="'note'" >

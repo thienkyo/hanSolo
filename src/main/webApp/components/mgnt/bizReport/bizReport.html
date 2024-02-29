@@ -114,21 +114,31 @@ form .progress {
 				<!-- one Year info -->
 				<div class="cart__total" style="margin-bottom: 20px;padding: 20px 20px 20px 20px;font-weight: bolder;width: auto">
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Income: {{item.income | number:0}}đ</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Outcome: {{item.outcome | number:0}}đ</div>
-						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">Discount: {{item.discountAmount | number:0}}đ</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
+							Income: {{item.income | number:0}}đ &nbsp&nbsp&nbsp
+							Avg: {{item.income/item.details.length | number:0}}đ
+						</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
+							Outcome: {{item.outcome | number:0}}đ &nbsp&nbsp&nbsp
+							Avg: {{item.outcome/item.details.length | number:0}}đ
+						</div>
+						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
+							Discount: {{item.discountAmount | number:0}}đ &nbsp&nbsp&nbsp
+							Avg: {{item.discountAmount/item.details.length | number:0}}đ
+						</div>
 					</div>
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Profit: {{item.income-item.outcome | number:0}}đ
 							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:2}}%)
+							| {{(item.income-item.outcome)/item.details.length | number:0}}đ
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:2}}%
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Quantity: {{item.orders}} | {{item.frames}} | {{item.lenses}} &nbsp&nbsp&nbsp
-							Avg: {{item.orders/12 | number:0}} | {{item.frames/12 | number:0}} | {{item.lenses/12 | number:0}}
+							Avg: {{item.orders/item.details.length | number:0}} | {{item.frames/item.details.length | number:0}} | {{item.lenses/item.details.length | number:0}}
 						</div>
 					</div>
 				</div>
