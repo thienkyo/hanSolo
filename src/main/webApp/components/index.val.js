@@ -314,6 +314,13 @@ function ModifiedReportDO(year){
 	this.frames = 0;
 	this.lenses = 0;
 	this.discountAmount = 0;
+	// for calculate correct average
+    this.income2 = 0;
+    this.outcome2 = 0;
+    this.orders2 = 0;
+    this.frames2 = 0;
+    this.lenses2 = 0;
+    this.discountAmount2 = 0;
 }
 
 function BizReportDO(){

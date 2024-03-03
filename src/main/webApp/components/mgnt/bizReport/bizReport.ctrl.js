@@ -51,6 +51,15 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     }
 
     getDataByCondition();
+    self.dynamicPopover = {
+        content: 'Hello, World!',
+        templateUrl: 'myPopoverTemplate.html',
+        title: 'Title'
+    };
+
+    self.currentDate  = (new Date()).getDate();
+    self.currentMonth = (new Date()).getMonth() + 1;
+    self.currentYear  = (new Date()).getFullYear();
 
     ///////////////////////////////////
 
@@ -129,6 +138,18 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                     reportOne.frames += dataOne.frameQuantity;
                     reportOne.lenses += dataOne.lensQuantity;
                     reportOne.discountAmount += dataOne.discountAmount;
+                    // add more detail in current year,
+                    // for calculate the correct average
+                    // ex: income2 doesn't count the latest month
+                    if(reportOne.year == self.currentYear && dataOne.month != self.currentMonth){
+
+                        reportOne.income2 += dataOne.income;
+                        reportOne.outcome2 += dataOne.outcome;
+                        reportOne.orders2 += dataOne.orderQuantity;
+                        reportOne.frames2 += dataOne.frameQuantity;
+                        reportOne.lenses2 += dataOne.lensQuantity;
+                        reportOne.discountAmount2 += dataOne.discountAmount;
+                    }
                 }
             });
             self.allIncome  += dataOne.income;
@@ -146,6 +167,7 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
                 self.modifiedReports2.push(reportOne);
             }
         });
+        console.log(self.modifiedReports2);
     }
 
     self.setTheOne = function(one){
@@ -166,13 +188,20 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     }
 
     self.upsert = function(bizReport){
+        console.log(bizReport);
         self.responseStr = false;
         self.responseStrFail = false;
         bizReport.clientCode = self.queryRequest.clientCode;
         bizReport.shopCode = self.queryRequest.shopCode;
 
         bizReportService.upsert(bizReport).then(function (data) {
-            self.responseStr = data.errorMessage;
+
+            console.log(data);
+            if(data.errorCode == 'SUCCESS'){
+                self.responseStr = data.errorMessage;
+            }else{
+                self.responseStrFail = data.errorMessage;
+            }
             if(bizReport.id == 0){
                 self.bizReportList.unshift(data.obj);
                 self.tableParams = new NgTableParams({}, { dataset: self.bizReportList});

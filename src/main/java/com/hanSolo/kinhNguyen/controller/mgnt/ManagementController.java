@@ -603,7 +603,8 @@ public class ManagementController {
         }
 
         if(bizReport.getId() != 0){
-            return new GeneralResponse(null,Utility.FAIL_ERRORCODE,"fail");
+            //return new GeneralResponse(null,Utility.FAIL_ERRORCODE,"fail");
+            return new GeneralResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
         }
 
         List<Shop> shopList = shopRepo.findByClientCodeOrderByGmtCreateDesc(bizReport.getClientCode());

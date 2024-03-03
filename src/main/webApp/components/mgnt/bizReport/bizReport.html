@@ -35,6 +35,7 @@ form .progress {
   padding: 7px 17px;
 }
 </style>
+<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <link href="css/main2.css" rel="stylesheet">
 
 <section style="margin-top: 30px;">
@@ -116,29 +117,33 @@ form .progress {
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Income: {{item.income | number:0}}đ &nbsp&nbsp&nbsp
-							Avg: {{item.income/item.details.length | number:0}}đ
+							Avg: {{item.year !=  ctrl.currentYear ? item.income/item.details.length : item.income2/(item.details.length -1) | number:0}}đ
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Outcome: {{item.outcome | number:0}}đ &nbsp&nbsp&nbsp
-							Avg: {{item.outcome/item.details.length | number:0}}đ
+							<!--Avg: {{item.outcome/item.details.length | number:0}}đ-->
+							Avg: {{item.year !=  ctrl.currentYear ? item.outcome/item.details.length : item.outcome2/(item.details.length -1) | number:0}}đ
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Discount: {{item.discountAmount | number:0}}đ &nbsp&nbsp&nbsp
-							Avg: {{item.discountAmount/item.details.length | number:0}}đ
+							Avg: {{item.year !=  ctrl.currentYear ? item.discountAmount/item.details.length : item.discountAmount2/(item.details.length -1) | number:0}}đ
 						</div>
 					</div>
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Profit: {{item.income-item.outcome | number:0}}đ
 							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:2}}%)
-							| {{(item.income-item.outcome)/item.details.length | number:0}}đ
+							| {{item.year !=  ctrl.currentYear ? (item.income-item.outcome)/item.details.length : (item.income2-item.outcome2)/(item.details.length -1) | number:0}}đ
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:2}}%
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Quantity: {{item.orders}} | {{item.frames}} | {{item.lenses}} &nbsp&nbsp&nbsp
-							Avg: {{item.orders/item.details.length | number:0}} | {{item.frames/item.details.length | number:0}} | {{item.lenses/item.details.length | number:0}}
+							Avg: <!--{{item.orders/item.details.length | number:0}} | {{item.frames/item.details.length | number:0}} | {{item.lenses/item.details.length | number:0}}-->
+							{{item.year !=  ctrl.currentYear ? item.orders/item.details.length : item.orders2/(item.details.length -1) | number:0}}
+							|{{item.year !=  ctrl.currentYear ? item.frames/item.details.length : item.frames2/(item.details.length -1) | number:0}}
+							|{{item.year !=  ctrl.currentYear ? item.lenses/item.details.length : item.lenses2/(item.details.length -1) | number:0}}
 						</div>
 					</div>
 				</div>
@@ -146,7 +151,7 @@ form .progress {
 					<table ng-table="" class="table table-bordered table-hover table-striped"  style="width: auto;">
 						<tr ng-repeat="one in item.details">
 
-							<td data-title="'month'"  style="width:10px;text-align: center;">
+							<td data-title="'month'" style="width:12px;text-align: center;">
 								{{one.month}}
 							</td>
 							<td data-title="'income'" style="width:130px;text-align: right;">
@@ -158,12 +163,12 @@ form .progress {
 							<td data-title="'discount'" style="text-align: right;">
 								{{one.discountAmount | number:0}}đ
 							</td>
-							<td data-title="'profit(pro/in)'" style="text-align: right;">
+							<td data-title="'profit'" style="text-align: right;">
 								{{one.income - one.outcome | number:0}}đ
-								({{(one.income - one.outcome) <= 0  ? 0 :(one.income - one.outcome)/one.income*100 | number:0}}%)
+
 							</td>
-							<td data-title="'In/Out'" style="text-align: right;">
-								{{one.income/one.outcome*100 | number:0}}%
+							<td data-title="'pro/in'" style="text-align: right;">
+								{{(one.income - one.outcome) <= 0  ? 0 :(one.income - one.outcome)/one.income*100 | number:0}}%
 							</td>
 							<td data-title="'order qty'" style="text-align: center;">
 								{{one.orderQuantity}}
@@ -173,6 +178,31 @@ form .progress {
 							</td>
 							<td data-title="'lens qty'" style="text-align: center;">
 								{{one.lensQuantity}}
+							</td>
+							<td data-title="'note'" style="text-align: center;">
+								{{one.note}}
+								<span uib-popover-template="ctrl.dynamicPopover.templateUrl"
+									  popover-placement="bottom" popover-title="add note:"
+									  >
+									<a href="" >[+]</a>
+								</span>
+								<script type="text/ng-template" id="myPopoverTemplate.html">
+									<div class="form-group">
+										<textarea name="content" placeholder="ghi chú" rows="5"  class="form-control"
+												  ng-model="one.note" maxlength="600" ng-cloak ></textarea>
+										<a ng-click="ctrl.upsert(one)" href="" class="btn btn-default check_out" style="margin: 10px 0px 0px 0px;">Save</a>
+										<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+											 style="margin: 10px 0px 0px 0px;width: 40px;height: 0px;padding: 5px 0px 25px 10px;float: right;">
+											<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+										</div>
+										<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+											 style="margin: 0px 0px 0px 0px;width: 40px;height: 0px;padding: 5px 0px 25px 10px;">
+											<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+
+										</div>
+									</div>
+								</script>
+
 							</td>
 
 
