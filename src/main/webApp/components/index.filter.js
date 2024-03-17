@@ -69,10 +69,10 @@ angular.module('app')
 .filter('getShortName', function () {
     return function (name) {
         if (!name) { return ''; }
-
-        var returnStr = name.split(' ')[name.split(' ').length-2] +' '+name.split(' ')[name.split(' ').length-1];
-
-        return returnStr;
+        if(!name.split(' ')[name.split(' ').length-2]){
+            return name;
+        }
+        return name.split(' ')[name.split(' ').length-2] +' '+name.split(' ')[name.split(' ').length-1];
     };
 })
 

@@ -381,6 +381,7 @@ angular.module('orderListModule')
                 oneOrder.couponCode = '';
                 oneOrder.couponDiscount = 0;
                 oneOrder.cusSource = null;
+                oneOrder.doneSmsPaymentNotify = false;
 
                 oneOrder.orderDetails.forEach((oneDetail, index, array) => {
                     oneDetail.id = 0;
@@ -486,11 +487,11 @@ angular.module('orderListModule')
       self.copyText = '';
     })
 
-    function getShopName(mem){
-        if(mem.shopCode){
-            var shop = self.shopList.find(i => i.shopCode == mem.shopCode);
-            mem.shopName = shop.shopName;
-            mem.shopAddress = shop.shopAddress;
+    function getShopName(detail){
+        if(detail.shopCode){
+            var shop = self.shopList.find(i => i.shopCode == detail.shopCode);
+            detail.shopName = shop.shopName;
+            detail.shopAddress = shop.shopAddress;
         }
     }
 //////////// recovery//////////////

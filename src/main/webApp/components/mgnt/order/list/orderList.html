@@ -116,8 +116,7 @@
 									{{item.orderDetailNoteForCus}}
 									{{item.orderDetailNote}}
 								</td>
-								<td title="'other'"  style="">
-								</td>
+
 							</tr>
 
 						</table>
@@ -260,22 +259,22 @@
 									<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
 										{{item.name}} ({{item.yob}})
 									</td>
-									<td title="'lens'" style="text-align: right;padding-right: 2px;padding-left: 2px;">
-										<div class="row" style="margin-left: 3px;">
+									<td title="'lens'" style="text-align: left;padding-right: 2px;padding-left: 2px;">
+										<div  style="margin-left: 3px;">
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
 										</div>
-										<div class="row" style="margin-left: 3px;">
+										<div  style="margin-left: 3px;">
 											{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
 										</div>
-										<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
+										<div  style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
 											{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
 										</div>
 									</td>
 									<td title="'frame'"  style="">
 										{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
 									</td>
-									<td title="'note'" >
+									<td title="'note'" style="width:200px;">
 										{{item.orderDetailNoteForCus}}
 										{{item.orderDetailNote}}
 									</td>

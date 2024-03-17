@@ -260,7 +260,21 @@
 								 >
 						</select>
 					</td>
-					<td title="'del'" style="width: 20px;text-align: center;" >
+					<td title="'default'" style="width: 20px;text-align: center;" >
+
+						<a ng-click="" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >[+]</a>
+						<a ng-click="" href="" class="btn btn-success" style="margin: 0px 0px 0px 0px;" >[+]</a>
+						<a ng-click="" href="" class="btn btn-danger" style="margin: 0px 0px 0px 0px;" >[-]</a>
+
+
+						<!--<a  href=""
+						   ng-class="ctrl.isRunSmsSend ? 'btn btn-success' : 'btn btn-danger'"
+						   ng-disabled="ctrl.isSaveButtonPressed"
+						   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsSend ? '[ON]' : '[OFF]'}} send sms api</a>-->
+
+
+					</td>
+					<!--<td title="'del'" style="width: 20px;text-align: center;" >
 
 						<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 						<p ng-show="ctrl.deletingId == one.id">
@@ -269,7 +283,7 @@
 							<a ng-click="ctrl.resetDelete()" href="" class="btn  check_out" style="margin: 4px 4px 4px 4px;">no</a>
 						</p>
 
-					</td>
+					</td>-->
 				</tr>
 			</table>
 		</div>

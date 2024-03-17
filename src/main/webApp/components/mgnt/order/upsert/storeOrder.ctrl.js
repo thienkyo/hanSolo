@@ -650,6 +650,7 @@ angular.module('storeOrderModule')
                 self.theOrder.shopCode = currentShopCacheService.get().shopCode;
             }
         }
+        console.log(self.theOrder);
     }
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.

@@ -37,6 +37,7 @@ public class ScheduledTasks {
 
     /**
      * build data for sms function
+     * run every 6h every day
      * first run 00:30:35
      * run at 00 04 08 12 16 20
      * @throws ParseException
@@ -49,8 +50,8 @@ public class ScheduledTasks {
     }
 
     /**
-     * build data for sms function
-     * run every 6h
+     * calculate biz report for the last 3 months
+     * run every 6h every day
      * first run at 00:01:25
      * @throws ParseException
      */
