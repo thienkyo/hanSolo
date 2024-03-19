@@ -2,10 +2,10 @@
 angular.module('clientShopModule')
 .controller('clientShopController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
                                     'CommonStatusArray','clientService','shopService','ClientDO','ShopDO','memberListService',
-                                    'ClientStatusList',
+                                    'ClientStatusList','clientInfoCacheService',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
          CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService,
-         ClientStatusList
+         ClientStatusList,clientInfoCacheService
          ){
     var self = this;
     self.statusList = CommonStatusArray;
@@ -23,13 +23,23 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
 
     clientService.getAll().then(function (data) {
         self.clientList = data;
-        //self.clientList.forEach(enrichClientList);
+        self.clientList.forEach(enrichClientList);
         console.log(self.clientList);
         self.tableParams = new NgTableParams({}, { dataset: self.clientList});
     });
 
-    function enrichClientList(client){
+    self.setDefaultClient = function(client){
+        clientInfoCacheService.set(client);
+        self.clientList.forEach(enrichClientList);
+        console.log(clientInfoCacheService.get());
+    }
 
+    function enrichClientList(client){
+        if(client.clientCode == clientInfoCacheService.get().clientCode){
+            client.isDefault = true;
+        }else{
+            client.isDefault = false;
+        }
     }
 
     self.addClient = function(){

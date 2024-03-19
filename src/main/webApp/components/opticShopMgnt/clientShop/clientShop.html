@@ -260,17 +260,19 @@
 								 >
 						</select>
 					</td>
-					<td title="'default'" style="width: 20px;text-align: center;" >
+					<td title="'def'" style="width: 20px;text-align: center;" sortable="'isDefault'" >
 
-						<a ng-click="" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >[+]</a>
-						<a ng-click="" href="" class="btn btn-success" style="margin: 0px 0px 0px 0px;" >[+]</a>
-						<a ng-click="" href="" class="btn btn-danger" style="margin: 0px 0px 0px 0px;" >[-]</a>
+						<!--<a href="" class="btn btn-success" style="margin: 0px 0px 0px 0px;"
+						   ng-show="one.isDefault">
+							[+]</a>
+						<a href="" class="btn btn-danger" style="margin: 0px 0px 0px 0px;"
+						   ng-show="!one.isDefault" ng-click="ctrl.setDefaultClient(one)">
+							[+]</a>-->
 
+						<a ng-click="ctrl.setDefaultClient(one)" href=""
+						   ng-class="one.isDefault ? 'btn btn-success' : 'btn btn-danger'"
+						   >[+]</a>
 
-						<!--<a  href=""
-						   ng-class="ctrl.isRunSmsSend ? 'btn btn-success' : 'btn btn-danger'"
-						   ng-disabled="ctrl.isSaveButtonPressed"
-						   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsSend ? '[ON]' : '[OFF]'}} send sms api</a>-->
 
 
 					</td>

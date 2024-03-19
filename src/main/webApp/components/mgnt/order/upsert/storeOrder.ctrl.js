@@ -73,20 +73,27 @@ angular.module('storeOrderModule')
 
     self.remove1Tab = function(index,orderDetail){
         self.isSaveButtonPressed = true;
-        storeOrderService.deleteOrderDetail(orderDetail).then(function (data) {
-            console.log(data);
-             if(data.errorCode == 'SUCCESS' ){
-                if(self.theOrder.orderDetails.length > 1){
-                    self.theOrder.orderDetails.splice(index,1);
-                }
-                self.calculateOrderTotal(self.theOrder);
-                self.isErrorMsg = false;
-                self.isSaveButtonPressed = false;
-                self.order_return_status = data.errorMessage;
-             }else{
-                self.isErrorMsg = data.errorMessage;
-             }
-         });
+        if(orderDetail.id == 0){
+            self.theOrder.orderDetails.splice(index,1);
+            console.log('test');
+            self.isErrorMsg = false;
+            self.isSaveButtonPressed = false;
+            self.order_return_status = 'Success';
+        }else if(self.theOrder.orderDetails.length > 1 ){
+            storeOrderService.deleteOrderDetail(orderDetail).then(function (data) {
+                 if(data.errorCode == 'SUCCESS' ){
+                    if(self.theOrder.orderDetails.length > 1){
+                        self.theOrder.orderDetails.splice(index,1);
+                    }
+                    self.calculateOrderTotal(self.theOrder);
+                    self.isErrorMsg = false;
+                    self.isSaveButtonPressed = false;
+                    self.order_return_status = data.errorMessage;
+                 }else{
+                    self.isErrorMsg = data.errorMessage;
+                 }
+            });
+        }
 
     }
 

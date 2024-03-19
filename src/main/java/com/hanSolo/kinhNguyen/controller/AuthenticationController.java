@@ -230,14 +230,12 @@ public class AuthenticationController {
     }
 
     private void manageSmsNotifyOrder(Order order) throws ParseException {
-        if(!order.getDoneSmsPaymentNotify() && order.getId() !=0 ){
-            if(order.getShippingPhone().replace(" ","").length() > 9){
-                SmsJob job = CommonCache.SMS_JOB_LIST.get(Utility.SMS_JOB_NOTIFYORDER);
-                if(job != null){
-                    SmsQueue smsQueue = generateSmsQueue(job, order);
-                    smsQueueRepo.save(smsQueue);
-                    order.setDoneSmsPaymentNotify(true);
-                }
+        if(!order.getDoneSmsPaymentNotify() && order.getShippingPhone().replace(" ","").length() > 9){
+            SmsJob job = CommonCache.SMS_JOB_LIST.get(Utility.SMS_JOB_NOTIFYORDER);
+            if(job != null){
+                SmsQueue smsQueue = generateSmsQueue(job, order);
+                smsQueueRepo.save(smsQueue);
+                order.setDoneSmsPaymentNotify(true);
             }
         }
     }
