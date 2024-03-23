@@ -1,9 +1,9 @@
 'use strict';
 angular.module('customerSourceModule')
 .controller('customerSourceController', ['$scope','$location','customerSourceService','NgTableParams','memberService','CommonStatusArray',
-                                        'CustomerSourceDO','Upload','$timeout','uploadService','CustomerSourceReportDO',
+                                        'CustomerSourceDO','Upload','$timeout','uploadService','CustomerSourceReportDO','clientInfoCacheService',
 	function($scope,$location,customerSourceService,NgTableParams,memberService,CommonStatusArray,
-	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO) {
+	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO,clientInfoCacheService) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theOne = new CustomerSourceDO;
@@ -12,6 +12,11 @@ angular.module('customerSourceModule')
 		self.discountOrderNumber = 0;
 		self.totalDiscountAmount = 0;
 		self.totalCount = 0;
+
+		self.queryRequest={};
+        self.queryRequest.amount = 100;
+        self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+        self.queryRequest.shopCode = "";
 
 		if(!memberService.isAdmin()){
 			$location.path('#/');

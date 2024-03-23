@@ -387,7 +387,11 @@
 					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
 			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">
-						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)" data-toggle="modal" data-target="#historyModal">{{order.shippingPhone | tel}}</a>
+						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)"
+						   data-toggle="modal" data-target="#historyModal"
+						   ng-if="order.shippingPhone.length > 9">
+							{{order.shippingPhone | tel}}</a>
+						<a ng-if="order.shippingPhone.length < 9">{{order.shippingPhone | tel}}</a>
 					</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
 						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>

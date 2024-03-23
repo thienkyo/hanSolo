@@ -602,7 +602,7 @@ angular.module('storeOrderModule')
                 self.theOrder = data.obj;
                 self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id); // for check addDetailToBill
                 console.log(self.tempCacheOrder);
-                console.log(self.theOrder);
+
                 if(self.theOrder){
                     if(!self.theOrder.clientCode){
                         self.theOrder.clientCode = clientInfoCacheService.get().clientCode;
@@ -621,6 +621,7 @@ angular.module('storeOrderModule')
                         self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                         self.calculateOrderTotal(self.theOrder);
                     }
+                    console.log(self.theOrder);
 
                     // load jobid for sms send
                     if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){

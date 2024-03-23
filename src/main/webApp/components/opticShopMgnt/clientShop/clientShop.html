@@ -198,13 +198,18 @@
 									<td title="'Create date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:130px;">
 										{{one.gmtCreate | date:"dd-MM-yyyy"}}
 									</td>
-									<td title="'del'" style="width:30px;" >
+									<td title="'X'" style="width:30px;" >
 										<a ng-click="ctrl.promptDelete(one.id)" href="" class="btn check_out" style="margin: 0px 0px 0px 0px;" >X</a>
 										<p ng-show="ctrl.deletingId == one.id">
 											Are you sure?
 											<a ng-click="ctrl.deleteShop(one)" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">yes</a>
 											<a ng-click="ctrl.resetDelete()" href="" class="btn check_out" style="margin: 4px 4px 4px 4px;">no</a>
 										</p>
+									</td>
+									<td title="'def'" style="width: 20px;text-align: center;" sortable="'isDefault'" >
+										<a ng-click="ctrl.setDefaultClientShop(ctrl.theClient,one)" href=""
+										   ng-class="one.isDefault ? 'btn btn-success' : 'btn btn-danger'"
+										>[+]</a>
 									</td>
 								</tr>
 							</table>
@@ -269,7 +274,7 @@
 						   ng-show="!one.isDefault" ng-click="ctrl.setDefaultClient(one)">
 							[+]</a>-->
 
-						<a ng-click="ctrl.setDefaultClient(one)" href=""
+						<a  href=""
 						   ng-class="one.isDefault ? 'btn btn-success' : 'btn btn-danger'"
 						   >[+]</a>
 

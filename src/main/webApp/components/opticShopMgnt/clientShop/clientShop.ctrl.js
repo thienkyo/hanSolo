@@ -2,10 +2,10 @@
 angular.module('clientShopModule')
 .controller('clientShopController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
                                     'CommonStatusArray','clientService','shopService','ClientDO','ShopDO','memberListService',
-                                    'ClientStatusList','clientInfoCacheService',
+                                    'ClientStatusList','clientInfoCacheService','currentShopCacheService',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
          CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService,
-         ClientStatusList,clientInfoCacheService
+         ClientStatusList,clientInfoCacheService,currentShopCacheService,
          ){
     var self = this;
     self.statusList = CommonStatusArray;
@@ -28,10 +28,12 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.tableParams = new NgTableParams({}, { dataset: self.clientList});
     });
 
-    self.setDefaultClient = function(client){
+    self.setDefaultClientShop = function(client,shop){
         clientInfoCacheService.set(client);
+        currentShopCacheService.set(shop);
         self.clientList.forEach(enrichClientList);
-        console.log(clientInfoCacheService.get());
+        self.shopList.forEach(enrichShopList);
+
     }
 
     function enrichClientList(client){
@@ -42,12 +44,22 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         }
     }
 
+    function enrichShopList(shop){
+        console.log(shop);
+        console.log(currentShopCacheService.get().shopCode);
+        if(shop.shopCode == currentShopCacheService.get().shopCode){
+            shop.isDefault = true;
+        }else{
+            shop.isDefault = false;
+        }
+    }
+
     self.addClient = function(){
         self.theClient = new ClientDO();
         self.theShop = new ShopDO();
         self.shopList = [];
         self.shopTableParams = new NgTableParams({}, { dataset: self.shopList});
-        console.log(self.theShop);
+
     }
 
     self.closeDetailModal = function(){
@@ -71,6 +83,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         self.theShop = new ShopDO();
         shopService.getAll(self.theClient.id).then(function (data) {
             self.shopList = data;
+            self.shopList.forEach(enrichShopList);
             console.log(self.shopList);
             self.shopTableParams = new NgTableParams({}, { dataset: self.shopList});
         });
