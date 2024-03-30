@@ -2,10 +2,10 @@
 angular.module('clientShopModule')
 .controller('clientShopController', ['$scope','$location','NgTableParams','memberService','ContractDO','SalaryDO',
                                     'CommonStatusArray','clientService','shopService','ClientDO','ShopDO','memberListService',
-                                    'ClientStatusList','clientInfoCacheService','currentShopCacheService',
+                                    'ClientStatusList','clientInfoCacheService','currentShopCacheService','oneClientShopListCacheService',
 function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
          CommonStatusArray,clientService,shopService,ClientDO,ShopDO,memberListService,
-         ClientStatusList,clientInfoCacheService,currentShopCacheService,
+         ClientStatusList,clientInfoCacheService,currentShopCacheService,oneClientShopListCacheService,
          ){
     var self = this;
     self.statusList = CommonStatusArray;
@@ -33,6 +33,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         currentShopCacheService.set(shop);
         self.clientList.forEach(enrichClientList);
         self.shopList.forEach(enrichShopList);
+        oneClientShopListCacheService.set(self.shopList);
 
     }
 
@@ -84,7 +85,7 @@ function($scope,$location,NgTableParams,memberService,ContractDO,SalaryDO,
         shopService.getAll(self.theClient.id).then(function (data) {
             self.shopList = data;
             self.shopList.forEach(enrichShopList);
-            console.log(self.shopList);
+            //console.log(self.shopList);
             self.shopTableParams = new NgTableParams({}, { dataset: self.shopList});
         });
     }

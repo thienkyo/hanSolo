@@ -2,8 +2,10 @@
 angular.module('customerSourceModule')
 .controller('customerSourceController', ['$scope','$location','customerSourceService','NgTableParams','memberService','CommonStatusArray',
                                         'CustomerSourceDO','Upload','$timeout','uploadService','CustomerSourceReportDO','clientInfoCacheService',
+                                        'currentShopCacheService','shopListCacheService','oneClientShopListCacheService',
 	function($scope,$location,customerSourceService,NgTableParams,memberService,CommonStatusArray,
-	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO,clientInfoCacheService) {
+	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO,clientInfoCacheService,
+	        currentShopCacheService,shopListCacheService,oneClientShopListCacheService) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theOne = new CustomerSourceDO;
@@ -13,42 +15,73 @@ angular.module('customerSourceModule')
 		self.totalDiscountAmount = 0;
 		self.totalCount = 0;
 
+        self.currentYear  = (new Date()).getFullYear();
 		self.queryRequest={};
-        self.queryRequest.amount = 100;
+        self.queryRequest.amount = 0;
         self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
-        self.queryRequest.shopCode = "";
+        self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
+        self.queryRequest.generalPurpose = self.currentYear;
+        self.isGodLike = memberService.isGodLike();
+        self.isSuperAdmin = memberService.isSuperAdmin();
+        self.yearList = buildYearList();
 
 		if(!memberService.isAdmin()){
 			$location.path('#/');
 		}
-		
-		customerSourceService.getAll().then(function (data) {
-			self.customerSourceList = data;
-/*
-			for (var i = 0; i < self.customerSourceList.length; i++){
-                 self.totalCount += ;
+
+
+        function buildYearList(){
+            var yearList = [];
+            for(var i = 0; i < 10; i++){
+                yearList.push(self.currentYear - i);
             }
-*/
+            return yearList;
+        }
+        console.log(self.yearList);
+        console.log(self.queryRequest);
 
-            self.customerSourceList.forEach((dataOne, index, array) => {
-                self.totalCount += dataOne.count;
+
+        if(self.isSuperAdmin){
+            self.shopList = oneClientShopListCacheService.get();
+            console.log(self.shopList);
+        }
+
+
+
+
+
+        self.loadCusSourceData = function(str){
+            customerSourceService.getCustomerSourceByTerms(self.queryRequest).then(function (data) {
+                self.customerSourceList = data;
+                self.totalCount = 0;
+                self.customerSourceList.forEach((dataOne, index, array) => {
+                    self.totalCount += dataOne.count;
+                });
+                self.customerSourceList.forEach((dataOne, index, array) => {
+                    dataOne.percent = dataOne.count/self.totalCount*100;
+                });
+
+                self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
+
+                customerSourceService.getReportByTerms(self.queryRequest).then(function (data) {
+                    self.reportListByYear = data;
+                    if(self.customerSourceList){
+                        self.reportListByYear.forEach(fillInSourceName);
+                    }
+                    console.log(self.reportListByYear);
+                    self.reportByYearParams = new NgTableParams({ page: 1,count: 10,},
+                        {total: self.reportListByYear.length, dataset: self.reportListByYear});
+                });
+
             });
-            self.customerSourceList.forEach((dataOne, index, array) => {
-                dataOne.percent = dataOne.count/self.totalCount*100;
-            });
+        }
 
-			self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
+        self.loadCusSourceData();
 
-			customerSourceService.getReportAll().then(function (data) {
-                self.reportList = data;
-                if(self.customerSourceList){
-                    self.reportList.forEach(fillInSourceName);
-                }
-                console.log(self.reportList);
-                self.reportParams = new NgTableParams({}, { dataset: self.reportList});
-            });
 
-		});
+
+		
+
 
 
 		
@@ -61,6 +94,11 @@ angular.module('customerSourceModule')
 		self.upsert = function(customerSource){
 			self.responseStr = false;
 			self.responseStrFail = false;
+
+			customerSource.clientCode  = clientInfoCacheService.get().clientCode;
+            customerSource.shopCode = currentShopCacheService.get().shopCode;
+
+
 			customerSourceService.upsert(customerSource).then(function (data) {
 				self.responseStr = data.errorMessage;
 				//console.log(data);
@@ -97,6 +135,8 @@ angular.module('customerSourceModule')
 		self.upsertReport = function(report){
             self.responseStr = false;
             self.responseStrFail = false;
+            report.clientCode  = clientInfoCacheService.get().clientCode;
+            report.shopCode = currentShopCacheService.get().shopCode;
             customerSourceService.upsertReport(report).then(function (data) {
                 self.responseStr = data.errorMessage;
             });

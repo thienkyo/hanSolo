@@ -77,6 +77,7 @@ public class Utility {
     final public static int COLLECTION_PAGE_SIZE = 4;
     final public static int BLOG_PAGE_SIZE = 9;
     final public static int FIRST_TIME_LOAD_SIZE = 100;
+    final public static String ALL = "ALL";
 
     final public static String SMS_QUEUE_INIT = "INIT";
     final public static String SMS_QUEUE_SENDING = "SENDING";
@@ -110,6 +111,16 @@ public class Utility {
     final public static String SHOP_STATUS_INIT = "INIT";
     final public static String SHOP_STATUS_ACTIVE = "ACTIVE";
     final public static String SHOP_STATUS_INACTIVE = "INACTIVE";
+
+    final public static Date getFirstDateOfYear(String year) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        return df.parse(year + "0101_000000");
+    }
+
+    final public static Date getLastDateOfYear(String year) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        return df.parse(year + "1231_595900");
+    }
 
     final public static Date getCurrentDate() throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");

@@ -438,6 +438,7 @@ angular.module('orderListModule')
     self.resetList = resetList;
 
     function getOrdersByTerms(){
+        self.showLoadingText = true;
         self.tableParams = new NgTableParams({}, { dataset: []});
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
             self.orderList = data;

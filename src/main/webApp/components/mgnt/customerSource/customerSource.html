@@ -34,65 +34,31 @@ form .progress {
   margin-top: -3px;
   padding: 7px 17px;
 }
+
+
 </style>
 <link href="css/main2.css" rel="stylesheet">
-<section>
+<section class="shopping-cart spad" style="padding-top: 0px;">
 	<div class="container" ng-cloak>
-		<h3 style="margin-bottom: 40px;text-align: center;">Customer Source </h3>
+		<h3 style="margin-bottom: 20px;text-align: center;">Customer Source </h3>
 
 		<!-- Config Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li class="nav-item">
-				<a class="nav-link active" data-toggle="tab" href="" data-target="#month">Month</a>
+				<a class="nav-link active" data-toggle="tab" href="" data-target="#detail">Detail</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#source">Source</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#source">All</a>
 			</li>
 		</ul>
-
 		<!-- config Tab panes -->
 		<div class="tab-content">
-			<div id="month" class="container tab-pane active">
+			<div id="detail" class="container tab-pane active" style="padding-left: 0px;padding-right: 0px;">
 				<br>
-				<!-- insert Config -->
-				<div class="row" style="margin-bottom: 30px;">
-					<div class="col-md-1">
-						<input type="number"  ng-model="ctrl.theOneReport.id" disabled="disabled" placeholder="id" style="width:60px;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.year" placeholder="year" style="width: 100%;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.month" placeholder="month" style="width: 100%;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.count" placeholder="count" style="width: 100%;"/>
-					</div>
-
-					<div class="col-md-3">
-						<a ng-click="ctrl.upsertReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
-						<a ng-click="ctrl.calculateReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">cal</a>
-						<a ng-click="ctrl.clearTheOneReport()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
-					</div>
-					<div class="col-md-1">
-						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
-							thành công
-						</div>
-						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
-							thất bại
-						</div>
-					</div>
-				</div>
 
 				<!--data table-->
 				<div class="table-responsive">
-					<table ng-table="ctrl.reportParams" class="table table-bordered table-hover table-striped" show-filter="true">
+					<table ng-table="ctrl.reportByYearParams" class="table table-bordered table-hover table-striped" show-filter="true">
 						<tr ng-repeat="one in $data">
 							<td title="'id'" filter="{ 'id': 'number'}" sortable="'id'" style="width:80px;text-align: center;">
 								<a href="" ng-click="ctrl.setTheOneReport(one)">{{one.id}}</a>
@@ -100,7 +66,7 @@ form .progress {
 							<td title="'year'" filter="{ 'year': 'text'}" sortable="'year'"  style="width:180px;">
 								{{one.year}}
 							</td>
-							<td title="'month'" filter="{ 'month': 'number'}" sortable="'month'"  style="width:180px;">
+							<td title="'month'" filter="{ 'month': 'text'}" sortable="'month'"  style="width:180px;">
 								{{one.month}}
 							</td>
 							<td title="'source'" filter="{ 'sourceName': 'text'}" sortable="'sourceName'"  style="width:180px;">
@@ -119,8 +85,13 @@ form .progress {
 					</table>
 				</div>
 
+				<div class="row" style="text-align: center;" ng-show="!ctrl.customerSourceList">
+					<div class="col-sm-6"></div>
+					<div  class="loaderAni"></div>
+				</div>
+
 			</div>
-			<div id="source" class="container tab-pane">
+			<div id="source" class="container tab-pane" style="padding-left: 0px;padding-right: 0px;">
 				<br>
 				<div class="row" style="margin-bottom: 30px;">
 					<div class="col-md-1">
@@ -182,6 +153,76 @@ form .progress {
 
 
 
+
+
+			</div>
+		</div>
+
+		<!--more tab-->
+		<ul class="nav nav-tabs {{ctrl.isClickOrderRecovery ? 'active' : ''}}"  role="tablist" style="padding-top: 20px;">
+			<li class="nav-item">
+				<a class="nav-link" data-toggle="tab" href="" data-target="#more"
+				   ng-click="ctrl.isClickOrderRecovery = ctrl.isClickOrderRecovery ? false : true;">more</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div id="more" class="container tab-pane {{ctrl.isClickOrderRecovery ? 'active' : ''}}">
+				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+
+					<div class="col-sm-6" style="text-align: left;">
+						data range:
+						<select  ng-model="ctrl.queryRequest.generalPurpose"
+								 ng-options="opt for opt in ctrl.yearList "
+								 ng-change="ctrl.loadCusSourceData()"
+								 style="width: 15%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+						</select>
+
+						<select  ng-model="ctrl.queryRequest.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+								 ng-change="ctrl.loadCusSourceData()"
+								 style="width: 20%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 4px;background: #FFFFFF;">
+						</select>
+					</div>
+					<div class="col-sm-6"></div>
+
+				</div>
+
+
+				<!-- insert Config -->
+				<div class="row" style="margin-bottom: 30px;">
+					<div class="col-md-1">
+						<input type="number"  ng-model="ctrl.theOneReport.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.year" placeholder="year" style="width: 100%;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.month" placeholder="month" style="width: 100%;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.count" placeholder="count" style="width: 100%;"/>
+					</div>
+
+					<div class="col-md-3">
+						<a ng-click="ctrl.upsertReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
+						<a ng-click="ctrl.calculateReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">cal</a>
+						<a ng-click="ctrl.clearTheOneReport()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-md-1">
+						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thành công
+						</div>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+					</div>
+				</div>
 
 
 			</div>

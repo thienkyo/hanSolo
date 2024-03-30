@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface CustomerSourceRepository extends JpaRepository<CustomerSource, Integer> {
     List<CustomerSource> findAllByOrderByGmtCreateDesc();
+    List<CustomerSource> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+    List<CustomerSource> findByClientCodeOrderByClientCodeDesc(String clientCode);
+
+
 }

@@ -3,15 +3,17 @@ angular.module('customerSourceModule')
 .factory('customerSourceService', ['ajaxService',function(ajaxService) {
 		var customerSourceService = {
 				getAll : getAll,
+				getCustomerSourceByTerms : getCustomerSourceByTerms,
 				upsert : upsert,
 				deleteOne : deleteOne,
 				getReportAll : getReportAll,
 				calculateReport : calculateReport,
-				upsertReport : upsertReport
+				upsertReport : upsertReport,
+				getReportByTerms : getReportByTerms
 			};
 	return customerSourceService;
 
-	/* management from here*/
+	/*Deprecated*/
 	function getAll(){
 		var url = "mgnt/getAllCustomerSource";
 		return ajaxService.get(url,null,{}).then(function(response){
@@ -19,7 +21,22 @@ angular.module('customerSourceModule')
 		});
 	}
 
-	function getReportAll(){
+	function getCustomerSourceByTerms(req){
+        var url = "mgnt/getCustomerSourceByTerms";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+	function getReportByTerms(req){
+        var url = "mgnt/getCusReportByTerms";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    /*Deprecated*/
+    function getReportAll(){
         var url = "mgnt/getAllCustomerSourceReport";
         return ajaxService.get(url,null,{}).then(function(response){
             return response.data;

@@ -504,9 +504,24 @@ public class ManagementController {
 
     //////////////////////////// customer Source section ///////////////////////////////
     @SuppressWarnings("unchecked")
+    @Deprecated
     @RequestMapping(value = "getAllCustomerSource", method = RequestMethod.GET)
     public List<CustomerSource> getAllCustomerSource(final HttpServletRequest request) throws ServletException {
         return customerSourceRepo.findAllByOrderByGmtCreateDesc();
+    }
+
+    @RequestMapping(value = "getCustomerSourceByTerms", method = RequestMethod.POST)
+    public List<CustomerSource> getCustomerSourceByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) throws ParseException {
+        List<CustomerSource> rs = new ArrayList<>();
+        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)){
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                rs =  customerSourceRepo.findByClientCodeOrderByClientCodeDesc(req.getClientCode());
+            }else{
+                rs =  customerSourceRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(
+                        req.getClientCode(),req.getShopCode());
+            }
+        }
+        return rs;
     }
 
     @RequestMapping(value = "upsertCustomerSource", method = RequestMethod.POST)
@@ -522,7 +537,8 @@ public class ManagementController {
     public GenericResponse upsertCustomerSourceReport(@RequestBody final CustomerSourceReport customerSourceReport, final HttpServletRequest request) throws ParseException {
         List<CustomerSourceReport> csrList = new ArrayList<>();
         if(customerSourceReport.getId() == 0){
-            List<CustomerSource> csList = customerSourceRepo.findAll();
+            List<CustomerSource> csList = customerSourceRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(
+                    customerSourceReport.getClientCode(), customerSourceReport.getShopCode());
             for(CustomerSource cs : csList){
                 csrList.add(new CustomerSourceReport(Utility.getCurrentDate(),
                         Utility.getCurrentDate(),
@@ -542,9 +558,25 @@ public class ManagementController {
         return new GenericResponse("Success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
-    @RequestMapping(value = "getAllCustomerSourceReport", method = RequestMethod.GET)
+    @Deprecated
+    //@RequestMapping(value = "getAllCustomerSourceReport", method = RequestMethod.GET)
     public List<CustomerSourceReport> getAllCustomerSourceReport(final HttpServletRequest request) throws ServletException {
         return customerSourceReportRepo.findByOrderByYearDescMonthDescCustomerSourceIdAsc();
+    }
+
+    @RequestMapping(value = "getCusReportByTerms", method = RequestMethod.POST)
+    public List<CustomerSourceReport> getCusReportByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) throws ParseException {
+        List<CustomerSourceReport> reportList = new ArrayList<>();
+        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)){
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                reportList =  customerSourceReportRepo.findByClientCodeAndYearOrderByYearDescMonthDescCustomerSourceIdAsc(
+                        req.getClientCode(),req.getGeneralPurpose());
+            }else{
+                reportList =  customerSourceReportRepo.findByClientCodeAndShopCodeAndYearOrderByYearDescMonthDescCustomerSourceIdAsc(
+                        req.getClientCode(),req.getShopCode(), req.getGeneralPurpose());
+            }
+        }
+        return reportList;
     }
 
     @RequestMapping(value = "calCustomerSourceReport", method = RequestMethod.POST)
