@@ -3,11 +3,11 @@ angular.module('bizExpenseModule')
 	.controller('bizExpenseController',['$rootScope','$location','memberService','bizExpenseService','AmountList',
 									'NgTableParams','BizExpenseStatusArray','BizExpenseDO','uploadService','$timeout',
 									'FirstTimeLoadSize','clientListCacheService','shopListCacheService','clientInfoCacheService',
-									'currentShopCacheService','commonCacheService',
+									'currentShopCacheService',
 	function($rootScope,$location,memberService,bizExpenseService,AmountList,
 	        NgTableParams,BizExpenseStatusArray,BizExpenseDO,uploadService,$timeout,
 	        FirstTimeLoadSize,clientListCacheService,shopListCacheService,clientInfoCacheService,
-	        currentShopCacheService,commonCacheService) {
+	        currentShopCacheService) {
 	var self = this;
 	self.theBizExpense = new BizExpenseDO;
 	self.statusList = BizExpenseStatusArray;
@@ -27,10 +27,6 @@ angular.module('bizExpenseModule')
 	if(!memberService.isMod()){
 		$location.path('#/');
 	}
-
-	commonCacheService.getLastTimeData().then(function (data) {
-        self.lastCustomerSourceCalculationTime = data.lastCustomerSourceCalculationTime;
-    });
 
 	if(self.isGodLike){
         self.queryRequest.clientCode = 'ALL';

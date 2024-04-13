@@ -2,10 +2,10 @@
 angular.module('customerSourceModule')
 .controller('customerSourceController', ['$scope','$location','customerSourceService','NgTableParams','memberService','CommonStatusArray',
                                         'CustomerSourceDO','Upload','$timeout','uploadService','CustomerSourceReportDO','clientInfoCacheService',
-                                        'currentShopCacheService','shopListCacheService','oneClientShopListCacheService',
+                                        'currentShopCacheService','shopListCacheService','oneClientShopListCacheService','commonCacheService',
 	function($scope,$location,customerSourceService,NgTableParams,memberService,CommonStatusArray,
 	        CustomerSourceDO,Upload,$timeout,uploadService,CustomerSourceReportDO,clientInfoCacheService,
-	        currentShopCacheService,shopListCacheService,oneClientShopListCacheService) {
+	        currentShopCacheService,shopListCacheService,oneClientShopListCacheService,commonCacheService) {
 		var self = this;
 		self.statusList = CommonStatusArray;
 		self.theOne = new CustomerSourceDO;
@@ -28,6 +28,10 @@ angular.module('customerSourceModule')
 		if(!memberService.isAdmin()){
 			$location.path('#/');
 		}
+
+		commonCacheService.getLastTimeData().then(function (data) {
+            self.lastCustomerSourceCalculationTime = data.lastCustomerSourceCalculationTime;
+        });
 
 
         function buildYearList(){
