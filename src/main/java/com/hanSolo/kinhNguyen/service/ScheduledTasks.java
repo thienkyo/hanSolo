@@ -1,6 +1,8 @@
 package com.hanSolo.kinhNguyen.service;
 
 import com.hanSolo.kinhNguyen.models.BizReport;
+import com.hanSolo.kinhNguyen.models.DateTimeContainer;
+import com.hanSolo.kinhNguyen.models.DatetimeWrapper;
 import com.hanSolo.kinhNguyen.repository.BizReportRepository;
 import com.hanSolo.kinhNguyen.repository.ClientRepository;
 import com.hanSolo.kinhNguyen.repository.ShopRepository;
@@ -17,7 +19,9 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -34,10 +38,11 @@ public class ScheduledTasks {
 
     @Autowired private BizReportService bizReportService;
     @Autowired private SmsService smsService;
+    @Autowired private CustomerSourceReportService customerSourceReportService;
 
     /**
      * build data for sms function
-     * run every 6h every day
+     * run every 4h every day
      * first run 00:30:35
      * run at 00 04 08 12 16 20
      * @throws ParseException
@@ -50,15 +55,17 @@ public class ScheduledTasks {
     }
 
     /**
-     * calculate biz report for the last 3 months
+     * calculate for the last 3 months
      * run every 6h every day
      * first run at 00:01:25
      * @throws ParseException
      */
-    @Scheduled(cron = "25 1 0/6 * * *")
-    //@Scheduled(cron = "*/5 * * * * *")
-    public void scheduleExpenseCalculation() throws ParseException {
-        Calendar calendar = Calendar.getInstance();
+    //@Scheduled(cron = "25 1 0/6 * * *")
+    @Scheduled(cron = "*/5 * * * * *")
+    public void scheduleCalculation() throws ParseException {
+
+        //begin - this code block is deprecated
+       /* Calendar calendar = Calendar.getInstance();
         // container only used as a place to hold year, month
         List<BizReport> container = new ArrayList<>();
         BizReport tempHolder;
@@ -80,14 +87,46 @@ public class ScheduledTasks {
             bizReportList.addAll(tempList);
         }
 
-        LOGGER.info("expense calculation every 6hrs: year/month bizReportList size :" + bizReportList.size());
+        //LOGGER.info("expense calculation every 6hrs: year/month bizReportList size :" + bizReportList.size());
 
         for(BizReport br : bizReportList){
             bizReportService.calculateReport(br);
+        }*/
+        // end - this code block is deprecated
+
+        // new logic here
+        Calendar calendar = Calendar.getInstance();
+        List<DateTimeContainer> dtContainer = new ArrayList<>();
+        List<String> yearMonthList = new ArrayList<>();
+        DateTimeContainer tempContainer;
+        for(int i = 0; i<3 ;i++){
+            calendar.setTime(Utility.getCurrentDate());
+            calendar.add(Calendar.MONTH, -i);
+            String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            month = month.length() > 1 ? month : "0" + month;
+            int year = calendar.get(Calendar.YEAR);
+            tempContainer = new DateTimeContainer(String.valueOf(year), month,"00");
+            dtContainer.add(tempContainer);
+            yearMonthList.add(year + month);
         }
+
+        Date startDate = Utility.getFirstDateOfMonth(dtContainer.get(dtContainer.size()-1).getYear(),
+                dtContainer.get(dtContainer.size()-1).getMonth());
+        DatetimeWrapper dtWrapper = new DatetimeWrapper(dtContainer, startDate, Utility.getCurrentDate(), yearMonthList);
+
+        LOGGER.info("scheduleCalculation, DatetimeWrapper:" + dtWrapper);
+
+        // calculate customer source report.
+        customerSourceReportService.calCustomerSourceReportForScheduleTask(dtWrapper);
+
+        // calculate biz report
+        bizReportService.calculateReportForScheduleTask(dtWrapper);
+
     }
 
+
     /**
+     * once a month
      * At 04:05 AM, on day 28 of the month
      */
     //@Scheduled(cron = "0 5 5 28 * *")

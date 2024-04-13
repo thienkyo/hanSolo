@@ -55,7 +55,48 @@ form .progress {
 		<div class="tab-content">
 			<div id="detail" class="container tab-pane active" style="padding-left: 0px;padding-right: 0px;">
 				<br>
+				<!-- insert Config -->
+				<div class="row" style="margin-bottom: 30px;">
+					<div class="col-md-1">
+						<input type="number"  ng-model="ctrl.theOneReport.id" disabled="disabled" placeholder="id" style="width:60px;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.year" placeholder="year" style="width: 100%;"/>
+					</div>
+					<div class="col-md-2">
+						<input type="text"  ng-model="ctrl.theOneReport.month" placeholder="month" style="width: 100%;"/>
+					</div>
+					<div class="col-md-1">
+						<input type="text"  ng-model="ctrl.theOneReport.count" placeholder="count" style="width: 100%;"/>
+					</div>
+					<div class="col-md-1">
+						<select  ng-model="ctrl.queryRequest.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+								 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;">
+						</select>
+					</div>
 
+
+					<div class="col-md-3">
+						<a ng-click="ctrl.upsertReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
+						<a ng-click="ctrl.calculateReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">cal</a>
+						<a ng-click="ctrl.clearTheOneReport()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
+					</div>
+					<div class="col-md-1">
+						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thành công
+						</div>
+						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
+							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only"></span>
+							thất bại
+						</div>
+					</div>
+				</div>
 				<!--data table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.reportByYearParams" class="table table-bordered table-hover table-striped" show-filter="true">
@@ -100,6 +141,12 @@ form .progress {
 					<div class="col-md-2">
 						<input type="text"  ng-model="ctrl.theOne.name" placeholder="name" style="width: 100%;"/>
 					</div>
+					<div class="col-md-1">
+						<select  ng-model="ctrl.queryRequest.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList "
+								 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;">
+						</select>
+					</div>
 
 					<div class="col-md-2">
 						<a ng-click="ctrl.upsert(ctrl.theOne)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
@@ -119,7 +166,7 @@ form .progress {
 							thất bại
 						</div>
 					</div>
-					<div class="col-md-6" style="text-align: end;">
+					<div class="col-md-5" style="text-align: end;">
 						total:{{ctrl.totalCount}}
 					</div>
 				</div>
@@ -170,7 +217,7 @@ form .progress {
 				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
 
 					<div class="col-sm-6" style="text-align: left;">
-						data range:
+						config:
 						<select  ng-model="ctrl.queryRequest.generalPurpose"
 								 ng-options="opt for opt in ctrl.yearList "
 								 ng-change="ctrl.loadCusSourceData()"
@@ -188,41 +235,7 @@ form .progress {
 				</div>
 
 
-				<!-- insert Config -->
-				<div class="row" style="margin-bottom: 30px;">
-					<div class="col-md-1">
-						<input type="number"  ng-model="ctrl.theOneReport.id" disabled="disabled" placeholder="id" style="width:60px;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.year" placeholder="year" style="width: 100%;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.month" placeholder="month" style="width: 100%;"/>
-					</div>
-					<div class="col-md-2">
-						<input type="text"  ng-model="ctrl.theOneReport.count" placeholder="count" style="width: 100%;"/>
-					</div>
 
-					<div class="col-md-3">
-						<a ng-click="ctrl.upsertReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">Save</a>
-						<a ng-click="ctrl.calculateReport(ctrl.theOneReport)" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">cal</a>
-						<a ng-click="ctrl.clearTheOneReport()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
-					</div>
-					<div class="col-md-1">
-						<div class="alert alert-success" role="alert" ng-show="ctrl.responseStr"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
-							thành công
-						</div>
-						<div class="alert alert-danger" role="alert" ng-show="ctrl.responseStrFail"
-							 style="margin: 0px 0px 0px 0px;width: 120px;height: 0px;padding: 5px 0px 25px 10px;">
-							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-							<span class="sr-only"></span>
-							thất bại
-						</div>
-					</div>
-				</div>
 
 
 			</div>

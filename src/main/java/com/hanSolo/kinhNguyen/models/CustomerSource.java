@@ -25,6 +25,19 @@ public class CustomerSource extends ParentCodeModel{
     @Column(name = "count")
     private Integer count;
 
+    public CustomerSource() {
+    }
+
+    public CustomerSource(Date gmtCreate, Date gmtModify, String name, Integer count,
+                          String clientCode, String shopCode) {
+        this.gmtCreate = gmtCreate;
+        this.gmtModify = gmtModify;
+        this.name = name;
+        this.count = count;
+        super.setClientCode(clientCode);
+        super.setShopCode(shopCode);
+    }
+
     public Integer getCount() {
         return count;
     }

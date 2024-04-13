@@ -96,14 +96,14 @@ angular.module('customerSourceModule')
 			self.responseStrFail = false;
 
 			customerSource.clientCode  = clientInfoCacheService.get().clientCode;
-            customerSource.shopCode = currentShopCacheService.get().shopCode;
+            customerSource.shopCode = self.queryRequest.shopCode;
 
 
 			customerSourceService.upsert(customerSource).then(function (data) {
 				self.responseStr = data.errorMessage;
-				//console.log(data);
+				console.log(data);
 				if(customerSource.id == 0){
-					self.customerSourceList.unshift(data.customerSource);
+					self.customerSourceList.unshift(data.obj);
 					self.tableParams = new NgTableParams({}, { dataset: self.customerSourceList});
 				}
 			});
@@ -136,7 +136,7 @@ angular.module('customerSourceModule')
             self.responseStr = false;
             self.responseStrFail = false;
             report.clientCode  = clientInfoCacheService.get().clientCode;
-            report.shopCode = currentShopCacheService.get().shopCode;
+            report.shopCode = self.queryRequest.shopCode;
             customerSourceService.upsertReport(report).then(function (data) {
                 self.responseStr = data.errorMessage;
             });

@@ -21,6 +21,7 @@ angular.module('orderListModule')
 	self.isUpdatingOrder = false; // disable/able the select for update order status
 	self.showLoadingText = true; // disable/able Loading..
 	self.isRecoveringOrder = false; // disable/able the select for recover button
+	self.isLoadingHistoryModal = false;
 	self.tempArray=[];
 	self.detailArray=[];
     self.tempAmount=0;
@@ -43,11 +44,6 @@ angular.module('orderListModule')
         $location.path('#/');
     }
 ///////////////
-	customerSourceService.getAll().then(function (data) {
-        self.cusSourceList = data;
-      //  self.customerParams = new NgTableParams({}, { dataset: self.customerSourceList});
-    });
-
 	resetList();
 //////////////
 
@@ -447,6 +443,9 @@ angular.module('orderListModule')
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
             self.showLoadingText = false;
         });
+        customerSourceService.getCustomerSourceByTerms(self.queryRequest).then(function (data) {
+            self.cusSourceList = data;
+        });
     }
     self.getOrdersByTerms = getOrdersByTerms;
 
@@ -470,10 +469,12 @@ angular.module('orderListModule')
     self.getHistoryModal = function(phone) {
         self.theHistoryParams = new NgTableParams({}, { dataset: []});
         self.queryRequest.generalPurpose = phone;
+        self.isLoadingHistoryModal = true;
         orderListService.getOrderHistory(self.queryRequest).then(function(data){
             data.forEach(getShopName);
             self.theHistoryModal = data;
             self.theHistoryModal[0].phone = phone;
+            self.isLoadingHistoryModal = false;
             self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
        });
     }

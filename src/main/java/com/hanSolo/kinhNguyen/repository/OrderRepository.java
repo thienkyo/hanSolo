@@ -30,18 +30,17 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     @Query("update Order o set o.gmtModify = ?1, o.cusSource = ?2 where o.id = ?3")
     int updateGmtModifyAndCusSourceById(@NonNull Date gmtModify, @NonNull Integer cusSource, @NonNull Integer id);
 
-    List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
     long countByGmtCreateBetweenAndCusSource(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd, @Nullable Integer cusSource);
 
+    List<Order> findByGmtCreateBetweenAndCusSourceNotNull(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
 
-    //// client and shop
+
+
     List<Order> findByClientCodeOrderByGmtCreateDesc(String clientCode);
     List<Order> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
     List<Order> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
     List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
     Optional<Order> findByIdAndClientCode(Integer id, String clientCode);
-
-    //Optional<Order> findByIdAndClientCodeAndShopCode(Integer id, String clientCode, String shopCode);
 
     List<Order> findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(String clientCode, String shippingName);
     List<Order> findFirst40ByClientCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shippingPhone);
@@ -56,7 +55,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     List<Order> findByIdInAndClientCode(Collection<Integer> ids, @NonNull String clientCode);
 
-
+    List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
 
 
 }
