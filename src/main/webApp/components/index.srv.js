@@ -392,15 +392,24 @@ angular.module('app')
     }
 
 }])
-.factory('commonCacheService',['store', function(store) {
+.factory('commonCacheService',['store','ajaxService', function(store,ajaxService) {
 	var currentCache = {};
 	// var globalCacheName = '';
 	var commonCacheService = {
 		setCurrentCache : setCurrentCache,
 		getCurrentCache : getCurrentCache,
-		clearCache : clearCache
+		clearCache : clearCache,
+		getLastTimeData : getLastTimeData
 		}
 	return commonCacheService;
+
+	// get data from class CommonCache.java in backend
+	function getLastTimeData(){
+        var url = "mgnt/getLastTimeData";
+        return ajaxService.post(url,null,{}).then(function(response){
+            return response.data;
+        });
+    }
 
 	function setCurrentCache(cacheName, cacheData){
         //currentCache = cacheData;

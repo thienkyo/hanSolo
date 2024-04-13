@@ -2,10 +2,10 @@
 angular.module('bizReportModule')
 .controller('bizReportController', ['$scope','$location','bizReportService','NgTableParams','memberService','ModifiedReportDO',
                                     'CommonStatusArray','BizReportDO','Upload','$timeout','uploadService','clientInfoCacheService',
-                                    'clientListCacheService','shopListCacheService',
+                                    'clientListCacheService','shopListCacheService','commonCacheService',
 function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedReportDO,
             CommonStatusArray,BizReportDO,Upload,$timeout,uploadService,clientInfoCacheService,
-            clientListCacheService,shopListCacheService){
+            clientListCacheService,shopListCacheService,commonCacheService){
     var self = this;
     self.statusList = CommonStatusArray;
     self.theOne = new BizReportDO;
@@ -49,6 +49,10 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     if(!memberService.isSuperAdmin()){
         $location.path('#/');
     }
+
+    commonCacheService.getLastTimeData().then(function (data) {
+        self.lastBizReportCalculationTime = data.lastBizReportCalculationTime;
+    });
 
     getDataByCondition();
     self.dynamicPopover = {

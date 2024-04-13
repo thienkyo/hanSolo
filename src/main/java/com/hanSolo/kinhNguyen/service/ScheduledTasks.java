@@ -60,8 +60,8 @@ public class ScheduledTasks {
      * first run at 00:01:25
      * @throws ParseException
      */
-    //@Scheduled(cron = "25 1 0/6 * * *")
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "25 1 0/6 * * *")
+    //@Scheduled(cron = "*/5 * * * * *")
     public void scheduleCalculation() throws ParseException {
 
         //begin - this code block is deprecated

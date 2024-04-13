@@ -1427,10 +1427,6 @@ public class ManagementController {
 
 
 
-
-
-
-
     //////////////////////////// lens product section///////////////////////////////
     @RequestMapping(value = "getlensProductForMgnt/{amount}", method = RequestMethod.GET)
     public List<LensProduct> getlensProductForMgnt(@PathVariable final int amount, final HttpServletRequest request) {
@@ -1490,6 +1486,12 @@ public class ManagementController {
         return new GenericResponse("prepare lensProduct success",Utility.SUCCESS_ERRORCODE, "Success");
     }
 
+    //////////////////////////// commonCache section///////////////////////////////
+
+    @RequestMapping(value = "getLastTimeData", method = RequestMethod.POST)
+    public LastTimeContainer getLastTimeData()  {
+        return CommonCache.getLastTimeData();
+    }
 
     //////////////////////////// upload section///////////////////////////////
     @SuppressWarnings("unchecked")

@@ -1,5 +1,6 @@
 package com.hanSolo.kinhNguyen.service;
 
+import com.hanSolo.kinhNguyen.cacheCenter.CommonCache;
 import com.hanSolo.kinhNguyen.models.BizExpense;
 import com.hanSolo.kinhNguyen.models.BizReport;
 import com.hanSolo.kinhNguyen.models.DatetimeWrapper;
@@ -98,7 +99,7 @@ public class BizReportService {
         return new GeneralResponse(bizReportRepo.save(bizReport),Utility.SUCCESS_ERRORCODE,Utility.SUCCESS_MSG);
     }
 
-    public void calculateReportForScheduleTask(DatetimeWrapper dtWrapper)  {
+    public void calculateReportForScheduleTask(DatetimeWrapper dtWrapper) throws ParseException {
         List<BizReport> reports = bizReportRepo.findByYearAndMonth2(dtWrapper.getYearMonthStrList());
         List<BizExpense> expenses = bizExpenseRepo.findByGmtCreateBetween(dtWrapper.getStartTime(), dtWrapper.getEndTime());
         List<Salary>  salaries = salaryRepo.findByYearAndMonth(dtWrapper.getYearMonthStrList());
@@ -198,5 +199,6 @@ public class BizReportService {
             rp.setDiscountAmount(discountAmount);
         }
         bizReportRepo.saveAll(reports);
+        CommonCache.LAST_BIZ_REPORT_CALCULATION_TIME = Utility.getCurrentDate();
     }
 }

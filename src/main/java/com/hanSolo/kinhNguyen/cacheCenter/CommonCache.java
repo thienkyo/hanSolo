@@ -1,7 +1,7 @@
 package com.hanSolo.kinhNguyen.cacheCenter;
 
-import com.hanSolo.kinhNguyen.facade.ShopInterface;
 import com.hanSolo.kinhNguyen.models.Client;
+import com.hanSolo.kinhNguyen.models.LastTimeContainer;
 import com.hanSolo.kinhNguyen.models.LensProduct;
 import com.hanSolo.kinhNguyen.models.Member;
 import com.hanSolo.kinhNguyen.models.Order;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CommonCache {
+public final class CommonCache {
 
     ///// config /////
     /**
@@ -29,6 +29,16 @@ public class CommonCache {
      * the last time build sms data.
      */
     public static Date LAST_PREPARE_DATA_HEARTBEAT_TIME;
+
+    /**
+     * the last customer source.
+     */
+    public static Date LAST_CUSTOMER_SOURCE_CALCULATION_TIME;
+
+    /**
+     * the last biz report.
+     */
+    public static Date LAST_BIZ_REPORT_CALCULATION_TIME;
 
     /**
      * control api prepareSmsData: to prepare data sms sending true = allow
@@ -86,6 +96,8 @@ public class CommonCache {
         try {
             LAST_SMS_HEARTBEAT_TIME = Utility.getCurrentDate();
             LAST_PREPARE_DATA_HEARTBEAT_TIME = Utility.getCurrentDate();
+            LAST_BIZ_REPORT_CALCULATION_TIME = Utility.getCurrentDate();
+            LAST_CUSTOMER_SOURCE_CALCULATION_TIME = Utility.getCurrentDate();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -104,4 +116,13 @@ public class CommonCache {
         return !filteredList.isEmpty();
     }
 
+    public static LastTimeContainer getLastTimeData(){
+        LastTimeContainer container = new LastTimeContainer();
+        container.setLastBizReportCalculationTime(LAST_BIZ_REPORT_CALCULATION_TIME);
+        container.setLastCustomerSourceCalculationTime(LAST_CUSTOMER_SOURCE_CALCULATION_TIME);
+        container.setLastPrepareDataHeartBeatTime(LAST_PREPARE_DATA_HEARTBEAT_TIME);
+        container.setLastSmsHeartBeatTime(LAST_SMS_HEARTBEAT_TIME);
+
+        return container;
+    }
 }

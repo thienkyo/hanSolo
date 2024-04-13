@@ -10,6 +10,7 @@ import com.hanSolo.kinhNguyen.models.Order;
 import com.hanSolo.kinhNguyen.repository.CustomerSourceReportRepository;
 import com.hanSolo.kinhNguyen.repository.CustomerSourceRepository;
 import com.hanSolo.kinhNguyen.repository.OrderRepository;
+import com.hanSolo.kinhNguyen.utility.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class CustomerSourceReportService {
      * @return
      * @throws ParseException
      */
-    public void calCustomerSourceReportForScheduleTask(DatetimeWrapper dtWrapper)  {
+    public void calCustomerSourceReportForScheduleTask(DatetimeWrapper dtWrapper) throws ParseException {
         List<CustomerSourceReport> csrList = customerSourceReportRepo.findByYearAndMonth(dtWrapper.getYearMonthStrList());
         List<Order> orderList = orderRepo.findByGmtCreateBetweenAndCusSourceNotNull(dtWrapper.getStartTime(), dtWrapper.getEndTime());
         Calendar calendar = Calendar.getInstance();
@@ -52,5 +53,6 @@ public class CustomerSourceReportService {
             csr.setCount(oneCSOrderList.size());
         }
         customerSourceReportRepo.saveAll(csrList);
+        CommonCache.LAST_CUSTOMER_SOURCE_CALCULATION_TIME = Utility.getCurrentDate();
     }
 }
