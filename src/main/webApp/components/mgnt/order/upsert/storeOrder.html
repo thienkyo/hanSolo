@@ -68,10 +68,15 @@
 select, textarea {
   background: #FFFFFF;
 }
+.btn-default {
 
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
 
 </style>
-<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
+<!--<link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">-->
 <!-- Shopping Cart Section Begin -->
 <h2 style="text-align: center;">{{ctrl.theOrder.id == 0 ? 'Create Order' :  'Order ' + ctrl.theOrder.id }}{{ctrl.isLocalWeb ? '[LOCAL]' : ''}}
 
@@ -79,14 +84,52 @@ select, textarea {
 <h4 style="text-align: center;">
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}" target="_blank" ng-show="ctrl.theOrder.id > 0">[print]</a>
 	<a href="/components/mgnt/printable/invoice/invoice.html/#/?orderId={{ctrl.theOrder.id}}&noAddress=true" target="_blank" ng-show="ctrl.theOrder.id > 0">[print2]</a>
-	<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.deposit}}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
-	   target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QRD]</a>
-	<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.remain }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
-	   target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QR]</a>
-	<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ ctrl.theOrder.total }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
-	   target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit == 0" >[QR]</a>
+
+
+	<!--for deposit amount-->
+	<a href="" data-toggle="modal" data-target="#showQRD"
+	   ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QRD]</a>
+	<!--for deposit amount-->
+	<a href="" data-toggle="modal" data-target="#showQR"
+	   ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QR]</a>
+
+	<!--for no deposit amount-->
+	<a href="" data-toggle="modal" data-target="#showQR"
+	   ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit == 0">[QR]</a>
+
 	<a href="" ng-show="ctrl.isGodLike" ng-click="ctrl.dummyData()">[dummyData]</a>
 </h4>
+
+<div class="modal fade" id="showQR" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<!--for remain amount-->
+				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.remain }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0" />
+				<!--for toal amount-->
+				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ ctrl.theOrder.total }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit == 0" />
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="showQRD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+
+			<div class="modal-body">
+				<!--for deposit amount-->
+				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.deposit}}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0" />
+			</div>
+
+		</div>
+	</div>
+</div>
+
 
 <section class="shopping-cart spad" style="padding-top: 50px;">
 	<div class="container">
@@ -365,21 +408,24 @@ select, textarea {
 			<div id="home{{$index}}" class="container tab-pane {{$index == 0 ? 'active' : ''}}" ng-repeat="item in ctrl.theOrder.orderDetails track by $index"><br>
 				<a ng-click="ctrl.deletingOrderId = false"
 				   ng-show="ctrl.deletingOrderId == item.id"
-				   href="" class="btn btn-default check_out"
+				   href="" class="btn btn-default "
 				   style="margin: 4px 4px 4px 4px;float: right;color: mediumblue;background-color: bisque;">no</a>
 				<a ng-click="ctrl.remove1Tab($index,item)"
 				   ng-show="ctrl.deletingOrderId == item.id"
-				   href="" class="btn btn-default check_out"
+				   href="" class="btn btn-default"
 				   style="margin: 4px 4px 4px 4px;float: right;color: crimson;background-color: bisque;">yes</a>
 				<a ng-click="ctrl.deletingOrderId = ctrl.deletingOrderId ? false : item.id;"
 				   ng-show="ctrl.deletingOrderId != item.id"
-				   href="" class="btn btn-default check_out"
+				   href="" class="btn btn-default"
 				   style="margin: 4px 4px 4px 4px;float: right;">remove</a>
 
-				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default check_out"
+				<a ng-click="ctrl.copy1Tab(item)" href="" class="btn btn-default"
 				   style="margin: 4px 4px 4px 4px;float: right;">copy</a>
 				<a href="/components/mgnt/printable/prescription/prescription.html/#/?orderDetailId={{item.id}}"
-				   target="_blank" ng-show="item.id"class="btn btn-default check_out" style="margin: 4px 4px 4px 4px;float: right;">print</a>
+				   target="_blank" ng-show="item.id"
+				   class="btn btn-default"
+				   style="margin: 4px 4px 4px 4px;float: right;">print</a>
+
 				<a ng-click="item.isSplit = item.isSplit ? false : true ;ctrl.controlSplitButton(item)" href=""
 				   ng-class="item.isSplit ? 'btn btn-success' : 'btn btn-default'"
 				   ng-show="ctrl.theOrder.orderDetails.length > 1"
@@ -933,19 +979,12 @@ select, textarea {
 					add detail to bill {{ctrl.tempCacheOrder.addDetailToBill ? '[Y]' : '[N]'}}
 				</a>
 
-				<!--<button type="button" class="btn btn-primary" ng-click="ctrl.doRecovery();"
-						style="margin-top: 0px;height: 32px;margin-bottom: 20px;"
-						ng-disabled="ctrl.isRecoveringOrder">
-					recover
-				</button>-->
-
-				<!--<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.isRecoveringOrder"
-					   dismiss-on-timeout="2000" style="margin-top: 30px;margin-bottom: 0px;" >
-					thành công
-				</alert>-->
-
-				<!--<textarea rows="30"  placeholder="for recovery" class="checkout__input__add"
-						  ng-model="ctrl.orderListText" style="width: 100%;padding-left: 6px;border: 1px solid #e1e1e1;" ></textarea>-->
+				<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.deposit}}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+				target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QRD]</a>
+				<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.remain }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+				   target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0">[QR]</a>
+				<a href="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ ctrl.theOrder.total }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
+				   target="_blank" ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit == 0" >[QR]</a>
 
 			</div>
 		</div>

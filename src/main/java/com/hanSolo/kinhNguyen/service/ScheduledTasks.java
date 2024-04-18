@@ -63,43 +63,12 @@ public class ScheduledTasks {
     @Scheduled(cron = "25 1 0/6 * * *")
     //@Scheduled(cron = "*/5 * * * * *")
     public void scheduleCalculation() throws ParseException {
-
-        //begin - this code block is deprecated
-       /* Calendar calendar = Calendar.getInstance();
-        // container only used as a place to hold year, month
-        List<BizReport> container = new ArrayList<>();
-        BizReport tempHolder;
-        for(int i = 0; i<3 ;i++){
-            tempHolder = new BizReport();
-            calendar.setTime(Utility.getCurrentDate());
-            calendar.add(Calendar.MONTH, -i);
-            String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-            month = month.length() > 1 ? month : "0" + month;
-            int year = calendar.get(Calendar.YEAR);
-            tempHolder.setYear(String.valueOf(year));
-            tempHolder.setMonth(month);
-            container.add(tempHolder);
-        }
-
-        List<BizReport> bizReportList = new ArrayList<>();
-        for(BizReport br : container){
-            List<BizReport> tempList = bizReportRepo.findByYearAndMonth(br.getYear(), br.getMonth());
-            bizReportList.addAll(tempList);
-        }
-
-        //LOGGER.info("expense calculation every 6hrs: year/month bizReportList size :" + bizReportList.size());
-
-        for(BizReport br : bizReportList){
-            bizReportService.calculateReport(br);
-        }*/
-        // end - this code block is deprecated
-
         // new logic here
         Calendar calendar = Calendar.getInstance();
         List<DateTimeContainer> dtContainer = new ArrayList<>();
         List<String> yearMonthList = new ArrayList<>();
         DateTimeContainer tempContainer;
-        for(int i = 0; i<3 ;i++){
+        for(int i = 0; i < 3 ;i++){
             calendar.setTime(Utility.getCurrentDate());
             calendar.add(Calendar.MONTH, -i);
             String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);

@@ -397,12 +397,12 @@
 						<a ng-if="order.shippingPhone.length < 9">{{order.shippingPhone | tel}}</a>
 					</td>
 					<td title="'name'" filter="{ 'shippingName' : 'text'}"  sortable="'shippingName'">
-						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
+						<a href="" ng-click="ctrl.setSummaryModal(order); ctrl.queryRequest.generalPurpose=order.shippingName" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
 					<td title="'source'" style="width:100px;">
 						<select  ng-model="order.cusSource"  ng-change="ctrl.updateCusSource(order)"
-								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList"
+								 ng-options="opt.id as opt.name for opt in ctrl.cusSourceList | filter:{ shopCode: order.shopCode}"
 								 ng-disabled="ctrl.isUpdatingOrder" ng-show="order.location == 'STORE'"
 								 style="background: #F0F0E9;">
 						</select>

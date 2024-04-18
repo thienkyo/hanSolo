@@ -4,12 +4,12 @@ angular.module('orderListModule')
 										 'memberService','orderListService','customerSourceService','shopListCacheService',
 										 'NgTableParams','OrderStatusArray','cartService','AmountList','$modal','$log',
 										 'searchService','commonService','clientService','clientInfoCacheService',
-										 'oneClientShopListCacheService','OrderStatusAmount',
+										 'oneClientShopListCacheService','OrderStatusAmount','currentShopCacheService',
 	function($rootScope, $routeParams,$location,FirstTimeLoadSize,clientListCacheService,
 	        memberService,orderListService,customerSourceService,shopListCacheService,
 	        NgTableParams,OrderStatusArray,cartService,AmountList, $modal, $log,
 	        searchService,commonService,clientService,clientInfoCacheService,
-	        oneClientShopListCacheService,OrderStatusAmount,
+	        oneClientShopListCacheService,OrderStatusAmount,currentShopCacheService,
 	        ) {
 	var self = this;
 	self.orderList = [];
@@ -417,17 +417,21 @@ angular.module('orderListModule')
         self.shopList = shopListCacheService.get();
 
         self.shadowShopList = shopListCacheService.get();
-        if(self.isGodLike){
+       /* if(self.isGodLike){
             self.queryRequest.clientCode = 'ALL';
             self.queryRequest.shopCode = 'ALL';
-        }else{
+        }else{*/
             self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
+            self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
+            self.shopList = shopListCacheService.get().filter(i => i.clientCode == self.queryRequest.clientCode || i.shopCode == 'ALL' );
+
+
             if(self.shopList.length == 1){
                 self.queryRequest.shopCode = self.shopList[0].shopCode;
             }else{
                 self.queryRequest.shopCode = 'ALL';
             }
-        }
+        //}
 
         getOrdersByTerms();
     }
@@ -436,6 +440,7 @@ angular.module('orderListModule')
     function getOrdersByTerms(){
         self.showLoadingText = true;
         self.tableParams = new NgTableParams({}, { dataset: []});
+        console.log(self.queryRequest);
         orderListService.getOrdersByTerms(self.queryRequest).then(function (data) {
             self.orderList = data;
             self.statusNumber = new OrderStatusAmount();
@@ -445,6 +450,7 @@ angular.module('orderListModule')
         });
         customerSourceService.getCustomerSourceByTerms(self.queryRequest).then(function (data) {
             self.cusSourceList = data;
+            console.log(data);
         });
     }
     self.getOrdersByTerms = getOrdersByTerms;

@@ -515,7 +515,7 @@ public class ManagementController {
     @RequestMapping(value = "getCustomerSourceByTerms", method = RequestMethod.POST)
     public List<CustomerSource> getCustomerSourceByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) throws ParseException {
         List<CustomerSource> rs = new ArrayList<>();
-        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)){
+        if(onlyAllowThisRole(request,Utility.ADMIN_ROLE)){
             if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
                 rs =  customerSourceRepo.findByClientCodeOrderByClientCodeDesc(req.getClientCode());
             }else{
@@ -586,7 +586,7 @@ public class ManagementController {
     @RequestMapping(value = "getCusReportByTerms", method = RequestMethod.POST)
     public List<CustomerSourceReport> getCusReportByTerms(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) throws ParseException {
         List<CustomerSourceReport> reportList = new ArrayList<>();
-        if(onlyAllowThisRole(request,Utility.SUPERADMIN_ROLE)){
+        if(onlyAllowThisRole(request,Utility.ADMIN_ROLE)){
             if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
                 reportList =  customerSourceReportRepo.findByClientCodeAndYearOrderByYearDescMonthDescCustomerSourceIdAsc(
                         req.getClientCode(),req.getGeneralPurpose());

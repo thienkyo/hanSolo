@@ -23,6 +23,7 @@ angular.module('customerSourceModule')
         self.queryRequest.generalPurpose = self.currentYear;
         self.isGodLike = memberService.isGodLike();
         self.isSuperAdmin = memberService.isSuperAdmin();
+        self.isAdmin = memberService.isAdmin();
         self.yearList = buildYearList();
 
 		if(!memberService.isAdmin()){
@@ -34,24 +35,14 @@ angular.module('customerSourceModule')
         });
 
 
-        function buildYearList(){
-            var yearList = [];
-            for(var i = 0; i < 10; i++){
-                yearList.push(self.currentYear - i);
-            }
-            return yearList;
-        }
-        console.log(self.yearList);
-        console.log(self.queryRequest);
-
-
         if(self.isSuperAdmin){
             self.shopList = oneClientShopListCacheService.get();
             console.log(self.shopList);
+        }else if(self.isAdmin){
+            self.shopList = [];
+            self.shopList.push(currentShopCacheService.get());
+            console.log(self.shopList);
         }
-
-
-
 
 
         self.loadCusSourceData = function(str){
@@ -85,10 +76,15 @@ angular.module('customerSourceModule')
 
 
 		
+        function buildYearList(){
+            var yearList = [];
+            for(var i = 0; i < 10; i++){
+                yearList.push(self.currentYear - i);
+            }
+            return yearList;
+        }
 
 
-
-		
 		self.setTheOne = function(one){
 			self.theOne = one;
 			self.responseStr = false;
