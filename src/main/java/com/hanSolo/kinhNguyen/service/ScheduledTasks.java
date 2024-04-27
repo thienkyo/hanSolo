@@ -56,11 +56,13 @@ public class ScheduledTasks {
 
     /**
      * calculate for the last 3 months
-     * run every 6h every day
-     * first run at 00:01:25
+     * At 25 seconds past the minute,
+     * at 1 minutes past the hour, every 3 hours,
+     * between 07:00 AM and 07:59 PM
      * @throws ParseException
      */
-    @Scheduled(cron = "25 1 0/6 * * *")
+    @Scheduled(cron = "25 1 7-19/3 * * *")
+    //@Scheduled(cron = "25 1 0/6 * * *")
     //@Scheduled(cron = "*/5 * * * * *")
     public void scheduleCalculation() throws ParseException {
         // new logic here
@@ -96,9 +98,9 @@ public class ScheduledTasks {
 
     /**
      * once a month
-     * At 04:05 AM, on day 28 of the month
+     * At 03:05 AM, on day 1 of the month
      */
-    //@Scheduled(cron = "0 5 5 28 * *")
+    //@Scheduled(cron = "0 5 3 1 * *")
     //@Scheduled(cron = "*/5 * * * * *")
     public void monthlyTask() {
 

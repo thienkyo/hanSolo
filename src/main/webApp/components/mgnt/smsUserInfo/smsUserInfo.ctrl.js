@@ -410,11 +410,18 @@ angular.module('smsUserInfoModule')
     }
 
 //////////////  lucky draw section //////
-    console.log(self.queryRequest);
+
     programService.getDataForMgnt(self.queryRequest).then(function (data) {
-        self.programResultList = data;
+        self.programResultList = data.map(combineNamePhone);
+        console.log(self.programResultList);
+
         self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
     });
+
+    function combineNamePhone(item) {
+        item.winnerNamePhone = item.winnerName +' '+ item.winnerPhone
+        return item;
+    }
 
     self.getProgramResultForMgnt = function(req){
         self.programResultList = [];
