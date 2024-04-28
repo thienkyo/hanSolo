@@ -2,6 +2,8 @@ package com.hanSolo.kinhNguyen.utility;
 
 import com.hanSolo.kinhNguyen.DTO.SmsStringResult;
 import com.hanSolo.kinhNguyen.models.Coupon;
+import com.hanSolo.kinhNguyen.models.DateTimeContainer;
+import com.hanSolo.kinhNguyen.models.DatetimeWrapper;
 import com.hanSolo.kinhNguyen.models.SmsJob;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -144,6 +146,27 @@ public class Utility {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
         month = month.length() > 1 ? month : "0" + month;
         return df.parse(year + month + res + "_235959");
+    }
+
+    final public static DatetimeWrapper prepareMonthForScheduleTask() throws ParseException {
+        Calendar calendar = Calendar.getInstance();
+        List<DateTimeContainer> dtContainer = new ArrayList<>();
+        List<String> yearMonthList = new ArrayList<>();
+        DateTimeContainer tempContainer;
+        for(int i = 0; i < 3 ;i++){
+            calendar.setTime(getCurrentDate());
+            calendar.add(Calendar.MONTH, -i);
+            String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+            month = month.length() > 1 ? month : "0" + month;
+            int year = calendar.get(Calendar.YEAR);
+            tempContainer = new DateTimeContainer(String.valueOf(year), month,"00");
+            dtContainer.add(tempContainer);
+            yearMonthList.add(year + month);
+        }
+
+        Date startDate = Utility.getFirstDateOfMonth(dtContainer.get(dtContainer.size()-1).getYear(),
+                dtContainer.get(dtContainer.size()-1).getMonth());
+        return new DatetimeWrapper(dtContainer, startDate, Utility.getCurrentDate(), yearMonthList);
     }
 
     final public static ResponseEntity<String> savefile(String dir, MultipartFile uploadfile, String oldName) {

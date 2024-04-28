@@ -66,7 +66,7 @@ public class ScheduledTasks {
     //@Scheduled(cron = "*/5 * * * * *")
     public void scheduleCalculation() throws ParseException {
         // new logic here
-        Calendar calendar = Calendar.getInstance();
+        /*Calendar calendar = Calendar.getInstance();
         List<DateTimeContainer> dtContainer = new ArrayList<>();
         List<String> yearMonthList = new ArrayList<>();
         DateTimeContainer tempContainer;
@@ -83,15 +83,15 @@ public class ScheduledTasks {
 
         Date startDate = Utility.getFirstDateOfMonth(dtContainer.get(dtContainer.size()-1).getYear(),
                 dtContainer.get(dtContainer.size()-1).getMonth());
-        DatetimeWrapper dtWrapper = new DatetimeWrapper(dtContainer, startDate, Utility.getCurrentDate(), yearMonthList);
+        DatetimeWrapper dtWrapper = new DatetimeWrapper(dtContainer, startDate, Utility.getCurrentDate(), yearMonthList);*/
 
-        LOGGER.info("scheduleCalculation, DatetimeWrapper:" + dtWrapper);
+        LOGGER.info("scheduleCalculation, DatetimeWrapper:" + Utility.prepareMonthForScheduleTask());
 
         // calculate customer source report.
-        customerSourceReportService.calCustomerSourceReportForScheduleTask(dtWrapper);
+        customerSourceReportService.calCustomerSourceReportForScheduleTask(Utility.prepareMonthForScheduleTask());
 
         // calculate biz report
-        bizReportService.calculateReportForScheduleTask(dtWrapper);
+        bizReportService.calculateReportForScheduleTask(Utility.prepareMonthForScheduleTask());
 
     }
 

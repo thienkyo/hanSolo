@@ -183,6 +183,8 @@ public class AuthenticationController {
             specSms.setJobIdToRun(order.getSpecificJobId().toString());
             specSms.setGmtModify(Utility.getCurrentDate());
             specSms.setOrderId(or.getId());
+            specSms.setClientCode(order.getClientCode());
+            specSms.setShopCode(or.getShopCode());
             specificSmsUserInfoRepo.save(specSms);
         }else{
             specSmsDBOtp.ifPresent(x -> specificSmsUserInfoRepo.delete(x));
@@ -224,6 +226,8 @@ public class AuthenticationController {
             smsUserInfo.setAreaCode(order.getAreaCode());
             smsUserInfo.setAddress(order.getShippingAddress());
             smsUserInfo.setGmtModify(Utility.getCurrentDate());
+            smsUserInfo.setClientCode(order.getClientCode());
+            smsUserInfo.setShopCode(order.getShopCode());
             smsUserResult.add(smsUserInfo);
         }
         smsUserInfoRepo.saveAll(smsUserResult);
