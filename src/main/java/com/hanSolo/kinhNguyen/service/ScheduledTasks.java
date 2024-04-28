@@ -57,11 +57,11 @@ public class ScheduledTasks {
     /**
      * calculate for the last 3 months
      * At 25 seconds past the minute,
-     * at 1 minutes past the hour, every 3 hours,
+     * at 1 minutes past the hour, every 2 hours,
      * between 07:00 AM and 07:59 PM
      * @throws ParseException
      */
-    @Scheduled(cron = "25 1 7-19/3 * * *")
+    @Scheduled(cron = "25 1 7-19/2 * * *")
     //@Scheduled(cron = "25 1 0/6 * * *")
     //@Scheduled(cron = "*/5 * * * * *")
     public void scheduleCalculation() throws ParseException {

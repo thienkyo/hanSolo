@@ -65,7 +65,6 @@ form .progress {
 					</select>
 				</div>
 
-
 			</div>
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">All Income : {{ctrl.allIncome | number:0}}đ</div>
@@ -78,7 +77,7 @@ form .progress {
 					<!--({{(ctrl.allProfit)/ctrl.allIncome*100 | number:0}}%)-->
 					({{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:2}}%)
 				</div>
-				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">In/Out: {{(ctrl.allIncome)/ctrl.allOutcome*100 | number:2}}%</div>
+				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Profit/Income: {{ctrl.allProfit <= 0  ? 0 :(ctrl.allProfit)/ctrl.allIncome*100 | number:2}}%</div>
 				<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px;">Quantity: {{ctrl.allOrders}} | {{ctrl.allFrames}} | {{ctrl.allLenses}}</div>
 			</div>
 			<div class="row" style="margin-right: 0px;margin-left: 0px;font-size: 20px;font-weight: bolder;background: #f3f2ee">
@@ -131,12 +130,11 @@ form .progress {
 					</div>
 					<div class="row" style="margin-right: 0px;margin-left: 0px;">
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
-							Profit: {{item.income-item.outcome | number:0}}đ
-							({{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:2}}%)
-							| {{item.year !=  ctrl.currentYear ? (item.income-item.outcome)/item.details.length : (item.income2-item.outcome2)/(item.details.length -1) | number:0}}đ
+							Profit: {{item.income-item.outcome | number:0}}đ &nbsp&nbsp&nbsp
+							Avg: {{item.year !=  ctrl.currentYear ? (item.income-item.outcome)/item.details.length : (item.income2-item.outcome2)/(item.details.length -1) | number:0}}đ
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
-							In/Out: {{ item.income <= item.outcome ? 0 : (item.income)/item.outcome*100 | number:2}}%
+							Profit/Income: {{(item.income - item.outcome) <= 0  ? 0 :(item.income - item.outcome)/item.income*100 | number:2}}%
 						</div>
 						<div class="col-sm-4 border" style="padding: 10px 10px 10px 10px">
 							Quantity: {{item.orders}} | {{item.frames}} | {{item.lenses}} &nbsp&nbsp&nbsp
@@ -179,13 +177,14 @@ form .progress {
 							<td data-title="'lens qty'" style="text-align: center;">
 								{{one.lensQuantity}}
 							</td>
-							<td data-title="'note'" style="text-align: center;">
-								{{one.note}}
+							<td data-title="'note'" style="text-align: left;">
+
 								<span uib-popover-template="ctrl.dynamicPopover.templateUrl"
 									  popover-placement="bottom" popover-title="add note:"
 									  >
 									<a href="" >[+]</a>
 								</span>
+								{{one.note}}
 								<script type="text/ng-template" id="myPopoverTemplate.html">
 									<div class="form-group">
 										<textarea name="content" placeholder="ghi chú" rows="5"  class="form-control"

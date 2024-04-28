@@ -1,4 +1,4 @@
-package com.hanSolo.kinhNguyen.controller;
+package com.hanSolo.kinhNguyen.controller.mgnt;
 
 import com.hanSolo.kinhNguyen.DTO.SmsStringResult;
 import com.hanSolo.kinhNguyen.models.Coupon;
@@ -44,7 +44,7 @@ public class ProgramController {
     public GeneralResponse<List<ProgramResult>> saveResult(@RequestBody final LuckyDrawRequest req, final HttpServletRequest request) throws ParseException {
 
         //List<String> orderIdList = Arrays.asList(req.getOrderIdList().split(","));
-        String[] orderIdList = req.getOrderIdList().split(",");
+        String[] orderIdList = req.getOrderIdList().replace(" ","").split(",");
         List<Integer> orderIdList2 = Arrays.stream(orderIdList)    // stream of String
                 .map(Integer::valueOf) // stream of Integer
                 .collect(Collectors.toList());
