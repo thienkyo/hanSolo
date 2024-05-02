@@ -335,6 +335,8 @@ function BizReportDO(){
 	this.lensQuantity = 0;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
+    this.clientCode = '';
+    this.shopCode = '';
 }
 
 function SmsUserInfoDO(){
@@ -350,6 +352,8 @@ function SmsUserInfoDO(){
     this.isTestUser = false;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
+    this.clientCode = '';
+    this.shopCode = '';
 }
 
 function SmsQueueDO(){
@@ -360,6 +364,8 @@ function SmsQueueDO(){
     this.content = '';
     this.status = 'INIT';
     this.weight = '1';
+    this.clientCode = '';
+    this.shopCode = '';
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();
 }
@@ -373,6 +379,8 @@ function SmsJobDO(){
     this.specificPhones = '';
     this.noSmsDays = 1;
     this.weight = '1';
+    this.clientCode = '';
+    this.shopCode = '';
     this.isTest = true;
 	this.gmtCreate = (new Date()).getTime();
     this.gmtModify = (new Date()).getTime();

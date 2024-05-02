@@ -2,15 +2,16 @@
 angular.module('homeModule')
 .controller('homeController', ['$scope','homeService','cartService','clientListCacheService','memberService',
                                'shopListCacheService','clientInfoCacheService','clientService','currentShopCacheService',
-                               'oneClientShopListCacheService',
+                               'oneClientShopListCacheService','queryRequestDO',
 	function($scope,homeService,cartService,clientListCacheService,memberService,
 	         shopListCacheService,clientInfoCacheService,clientService,currentShopCacheService,
-	         oneClientShopListCacheService
+	         oneClientShopListCacheService,queryRequestDO
 	){
 		var self = this;
 		self.isGodLike = memberService.isGodLike();
 		self.isLogin = memberService.isLogin();
-
+		self.queryRequest = queryRequestDO;
+		console.log(self.queryRequest);
 
 		homeService.getBanner()
         		.then(function (response) {

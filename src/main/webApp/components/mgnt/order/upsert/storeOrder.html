@@ -103,13 +103,17 @@ select, textarea {
 <div class="modal fade" id="showQR" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="modal-body">
+			<div class="modal-body" style="text-align: center;">
 				<!--for remain amount-->
 				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.remain }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
 					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0" />
-				<!--for toal amount-->
+				<!--for total amount-->
 				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ ctrl.theOrder.total }}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
 					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit == 0" />
+
+				<img src="/static/FB_like.png" style="max-width: 30%;"/>
+
+				<img src="/static/matKinhNguyen_FB.jpeg" style="max-width: 45%;" />
 			</div>
 
 		</div>
@@ -120,10 +124,14 @@ select, textarea {
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 
-			<div class="modal-body">
+			<div class="modal-body" style="text-align: center;">
 				<!--for deposit amount-->
 				<img src="https://img.vietqr.io/image/VCB-0371000405338-compact2.png?amount={{ctrl.theOrder.deposit}}&addInfo=mat%20kinh%20nguyen%20id%20{{ctrl.theOrder.id}}&accountName=nguyen%20thi%20ngoc%20thao"
 					 ng-show="ctrl.theOrder.id > 0 && ctrl.theOrder.deposit > 0" />
+
+				<img src="/static/FB_like.png" style="max-width: 30%;" />
+
+				<img src="/static/matKinhNguyen_FB.jpeg" style="max-width: 45%;" />
 			</div>
 
 		</div>
@@ -545,7 +553,7 @@ select, textarea {
 					</div>
 					<!-- chi tiet -->
 					<div class="col-lg-7">
-						<div style="margin-bottom: 12px;">Chi tiết </div>
+						<div style="margin-bottom: 2px;">Chi tiết </div>
 						<div class="container" style="width:100%;font-size: 18px;"> <!--begin of don kinh-->
 							<div class="row">
 								<div class="col-md-2 border bg-light">

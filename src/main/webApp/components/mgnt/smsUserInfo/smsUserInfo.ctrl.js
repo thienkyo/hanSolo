@@ -5,13 +5,13 @@ angular.module('smsUserInfoModule')
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
 									'strategyService','StrategyDO','clientInfoCacheService','LuckyDrawRequest','programService',
-									'queryRequestDO','oneClientShopListCacheService',
+									'queryRequestDO','oneClientShopListCacheService','currentShopCacheService',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
 	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
 	        strategyService,StrategyDO,clientInfoCacheService,LuckyDrawRequest,programService,
-	        queryRequestDO,oneClientShopListCacheService) {
+	        queryRequestDO,oneClientShopListCacheService,currentShopCacheService) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
@@ -38,8 +38,11 @@ angular.module('smsUserInfoModule')
         self.luckyDrawReq.shopCode = 'S7LJ6W';
     }
 
-	self.queryRequest.clientCode = self.luckyDrawReq.clientCode;
-	self.queryRequest.shopCode = self.luckyDrawReq.shopCode;
+    console.log(self.queryRequest);
+    console.log(self.luckyDrawReq);
+
+	self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+    self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
 
 	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
@@ -128,6 +131,8 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms job //////
+    self.theSmsJob.clientCode  = clientInfoCacheService.get().clientCode;
+    self.theSmsJob.shopCode = currentShopCacheService.get().shopCode;
     if(self.isSuperAdmin){
         self.shopList = oneClientShopListCacheService.get();
         console.log(self.shopList);
@@ -182,6 +187,7 @@ angular.module('smsUserInfoModule')
     self.upsertSmsJob = function(one){
         self.isSaveButtonPressed=true;
         self.responseStr = false;
+        console.log(one);
         smsJobService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
