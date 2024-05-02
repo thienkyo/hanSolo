@@ -608,7 +608,7 @@ function(opticShopOnlineService,cacheName,commonCacheService,memberService) {
     }
 }])
 
-
+// for user.
 .factory('oneClientShopListCacheService',['commonCacheService','ShopDO',
     function(commonCacheService,ShopDO) {
     var cacheNameStr = 'oneClientShopListCache';
