@@ -14,5 +14,9 @@ public interface SmsJobRepository extends PagingAndSortingRepository<SmsJob, Int
 
     Optional<SmsJob> findFirstByJobTypeAndStatus(String jobType, Boolean status);
 
+    List<SmsJob> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+
+    List<SmsJob> findByClientCodeAndShopCodeOrderByGmtCreateDesc(@NonNull String clientCode, @NonNull String shopCode);
+
 
 }

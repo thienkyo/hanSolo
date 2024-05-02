@@ -40,9 +40,9 @@ angular.module('smsUserInfoModule')
 			};
 	return smsQueueService;
 
-	function getDataForMgnt(amount){
-		var url = "mgnt/getSmsQueueForMgnt/"+amount;
-		return ajaxService.get(url,null,{}).then(function(response){
+	function getDataForMgnt(req){
+		var url = "mgnt/getSmsQueueForMgnt";
+		return ajaxService.post(url,req,{}).then(function(response){
 			return response.data;
 		});
 	}
@@ -90,9 +90,9 @@ angular.module('smsUserInfoModule')
 			};
 	return smsJobService;
 
-	function getDataForMgnt(amount){
-		var url = "mgnt/getSmsJobForMgnt/"+amount;
-		return ajaxService.get(url,null,{}).then(function(response){
+	function getDataForMgnt(req){
+		var url = "mgnt/getSmsJobForMgnt";
+		return ajaxService.post(url,req,{}).then(function(response){
 			return response.data;
 		});
 	}

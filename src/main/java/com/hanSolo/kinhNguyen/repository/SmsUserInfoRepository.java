@@ -4,6 +4,7 @@ import com.hanSolo.kinhNguyen.models.SmsUserInfo;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -29,4 +30,12 @@ public interface SmsUserInfoRepository extends PagingAndSortingRepository<SmsUse
     @Modifying
     @Query("update SmsUserInfo s set s.lastSendSmsDate = ?1 where s.phone = ?2")
     int updateLastSendSmsDateByPhone(Date lastSendSmsDate, String phone);
+
+    List<SmsUserInfo> findFirst100ByClientCodeOrderByGmtCreateDesc(@NonNull String clientCode);
+    List<SmsUserInfo> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(@NonNull String clientCode, @NonNull String shopCode);
+
+    List<SmsUserInfo> findByClientCodeOrderByGmtCreateDesc(@NonNull String clientCode);
+    List<SmsUserInfo> findByClientCodeAndShopCodeOrderByGmtCreateDesc(@NonNull String clientCode, @NonNull String shopCode);
+
+
 }

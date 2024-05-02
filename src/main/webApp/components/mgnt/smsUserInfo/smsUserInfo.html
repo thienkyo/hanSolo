@@ -185,11 +185,25 @@ form .progress {
 				<a ng-click="ctrl.toggleSmsSend()" href=""
 				   ng-class="ctrl.isRunSmsSend ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
-				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsSend ? '[ON]' : '[OFF]'}} send sms api</a>
+				   style="margin: 4px 0px 4px 0px;float: left;">{{ctrl.isRunSmsSend ? '[ON]' : '[OFF]'}} send sms api</a>
 				<a ng-click="ctrl.toggleSmsDataPrepare()" href=""
 				   ng-class="ctrl.isRunSmsDataPrepare ? 'btn btn-success' : 'btn btn-danger'"
 				   ng-disabled="ctrl.isSaveButtonPressed"
 				   style="margin: 4px 4px 4px 4px;float: left;">{{ctrl.isRunSmsDataPrepare ? '[ON]' : '[OFF]'}} sms data api/task</a>
+
+
+
+
+
+				<select  ng-model="ctrl.queryRequest.shopCode"
+						 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+						 ng-change="ctrl.loadSmsJobData()"
+						 style="width: 15%;height: 38px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;float: right;">
+				</select>
+
+
+
+
 				<!-- sms job table-->
 				<div class="table-responsive">
 					<table ng-table="ctrl.smsJobTableParams" class="table table-bordered table-hover table-striped" show-filter="true">
@@ -307,9 +321,9 @@ form .progress {
 				<h3 style="margin-top: 20px;">Sms queue </h3>
 				<div class="row" style="margin-top: 20px;margin-bottom: 20px;">
 					<div class="col-sm-1">
-						<select  ng-model="ctrl.smsQueueAmount"
+						<select  ng-model="ctrl.queryRequest.amount"
 								 ng-options="opt.value as opt.name for opt in ctrl.smsQueueAmountList"
-								 ng-change="ctrl.getSmsQueueByTerm(ctrl.smsQueueAmount)"
+								 ng-change="ctrl.loadSmsQueueData()"
 								 style="width: 90px;height: 30px;">
 						</select>
 					</div>
@@ -323,6 +337,17 @@ form .progress {
 						</span>
 
 					</div>
+					<div class="col-sm-4">
+						<select  ng-model="ctrl.queryRequest.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+								 ng-change="ctrl.loadSmsQueueData()"
+								 style="width: 45%;height: 38px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;float: right;">
+						</select>
+					</div>
+
+
+
+
 				</div>
 				<!-- sms queue table-->
 				<div class="table-responsive">

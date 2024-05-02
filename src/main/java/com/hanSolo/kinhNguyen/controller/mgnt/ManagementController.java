@@ -985,6 +985,25 @@ public class ManagementController {
         return SmsUserInfoList;
     }
 
+    @RequestMapping(value = "getSmsUserInfoForMgnt", method = RequestMethod.GET)
+    public List<SmsUserInfo> getSmsUserInfoForMgnt(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        List<SmsUserInfo> SmsUserInfoList ;
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                SmsUserInfoList =  smsUserInfoRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                SmsUserInfoList =  smsUserInfoRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }else{
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                SmsUserInfoList =  smsUserInfoRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                SmsUserInfoList =  smsUserInfoRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }
+        return SmsUserInfoList;
+    }
+
     @RequestMapping(value = "upsertSmsUserInfo", method = RequestMethod.POST)
     public SmsUserInfoResponse upsertSmsUserInfo(@RequestBody final SmsUserInfo one, final HttpServletRequest request) throws ParseException {
         if(one.getId() == 0){
@@ -1016,6 +1035,29 @@ public class ManagementController {
         }
         return SmsQueueList;
     }
+
+
+    @RequestMapping(value = "getSmsQueueForMgnt", method = RequestMethod.POST)
+    public List<SmsQueue> getSmsQueueForMgnt(@RequestBody final QueryByClientShopAmountRequest req) {
+        List<SmsQueue> SmsQueueList ;
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                SmsQueueList =  smsQueueRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                SmsQueueList =  smsQueueRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }else{
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                SmsQueueList =  smsQueueRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                SmsQueueList =  smsQueueRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }
+        return SmsQueueList;
+    }
+
+
+
 
     @RequestMapping(value = "upsertSmsQueue", method = RequestMethod.POST)
     public SmsQueueResponse upsertSmsQueue(@RequestBody final SmsQueue one) throws ParseException {
@@ -1080,6 +1122,20 @@ public class ManagementController {
     public List<SmsJob> getSmsJobForMgnt(@PathVariable final int amount) {
         return smsJobRepo.findAllByOrderByGmtCreateDesc();
     }
+
+
+    @RequestMapping(value = "getSmsJobForMgnt", method = RequestMethod.POST)
+    public List<SmsJob> getSmsJobForMgnt(@RequestBody final QueryByClientShopAmountRequest req) {
+        List<SmsJob> smsJobList;
+        if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+            smsJobList =  smsJobRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+        }else{
+            smsJobList =  smsJobRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+        }
+        return smsJobList;
+    }
+
+
 
     @RequestMapping(value = "upsertSmsJob", method = RequestMethod.POST)
     public SmsJobResponse upsertSmsJob(@RequestBody final SmsJob one) throws ParseException {

@@ -5,13 +5,13 @@ angular.module('smsUserInfoModule')
 									'FirstTimeLoadSize','SmsQueueDO','smsQueueService','SmsJobDO','smsJobService',
 									'CommonStatusArray','specificSmsUserInfoService','AreaCodeList','genderArray',
 									'strategyService','StrategyDO','clientInfoCacheService','LuckyDrawRequest','programService',
-									'queryRequestDO',
+									'queryRequestDO','oneClientShopListCacheService',
 	function($rootScope,$location,memberService,smsUserInfoService,AmountList,
 	        NgTableParams,SmsUserInfoDO,uploadService,$timeout,JobTypeList,
 	        FirstTimeLoadSize,SmsQueueDO,smsQueueService,SmsJobDO,smsJobService,
 	        CommonStatusArray,specificSmsUserInfoService,AreaCodeList,genderArray,
 	        strategyService,StrategyDO,clientInfoCacheService,LuckyDrawRequest,programService,
-	        queryRequestDO) {
+	        queryRequestDO,oneClientShopListCacheService) {
 	var self = this;
 	self.theSmsUserInfo = new SmsUserInfoDO();
 	self.theSmsQueue = new SmsQueueDO();
@@ -47,7 +47,7 @@ angular.module('smsUserInfoModule')
 	self.amountList=AmountList;
 	self.smsQueueAmountList = AmountList.map(a => ({...a}));// clone array
     self.amount = FirstTimeLoadSize;
-    self.smsQueueAmount = FirstTimeLoadSize;
+    //self.smsQueueAmount = FirstTimeLoadSize;
 
 	smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
 		self.smsUserInfoList = data;
@@ -128,6 +128,10 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms job //////
+    if(self.isSuperAdmin){
+        self.shopList = oneClientShopListCacheService.get();
+        console.log(self.shopList);
+    }
 
     smsJobService.getLastHeartBeatTime().then(function (data) {
         self.lastHeartBeatTime = data;
@@ -162,13 +166,18 @@ angular.module('smsUserInfoModule')
         });
     }
 
+    self.loadSmsJobData = function(){
+        smsJobService.getDataForMgnt(self.queryRequest).then(function (data) {
+            self.smsJobList = data;
+            console.log(data);
+            self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
+            if(self.smsJobList.find(i => i.jobType == 'LUCKYDRAW' && i.status )){
+                self.luckyDrawReq.smsJobId = self.smsJobList.find(i => i.jobType == 'LUCKYDRAW' && i.status ).id;
+            }
+        });
+    }
+    self.loadSmsJobData();
 
-    smsJobService.getDataForMgnt(0).then(function (data) {
-        self.smsJobList = data;
-        console.log(data);
-        self.smsJobTableParams = new NgTableParams({}, { dataset: self.smsJobList});
-        self.luckyDrawReq.smsJobId = self.smsJobList.find(i => i.jobType == 'LUCKYDRAW' && i.status ).id;
-    });
 
     self.upsertSmsJob = function(one){
         self.isSaveButtonPressed=true;
@@ -216,32 +225,40 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms queue//////
-    smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
-        self.smsQueueList = data;
-        self.smsQueueList.forEach((dataOne, index, array) => {
-           var tempJob = self.smsJobList.find(i => i.id == dataOne.jobId);
-           if(tempJob){
-              dataOne.jobName = self.smsJobList.find(i => i.id == dataOne.jobId).jobName;
-           }
+    self.loadSmsQueueData = function(){
+        smsQueueService.getDataForMgnt(self.queryRequest).then(function (data) {
+            self.smsQueueList = data;
+            self.smsQueueList.forEach((dataOne, index, array) => {
+               var tempJob = self.smsJobList.find(i => i.id == dataOne.jobId);
+               if(tempJob){
+                  dataOne.jobName = self.smsJobList.find(i => i.id == dataOne.jobId).jobName;
+               }
+            });
+            console.log(self.smsQueueList );
+            self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
-        self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
-    });
+    }
+    self.loadSmsQueueData();
+
+
+
+
 
     self.prepareData = function(){
-        smsQueueService.prepareData(self.smsQueueAmount).then(function (data) {
+        smsQueueService.prepareData(self.queryRequest.amount).then(function (data) {
             self.responseStr = true;
         });
     }
 
     self.loadSmsQueue = function(){
-        smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
+        smsQueueService.getDataForMgnt(self.queryRequest.amount).then(function (data) {
             self.smsQueueList = data;
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }
 
     self.getSmsQueueByTerm = function(){
-        smsQueueService.getDataForMgnt(self.smsQueueAmount).then(function (data) {
+        smsQueueService.getDataForMgnt(self.queryRequest.amount).then(function (data) {
             self.smsQueueList = data;
             if(self.smsQueueList.length != 100){
                 self.smsQueueAmountList.find(i => i.value == 0).name = self.smsQueueList.length;

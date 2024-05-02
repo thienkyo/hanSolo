@@ -45,7 +45,7 @@ angular.module('customerSourceModule')
         }
 
 
-        self.loadCusSourceData = function(str){
+        self.loadCusSourceData = function(){
             customerSourceService.getCustomerSourceByTerms(self.queryRequest).then(function (data) {
                 self.customerSourceList = data;
                 self.totalCount = 0;

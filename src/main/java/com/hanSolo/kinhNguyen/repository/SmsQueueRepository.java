@@ -21,4 +21,10 @@ public interface SmsQueueRepository extends PagingAndSortingRepository<SmsQueue,
 
     Optional<SmsQueue> findFirstByJobTypeAndStatusInOrderByGmtModifyDesc(String jobType, Collection<String> statuses);
 
+    List<SmsQueue> findByClientCodeOrderByGmtCreateDesc(@NonNull String clientCode);
+    List<SmsQueue> findFirst100ByClientCodeOrderByGmtCreateDesc(@NonNull String clientCode);
+
+    List<SmsQueue> findByClientCodeAndShopCodeOrderByGmtCreateDesc(@NonNull String clientCode, @NonNull String shopCode);
+    List<SmsQueue> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(@NonNull String clientCode, @NonNull String shopCode);
+
 }

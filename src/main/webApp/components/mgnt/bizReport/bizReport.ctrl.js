@@ -32,7 +32,6 @@ function($scope,$location,bizReportService,NgTableParams,memberService,ModifiedR
     }else{*/
         self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
         self.shopList = shopListCacheService.get().filter(i => i.clientCode == self.queryRequest.clientCode || i.shopCode == 'ALL' );
-
         self.queryRequest.shopCode = self.shopList[1].shopCode;
 
     //}
