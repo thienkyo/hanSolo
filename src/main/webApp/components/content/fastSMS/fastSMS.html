@@ -6,6 +6,13 @@
 					<div class="login-form"><!--login form-->
 						<h2 style="margin-bottom: 10px;">Fast SMS</h2>
 						<form ng-submit="ctrl.addQueue(ctrl.theSmsQueue)">
+
+							<select  ng-model="ctrl.theSmsQueue.shopCode"
+									 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+									 ng-change="ctrl.loadSmsJobData()"
+									 style="width: 35%;height: 35px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;float: right;">
+							</select>
+
 							<a ng-click="ctrl.addQueue(ctrl.theSmsQueue)" href=""
 							   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn btn-default check_out'"
 							   style="margin: 0px 0px 10px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'send'}}</a>

@@ -124,6 +124,7 @@ public class ProgramController {
             sms.setClientCode(req.getClientCode());
             sms.setShopCode(req.getShopCode());
             sms.setJobId(pro.getJobId());
+            sms.setJobType(Utility.SMS_JOB_LUCKYDRAW);
             smsList.add(sms);
 
             // set it done.

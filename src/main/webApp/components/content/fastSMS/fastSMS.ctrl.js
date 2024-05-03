@@ -1,15 +1,25 @@
 'use strict';
 angular.module('fastSMSModule')
-.controller('fastSMSController',['$rootScope','fastSMSService','$location','SmsQueueDO',
-	function($rootScope, fastSMSService,$location,SmsQueueDO) {
+.controller('fastSMSController',['$rootScope','fastSMSService','$location','SmsQueueDO','clientInfoCacheService','currentShopCacheService',
+                                'oneClientShopListCacheService',
+	function($rootScope, fastSMSService,$location,SmsQueueDO,clientInfoCacheService,currentShopCacheService,
+	        oneClientShopListCacheService
+	){
 	var self = this;
 	self.theSmsQueue = new SmsQueueDO();
+
+	self.shopList = oneClientShopListCacheService.get();
 
     fastSMSService.getSMSConfig().then(function (data) {
 		self.theSmsQueue.content = data.smsJob.msgContentTemplate;
 		self.theSmsQueue.receiverName = 'fastSMS';
 		self.theSmsQueue.jobId = data.smsJob.id;
 		self.theSmsQueue.weight = data.smsJob.weight;
+		self.theSmsQueue.jobType = data.smsJob.jobType;
+		self.theSmsQueue.clientCode  = clientInfoCacheService.get().clientCode;
+        self.theSmsQueue.shopCode = currentShopCacheService.get().shopCode;
+		console.log(self.theSmsQueue);
+		console.log(data);
 	});
 
 	self.addQueue = function(one){

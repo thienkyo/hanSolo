@@ -255,6 +255,9 @@ public class AuthenticationController {
         smsQueue.setReceiverName(order.getShippingName());
         smsQueue.setReceiverPhone(order.getShippingPhone());
         smsQueue.setWeight(job.getWeight());
+        smsQueue.setClientCode(order.getClientCode());
+        smsQueue.setShopCode(order.getShopCode());
+        smsQueue.setJobType(job.getJobType());
 
         return smsQueue;
     }

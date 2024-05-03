@@ -52,12 +52,12 @@ angular.module('homeModule')
         });
         */
 
-		//console.log('this is home');
-		/*console.log(clientListCacheService.get());
+		console.log('this is home');
+		console.log(clientListCacheService.get());
         console.log(clientInfoCacheService.get());
         console.log(shopListCacheService.get());
         console.log(currentShopCacheService.get());
-        console.log(oneClientShopListCacheService.get());*/
+        console.log(oneClientShopListCacheService.get());
 
 		if(self.isGodLike){ // only godlike get new data from db.
             clientService.getClientShopList().then(function (data) {
@@ -74,11 +74,13 @@ angular.module('homeModule')
                 clientListCacheService.set(data.obj.clientList);
                 oneClientShopListCacheService.set(data.obj.oneClientShopList);
                  if(data.obj.shopList){
+                    console.log(data.obj.shopList);
                     shopListCacheService.set(data.obj.shopList);
-                    if(data.obj.shopList.find(i => i.shopCode == 'ALL')){
+                    console.log(shopListCacheService.get());
+                    if(data.obj.shopList.length >= 2){
+                        currentShopCacheService.set(data.obj.shopList[1]);
+                    }else if(data.obj.shopList.find(i => i.shopCode == 'ALL')){
                         currentShopCacheService.set(data.obj.shopList.find(i => i.shopCode == 'ALL'));
-                    }else if(data.obj.shopList.length == 1){
-                        currentShopCacheService.set(data.obj.shopList[0]);
                     }
                 }
             });
