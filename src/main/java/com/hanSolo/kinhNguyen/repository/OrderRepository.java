@@ -42,7 +42,7 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
     List<Order> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
     Optional<Order> findByIdAndClientCode(Integer id, String clientCode);
 
-    List<Order> findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(String clientCode, String shippingName);
+    List<Order> findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(String clientCode, String shippingName);
     List<Order> findFirst40ByClientCodeAndShippingPhoneContainsOrderByGmtCreateDesc(String clientCode, String shippingPhone);
 
     List<Order> findFirst40ByClientCodeAndShopCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(String clientCode, String shopCode, String shippingName);

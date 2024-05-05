@@ -47,16 +47,23 @@ angular.module('smsUserInfoModule')
 	if(!memberService.isAdmin() || !clientInfoCacheService.get().isUnlockSmsFeature){
 		$location.path('#/');
 	}
+	if(self.isSuperAdmin){
+        self.shopList = oneClientShopListCacheService.get();
+        console.log(self.shopList);
+    }
+
 	self.amountList=AmountList;
 	self.smsQueueAmountList = AmountList.map(a => ({...a}));// clone array
     self.amount = FirstTimeLoadSize;
     //self.smsQueueAmount = FirstTimeLoadSize;
 
+
+
+//////// sms user info //////
 	smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
 		self.smsUserInfoList = data;
 		self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
 	});
-
 
 	self.upsert = function(smsUserInfo){
 	    self.isSaveButtonPressed=true;
@@ -133,10 +140,7 @@ angular.module('smsUserInfoModule')
 ////////  sms job //////
     self.theSmsJob.clientCode  = clientInfoCacheService.get().clientCode;
     self.theSmsJob.shopCode = currentShopCacheService.get().shopCode;
-    if(self.isSuperAdmin){
-        self.shopList = oneClientShopListCacheService.get();
-        console.log(self.shopList);
-    }
+
 
     smsJobService.getLastHeartBeatTime().then(function (data) {
         self.lastHeartBeatTime = data;
@@ -212,6 +216,7 @@ angular.module('smsUserInfoModule')
     self.clearSmsJob = function(){
         self.responseStr = false;
         self.theSmsJob = new SmsJobDO();
+        self.theSmsJob.clientCode  = clientInfoCacheService.get().clientCode;
     }
 
     self.deleteSmsJob = function(one){
@@ -231,6 +236,9 @@ angular.module('smsUserInfoModule')
     }
 
 ////////  sms queue//////
+    self.theSmsQueue.clientCode  = clientInfoCacheService.get().clientCode;
+    self.theSmsQueue.shopCode = currentShopCacheService.get().shopCode;
+
     self.loadSmsQueueData = function(){
         smsQueueService.getDataForMgnt(self.queryRequest).then(function (data) {
             self.smsQueueList = data;
@@ -245,10 +253,6 @@ angular.module('smsUserInfoModule')
         });
     }
     self.loadSmsQueueData();
-
-
-
-
 
     self.prepareData = function(){
         smsQueueService.prepareData(self.queryRequest.amount).then(function (data) {
@@ -298,6 +302,7 @@ angular.module('smsUserInfoModule')
     self.clearSmsQueue = function(){
         self.responseStr = false;
         self.theSmsQueue = new SmsQueueDO();
+        self.theSmsQueue.clientCode  = clientInfoCacheService.get().clientCode;
     }
 
     self.upsertSmsQueue = function(one){

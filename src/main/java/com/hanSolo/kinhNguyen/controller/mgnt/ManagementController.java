@@ -1391,9 +1391,6 @@ public class ManagementController {
     }
 
 
-
-
-
     @RequestMapping(value = "getOrderByName", method = RequestMethod.POST)
     public List<Order> getOrderByName(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
         String keySearch = req.getGeneralPurpose();
@@ -1407,7 +1404,7 @@ public class ManagementController {
             orderDetailList = orderDetailRepo.findFirst40ByNameContainsIgnoreCaseOrderByGmtCreateDesc(keySearch);
 
         }else if(req.getShopCode().equalsIgnoreCase("ALL")){
-            orderList =  orderRepo.findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateAsc(req.getClientCode(), keySearch);
+            orderList =  orderRepo.findFirst40ByClientCodeAndShippingNameContainsIgnoreCaseOrderByGmtCreateDesc(req.getClientCode(), keySearch);
             orderDetailList = orderDetailRepo.findFirst40ByClientCodeAndNameContainsIgnoreCaseOrderByGmtCreateDesc(req.getClientCode(), keySearch);
 
         }else{

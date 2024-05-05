@@ -183,7 +183,7 @@ public class AuthenticationController {
             specSms.setJobIdToRun(order.getSpecificJobId().toString());
             specSms.setGmtModify(Utility.getCurrentDate());
             specSms.setOrderId(or.getId());
-            specSms.setClientCode(order.getClientCode());
+            specSms.setClientCode(or.getClientCode());
             specSms.setShopCode(or.getShopCode());
             specificSmsUserInfoRepo.save(specSms);
         }else{

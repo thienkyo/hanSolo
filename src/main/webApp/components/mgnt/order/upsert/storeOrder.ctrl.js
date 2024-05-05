@@ -664,7 +664,7 @@ angular.module('storeOrderModule')
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.
 
     //// collect specific job.
-    smsJobService.getDataForMgnt(0).then(function (data) {
+    smsJobService.getDataForMgnt(self.queryRequest).then(function (data) {
         var tempArray = data.filter(i => i.jobType == 'SPECIFIC' && i.status == true );
         self.smsJobList = self.smsJobList.concat(tempArray);
     });

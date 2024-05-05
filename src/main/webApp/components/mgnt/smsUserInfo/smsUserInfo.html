@@ -59,10 +59,10 @@ form .progress {
 		<!-- Nav tabs -->
 		<ul class="nav nav-tabs" role="tablist">
 			<li class="nav-item">
-				<a class="nav-link" data-toggle="tab" href="" data-target="#job">Sms job</a>
+				<a class="nav-link" data-toggle="tab" href="" data-target="#job" ng-click="ctrl.loadSmsJobData()">Sms job</a>
 			</li>
 			<li class="nav-item ">
-				<a class="nav-link active" data-toggle="tab" href="" data-target="#queue">Sms queue</a>
+				<a class="nav-link active" data-toggle="tab" href="" data-target="#queue" ng-click="ctrl.loadSmsQueueData()" >Sms queue</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" data-toggle="tab" href="" data-target="#info">Sms user info</a>
@@ -282,10 +282,19 @@ form .progress {
 					<div class="col-sm-1">
 						<input type="text"  ng-model="ctrl.theSmsQueue.weight"  placeholder="weight" style="width: 100%;"/>
 					</div>
+					<div class="col-sm-2">
+						<select  ng-model="ctrl.theSmsQueue.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+								 style="width: 100%;height: 30px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;">
+						</select>
+					</div>
 					<div class="col-sm-3">
-						<input type="text"  ng-model="ctrl.theSmsQueue.receiverPhone" placeholder="phone" style="width: 100px;"/>
+						<input type="text"  ng-model="ctrl.theSmsQueue.receiverPhone" placeholder="phone" style="width: 120px;"/>
 						{{ctrl.theSmsQueue.receiverPhone | tel}}
 					</div>
+
+
+
 
 				</div>
 				<div class="row" style="margin-top: 20px;">
@@ -434,6 +443,7 @@ form .progress {
 								 style="height: 40px;border: 1px solid #e1e1e1;width: 100%;">
 						</select>
 					</div>
+
 					<div class="col-sm-2" style="margin-top: 10px;">{{ctrl.theSmsUserInfo.gmtCreate | date:"yyyy-MM-dd HH:mm:ss"}}</div>
 					<div class="col-sm-2" style="margin-top: 10px;">{{ctrl.theSmsUserInfo.gmtModify | date:"yyyy-MM-dd HH:mm:ss"}}</div>
 				</div>
@@ -475,6 +485,15 @@ form .progress {
 						</select>
 						size: {{ctrl.smsUserInfoList.length}}
 					</div>
+					<div class="col-sm-10">
+						<select  ng-model="ctrl.queryRequest.shopCode"
+								 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL'}"
+								 ng-change="ctrl.loadSmsQueueData()"
+								 style="width: 45%;height: 38px;border: 1px solid rgb(118 118 118);border-radius: 3px;background: #FFFFFF;float: right;">
+						</select>
+					</div>
+
+
 				</div>
 				<!-- sms user info table-->
 				<div class="table-responsive">
