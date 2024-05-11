@@ -391,6 +391,11 @@ angular.module('storeOrderModule')
         self.theOrder.specificJobId = self.selectedJob.id;
         self.theOrder.specificJobName = self.selectedJob.jobName;
 
+        if(self.theOrder.customDiscountAmount > 99999){
+            self.isErrorMsg ='discount không thể lớn hon 100k.';
+            return;
+        }
+
         if(self.theOrder.shippingName && self.theOrder.shippingPhone && self.theOrder.shopCode && self.theOrder.shopCode != 'ALL'){
             if(memberService.isMod()){
                 self.isSaveButtonPressed=true;

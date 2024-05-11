@@ -8,9 +8,9 @@ angular.module('smsUserInfoModule')
 			};
 	return smsUserInfoService;
 
-	function getSmsUserInfoForMgnt(amount){
-		var url = "mgnt/getSmsUserInfoForMgnt/"+amount;
-		return ajaxService.get(url,null,{}).then(function(response){
+	function getSmsUserInfoForMgnt(req){
+		var url = "mgnt/getSmsUserInfoForMgnt";
+		return ajaxService.post(url,req,{}).then(function(response){
 			return response.data;
 		});
 	}   

@@ -54,16 +54,27 @@ angular.module('smsUserInfoModule')
 
 	self.amountList=AmountList;
 	self.smsQueueAmountList = AmountList.map(a => ({...a}));// clone array
-    self.amount = FirstTimeLoadSize;
-    //self.smsQueueAmount = FirstTimeLoadSize;
-
+	self.smsUserInfoAmountList = AmountList.map(a => ({...a}));// clone array
+    //self.amount = FirstTimeLoadSize;
+    self.queryRequest.amount = FirstTimeLoadSize;
 
 
 //////// sms user info //////
-	smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
-		self.smsUserInfoList = data;
-		self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
-	});
+    self.theSmsUserInfo.clientCode  = clientInfoCacheService.get().clientCode;
+    self.theSmsUserInfo.shopCode = currentShopCacheService.get().shopCode;
+
+	self.loadSmsUserInfoData = function(){
+        smsUserInfoService.getSmsUserInfoForMgnt(self.queryRequest).then(function (data) {
+            self.smsUserInfoList = data;
+            if(self.smsUserInfoList.length != 100){
+                self.smsUserInfoAmountList.find(i => i.value == 0).name = self.smsUserInfoList.length;
+            }else{
+                self.smsUserInfoAmountList.find(i => i.value == 0).name = 'all';
+            }
+            self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
+        });
+    }
+    self.loadSmsUserInfoData();
 
 	self.upsert = function(smsUserInfo){
 	    self.isSaveButtonPressed=true;
@@ -100,13 +111,23 @@ angular.module('smsUserInfoModule')
         self.responseStrFail = false;
     };
 
-    self.getSmsUserInfoByTerm = function(){
+
+
+
+
+
+
+
+
+
+///////
+    /*self.getSmsUserInfoByTerm = function(){
         smsUserInfoService.getSmsUserInfoForMgnt(self.amount).then(function (data) {
             self.smsUserInfoList = data;
 
             self.tableParams = new NgTableParams({}, { dataset: self.smsUserInfoList});
         });
-    }
+    }*/
 
     self.promptDelete = function(id){
         self.deletingId = self.deletingId ? false : id;
@@ -126,6 +147,8 @@ angular.module('smsUserInfoModule')
 		self.responseStrFail = false;
 		self.theSmsUserInfo = new SmsUserInfoDO();
 		self.picFile = null;
+        self.theSmsUserInfo.clientCode  = clientInfoCacheService.get().clientCode;
+        self.theSmsUserInfo.shopCode = currentShopCacheService.get().shopCode;
 	}
 
 	self.setStyle = function(status){
@@ -248,7 +271,11 @@ angular.module('smsUserInfoModule')
                   dataOne.jobName = self.smsJobList.find(i => i.id == dataOne.jobId).jobName;
                }
             });
-            console.log(self.smsQueueList );
+            if(self.smsQueueList.length != 100){
+                self.smsQueueAmountList.find(i => i.value == 0).name = self.smsQueueList.length;
+            }else{
+                self.smsQueueAmountList.find(i => i.value == 0).name = 'all';
+            }
             self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
         });
     }
@@ -267,19 +294,7 @@ angular.module('smsUserInfoModule')
         });
     }
 
-    self.getSmsQueueByTerm = function(){
-        smsQueueService.getDataForMgnt(self.queryRequest.amount).then(function (data) {
-            self.smsQueueList = data;
-            if(self.smsQueueList.length != 100){
-                self.smsQueueAmountList.find(i => i.value == 0).name = self.smsQueueList.length;
-            }else{
-                self.smsQueueAmountList.find(i => i.value == 0).name = 'all';
-            }
-            self.smsQueueTableParams = new NgTableParams({}, { dataset: self.smsQueueList});
-        });
-    }
-
-     self.delete100SmsQueue = function(){
+    self.delete100SmsQueue = function(){
         self.responseStr = false;
         smsQueueService.delete100().then(function (data) {
             self.responseStr = data;

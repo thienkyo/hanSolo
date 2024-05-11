@@ -266,7 +266,6 @@ select, textarea {
 									 style="height: 40px;border: 1px solid #e1e1e1;">
 							</select>
 						</div>
-
 					</div>
 
 					<div class="col-lg-3">
@@ -283,7 +282,7 @@ select, textarea {
 						</div>
 					</div>
 					<div class="col-lg-2">
-						<p style="margin-bottom: 6px;">Recheck:
+						<p style="margin-bottom: 1px;">Recheck:
 						<div class="checkout__input">
 							<select  ng-model="ctrl.selectedJob" ng-change="ctrl.tempF()"
 									 ng-options="opt as opt.jobName for opt in ctrl.smsJobList"
@@ -293,7 +292,7 @@ select, textarea {
 					</div>
 
 					<div class="col-lg-3">
-						<p style="margin-bottom: 6px;">Shop:
+						<p style="margin-bottom: 1px;">Shop:
 						<div class="checkout__input">
 							<select  ng-model="ctrl.theOrder.shopCode"
 									 ng-options="opt.shopCode as opt.shopAddress +' | '+ opt.shopName for opt in ctrl.shopList | filter:{ shopCode: '!ALL' }"
@@ -303,7 +302,6 @@ select, textarea {
 							</select>
 						</div>
 					</div>
-
 				</div>
 
 
@@ -318,7 +316,6 @@ select, textarea {
 							</select>
 						</div>
 					</div>
-
 				</div>
 
 				<div class="row" style="margin-bottom: 60px;">
@@ -340,16 +337,22 @@ select, textarea {
 					<ul>
 						<li>Subtotal <span>{{ctrl.theOrder.subTotal | number:0}}đ</span></li>
 						<li>Coupon <span>({{ctrl.theOrder.couponDiscount}}%) {{(ctrl.theOrder.couponDiscount)/100*ctrl.theOrder.subTotal | number:0}}đ</span></li>
-						<li>Total <span uib-popover-template="ctrl.dynamicPopover.templateUrl"
-										 popover-placement="bottom" popover-title="Custom discount:">
-							{{ctrl.theOrder.total | number:0}}đ</span> <span ng-if="ctrl.theOrder.customDiscountAmount > 100">*</span>
+						<li>Total
+							<span ng-click="ctrl.needCustomDiscount = ctrl.needCustomDiscount ? false : true;">
+								{{ctrl.theOrder.total | number:0}}đ
+							</span>
+							<span ng-if="ctrl.theOrder.customDiscountAmount > 100">*</span>
+						</li>
+						<li ng-if="ctrl.needCustomDiscount">discount:
+							<span>
+								<input type="text" ng-model="ctrl.theOrder.customDiscountAmount"
+									   ng-change="ctrl.calculateOrderTotal()" class="form-control"
+									   style="width: 50%;float: inline-end;height: 30px;"
+								>
+							</span>
 						</li>
 
-						<script type="text/ng-template" id="myPopoverTemplate.html">
-							<div class="form-group">
-								<input type="text" ng-model="ctrl.theOrder.customDiscountAmount" ng-change="ctrl.calculateOrderTotal()" class="form-control">
-							</div>
-						</script>
+
 						<li ng-show="ctrl.theOrder.deposit > 0">Deposit <span>{{ctrl.theOrder.deposit | number:0}}đ</span></li>
 						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>

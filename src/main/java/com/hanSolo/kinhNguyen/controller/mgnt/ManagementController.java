@@ -985,7 +985,7 @@ public class ManagementController {
         return SmsUserInfoList;
     }
 
-    @RequestMapping(value = "getSmsUserInfoForMgnt", method = RequestMethod.GET)
+    @RequestMapping(value = "getSmsUserInfoForMgnt", method = RequestMethod.POST)
     public List<SmsUserInfo> getSmsUserInfoForMgnt(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
         List<SmsUserInfo> SmsUserInfoList ;
         if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
@@ -1117,13 +1117,6 @@ public class ManagementController {
         return CommonCache.SMS_SEND_CONTROL;
     }
 
-
-    @RequestMapping(value = "getSmsJobForMgnt/{amount}", method = RequestMethod.GET)
-    public List<SmsJob> getSmsJobForMgnt(@PathVariable final int amount) {
-        return smsJobRepo.findAllByOrderByGmtCreateDesc();
-    }
-
-
     @RequestMapping(value = "getSmsJobForMgnt", method = RequestMethod.POST)
     public List<SmsJob> getSmsJobForMgnt(@RequestBody final QueryByClientShopAmountRequest req) {
         List<SmsJob> smsJobList;
@@ -1134,7 +1127,6 @@ public class ManagementController {
         }
         return smsJobList;
     }
-
 
 
     @RequestMapping(value = "upsertSmsJob", method = RequestMethod.POST)
