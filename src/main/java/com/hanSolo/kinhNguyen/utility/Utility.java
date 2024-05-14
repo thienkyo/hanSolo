@@ -114,6 +114,10 @@ public class Utility {
     final public static String SHOP_STATUS_ACTIVE = "ACTIVE";
     final public static String SHOP_STATUS_INACTIVE = "INACTIVE";
 
+
+    final public static int BIZ_EXPENSE_INIT = 0;
+    final public static int BIZ_EXPENSE_DONE = 1;
+
     final public static Date getFirstDateOfYear(String year) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
         return df.parse(year + "0101_000000");

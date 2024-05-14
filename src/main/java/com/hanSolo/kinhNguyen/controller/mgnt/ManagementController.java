@@ -279,6 +279,20 @@ public class ManagementController {
         return new GeneralResponse("upsert_bizExpense_success",Utility.SUCCESS_ERRORCODE,"Success");
     }
 
+    @RequestMapping(value = "updateBizExpensesStatus", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public GeneralResponse updateBizExpensesStatus(@RequestBody final List<BizExpense>  bizExpenses, final HttpServletRequest request) throws ParseException {
+        if(!onlyAllowThisRole(request,Utility.ADMIN_ROLE) ){
+            return new GeneralResponse("no authorization",Utility.FAIL_ERRORCODE,Utility.FAIL_MSG);
+        }
+        for(BizExpense be : bizExpenses){
+            be.setGmtModify(Utility.getCurrentDate());
+            be.setStatus(Utility.BIZ_EXPENSE_DONE);
+        }
+        bizExpenseRepo.saveAll(bizExpenses);
+        return new GeneralResponse(bizExpenses,Utility.SUCCESS_ERRORCODE,"Success");
+    }
+
+
     //////////////////////////////Member section/////////////////////////////
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "getMemberForMgnt/{amount}", method = RequestMethod.GET)

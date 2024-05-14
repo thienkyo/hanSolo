@@ -73,7 +73,13 @@ angular.module('bizExpenseModule')
         self.tableParams = new NgTableParams({}, { dataset: []});
         bizExpenseService.getBizExpenseForMgnt(queryRequest).then(function (data) {
             self.BizExpenseList = data;
+            console.log(self.BizExpenseList);
             self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+            if(self.BizExpenseList.length != 100){
+                self.amountList.find(i => i.value == 0).name = self.BizExpenseList.length;
+            }else{
+                self.amountList.find(i => i.value == 0).name = 'all';
+            }
         });
     }
 
@@ -101,6 +107,47 @@ angular.module('bizExpenseModule')
            dataOne.picked = true;
            self.tempAmount += dataOne.amount;
        });
+    }
+
+    self.resetQuickPick = function() {
+        self.BizExpenseList.forEach((dataOne, index, array) => {
+           dataOne.picked = false;
+        });
+        self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+        self.tempAmount = 0;
+    }
+
+    self.quickStatusUpdate = function() {
+        self.tempArray = self.tempArray.filter(i => i.picked == true);
+        console.log(self.tempArray);
+        if(self.tempArray && self.tempArray.length > 0){
+
+            bizExpenseService.updateBizExpensesStatus(self.tempArray).then(function (data) {
+                console.log(data);
+                self.responseStr = data.obj;
+                self.isStatusUpdate = false;
+                self.tempAmount = 0;
+                self.tempArray = [];
+                //get update data
+                bizExpenseService.getBizExpenseForMgnt(self.queryRequest).then(function (data) {
+                    self.BizExpenseList = data;
+                    self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+                });
+
+            });
+        }
+    }
+
+    self.quickPick = function() {
+        self.tempArray = self.BizExpenseList.filter(i => i.status == 0);
+        //self.tempArray = self.tempArray;
+        self.tempAmount = 0;
+        console.log(self.tempArray);
+        self.tempArray.forEach((dataOne, index, array) => {
+           dataOne.picked = true;
+           self.tempAmount += dataOne.amount;
+       });
+       self.tableParams = new NgTableParams({}, { dataset: self.tempArray});
     }
 
     self.getOneDayExpense = function() {

@@ -5,7 +5,8 @@ angular.module('bizExpenseModule')
 			getBizExpenseForMgnt : getBizExpenseForMgnt,
 			upsert : upsert,
 			deleteBizExpense : deleteBizExpense,
-			updateBizExpenseStatus : updateBizExpenseStatus
+			updateBizExpenseStatus : updateBizExpenseStatus,
+			updateBizExpensesStatus : updateBizExpensesStatus
 			};
 	return bizExpenseService;
 
@@ -41,6 +42,13 @@ angular.module('bizExpenseModule')
     function updateBizExpenseStatus(bizExpense){
         var url = "mgnt/updateBizExpenseStatus";
         return ajaxService.post(url,bizExpense,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function updateBizExpensesStatus(bizExpenses){
+        var url = "mgnt/updateBizExpensesStatus";
+        return ajaxService.post(url,bizExpenses,{}).then(function(response){
             return response.data;
         });
     }
