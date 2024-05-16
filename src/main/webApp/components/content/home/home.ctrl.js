@@ -11,7 +11,6 @@ angular.module('homeModule')
 		self.isGodLike = memberService.isGodLike();
 		self.isLogin = memberService.isLogin();
 		self.queryRequest = queryRequestDO;
-		console.log(self.queryRequest);
 
 		homeService.getBanner()
         		.then(function (response) {

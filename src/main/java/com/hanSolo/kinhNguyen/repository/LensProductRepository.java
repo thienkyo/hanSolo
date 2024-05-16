@@ -18,6 +18,8 @@ public interface LensProductRepository extends PagingAndSortingRepository<LensPr
     /// clientCode shopCode
     List<LensProduct> findFirst50ByLensNoteContainsIgnoreCaseAndClientCodeOrderByGmtCreateDesc(String lensNote, String clientCode);
 
+    List<LensProduct> findFirst15ByClientCodeOrderByGmtCreateDesc(String clientCode);
+
 
 
 }

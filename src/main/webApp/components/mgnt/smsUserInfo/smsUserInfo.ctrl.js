@@ -38,8 +38,6 @@ angular.module('smsUserInfoModule')
         self.luckyDrawReq.shopCode = 'S7LJ6W';
     }
 
-    console.log(self.queryRequest);
-    console.log(self.luckyDrawReq);
 
 	self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
     self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
@@ -49,7 +47,6 @@ angular.module('smsUserInfoModule')
 	}
 	if(self.isSuperAdmin){
         self.shopList = oneClientShopListCacheService.get();
-        console.log(self.shopList);
     }
 
 	self.amountList=AmountList;

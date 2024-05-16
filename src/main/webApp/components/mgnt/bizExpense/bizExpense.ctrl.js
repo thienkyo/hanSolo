@@ -17,22 +17,22 @@ angular.module('bizExpenseModule')
 	self.tempAmount=0;
 	self.OneDayExpense={};
 	self.isGodLike = memberService.isGodLike();
-	self.clientList = clientListCacheService.get();
-    self.shopList = shopListCacheService.get();
-    self.clientList2 = clientListCacheService.get();
-    self.shopList2 = shopListCacheService.get();
+
     self.queryRequest={};
     self.queryRequest.amount = FirstTimeLoadSize;
+    self.currentMember = memberService.getCurrentMember();
+    self.latestBizExpense=[];
+    self.latestBizExpenseBK=[];
 
 	if(!memberService.isMod()){
 		$location.path('#/');
 	}
 
-	if(self.isGodLike){
+	/*if(self.isGodLike){
         self.queryRequest.clientCode = 'ALL';
         self.queryRequest.shopCode = 'ALL';
     }else{
-        self.theBizExpense.clientCode = clientInfoCacheService.get().clientCode;
+
         self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
         if(self.shopList.length == 1){
             self.queryRequest.shopCode = self.shopList[0].shopCode;
@@ -41,7 +41,21 @@ angular.module('bizExpenseModule')
             self.theBizExpense.shopCode = self.shopList[1].shopCode;
             self.queryRequest.shopCode = 'ALL';
         }
-    }
+    }*/
+
+    self.theBizExpense.clientCode = clientInfoCacheService.get().clientCode;
+    self.theBizExpense.shopCode = currentShopCacheService.get().shopCode;
+
+    self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
+    self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
+
+    self.clientList = clientListCacheService.get();
+    self.shopList = shopListCacheService.get().filter(i => i.clientCode == self.queryRequest.clientCode || i.clientCode == '');
+    self.clientList2 = clientListCacheService.get();
+    self.shopList2 = shopListCacheService.get().filter(i => i.clientCode == self.queryRequest.clientCode || i.clientCode == '');
+    console.log(shopListCacheService.get());
+    console.log(self.shopList2);
+
 
 	self.currentMember = memberService.getCurrentMember();
 	self.theBizExpense.owner = self.currentMember.name;
@@ -52,8 +66,27 @@ angular.module('bizExpenseModule')
 
 	self.amountList=AmountList;
 	getBizExpenseByCondition(self.queryRequest);
+	getLatestBizExpense(self.queryRequest);
 
-//////////////////////////
+//////////////auto complete////////////
+
+    self.searchChange = function(text){
+        if(self.latestBizExpenseBK.length > 0){
+            console.log(text);
+            self.latestBizExpense = self.latestBizExpenseBK.filter(i => i.lensNote.includes(text));
+            console.log(self.latestBizExpense);
+        }
+    }
+
+
+    self.resultSelectedChange = function(one,theBizExpense){
+        if(one){
+            theBizExpense.description = one.enrichData;
+        }
+
+    }
+
+/////////////////////////
     self.filterBizExpenseAndShopByClientCode = function(clientCode){
         if(clientCode == 'ALL'){
             self.queryRequest.shopCode = 'ALL';
@@ -73,7 +106,6 @@ angular.module('bizExpenseModule')
         self.tableParams = new NgTableParams({}, { dataset: []});
         bizExpenseService.getBizExpenseForMgnt(queryRequest).then(function (data) {
             self.BizExpenseList = data;
-            console.log(self.BizExpenseList);
             self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
             if(self.BizExpenseList.length != 100){
                 self.amountList.find(i => i.value == 0).name = self.BizExpenseList.length;
@@ -82,6 +114,27 @@ angular.module('bizExpenseModule')
             }
         });
     }
+
+    function getLatestBizExpense(queryRequest) {
+        bizExpenseService.getLatestLensProduct(queryRequest).then(function (data) {
+            self.latestBizExpenseBK = data.map(enrichOrderDetail);
+            self.latestBizExpense = data;
+            console.log(self.latestBizExpense);
+            console.log(self.latestBizExpenseBK);
+        });
+    }
+
+    function enrichOrderDetail(detail) {
+        var lensDetail = "("+detail.odSphere +" "+ detail.odCylinder+" "+detail.odPrism+")" +
+                "("+detail.osSphere +" "+ detail.osCylinder+" "+detail.osPrism+")" ;
+        var extInfo = detail.orderId+"-"+detail.id
+        detail.enrichData = detail.lensNote +" "+ lensDetail + " " +extInfo;
+
+        return detail;
+    }
+
+
+
 
     self.filterShopByClientCode = function(clientCode){
         self.shopList = shopListCacheService.get().filter(i => i.clientCode == clientCode );
@@ -113,15 +166,16 @@ angular.module('bizExpenseModule')
         self.BizExpenseList.forEach((dataOne, index, array) => {
            dataOne.picked = false;
         });
-        self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+        //self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
+        getBizExpenseByCondition(self.queryRequest);
         self.tempAmount = 0;
+        self.isQPPressed = false;
     }
 
     self.quickStatusUpdate = function() {
         self.tempArray = self.tempArray.filter(i => i.picked == true);
         console.log(self.tempArray);
         if(self.tempArray && self.tempArray.length > 0){
-
             bizExpenseService.updateBizExpensesStatus(self.tempArray).then(function (data) {
                 console.log(data);
                 self.responseStr = data.obj;
@@ -129,17 +183,14 @@ angular.module('bizExpenseModule')
                 self.tempAmount = 0;
                 self.tempArray = [];
                 //get update data
-                bizExpenseService.getBizExpenseForMgnt(self.queryRequest).then(function (data) {
-                    self.BizExpenseList = data;
-                    self.tableParams = new NgTableParams({}, { dataset: self.BizExpenseList});
-                });
+                getBizExpenseByCondition(self.queryRequest);
 
             });
         }
     }
 
     self.quickPick = function() {
-        self.tempArray = self.BizExpenseList.filter(i => i.status == 0);
+        self.tempArray = self.BizExpenseList.filter(i => i.status == 0 && i.ownerPhone == self.currentMember.phone);
         //self.tempArray = self.tempArray;
         self.tempAmount = 0;
         console.log(self.tempArray);

@@ -32,7 +32,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
 
     List<OrderDetail> findFirst40ByClientCodeAndPhoneOrderByGmtCreateDesc(String clientCode, String phone);
 
-
+    List<OrderDetail> findFirst15ByClientCodeOrderByGmtCreateDesc(String clientCode);
 
 
 }

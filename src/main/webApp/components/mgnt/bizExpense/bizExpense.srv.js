@@ -6,20 +6,20 @@ angular.module('bizExpenseModule')
 			upsert : upsert,
 			deleteBizExpense : deleteBizExpense,
 			updateBizExpenseStatus : updateBizExpenseStatus,
-			updateBizExpensesStatus : updateBizExpensesStatus
+			updateBizExpensesStatus : updateBizExpensesStatus,
+			getLatestLensProduct : getLatestLensProduct
 			};
 	return bizExpenseService;
 
-	/*function getBizExpenseForMgnt(amount){
-		var url = "mgnt/getBizExpenseForMgnt/"+amount;
-		return ajaxService.get(url,null,{}).then(function(response){
-			return response.data;
-		});
-	}   */
-
-
 	function getBizExpenseForMgnt(queryRequest){
         var url = "mgnt/getBizExpenseForMgnt/";
+        return ajaxService.post(url,queryRequest,{}).then(function(response){
+            return response.data;
+        });
+    }
+
+    function getLatestLensProduct(queryRequest){
+        var url = "mgnt/getLatestLensProduct/";
         return ajaxService.post(url,queryRequest,{}).then(function(response){
             return response.data;
         });

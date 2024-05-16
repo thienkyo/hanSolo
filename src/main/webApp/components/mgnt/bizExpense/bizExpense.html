@@ -41,8 +41,25 @@ form .progress {
 	text-align: center;
 	letter-spacing: 2px;
 	background-color: darkgray;
-
 }
+
+.search_class3{
+	background: #FFFFFF;
+    border: 1px solid rgb(118 118 118);
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 14px;
+    height: 40px;
+    outline: medium none;
+    padding-left: 0px;
+    padding-top: 5px;
+    width: 100%;
+    background-image: url(../static/home/searchicon.png);
+    background-repeat: no-repeat;
+    background-position: 530px;
+    float: left;
+    margin-bottom: 20px;
+}
+
 </style>
 <link rel="stylesheet" href="css/bootstrap.3.3.6/dist/css/bootstrap.3.3.6.css" type="text/css">
 <link href="css/main2.css" rel="stylesheet">
@@ -132,7 +149,6 @@ form .progress {
 
 
 
-
 			<div class="col-sm-3">
 				<input type="text"  ng-model="ctrl.theBizExpense.amount" placeholder="amount" style="width: 100px;height: 30px;"/>
 				{{ctrl.theBizExpense.amount | number:0}}đ
@@ -140,27 +156,55 @@ form .progress {
 
 		</div>
 		<div class="row" style="margin-top: 10px;">
-	    	<div class="col-sm-7">
-	    		<textarea name="description" placeholder="description" rows="3"  style="white-space: pre-line;"
-						  ng-model="ctrl.theBizExpense.description" ></textarea>
+	    	<div class="col-sm-6">
+	    		<!--<textarea name="description" placeholder="description" rows="3"  style="white-space: pre-line;"
+						  ng-model="ctrl.theBizExpense.description" ></textarea>-->
+				<div class="checkout__input" >
+					<md-autocomplete class="search_class3"  flex=""
+									 ng-disabled="false"
+									 md-no-cache="true"
+									 md-selected-item="ctrl.selectedOne"
+									 md-search-text-change="ctrl.searchChange(ctrl.theBizExpense.description)"
+									 md-search-text="ctrl.theBizExpense.description"
+									 md-selected-item-change="ctrl.resultSelectedChange(one,ctrl.theBizExpense)"
+									 md-items="one in ctrl.latestBizExpense"
+									 md-item-text="one.lensNote"
+									 md-min-length="3"
+									 md-delay="600"
+									 md-clear-button="true"
+									 md-autoselect="false"
+									 placeholder="miêu tả"
+					>
+						<md-item-template>
+							<div class="row">
+								<div class="col-md-5" >{{one.enrichData}}</div>
+							</div>
+						</md-item-template>
+
+					</md-autocomplete>
+				</div>
+
+
 	    	</div>
-			<div class="col-sm-2" >
+			<div class="col-sm-3" >
 				<a ng-click="ctrl.upsert(ctrl.theBizExpense)" href=""
 				   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'btn check_out'"
 				   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'Save'}}</a>
-				<a ng-click="ctrl.clear()" href="" class="btn check_out" style="margin: 0px 0px 0px 10px;">clear</a>
-				<a href="" class="btn check_out" style="margin: 10px 0px 0px 0px;"
-				   ng-click="ctrl.showUpload = ctrl.showUpload ? false : true;"
-				>upload</a>
+
+				<a href="" ng-click="ctrl.clear()"
+				   class="btn check_out" style="margin: 0px 0px 0px 10px;">clear</a>
+
+				<a href="" ng-click="ctrl.showUpload = ctrl.showUpload ? false : true;"
+				   class="btn check_out" style="margin: 0px 0px 0px 10px;">upload</a>
 			</div>
-			<div class="col-sm-2">
+			<div class="col-sm-3">
 				<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
 					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;width: 200px;height: 0px;padding: 5px 0px 25px 10px;" >
 					{{ctrl.responseStrFail}}
 				</alert>
 
 				<alert type="success" close="ctrl.closeAlert()" ng-if="ctrl.responseStr"
-					   dismiss-on-timeout="2000" style="margin: 0px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;" >
+					   dismiss-on-timeout="3000" style="margin: 0px 0px 0px 0px;height: 0px;padding: 5px 0px 25px 10px;" >
 					thành công
 				</alert>
 
@@ -189,10 +233,11 @@ form .progress {
 
 				<a ng-click="ctrl.resetQuickPick();ctrl.isStatusUpdate = false;" href="" class="btn check_out"
 				   style="margin: 0px 0px 4px 0px;" >reset</a>
-				<a ng-click="ctrl.quickPick()" href="" class="btn check_out"
+				<a ng-click="ctrl.quickPick();ctrl.isQPPressed = true;" href="" class="btn check_out"
 				   style="margin: 0px 0px 4px 0px;" >Chọn nhanh</a>
 
 				<a ng-click="ctrl.isStatusUpdate = true;" href="" class="btn check_out"
+				   ng-if="ctrl.isQPPressed"
 				   style="margin: 0px 0px 4px 0px;" >Cập nhật</a>
 
 				<span ng-if="ctrl.isStatusUpdate">

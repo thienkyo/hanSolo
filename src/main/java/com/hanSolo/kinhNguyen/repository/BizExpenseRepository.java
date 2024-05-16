@@ -12,12 +12,7 @@ import java.util.List;
 public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpense, Integer> {
 
     List<BizExpense> findFirst100ByOrderByGmtCreateDesc();
-
-    //List<BizExpense> findFirst100ByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
-
     List<BizExpense> findAllByOrderByGmtCreateDesc();
-
-    //List<BizExpense> findByOwnerPhoneOrderByGmtCreateDesc(String ownerPhone);
 
     @Transactional
     @Modifying
@@ -36,4 +31,7 @@ public interface BizExpenseRepository extends PagingAndSortingRepository<BizExpe
 
     List<BizExpense> findByClientCodeOrderByGmtCreateDesc(String clientCode);
     List<BizExpense> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+
+    List<BizExpense> findFirst15ByClientCodeOrderByGmtCreateDesc(String clientCode);
+
 }

@@ -252,6 +252,9 @@ public class ManagementController {
         return bizExpenseList;
     }
 
+
+
+
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "upsertBizExpense", method = RequestMethod.POST)
     public GeneralResponse<BizExpense> upsertBizExpense(@RequestBody final BizExpense bizExpense, final HttpServletRequest request) throws ParseException {
@@ -1396,6 +1399,12 @@ public class ManagementController {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "getLatestLensProduct", method = RequestMethod.POST)
+    public List<OrderDetail> getLatestLensProduct(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        List<OrderDetail> orderDetailList = orderDetailRepo.findFirst15ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+        return orderDetailList;
+    }
 
     @RequestMapping(value = "getOrderByName", method = RequestMethod.POST)
     public List<Order> getOrderByName(@RequestBody final QueryByClientShopAmountRequest req,final HttpServletRequest request) {
