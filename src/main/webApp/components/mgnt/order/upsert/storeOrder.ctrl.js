@@ -155,7 +155,7 @@ angular.module('storeOrderModule')
 
 
 
-    self.dummyData =function() {
+   self.dummyData =function() {
 
         var first = ['Nguyễn','Trần','Lê','Phạm','Hoàng','Võ','Phan','Trương','Bùi','Đặng'];
         var middle = ['Văn','Hữu','Thị','Minh','Thuỵ','Võ','Uyên','Ngọc','Bùi','Đặng'];
@@ -200,8 +200,9 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].pd = '67';
         self.theOrder.orderDetails[0].wd = '';
         self.theOrder.orderDetails[0].vaNear = '';
+        self.theOrder.orderDetails[0].name = first[Math.floor(Math.random() * 10)] + ' ' +middle[Math.floor(Math.random() * 10)] + ' ' +
+                                             middle2[Math.floor(Math.random() * 10)] + ' ' +last[Math.floor(Math.random() * 10)] ;
 
-        self.theOrder.orderDetails[0].name = 'Lê Nguyễn Thiện Thoại';
         self.theOrder.orderDetails[0].yob ='1983';
         self.theOrder.orderDetails[0].phone = '';
         self.theOrder.orderDetails[0].address = '';
@@ -209,11 +210,11 @@ angular.module('storeOrderModule')
         self.theOrder.orderDetails[0].recommendedSpectacles = '';
         self.theOrder.orderDetails[0].orderDetailNote = '';
 
-    }
+   }
 
-    self.searchTextChange =function(text) {
+   self.searchTextChange =function(text) {
         //console.log('Text changed to ' + text);
-    }
+   }
 
     self.searchLensTextChange =function(text) {
         //console.log('Text changed to ' + text);

@@ -387,7 +387,7 @@ select, textarea {
 			<a ng-click="ctrl.splitOrder()" href=""
 			   ng-show="ctrl.wannaSplit" ng-class="ctrl.isSaveButtonPressed ? 'btn btn-default inactive' : 'btn btn-default'"
 			   style="margin: 0px 0px 10px 10px;">split</a>
-			<a ng-click="ctrl.deselectOrder()" href="" class="btn btn-default check_out"
+			<a ng-click="ctrl.deselectOrder()" href="" class="btn btn-default"
 			   ng-show="ctrl.wannaSplit"
 			   style="margin: 0px 0px 10px 10px;">deselect</a>
 			<span ng-show="ctrl.wannaSplit">count: {{ctrl.theSplitOrder.orderDetails.length}}| amount:{{ctrl.theSplitOrder.subTotal | number}}đ</span>
@@ -400,16 +400,14 @@ select, textarea {
 				<a class="nav-link" data-toggle="tab" href="" ng-click="ctrl.add1Tab()"> + </a>
 			</li>
 			<li class="nav-item" ng-repeat="item in ctrl.theOrder.orderDetails track by $index">
-				<!--<a class="nav-link {{$index == 0 ? 'active' : ''}}"
-				   data-toggle="tab" href="" data-target="#home{{$index}}" >Đơn kính {{$index + 1 + ' ('+item.orderId+'-'+item.id+')'}}
-					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
-				</a>-->
 				<a class="nav-link {{$index == 0 ? 'active' : ''}}"
 				   data-toggle="tab" href="" data-target="#home{{$index}}" >
-					<!--{{item.name.split(' ')[item.name.split(' ').length-2]}} {{item.name.split(' ')[item.name.split(' ').length-1]}}-->
 
 					{{item.name | getShortName}}{{ ' ('+item.orderId+'-'+item.id+')'}}
 					<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-show="item.isSplit"></span>
+					<!--<i class="fas fa-ok"  ng-show="item.isSplit"></i>-->
+					<i class="fa fa-check" ng-show="item.isSplit"></i>
+
 				</a>
 			</li>
 		</ul>
