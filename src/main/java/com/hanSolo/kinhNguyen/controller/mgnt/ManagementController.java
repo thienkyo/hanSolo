@@ -1186,6 +1186,27 @@ public class ManagementController {
         return specificSmsUserInfoList;
     }
 
+
+
+    @RequestMapping(value = "getSpecificSmsUserInfoForMgnt", method = RequestMethod.POST)
+    public List<SpecificSmsUserInfo> getSpecificSmsUserInfoForMgnt(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        List<SpecificSmsUserInfo> specificSmsUserInfoList ;
+        if(req.getAmount() == Utility.FIRST_TIME_LOAD_SIZE){
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                specificSmsUserInfoList =  specificSmsUserInfoRepo.findFirst100ByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                specificSmsUserInfoList =  specificSmsUserInfoRepo.findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }else{
+            if(req.getShopCode().equalsIgnoreCase(Utility.ALL)){
+                specificSmsUserInfoList =  specificSmsUserInfoRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
+            }else{
+                specificSmsUserInfoList =  specificSmsUserInfoRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+            }
+        }
+        return specificSmsUserInfoList;
+    }
+
     @RequestMapping(value = "upsertSpecificSmsUserInfo", method = RequestMethod.POST)
     public SpecificSmsUserInfoResponse upsertSpecificSmsUserInfo(@RequestBody final SpecificSmsUserInfo one, final HttpServletRequest request) throws ParseException {
         if(one.getId() == 0){

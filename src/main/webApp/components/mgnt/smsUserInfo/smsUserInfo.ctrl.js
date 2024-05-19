@@ -34,10 +34,12 @@ angular.module('smsUserInfoModule')
 	self.smsJobList = [];
 
     // temp logic for production and dev
-    if($location.host().includes('opticshop')){
+   /* if($location.host().includes('opticshop')){
         self.luckyDrawReq.shopCode = 'S7LJ6W';
-    }
+    }*/
 
+    self.theSpecificSmsUserInfo.clientCode = clientInfoCacheService.get().clientCode;
+    self.luckyDrawReq.clientCode = clientInfoCacheService.get().clientCode;
 
 	self.queryRequest.clientCode  = clientInfoCacheService.get().clientCode;
     self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
@@ -52,8 +54,10 @@ angular.module('smsUserInfoModule')
 	self.amountList=AmountList;
 	self.smsQueueAmountList = AmountList.map(a => ({...a}));// clone array
 	self.smsUserInfoAmountList = AmountList.map(a => ({...a}));// clone array
+	self.specificUserInfoAmountList = AmountList.map(a => ({...a}));// clone array
     //self.amount = FirstTimeLoadSize;
     self.queryRequest.amount = FirstTimeLoadSize;
+    console.log(self.queryRequest);
 
 
 //////// sms user info //////
@@ -107,12 +111,6 @@ angular.module('smsUserInfoModule')
         self.responseStr = false;
         self.responseStrFail = false;
     };
-
-
-
-
-
-
 
 
 
@@ -350,10 +348,17 @@ angular.module('smsUserInfoModule')
 
 //////// specific sms user info //////
     self.loadSpecificSmsUserInfo = function(){
-        specificSmsUserInfoService.getDataForMgnt(self.amount).then(function (data) {
-                self.specificSmsUserInfoList = data;
-                self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
-            });
+        specificSmsUserInfoService.getDataForMgnt(self.queryRequest).then(function (data) {
+            console.log(data);
+            self.specificSmsUserInfoList = data;
+            self.specificSmsUserInfoTableParams = new NgTableParams({}, { dataset: self.specificSmsUserInfoList});
+
+            if(self.specificSmsUserInfoList.length != 100){
+                self.specificUserInfoAmountList.find(i => i.value == 0).name = self.specificSmsUserInfoList.length;
+            }else{
+                self.specificUserInfoAmountList .find(i => i.value == 0).name = 'all';
+            }
+        });
     }
 
     self.deleteSpecificSmsUserInfo = function(one){
@@ -376,6 +381,13 @@ angular.module('smsUserInfoModule')
         self.isSaveButtonPressed=true;
         self.responseStr = false;
         self.responseStrFail = false;
+        console.log(one);
+        if(!one.shopCode || one.shopCode == ''){
+            console.log(one);
+            self.isSaveButtonPressed=false;
+            self.responseStrFail = 'chọn shop';
+            return;
+        }
         specificSmsUserInfoService.upsert(one).then(function (data) {
             self.responseStr = data;
             self.isSaveButtonPressed=false;
@@ -394,6 +406,8 @@ angular.module('smsUserInfoModule')
     self.clearTheSpecificSmsUserInfo = function(){
         self.responseStr = false;
         self.theSpecificSmsUserInfo = new SmsUserInfoDO();
+        //self.theSpecificSmsUserInfo.shopCode =  ;
+
     }
 
 ///////////  strategy //////
@@ -450,36 +464,47 @@ angular.module('smsUserInfoModule')
     }
 
 //////////////  lucky draw section //////
-
-    programService.getDataForMgnt(self.queryRequest).then(function (data) {
-        self.programResultList = data.map(combineNamePhone);
-        console.log(self.programResultList);
-
+    self.getProgramResultForMgnt = function(){
+        self.programResultList = [];
         self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
-    });
+
+        console.log(self.queryRequest);
+
+        programService.getDataForMgnt(self.queryRequest).then(function (data) {
+            //self.programResultList = data;
+            self.programResultList = data.map(combineNamePhone);
+            console.log(data);
+            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
+        });
+
+    }
+
+
+
+
+
+
 
     function combineNamePhone(item) {
         item.winnerNamePhone = item.winnerName +' '+ item.winnerPhone
         return item;
     }
 
-    self.getProgramResultForMgnt = function(req){
-        self.programResultList = [];
-        self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
-        programService.getDataForMgnt(self.queryRequest).then(function (data) {
-            self.programResultList = data;
-            console.log(data);
-            self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
-        });
-    }
+
 
     self.saveProgramResult = function(req){
         self.isSaveButtonPressed = true;
         self.responseStr = false;
         self.responseStrFail = false;
         console.log(req);
+        if(!req.shopCode || req.shopCode == '' || req.smsJobId == 0 ){
+            self.isSaveButtonPressed=false;
+            self.responseStrFail = 'chọn shop/chương trình';
+            return;
+        }
+
         if(req.orderIdList == ''){
-            self.responseStrFail = 'pls input orderId';
+            self.responseStrFail = 'Thêm mã đơn';
             self.isSaveButtonPressed = false;
             return;
         }

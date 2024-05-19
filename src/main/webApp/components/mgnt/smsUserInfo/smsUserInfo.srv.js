@@ -161,9 +161,9 @@ angular.module('smsUserInfoModule')
  			};
  	return specificSmsUserInfoService;
 
- 	function getDataForMgnt(amount){
- 		var url = "mgnt/getSpecificSmsUserInfoForMgnt/"+amount;
- 		return ajaxService.get(url,null,{}).then(function(response){
+ 	function getDataForMgnt(req){
+ 		var url = "mgnt/getSpecificSmsUserInfoForMgnt/";
+ 		return ajaxService.post(url,req,{}).then(function(response){
  			return response.data;
  		});
  	}
@@ -221,7 +221,7 @@ angular.module('smsUserInfoModule')
   	return service;
 
   	function getDataForMgnt(req){
-  		var url = "mgnt/program/getByClientCode";
+  		var url = "mgnt/program/getByShopCode";
   		return ajaxService.post(url,req,{}).then(function(response){
   			return response.data;
   		});

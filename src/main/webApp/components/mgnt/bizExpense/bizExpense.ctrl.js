@@ -73,7 +73,7 @@ angular.module('bizExpenseModule')
     self.searchChange = function(text){
         if(self.latestBizExpenseBK.length > 0){
             console.log(text);
-            self.latestBizExpense = self.latestBizExpenseBK.filter(i => i.lensNote.includes(text));
+            self.latestBizExpense = self.latestBizExpenseBK.filter(i => i.lensNote.toLowerCase().includes(text.toLowerCase()));
             console.log(self.latestBizExpense);
         }
     }

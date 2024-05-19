@@ -24,4 +24,9 @@ public interface SpecificSmsUserInfoRepository extends PagingAndSortingRepositor
     @Query("update SpecificSmsUserInfo s set s.lastSendSmsDate = ?1 where s.phone = ?2")
     int updateLastSendSmsDateByPhone(Date lastSendSmsDate, String phone);
 
+    List<SpecificSmsUserInfo> findFirst100ByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<SpecificSmsUserInfo> findFirst100ByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+    List<SpecificSmsUserInfo> findByClientCodeOrderByGmtCreateDesc(String clientCode);
+    List<SpecificSmsUserInfo> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
+
 }

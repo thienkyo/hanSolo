@@ -95,7 +95,6 @@ angular.module('orderListModule')
 
     self.clearAmount = function() {
         self.tempAmount = 0;
-        console.log(self.tempArray);
         self.tableParams.data.forEach((dataOne, index, array) => {
            dataOne.picked = false;
         });

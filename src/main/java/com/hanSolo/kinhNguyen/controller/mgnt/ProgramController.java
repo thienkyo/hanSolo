@@ -143,6 +143,11 @@ public class ProgramController {
         return programResultRepo.findByClientCodeOrderByGmtCreateDesc(req.getClientCode());
     }
 
+    @RequestMapping(value = "getByShopCode", method = RequestMethod.POST)
+    public List<ProgramResult> getByShopCode(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) {
+        return programResultRepo.findByClientCodeAndShopCodeOrderByGmtCreateDesc(req.getClientCode(), req.getShopCode());
+    }
+
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public GeneralResponse<String> delete(@RequestBody final ProgramResult role, final HttpServletRequest request) {
         programResultRepo.delete(role);

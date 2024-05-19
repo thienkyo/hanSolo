@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface ProgramResultRepository extends PagingAndSortingRepository<ProgramResult, Integer> {
     List<ProgramResult> findByClientCodeAndStatus(String clientCode, Boolean status);
-
     List<ProgramResult> findByClientCodeOrderByGmtCreateDesc(String clientCode);
-
+    List<ProgramResult> findByClientCodeAndShopCodeOrderByGmtCreateDesc(String clientCode, String shopCode);
 }

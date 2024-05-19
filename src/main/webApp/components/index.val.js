@@ -135,10 +135,8 @@ function LuckyDrawRequest(){
     this.expiry = 60;
     this.couponValue = 20;
     this.smsJobId = 0;
-    this.clientCode = 'CMKN';
-    this.shopCode = 'SB8ZTM';// dev
-    //this.shopCode = ''; // production
-
+    this.clientCode = '';
+    this.shopCode = '';// dev
 }
 
 function OrderStatusAmount(){
