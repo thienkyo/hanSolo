@@ -380,6 +380,10 @@ angular.module('storeOrderModule')
         }
     }
 
+    self.saveOrder2 = function(){
+        orderCacheService.addOneOrder2(self.theOrder);
+    }
+
     self.saveOrder = function(){
         self.order_return_status = null;
         if(self.isPickDP){
@@ -422,7 +426,7 @@ angular.module('storeOrderModule')
                     return;
                 }
                 self.theOrder.customDiscountAmount = self.theOrder.customDiscountAmount ? self.theOrder.customDiscountAmount : 0;
-                orderCacheService.addOneOrder(self.theOrder);
+                //orderCacheService.addOneOrder(self.theOrder);
                 cartService.placeOrder(self.theOrder).then(function (data) {
                     self.order_return_status = data.errorMessage; // return after saving order, order_return_status would be orderid
                     self.isSaveButtonPressed=false;
@@ -431,7 +435,8 @@ angular.module('storeOrderModule')
                     self.theOrder.currentCouponCode = self.theOrder.couponCode;
                     self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                     self.calculateOrderTotal();
-                    orderCacheService.addOneOrder(self.theOrder);
+                    self.theOrder.phase = 'JUST_SAVED';
+                    orderCacheService.addOneOrder3(self.theOrder);
                     self.tempCacheOrder = self.theOrder; // for check addDetailToBill
                     self.newOrderId = self.theOrder.id;
 
@@ -627,7 +632,7 @@ angular.module('storeOrderModule')
                         self.theOrder.orderDetails.forEach(self.calculateFramePriceAfterSale);
                         self.calculateOrderTotal(self.theOrder);
                     }
-                    console.log(self.theOrder);
+
 
                     // load jobid for sms send
                     if(self.theOrder.specificJobId && self.theOrder.specificJobId > 0){
@@ -647,7 +652,10 @@ angular.module('storeOrderModule')
                 }else{
                     $location.path('/mgnt/storeOrder/0');
                 }
-
+                // save into cache before editing.
+                self.theOrder.phase = 'BEFORE_EDIT';
+                var clone = Object.assign({}, self.theOrder);
+                orderCacheService.addOneOrder3(clone);
         });
     }else{
         self.theOrder = new OrderDO;

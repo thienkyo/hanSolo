@@ -12,7 +12,6 @@ angular.module('orderCacheListModule')
 	var self = this;
 	self.isSyncingOrder = false;
 	self.orderList = [];
-	self.cusSourceList = [];
 	self.OrderStatusArray=OrderStatusArray;
 	self.statusStyle = { "width": "80px" };
     self.isSuperAdmin = memberService.isSuperAdmin();
@@ -21,10 +20,6 @@ angular.module('orderCacheListModule')
 	}
 
 	self.cacheCount = orderCacheService.getQuantity();
-
-	customerSourceService.getAll().then(function (data) {
-        self.cusSourceList = data;
-    });
 
     //get order from cache
     self.orderList = orderCacheService.getCurrentOrderCache();
@@ -36,12 +31,18 @@ angular.module('orderCacheListModule')
 	self.getOrderFromOnline = function() {
         orderCacheListService.get100OrdersForCache().then(function (data) {
             self.orderList = data;
+            self.orderList = data.map(enrichData);
             self.orderList.forEach(calculateOrderTotal);
             console.log(self.orderList);
             self.tableParams = new NgTableParams({}, { dataset: self.orderList});
             orderCacheService.setCurrentOrderCache(self.orderList);
             self.cacheCount = orderCacheService.getQuantity();
         });
+    }
+
+    function enrichData(item) {
+        item.phase = 'LOADED';
+        return item;
     }
 
     self.clearOrderCache = function() {
@@ -51,25 +52,26 @@ angular.module('orderCacheListModule')
         self.cacheCount = orderCacheService.getQuantity();
     }
 
-    self.sync = function(order){
+    self.copy = function(order){
+        self.isSyncingOrder=true;
+        var clone = Object.assign({}, order); //clone object
+        clone.id = 0;
 
-        if(memberService.isMod()){
-            self.isSyncingOrder=true;
-
-            var clone = Object.assign({}, order); //clone object
-            clone.id = 0;
-
-            for (var i = 0; i < clone.orderDetails.length; i++){
-                clone.orderDetails[i].id = 0;
-                clone.orderDetails[i].orderId = null;
-            }
-
-            orderCacheListService.syncOrder(clone).then(function (data) {
-              self.isSyncingOrder = false;
-              console.log(clone);
-            });
+        for (var i = 0; i < clone.orderDetails.length; i++){
+            clone.orderDetails[i].id = 0;
+            clone.orderDetails[i].orderId = null;
         }
+        orderCacheListService.syncOrder(clone).then(function (data) {
+          self.isSyncingOrder = false;
+          console.log(clone);
+        });
+    }
 
+    self.revert = function(order){
+        self.isSyncingOrder=true;
+        orderCacheListService.syncOrder(order).then(function (data) {
+          self.isSyncingOrder = false;
+        });
     }
 
 
@@ -159,6 +161,7 @@ angular.module('orderCacheListModule')
 
     self.setSummaryModal = function(one) {
         self.theSummaryModal = one;
+        self.theSummaryModal.plainText = JSON.stringify(one, undefined, 2);
         console.log(self.theSummaryModal);
     }
 

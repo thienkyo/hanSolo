@@ -479,18 +479,10 @@ angular.module('smsUserInfoModule')
 
     }
 
-
-
-
-
-
-
     function combineNamePhone(item) {
         item.winnerNamePhone = item.winnerName +' '+ item.winnerPhone
         return item;
     }
-
-
 
     self.saveProgramResult = function(req){
         self.isSaveButtonPressed = true;

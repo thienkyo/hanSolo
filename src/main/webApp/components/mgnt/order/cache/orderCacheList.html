@@ -84,6 +84,18 @@
 							</div>
 						</div>
 					</div>
+					<!-- metadata-->
+					<ul class="nav nav-tabs" role="tablist" ng-show="ctrl.isSuperAdmin">
+						<li class="nav-item {{ctrl.isClickMetadata ? 'active' : ''}}" ng-click="ctrl.isClickMetadata = ctrl.isClickMetadata ? false : true;">
+							<a class="nav-link" data-toggle="tab" href="" data-target="#metadata">metadata</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div id="metadata" class="container tab-pane {{ctrl.isClickMetadata ? 'active' : ''}}">
+							<br/>
+							<pre>{{ctrl.theSummaryModal.plainText}}</pre>
+						</div>
+					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="ctrl.clearAmount()">Close</button>
 					</div>
@@ -95,11 +107,11 @@
         <div class="table-responsive">
             <table ng-table="ctrl.tableParams" class="table table-bordered table-hover table-striped" show-filter="true">
 			    <tr ng-repeat="order in $data track by $index">
-			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:50px;text-align: center;">
+			        <td title="'id'" filter="{ 'id': 'number'}"  style="width:100px;text-align: center;">
 			        	<a href="" ng-click="ctrl.setModal(order)" data-toggle="modal" data-target="#exampleModal">{{order.id}}</a>
 			        </td>
-			        <td title="'Date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
-						{{order.gmtCreate | date:"yyyy-MM-dd  HH:mm:ss"}}
+			        <td title="'Modify date'" filter="{ 'gmtCreate' : 'text'}" sortable="'gmtCreate'" style="width:180px;">
+						{{order.gmtModify | date:"yyyy-MM-dd  HH:mm:ss"}}
 			        </td>
 					<td title="''"  style="text-align: center;">
 						<input type="checkbox"  ng-model="order.picked" ng-click="ctrl.calculateAmount(order)" />
@@ -110,12 +122,16 @@
 						<a href="" ng-click="ctrl.setSummaryModal(order)" data-toggle="modal" data-target="#summaryModal">{{order.shippingName}}</a>
 					</td>
 					<td title="'inside'" style="width:80px;">{{order.frameNumber}}G+{{order.lensNumber}}T</td>
-
-					<td title="'sync'" style="width:fit-content;" >
+					<td title="'phase'" style="width:80px;">{{order.phase}}</td>
+					<td title="'action'" style="width:fit-content;" >
 
 						<button type="button" class="btn btn-primary" ng-disabled="ctrl.isSyncingOrder"
-								 style="margin-top: 0px;height: 32px;" ng-click="ctrl.sync(order)">
-							sync
+								 style="margin-top: 0px;height: 32px;" ng-click="ctrl.copy(order)">
+							copy
+						</button>
+						<button type="button" class="btn btn-primary" ng-disabled="ctrl.isSyncingOrder"
+								style="margin-top: 0px;height: 32px;" ng-click="ctrl.revert(order)">
+							revert
 						</button>
 					</td>
 					<!--<td title="'delete'" style="width:fit-content;" >

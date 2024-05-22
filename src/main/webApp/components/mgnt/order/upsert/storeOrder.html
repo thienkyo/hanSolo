@@ -357,6 +357,7 @@ select, textarea {
 						<li ng-show="ctrl.theOrder.deposit > 0">Remain <span>{{ctrl.theOrder.remain | number:0}}đ</span></li>
 					</ul>
 					<a href="" ng-click="ctrl.saveOrder()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">{{ctrl.isSaveButtonPressed ? 'Loading...' : 'Save order'}}</a>
+					<!--<a href="" ng-click="ctrl.saveOrder2()" ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'">test</a>-->
 
 				<!--	<a href="" ng-click="ctrl.splitOrder()"
 					   ng-class="ctrl.isSaveButtonPressed ? 'inactive' : 'primary-btn'"

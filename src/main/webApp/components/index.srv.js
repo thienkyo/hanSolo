@@ -320,7 +320,9 @@ angular.module('app')
 	var orderCacheService = {
 		setCurrentOrderCache : setCurrentOrderCache,
 		getCurrentOrderCache : getCurrentOrderCache,
-		addOneOrder : addOneOrder,
+		addOneOrder : addOneOrder, // overwrite the duplicated order
+		addOneOrder2 : addOneOrder2,// keep version
+		addOneOrder3 : addOneOrder3,// just insert order to cache
 		getQuantity : getQuantity,
 		getOneOrder : getOneOrder,
 		clearCache : clearCache
@@ -346,6 +348,45 @@ angular.module('app')
             }
 	    }
 	    setCurrentOrderCache(currentOrderCache);
+    }
+
+    function addOneOrder3(order){
+        currentOrderCache = getCurrentOrderCache();
+        currentOrderCache.unshift(order);
+        if(getQuantity() > 2500){
+            currentOrderCache.pop();
+        }
+        setCurrentOrderCache(currentOrderCache);
+    }
+
+    function addOneOrder2(order){
+        currentOrderCache = getCurrentOrderCache();
+        var foundArray = currentOrderCache.filter(i => i.id == order.id);
+        console.log(foundArray);
+        if(foundArray.length > 0 && foundArray.length <= 3){
+            var index = currentOrderCache.indexOf(foundArray);
+            currentOrderCache[index] = order;
+
+            var indexOfMax = Math.max(...foundArray.map(o => o.version));
+            order.version = indexOfMax + 1;
+            var orderMaxVersion = foundArray.find(item => item.version == indexOfMax);
+            currentOrderCache.unshift(order);
+
+
+            console.log(index);
+            console.log(orderMaxVersion);
+            console.log(Math.max(...foundArray.map(o => o.version)));
+            console.log(order);
+        }else{
+            order.version = 1;
+            currentOrderCache.unshift(order);
+
+        }
+        if(getQuantity() > 2000){
+            currentOrderCache.pop();
+        }
+        setCurrentOrderCache(currentOrderCache);
+        console.log(currentOrderCache);
     }
 
 	function setCurrentOrderCache(orderList){
