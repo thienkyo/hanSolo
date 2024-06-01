@@ -508,8 +508,11 @@ angular.module('smsUserInfoModule')
                 self.responseStr = "Thành công";
 
                 data.obj.forEach((dataOne, index, array) => {
+                    combineNamePhone(dataOne);
                     self.programResultList.unshift(dataOne);
                 });
+
+
 
                 self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList});
              }else{
@@ -527,12 +530,33 @@ angular.module('smsUserInfoModule')
             self.isSaveButtonPressed = false;
             if(data.errorCode == 'SUCCESS' ){
             self.responseStr = 'Thành công';
+            data.obj = data.obj.map(combineNamePhone);
             self.programResultList2 = self.programResultList.map(obj => data.obj.find(o => o.orderId == obj.orderId) || obj);
 
             self.programResultTableParams = new NgTableParams({}, { dataset: self.programResultList2});
             }else{
             self.responseStrFail = data.errorMessage;
             }
+        });
+    }
+
+    self.getRandomOrder = function(){
+        programService.getRandomOrder(self.queryRequest).then(function (data) {
+            console.log(data);
+
+            if(data.obj.length > 0){
+                data.obj.forEach((dataOne, index, array) => {
+                   if(dataOne.shippingPhone.length > 9){
+                        if(self.luckyDrawReq.orderIdList == ''){
+                            self.luckyDrawReq.orderIdList +=  dataOne.id;
+                        }else{
+                            self.luckyDrawReq.orderIdList +=  ','+dataOne.id;
+                        }
+
+                   }
+               });
+            }
+
         });
     }
 

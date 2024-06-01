@@ -215,6 +215,7 @@ angular.module('smsUserInfoModule')
   	var service = {
   			getDataForMgnt : getDataForMgnt,
   			saveResult : saveResult,
+  			getRandomOrder : getRandomOrder,
   			prepareCouponAndSms : prepareCouponAndSms,
   			deleteOne : deleteOne
   			};
@@ -233,6 +234,13 @@ angular.module('smsUserInfoModule')
   			return response.data;
   		});
   	}
+
+  	function getRandomOrder(req){
+        var url = "mgnt/getRandomOrder";
+        return ajaxService.post(url,req,{}).then(function(response){
+            return response.data;
+        });
+    }
 
   	function prepareCouponAndSms(req){
         var url = "mgnt/program/createCouponAndSms";

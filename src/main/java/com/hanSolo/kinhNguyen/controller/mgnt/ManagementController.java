@@ -69,11 +69,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.hanSolo.kinhNguyen.cacheCenter.CommonCache.CLIENT_SHOP_LIST;
 
@@ -933,6 +935,26 @@ public class ManagementController {
     public GeneralResponse<List<Order>> recoverOrder(@RequestBody final List<Order> orders, final HttpServletRequest request) throws ServletException, ParseException {
 
         GeneralResponse response =  new GeneralResponse(orderRepo.saveAll(orders),Utility.SUCCESS_ERRORCODE,"save order success");
+        return response;
+    }
+
+    @RequestMapping(value = "getRandomOrder", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public GeneralResponse<List<Order>> getRandomOrder(@RequestBody final QueryByClientShopAmountRequest req, final HttpServletRequest request) throws ServletException, ParseException {
+
+
+        if(req.getGeneralPurpose() == ""){
+            return new GeneralResponse(Collections.EMPTY_LIST,Utility.SUCCESS_ERRORCODE,"save order success");
+        }
+
+        int max = Integer.parseInt(req.getGeneralPurpose());
+        Random r = new Random();
+        List<Integer> idList = new ArrayList<>();
+        for(int i =0; i <5; i++){
+            idList.add(r.nextInt(max));
+        }
+        GeneralResponse response =  new GeneralResponse(orderRepo.findByClientCodeAndShopCodeAndIdIn(req.getClientCode()
+                , req.getShopCode(), idList),Utility.SUCCESS_ERRORCODE,"save order success");
         return response;
     }
 

@@ -848,7 +848,7 @@ form .progress {
 						   style="margin: 0px 0px 0px 0px;">{{ctrl.isSaveButtonPressed ? 'Loading' : 'create'}}</a>
 
 						<a ng-click="ctrl.clearSmsQueue()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">clear</a>
-						<a ng-click="ctrl.clearSmsQueue()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">random</a>
+
 
 						<alert type="danger" close="ctrl.closeAlert()" ng-if="ctrl.responseStrFail"
 							   dismiss-on-timeout="3000"
@@ -863,6 +863,14 @@ form .progress {
 						</alert>
 
 					</div>
+				</div>
+
+				<div class="row" >
+					<div class="col-sm-3">
+						<input type="text"  ng-model="ctrl.queryRequest.generalPurpose" placeholder="random" style="width: 50%;"/>
+						<a ng-click="ctrl.getRandomOrder()" href="" class="btn btn-default check_out" style="margin: 0px 0px 0px 0px;">random</a>
+					</div>
+
 				</div>
 
 				<!-- lucky draw table-->

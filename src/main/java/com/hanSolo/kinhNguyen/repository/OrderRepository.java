@@ -57,5 +57,5 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Integ
 
     List<Order> findByGmtCreateBetween(@NonNull Date gmtCreateStart, @NonNull Date gmtCreateEnd);
 
-
+    List<Order> findByClientCodeAndShopCodeAndIdIn(String clientCode, String shopCode, Collection<Integer> ids);
 }
