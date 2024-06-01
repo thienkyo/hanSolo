@@ -352,7 +352,18 @@ angular.module('app')
 
     function addOneOrder3(order){
         currentOrderCache = getCurrentOrderCache();
-        currentOrderCache.unshift(order);
+        var found = currentOrderCache.find(i => i.id == order.id && i.phase == order.phase);
+
+        if(found){
+            if(JSON.stringify(order) !== JSON.stringify(found)){
+                 currentOrderCache.unshift(order);
+            }
+        }else{
+            currentOrderCache.unshift(order);
+        }
+
+
+        //currentOrderCache.unshift(order);
         if(getQuantity() > 2500){
             currentOrderCache.pop();
         }
@@ -362,7 +373,6 @@ angular.module('app')
     function addOneOrder2(order){
         currentOrderCache = getCurrentOrderCache();
         var foundArray = currentOrderCache.filter(i => i.id == order.id);
-        console.log(foundArray);
         if(foundArray.length > 0 && foundArray.length <= 3){
             var index = currentOrderCache.indexOf(foundArray);
             currentOrderCache[index] = order;
@@ -371,12 +381,6 @@ angular.module('app')
             order.version = indexOfMax + 1;
             var orderMaxVersion = foundArray.find(item => item.version == indexOfMax);
             currentOrderCache.unshift(order);
-
-
-            console.log(index);
-            console.log(orderMaxVersion);
-            console.log(Math.max(...foundArray.map(o => o.version)));
-            console.log(order);
         }else{
             order.version = 1;
             currentOrderCache.unshift(order);
@@ -386,7 +390,6 @@ angular.module('app')
             currentOrderCache.pop();
         }
         setCurrentOrderCache(currentOrderCache);
-        console.log(currentOrderCache);
     }
 
 	function setCurrentOrderCache(orderList){

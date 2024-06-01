@@ -38,9 +38,16 @@ angular.module('storeOrderModule')
 	self.queryRequest = queryRequestDO;
 	self.queryRequest.clientCode = clientInfoCacheService.get().clientCode;
 	self.queryRequest.shopCode = currentShopCacheService.get().shopCode;
-	console.log(self.queryRequest);
 
 //////////////// function section ////////////
+
+    self.checkReading = function(orderDetail){
+        if(orderDetail.vaNear){
+            orderDetail.reading = true;
+        }else{
+            orderDetail.reading = false;
+        }
+    }
 
     self.updatePrice = function(){
         self.calculateOrderTotal();
@@ -75,7 +82,6 @@ angular.module('storeOrderModule')
         self.isSaveButtonPressed = true;
         if(orderDetail.id == 0){
             self.theOrder.orderDetails.splice(index,1);
-            console.log('test');
             self.isErrorMsg = false;
             self.isSaveButtonPressed = false;
             self.order_return_status = 'Success';
@@ -308,12 +314,10 @@ angular.module('storeOrderModule')
         }
 
         self.queryRequest.generalPurpose = code+"|"+"BILL";
-        console.log(self.queryRequest);
         if(self.queryRequest.clientCode == 'GODLIKE' || self.queryRequest.clientCode == ''){
             self.queryRequest.clientCode = self.theOrder.clientCode;
             self.queryRequest.shopCode = self.theOrder.shopCode;
         }
-        console.log(self.queryRequest);
 
         storeOrderService.getCoupon3(self.queryRequest).then(function (data) {
 
@@ -380,9 +384,6 @@ angular.module('storeOrderModule')
         }
     }
 
-    self.saveOrder2 = function(){
-        orderCacheService.addOneOrder2(self.theOrder);
-    }
 
     self.saveOrder = function(){
         self.order_return_status = null;
@@ -612,7 +613,6 @@ angular.module('storeOrderModule')
             .then(function (data) {
                 self.theOrder = data.obj;
                 self.tempCacheOrder = orderCacheService.getOneOrder(self.theOrder.id); // for check addDetailToBill
-                console.log(self.tempCacheOrder);
 
                 if(self.theOrder){
                     if(!self.theOrder.clientCode){
@@ -653,8 +653,8 @@ angular.module('storeOrderModule')
                     $location.path('/mgnt/storeOrder/0');
                 }
                 // save into cache before editing.
-                self.theOrder.phase = 'BEFORE_EDIT';
                 var clone = Object.assign({}, self.theOrder);
+                clone.phase = 'BEFORE_EDIT';
                 orderCacheService.addOneOrder3(clone);
         });
     }else{
@@ -672,7 +672,6 @@ angular.module('storeOrderModule')
                 self.theOrder.shopCode = currentShopCacheService.get().shopCode;
             }
         }
-        console.log(self.theOrder);
     }
 
     self.isSaveButtonPressed=false;// the "save order" button is pressed or not.

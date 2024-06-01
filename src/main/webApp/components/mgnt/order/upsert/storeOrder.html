@@ -1,7 +1,7 @@
 <style>
 .prescriptionInput {
     width: 100%;
-    margin: 12px 10px 10px 10px;
+    margin: 12px 10px 11px 10px;
     border: 1px solid #e1e1e1;
     padding-left: 5px;
 }
@@ -489,10 +489,10 @@ select, textarea {
 						</div>
 						<div class="row">
 							<div class="col-md-6">
-								<h4 style="padding-bottom: 0px;">Thị lực không kính </h4>
+								<h5 style="padding-bottom: 0px;">Thị lực không kính </h5>
 							</div>
 							<div class="col-md-6">
-								<h4 style="padding-bottom: 0px;">Độ kính cũ </h4>
+								<h5 style="padding-bottom: 0px;">Độ kính cũ </h5>
 							</div>
 
 						</div>
@@ -670,7 +670,7 @@ select, textarea {
 										</div>
 										<div class="row">
 											<div class="col-md-7" style="padding-top: 10px;">
-												Khoảng cách làm việc(WD)
+												Khoảng cách làm việc(WD):
 											</div>
 											<div class="col-md-4" style="padding-left: 0px;">
 												<input type="text"  ng-model="item.wd" placeholder="wd"
@@ -680,8 +680,8 @@ select, textarea {
 
 									</div>
 									<div class="row border" >
-										<div class="col-md-3 border bg-light" style="padding-top: 6px;padding-bottom: 6px;">
-											MP<br>
+										<div class="col-md-3 border bg-light" style="padding-top: 12px;padding-bottom: 6px;">
+											MP
 											(OD)
 										</div>
 										<div class="col-md-3 border bg-light" >
@@ -690,8 +690,8 @@ select, textarea {
 										</div>
 									</div>
 									<div class="row border" >
-										<div class="col-md-3 border bg-light" style="padding-top: 6px;padding-bottom: 6px;">
-											MT<br>
+										<div class="col-md-3 border bg-light" style="padding-top: 12px;padding-bottom: 6px;">
+											MT
 											(OS)
 										</div>
 										<div class="col-md-3 border bg-light" >
@@ -703,6 +703,7 @@ select, textarea {
 								<div class="col-md-2 border bg-light" style="padding-top: 10px;padding-bottom: 10px;">
 									Thị lực gần(VA):
 									<input type="text"  ng-model="item.vaNear" placeholder="vaNear"
+										   ng-change="ctrl.checkReading(item)"
 										   class="prescriptionInput" style="margin: 10px 10px 10px 0px;">
 								</div>
 

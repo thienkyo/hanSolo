@@ -89,10 +89,10 @@
 						<table ng-table="" class="table table-bordered table-hover table-striped" show-filter="false">
 
 							<tr ng-repeat="item in ctrl.theSummaryModal.orderDetails">
-								<td title="'id'"  style="width:50px;text-align: center;">
+								<td title="'id'"  style="width:70px;text-align: center;">
 									{{item.id}}
 								</td>
-								<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:180px;">
+								<td title="'name'"filter="{ 'name': 'text'}" style="text-align: left;width:220px;">
 									{{item.name}} ({{item.yob}})
 								</td>
 								<td title="'lens'" style="text-align: right;padding-right: 2px;padding-left: 2px;">
@@ -100,16 +100,16 @@
 										({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 										({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
 									</div>
+									<div class="row" style="margin-left: 3px;" ng-if="item.reading">
+										{{item.reading ? 'Đọc sách :' + item.vaNear +'(' + item.odAdd + ")"+'(' + item.osAdd + ")" : ''}}
+									</div>
 									<div class="row" style="margin-left: 3px;">
-										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+										{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}}
+
                                     </div>
 
-									<div class="row" style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
-										{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
-									</div>
-
 								</td>
-								<td title="'frame'"  style="width:200px;">
+								<td title="'frame'"  style="width:220px;">
 									{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
 								</td>
 								<td title="'note'" style="width:200px;">
@@ -231,12 +231,13 @@
 											({{ item.odSphere +' '+ item.odCylinder +' '+item.odPrism}})
 											({{ item.osSphere +' '+ item.osCylinder +' '+item.osPrism}})
 										</div>
+										<div class="row" style="margin-left: 3px;" ng-if="item.reading">
+											{{item.reading ? 'Đọc sách :' + item.vaNear +'(' + item.odAdd + ")"+'(' + item.osAdd + ")" : ''}}
+										</div>
 										<div  style="margin-left: 3px;">
-											{{item.lensNote}} {{item.monoLens ? ', 1cái' : ''}} {{item.reading ? ', đọc sách' : ''}}
+											{{item.lensNote}} {{item.monoLens ? ', 1tròng' : ''}}
 										</div>
-										<div  style="margin-left: 3px;" ng-if="item.lensDiscountAmount > 0">
-											{{item.lensDiscountAmount > 0 ? '(discount:'+item.lensDiscountAmount +'%)' : ''}}
-										</div>
+
 									</td>
 									<td title="'frame'"  style="">
 										{{item.frameNote}} {{item.frameDiscountAmount > 0 ? '(discount:'+item.frameDiscountAmount +'%)' : ''}}
@@ -278,7 +279,7 @@
 				</button>
 				<button type="button" class="btn btn-primary" ng-click="ctrl.queryRequest.generalPurpose='';ctrl.getOrdersByTerms();"
 						style="margin-top: 0px;height: 35px;vertical-align: baseline;">
-					reset
+					refresh
 				</button>
 			</div>
 
