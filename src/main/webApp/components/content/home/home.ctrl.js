@@ -76,10 +76,10 @@ angular.module('homeModule')
                     console.log(data.obj.shopList);
                     shopListCacheService.set(data.obj.shopList);
                     console.log(shopListCacheService.get());
-                    if(data.obj.shopList.length >= 1){
+                    if(data.obj.shopList.length > 1){
                         currentShopCacheService.set(data.obj.shopList[1]);
                     }else {
-                        currentShopCacheService.set(data.obj.shopList[1]);
+                        currentShopCacheService.set(data.obj.shopList[0]);
                     }
                     /*else if(data.obj.shopList.find(i => i.shopCode == 'ALL')){
                         currentShopCacheService.set(data.obj.shopList.find(i => i.shopCode == 'ALL'));
