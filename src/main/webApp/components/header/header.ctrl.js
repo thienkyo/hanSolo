@@ -58,6 +58,12 @@ angular.module('app')
 			$location.path(url);
 		}
 	}
+
+	self.offMobileCanvas =function() {
+        console.log('hehe ' );
+        $(".offcanvas-menu-wrapper").removeClass("active");
+        $(".offcanvas-menu-overlay").removeClass("active");
+    }
 ///////////////////////////Receiver/////////////////////////////////////////////
 	$rootScope.$on('authorized', function() {
 		self.currentMember = memberService.getCurrentMember();

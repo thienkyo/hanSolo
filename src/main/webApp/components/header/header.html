@@ -112,48 +112,48 @@
 			</div>
 			<div class="col-lg-7 col-md-7">
 				<!-- menu-->
-				<nav class="header__menu mobile-menu">
+				<nav class="header__menu mobile-menu" >
 					<ul>
 						<!--new menu-->
-						<li class="active"><a href="#/">Home</a></li>
+						<li class="active" ><a href="#/" ng-click="ctrl.offMobileCanvas()">Home</a></li>
 						<li ng-if="ctrl.isMod">
 							<a href="" >order</a>
 							<ul class="dropdown" >
-								<li><a href="#/mgnt/storeOrder/0">create order</a></li>
-								<li><a href="#/mgnt/orderList">order list</a></li>
-								<li><a href="#/mgnt/coupon">coupons</a></li>
-								<li><a href="#/mgnt/orderCacheList/">order cache</a></li>
+								<li><a href="#/mgnt/storeOrder/0" ng-click="ctrl.offMobileCanvas()">create order</a></li>
+								<li><a href="#/mgnt/orderList" ng-click="ctrl.offMobileCanvas()">order list</a></li>
+								<li><a href="#/mgnt/coupon" ng-click="ctrl.offMobileCanvas()">coupons</a></li>
+								<li><a href="#/mgnt/orderCacheList/" ng-click="ctrl.offMobileCanvas()">order cache</a></li>
 							</ul>
 						</li>
 						<li  ng-if="ctrl.isAdmin">
-							<a href="" ng-if="ctrl.isAdmin">member</a>
+							<a href="" ng-if="ctrl.isAdmin" >member</a>
 							<ul class="dropdown" ng-show="ctrl.isAdmin">
-								<li><a href="#/mgnt/member">members</a></li>
-								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/contract/">contracts</a></li>
+								<li><a href="#/mgnt/member" ng-click="ctrl.offMobileCanvas()">members</a></li>
+								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/contract/" ng-click="ctrl.offMobileCanvas()">contracts</a></li>
 							</ul>
 						</li>
 						<li ng-if="ctrl.isMod"><a href="" >expense</a>
 							<ul class="dropdown">
-								<li><a href="#/mgnt/bizExpense">biz expense</a></li>
-								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/bizReport/">report</a></li>
-								<li ng-if="ctrl.isAdmin"><a href="#/mgnt/customerSource/">Customer Source</a></li>
+								<li><a href="#/mgnt/bizExpense" ng-click="ctrl.offMobileCanvas()">biz expense</a></li>
+								<li ng-if="ctrl.isSuperAdmin"><a href="#/mgnt/bizReport/" ng-click="ctrl.offMobileCanvas()">report</a></li>
+								<li ng-if="ctrl.isAdmin"><a href="#/mgnt/customerSource/" ng-click="ctrl.offMobileCanvas()">Customer Source</a></li>
 							</ul>
 						</li>
 						<li ng-if="(ctrl.isAdmin && ctrl.clientInfo.isUnlockSmsFeature) || ctrl.isGodLike">
 							<a href="" >sms</a>
 							<ul class="dropdown">
-								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/SmsUserInfo/">sms</a></li>
-								<li><a href="#/fastSMS/">fast SMS</a></li>
+								<li ng-show="ctrl.isSuperAdmin"><a href="#/mgnt/SmsUserInfo/" ng-click="ctrl.offMobileCanvas()">sms</a></li>
+								<li><a href="#/fastSMS/" ng-click="ctrl.offMobileCanvas()">fast SMS</a></li>
 							</ul>
 						</li>
 						<li ng-if="ctrl.isGodLike">
 							<a href="" >config</a>
 							<ul class="dropdown" >
-								<li><a href="#/mgnt/banner">banners</a></li>
-								<li><a href="#/Hmgnt/clientShop">client</a></li>
-								<li><a href="#/mgnt/lensProduct/">lens product</a></li>
-								<li><a href="#/mgnt/shopConfig">shop config</a></li>
-								<li><a href="#/Hmgnt/opticShopOnline">optic shop</a></li>
+								<li><a href="#/mgnt/banner" ng-click="ctrl.offMobileCanvas()">banners</a></li>
+								<li><a href="#/Hmgnt/clientShop"ng-click="ctrl.offMobileCanvas()">client</a></li>
+								<li><a href="#/mgnt/lensProduct/" ng-click="ctrl.offMobileCanvas()">lens product</a></li>
+								<li><a href="#/mgnt/shopConfig" ng-click="ctrl.offMobileCanvas()">shop config</a></li>
+								<li><a href="#/Hmgnt/opticShopOnline"ng-click="ctrl.offMobileCanvas()">optic shop</a></li>
 							</ul>
 						</li>
 
@@ -172,7 +172,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="canvas__open" style="margin-top: 10px;"><i class="fa fa-bars"></i></div>
+		<div class="canvas__open" ><i class="fa fa-bars"></i></div>
 	</div>
 </header>
+<script src="js/main.js"></script>
 <!-- Header Section End -->

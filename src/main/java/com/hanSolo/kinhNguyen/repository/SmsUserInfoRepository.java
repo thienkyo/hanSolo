@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public interface SmsUserInfoRepository extends PagingAndSortingRepository<SmsUserInfo, Integer> {
     Optional<SmsUserInfo> findByPhone(String phone);
+
+    Optional<SmsUserInfo> findByPhoneAndClientCode(String phone, String clientCode);
     List<SmsUserInfo> findAllByOrderByGmtCreateDesc();
     List<SmsUserInfo> findFirst100ByOrderByGmtCreateDesc();
     List<SmsUserInfo> findFirst100ByOrderCreateDateBeforeAndJobIdListNotLikeAndLastSendSmsDateBefore(Date orderCreateDate, String jobIdList, Date lastSendSmsDate);

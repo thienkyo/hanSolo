@@ -209,7 +209,20 @@ public class AuthenticationController {
             if(smsUserInfo.getPhone().replace(" ","").length() < 10){
                 continue;
             }
-            Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhone(smsUserInfo.getPhone());
+
+            boolean duplicated_phone = false;
+            for(SmsUserInfo re : smsUserResult){
+                if(smsUserInfo.getPhone().equals(re.getPhone())){
+                    duplicated_phone = true;
+                    break;
+                }
+
+            }
+            if(duplicated_phone){
+                continue;
+            }
+
+            Optional<SmsUserInfo> userInfoDBOtp = smsUserInfoRepo.findByPhoneAndClientCode(smsUserInfo.getPhone(), order.getClientCode());
             if(userInfoDBOtp.isPresent()){
                 String name = smsUserInfo.getName();
                 boolean gender = smsUserInfo.getGender();
