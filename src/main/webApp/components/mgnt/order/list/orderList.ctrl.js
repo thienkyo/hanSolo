@@ -471,14 +471,16 @@ angular.module('orderListModule')
         self.theSummaryModal.plainText = JSON.stringify(one, undefined, 2);
     }
 
-    self.getHistoryModal = function(phone) {
+    self.getHistoryModal = function(phone,name) {
         self.theHistoryParams = new NgTableParams({}, { dataset: []});
         self.queryRequest.generalPurpose = phone;
         self.isLoadingHistoryModal = true;
         orderListService.getOrderHistory(self.queryRequest).then(function(data){
             data.forEach(getShopName);
             self.theHistoryModal = data;
+            console.log(self.theHistoryModal)
             self.theHistoryModal[0].phone = phone;
+            self.theHistoryModal[0].name = name;
             self.isLoadingHistoryModal = false;
             self.theHistoryParams = new NgTableParams({}, { dataset: self.theHistoryModal});
        });

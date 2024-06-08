@@ -205,7 +205,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h4 class="modal-title" id="historyModalLabel">
-							Phone [{{ctrl.theHistoryModal[0].phone | tel}}]
+							[{{ctrl.theHistoryModal[0].name}}-{{ctrl.theHistoryModal[0].phone | tel}}]
 							<div class="loaderAni" style="float: inline-end;margin-top: 7px;" ng-if="ctrl.isLoadingHistoryModal"></div>
 						</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close" >
@@ -355,7 +355,7 @@
 					</td>
 			        <td title="'total'" filter="{ 'total' : 'text'}" sortable="'total'" style="text-align: right;width:110px;">{{order.total | number:0 }}đ</td>
 			        <td title="'phone'" filter="{ 'shippingPhone' : 'text'}"  sortable="'shippingPhone'" style="width:135px;">
-						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone)"
+						<a href="" ng-click="ctrl.getHistoryModal(order.shippingPhone,order.shippingName)"
 						   data-toggle="modal" data-target="#historyModal"
 						   ng-if="order.shippingPhone.length >= 9">
 							{{order.shippingPhone | tel}}</a>

@@ -1,9 +1,9 @@
 'use strict';
 angular.module('homeModule')
-.controller('homeController', ['$scope','homeService','cartService','clientListCacheService','memberService',
+.controller('homeController', ['$scope','$location','homeService','cartService','clientListCacheService','memberService',
                                'shopListCacheService','clientInfoCacheService','clientService','currentShopCacheService',
                                'oneClientShopListCacheService','queryRequestDO',
-	function($scope,homeService,cartService,clientListCacheService,memberService,
+	function($scope,$location,homeService,cartService,clientListCacheService,memberService,
 	         shopListCacheService,clientInfoCacheService,clientService,currentShopCacheService,
 	         oneClientShopListCacheService,queryRequestDO
 	){
@@ -52,6 +52,7 @@ angular.module('homeModule')
         */
 
 		console.log('this is home');
+		console.log($location);
 		console.log(clientListCacheService.get());
         console.log(clientInfoCacheService.get());
         console.log(shopListCacheService.get());
