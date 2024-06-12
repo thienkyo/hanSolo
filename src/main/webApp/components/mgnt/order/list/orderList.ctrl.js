@@ -403,7 +403,7 @@ angular.module('orderListModule')
                });
                self.isButtonPressed = false;
                self.tableParams = new NgTableParams({}, { dataset: self.orderList});
-             //  $location.path('/mgnt/storeOrder/'+data.obj[0].id);
+               self.tempArray=[];
             });
         }
     }

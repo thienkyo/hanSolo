@@ -34,8 +34,8 @@
 <div class="offcanvas-menu-wrapper">
 	<div class="offcanvas__option">
 		<div class="offcanvas__links">
-			<a href="#/login" ng-show="!ctrl.currentMember" >Sign in</a>
-			<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout()" style="margin-left: 20px;">Sign out</a>
+			<a href="#/login" ng-show="!ctrl.currentMember" ng-click="ctrl.offMobileCanvas()" >Sign in</a>
+			<a href="" ng-show="ctrl.currentMember" ng-click="ctrl.logout();ctrl.offMobileCanvas();" style="margin-left: 20px;">Sign out</a>
 		</div>
 	</div>
 	<div class="offcanvas__nav__option">
