@@ -39,9 +39,9 @@ public class Utility {
     final public static String HOME_COLLECTION = "HOMECOLLECTION";
 
     final public static String LOGIN_DILIMITER = "d3m";
-    final public static String DEFAULT_PW = "MTIzNDU2bHR0";//123456ltt
-    final public static String SECRET_KEY = "OSOKDMNT009";
-    final public static String SECRET_KEY_API_SMS = "kinhNguyenAPI";
+    final public static String DEFAULT_PW = "MTIzNDU2bHR0";
+    final public static String SECRET_KEY = "hansoloSandbox";
+    final public static String SECRET_KEY_API_SMS = "hansoloSandboxAPI";
 
     final public static String MEMBER_ROLE = "MEMBER";
     final public static String ADMIN_ROLE = "ADMIN";
